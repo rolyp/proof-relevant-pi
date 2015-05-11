@@ -2,9 +2,9 @@ module Transition.Seq where
 
    open import SharedModules hiding (_⇒_; sym; trans)
 
-   open import Action as ᴬ using (Action)
+   open import Action as ᴬ using (Action; _ᵇ; _ᶜ)
    open import Action.Seq using (Action⋆; target⋆; []; _∷_)
-   open import Name using (Name; _+_; _ᴺ+_; zero; toℕ)
+   open import Name as ᴺ using (Name; _+_; _ᴺ+_; zero; toℕ)
    open import Proc using (Proc)
    open import StructuralCong.Proc using (_≅_; ≅-sym; ≅-refl)
    open import Transition using (_—[_-_]→_; target)
@@ -23,7 +23,7 @@ module Transition.Seq where
    record _Δ′_ {ι Γ n m a} {P P′ : Proc ((Γ + toℕ n) + m)} {R} (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) : Set where
       constructor _Δ_
       field
-         {m′} : Name 1
+         {m′} : Name 2
          {R′} : _
          γ/E : ⋈[ Γ , n , m + toℕ m′ ] (subst Proc {!!} R) R′
          E/γ : P′ —[ a - ι ]→ subst Proc {!!} R′
