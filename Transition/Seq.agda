@@ -23,10 +23,10 @@ module Transition.Seq where
    record _Δ′_ {ι Γ n m a} {P P′ : Proc ((Γ + toℕ n) + m)} {R} (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) : Set where
       constructor _Δ_
       field
-         {R′} : _
          {m′} : Name 1
-         γ/E : ⋈[ Γ , n , m + toℕ m′ ] R R′
-         E/γ : P′ —[ a - ι ]→ R′
+         {R′} : _
+         γ/E : ⋈[ Γ , n , m + toℕ m′ ] (subst Proc {!!} R) R′
+         E/γ : P′ —[ a - ι ]→ subst Proc {!!} R′
 
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
    infix 4 _≃_
