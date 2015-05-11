@@ -2,7 +2,7 @@ module Transition.Seq where
 
    open import SharedModules hiding (_⇒_; sym; trans)
 
-   open import Action as ᴬ using (Action; _ᵇ; _ᶜ)
+   open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
    open import Action.Seq using (Action⋆; target⋆; []; _∷_)
    open import Name as ᴺ using (Name; _+_; _ᴺ+_; zero; toℕ)
    open import Proc using (Proc)
@@ -18,14 +18,13 @@ module Transition.Seq where
       [] : P —[ [] ]→⋆ P
       _∷_ : ∀ {a R a⋆ S} (E : P —[ a - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) → P —[ a ∷ a⋆ ]→⋆ S
 
-      -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
+      -- WIP: the type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
    record _Δ′_ {ι Γ n m a} {P P′ : Proc ((Γ + toℕ n) + m)} {R} (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) : Set where
       constructor _Δ_
       field
-         {m′} : Name 2
          {R′} : _
-         γ/E : ⋈[ Γ , n , m + toℕ m′ ] (subst Proc {!!} R) R′
+         γ/E : ⋈[ Γ , n , m + toℕ (inc a) ] (subst Proc {!!} R) R′
          E/γ : P′ —[ a - ι ]→ subst Proc {!!} R′
 
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
