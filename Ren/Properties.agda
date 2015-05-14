@@ -16,8 +16,9 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
 
    swap-involutive : ∀ {Γ} (a : A (Γ + 2)) → swap * swap * a ≡ a
    swap-involutive = involutive ᴿ.swap-involutive
+
+   postulate swap∘push∘push : ∀ {Γ} (a : A Γ) → swap * push * push * a ≡ push * push * a
 {-
-   swap∘push∘push : ∀ {Γ} (a : A Γ) → swap * push * push * a ≡ push * push * a
    swap∘push∘push a =
       begin
          swap * push * push * a
