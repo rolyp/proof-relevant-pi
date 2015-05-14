@@ -32,7 +32,7 @@ module Transition.Concur.Properties where
    -- Correctness of residuals, with respect to the above notion of cofinality.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} (E⌣E′ : E ⌣₁ E′) →
            let open _Δ_ (⊖₁ E⌣E′) in cofinal a⌣a′ P₁ P₂
-   ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) {-| swap∘push (target F)-} = {!!} --≅-refl
+   ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) {-| ≃ₑ-sym (swap∘push (target F))-} = {!!} --≅-refl
    ⊖₁-✓ (E ᵇ│ᶜ F) = ≅-refl
    ⊖₁-✓ (E ᶜ│ᵇ F) = ≅-refl
    ⊖₁-✓ (E ᶜ│ᶜ F) = ≅-refl
@@ -85,7 +85,7 @@ module Transition.Concur.Properties where
    ... | pop-y*E′/E rewrite pop∘push u y =
       ν (≅-trans ((suc (pop y) *⁼) swap*P′) (≅-reflexive (suc-pop∘swap y _)) │ Q′)
    ⊖₁-✓ (_│ᵥ_ {x = x} {u} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
-   ... | ᵇ∇ᵇ ∶ _ Δ _ | ᵛ∇ᵛ ∶ _ Δ _ | swap*P′ | Q′ {-rewrite push-* x | push-* u-} =
+   ... | ᵇ∇ᵇ ∶ _ Δ _ | ᵛ∇ᵛ ∶ _ Δ _ | swap*P′ | Q′ =
       ν (≅-trans ((pop zero *⁼) swap*P′) (≅-reflexive (pop-swap _)) │ Q′)
    ... | ᵇ∇ᵇ ∶ E′/E Δ E/E′ | ᵇ∇ᵇ ∶ F′/F Δ F/F′ | swap*P′ | swap*Q′ =
       ≅-trans (ν (ν (swap*P′ │ swap*Q′))) (νν-swapₗ _)
