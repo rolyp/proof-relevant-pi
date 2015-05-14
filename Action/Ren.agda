@@ -64,11 +64,11 @@ module Action.Ren where
 
       ren : Renameable Action
       ren = record {
-               _* = _*;
-               *-preserves-≃ₑ = *-preserves-≃ₑ;
-               *-preserves-∘ = *-preserves-∘;
-               *-preserves-id = *-preserves-id
-            }
+            _* = _*;
+            *-preserves-≃ₑ = *-preserves-≃ₑ;
+            *-preserves-∘ = *-preserves-∘;
+            *-preserves-id = *-preserves-id
+         }
          where
             _* : ∀ {Γ Γ′} → Ren Γ Γ′ → Action Γ → Action Γ′
             (ρ *) (a ᵇ) = (ρ *′) a ᵇ
