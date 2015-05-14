@@ -18,8 +18,8 @@ module StructuralCong.Proc where
    data _≅_ {Γ} : Proc Γ → Proc Γ → Set where
       -- Structural congruence. We need left and right versions of the rule to prove the lattice isos,
       -- although symmetry is derivable without them.
-      νν-swapₗ : ∀ P → ν (ν (swap * P)) ≅ ν (ν P)
-      νν-swapᵣ : ∀ P → ν (ν P) ≅ ν (ν (swap * P))
+      νν-swapₗ : ∀ P → ν (ν (swap *) P) ≅ ν (ν P)
+      νν-swapᵣ : ∀ P → ν (ν P) ≅ ν (ν (swap *) P)
       -- Compatibility.
       Ο : Ο ≅ Ο
       _•∙_ : ∀ {P R} (x : Name Γ) → P ≅ R → x •∙ P ≅ x •∙ R
@@ -87,21 +87,20 @@ module StructuralCong.Proc where
       open module IsEquivalence′ {Γ} = IsEquivalence (≅-equiv {Γ}) public
          hiding (sym; refl) renaming (trans to ≅-trans; reflexive to ≅-reflexive)
 
-   -- Renaming commutes with ≅. This isn't a Renameable (which is really Functor), but rather
-   -- the action of a functor on a 2-cell.
-   infixr 8 _*⁼_
-   _*⁼_ : ∀ {Γ Γ′ P R} (ρ : Ren Γ Γ′) → P ≅ R → ρ * P ≅ ρ * R
-   ρ *⁼ (νν-swapₗ P) with ᴾ.ν (ν (swap * suc (suc ρ) * P))
-   ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapₗ (suc (suc ρ) * P)
-   ρ *⁼ (νν-swapᵣ P) with ᴾ.ν (ν (swap * suc (suc ρ) * P))
-   ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapᵣ (suc (suc ρ) * P)
+   -- Renaming commutes with ≅. This isn't a Renameable (i.e. functor from Ren), but rather
+   -- the action of such a functor on a 2-cell.
+   _*⁼ : ∀ {Γ Γ′ P R} (ρ : Ren Γ Γ′) → P ≅ R → (ρ *) P ≅ (ρ *) R
+   (ρ *⁼) (νν-swapₗ P) with ᴾ.ν (ν (swap *) ((suc (suc ρ) *) P))
+   ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapₗ ((suc (suc ρ) *) P)
+   (ρ *⁼) (νν-swapᵣ P) with ᴾ.ν (ν (swap *) ((suc (suc ρ) *) P))
+   ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapᵣ ((suc (suc ρ) *) P)
    -- Compatibility.
-   ρ *⁼ Ο = Ο
-   ρ *⁼ (x •∙ P) = (ρ * x) •∙ (suc ρ *⁼ P)
-   ρ *⁼ (• x 〈 y 〉∙ P) = • ρ * x 〈 ρ * y 〉∙ (ρ *⁼ P)
-   ρ *⁼ (P ➕ R) = ρ *⁼ P ➕ ρ *⁼ R
-   ρ *⁼ (P │ R) = ρ *⁼ P │ ρ *⁼ R
-   ρ *⁼ (ν P) = ν (suc ρ *⁼ P)
-   ρ *⁼ (! P) = ! (ρ *⁼ P)
+   (ρ *⁼) Ο = Ο
+   (ρ *⁼) (x •∙ P) = (ρ *) x •∙ (suc ρ *⁼) P
+   (ρ *⁼) (• x 〈 y 〉∙ P) = • (ρ *) x 〈 (ρ *) y 〉∙ (ρ *⁼) P
+   (ρ *⁼) (P ➕ R) = (ρ *⁼) P ➕ (ρ *⁼) R
+   (ρ *⁼) (P │ R) = (ρ *⁼) P │ (ρ *⁼) R
+   (ρ *⁼) (ν P) = ν (suc ρ *⁼) P
+   (ρ *⁼) (! P) = ! (ρ *⁼) P
    -- Transitivity.
-   ρ *⁼ (trans P R) = trans (ρ *⁼ P) (ρ *⁼ R)
+   (ρ *⁼) (trans P R) = trans ((ρ *⁼) P) ((ρ *⁼) R)
