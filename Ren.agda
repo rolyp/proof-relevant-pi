@@ -91,3 +91,9 @@ module Ren where
    swap-involutive zero = refl
    swap-involutive (ᴺ.suc zero) = refl
    swap-involutive (ᴺ.suc (ᴺ.suc _)) = refl
+
+   swap∘suc-swap∘swap : ∀ {Γ} → swap ∘ suc (swap {Γ}) ∘ swap ≃ₑ suc swap ∘ swap ∘ suc swap
+   swap∘suc-swap∘swap zero = refl
+   swap∘suc-swap∘swap (ᴺ.suc zero) = refl
+   swap∘suc-swap∘swap (ᴺ.suc (ᴺ.suc zero)) = refl
+   swap∘suc-swap∘swap (ᴺ.suc (ᴺ.suc (ᴺ.suc _))) = refl
