@@ -47,13 +47,13 @@ module Transition.Concur.Properties where
    ⊖₁-✓ (E ᶜ│• F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | ᶜ∇ᶜ ∶ _ Δ _ | Q′ = ≅-refl │ Q′
    ⊖₁-✓ (E⌣E′ │ᵥᵇ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | ᵇ∇ᵇ ∶ _ Δ _ | swap*P′ {-rewrite swap∘push (target F)-} = {!!} --ν (swap*P′ │ ≅-refl)
+   ... | ᵇ∇ᵇ ∶ _ Δ _ | swap*P′ {-rewrite swap∘push (target F)-} = ν (swap*P′ │ {!!}) -- ≅-refl
    ⊖₁-✓ (E⌣E′ │ᵥᶜ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | ᶜ∇ᵇ ∶ _ Δ _ | P′ = ν (P′ │ ≅-refl)
    ⊖₁-✓ (_ᵇ│ᵥ_ {x = x} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | ᵛ∇ᵛ ∶ _ Δ _ | Q′ with (push *ᵇ) E
    ... | push*E rewrite pop-zero∘suc-push (target E) = ≅-refl │ Q′
-   ⊖₁-✓ (E ᵇ│ᵥ F⌣F′) | ᵇ∇ᵇ ∶ _ Δ _ | swap*Q′ {-rewrite swap∘push (target E)-} = {!!} --ν (≅-refl │ swap*Q′)
+   ⊖₁-✓ (E ᵇ│ᵥ F⌣F′) | ᵇ∇ᵇ ∶ _ Δ _ | swap*Q′ {-rewrite swap∘push (target E)-} = ν ({!!} │ swap*Q′) -- ≅-refl
    ⊖₁-✓ (E ᶜ│ᵥ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | ᶜ∇ᵇ ∶ _ Δ _ | Q′ = ν (≅-refl │ Q′)
    ⊖₁-✓ (P │ᵇᵇ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
