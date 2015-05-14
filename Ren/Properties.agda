@@ -39,6 +39,9 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
          (suc swap * ∘ swap * ∘ suc swap *) a
       ∎ where open EqReasoning (setoid _)
 
+   pop∘push : ∀ {Γ} (y : Name Γ) → pop y * ∘ push * ≃ₑ id
+   pop∘push _ a = trans (*-preserves-∘ a) (*-preserves-id a)
+
    pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) → ρ * ∘ pop x * ≃ₑ pop ((ρ *′) x) * ∘ suc ρ *
    pop-comm ρ x = ∘-* (ᴿ.pop-comm ρ x)
 
