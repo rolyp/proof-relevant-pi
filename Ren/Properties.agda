@@ -12,7 +12,8 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    open ᴺ using (Name; _+_; zero; shift)
    open ᴿ using (module Renameable; suc; pop; push; _ᴿ+_; swap; ᴺren)
 
-   module Renameable′ = Renameable {A = A}; open Renameable′ ⦃...⦄
+   module Renameable′ = Renameable {A = A}; open Renameable′ ⦃...⦄ -- fix A for all uses of *
+   open Renameable ⦃...⦄ using () renaming (_* to _*′)
 
    involutive : ∀ {Γ} {ρ : Ren Γ Γ} → ᴿ.Involutive ρ → ρ * ∘ ρ * ≃ₑ id
    involutive {ρ = ρ} ρ-involutive a = trans (∘-*₁ ρ-involutive a) (*-preserves-id a)
@@ -29,8 +30,8 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    postulate swap∘suc-swap∘swap : ∀ {Γ} → swap {Γ + 1} * ∘ suc swap * ∘ swap * ≃ₑ suc swap * ∘ swap * ∘ suc swap *
 -- swap∘suc-swap∘swap a = {!!}
 
---   pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) → ρ * ∘ pop x * ≃ₑ pop ((ρ *) x) * ∘ suc ρ *
---   pop-comm ρ x = ∘-* (ᴿ.pop-comm ρ x)
+   pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) → ρ * ∘ pop x * ≃ₑ pop ((ρ *′) x) * ∘ suc ρ *
+   pop-comm ρ x = ∘-* (ᴿ.pop-comm ρ x)
 
    ᴿ+-comm : ∀ {Γ Γ′} n (ρ : Ren Γ Γ′) → (ρ ᴿ+ n) * ∘ shift {Γ} n * ≃ₑ shift {Γ′} n * ∘ ρ *
    ᴿ+-comm n ρ = ∘-* (ᴿ.ᴿ+-comm n ρ)

@@ -49,7 +49,7 @@ module Ren where
    x : Cxt
    x = ((0 ∗) 1 ∗) 1
 
-   -- Functor from renamings. TODO: turn _*_ into a postfix operator.
+   -- Functor from renamings.
    record Renameable (A : Cxt → Set) : Set where
       field
          _* : ∀ {Γ Γ′} → Ren Γ Γ′ → A Γ → A Γ′
@@ -57,6 +57,7 @@ module Ren where
          *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = A Γ}
          *-preserves-∘ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → ρ * ∘ σ * ≃ₑ (ρ ∘ σ) *
 
+      -- TODO: better names for these.
       ∘-*₁ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} {ρ′ : Ren Γ Γ′} →
              ρ ∘ σ ≃ₑ ρ′ → ρ * ∘ σ * ≃ₑ ρ′ *
       ∘-*₁ ρ∘σ≃ₑρ′ a = trans (*-preserves-∘ a) (*-preserves-≃ₑ ρ∘σ≃ₑρ′ a)
