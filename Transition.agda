@@ -35,19 +35,15 @@ module Transition where
    infixl 6 _➕₁_ _ᵇ│_ _ᶜ│_ _│ᵇ_ _│ᶜ_ _│•_ _•│_ _│ᵥ_
    infixr 7 _•∙_ •_〈_〉∙_
 
-   source : ∀ {Γ P} {a : Action Γ} {R} → P —[ a - _ ]→ R → Proc Γ
+   source : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Proc Γ
    source {P = P} _ = P
 
    -- Bundling these together simplifies the proofs that involve these projections on slices.
-   out : ∀ {Γ P} {a : Action Γ} {R} → P —[ a - _ ]→ R → Σ[ a′ ∈ Action Γ ] Proc (ᴬ.target a′)
+   out : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Σ[ a′ ∈ Action Γ ] Proc (ᴬ.target a′)
    out {a = a} {R} _ = a , R
 
-   action : ∀ {Γ P} {a : Action Γ} {R} → P —[ a - _ ]→ R → Action Γ
+   action : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Action Γ
    action = π₁ ∘ out
 
-   target : ∀ {Γ P} {a : Action Γ} {R} → P —[ a - _ ]→ R → Proc (ᴬ.target a)
+   target : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Proc (ᴬ.target a)
    target = π₂ ∘ out
-
-   -- Closed τ-transition. (Not sure if we really need the size indices at this level.)
-   _—[_]→_ : Proc 0 → Size → Proc 0 → Set
-   P —[ ι ]→ R = P —[ τ ᶜ - ι ]→ R

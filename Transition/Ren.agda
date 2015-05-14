@@ -6,6 +6,7 @@ module Transition.Ren where
    open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Ren
    open import Name using (toℕ; _+_)
+   open import Proc using (Proc)
    open import Proc.Ren
    open import Ren as ᴿ using (Ren; suc; pop; push; _ᴿ+_; swap; Renameable; ᴺren); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
@@ -41,3 +42,11 @@ module Transition.Ren where
    ρ *ᵇ (νᵇ_ {R = R} {a = a} E) with suc ρ *ᵇ E
    ... | E′ rewrite ᴿ+-comm 1 ρ a | sym (swap-suc-suc ρ R) = νᵇ E′
    ρ *ᵇ (! E) = ! (ρ *ᵇ E)
+
+   _*′_ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P} {a : Action Γ} {R} →
+         P —[ a - ι ]→ R → ρ * P —[ ρ * a - ι ]→ subst Proc (sym (ren-preserves-inc ρ a)) (ρ ᴿ+ toℕ (inc a) * R)
+   ρ *′ E with action E
+   ... | (_ •) ᵇ = ρ *ᵇ E
+   ... | (• _) ᵇ = ρ *ᵇ E
+   ... | • _ 〈 _ 〉 ᶜ = ρ *ᶜ E
+   ... | τ ᶜ = ρ *ᶜ E
