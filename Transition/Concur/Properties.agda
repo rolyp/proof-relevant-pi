@@ -37,11 +37,11 @@ module Transition.Concur.Properties where
    ⊖₁-✓ (E ᶜ│ᵇ F) = ≅-refl
    ⊖₁-✓ (E ᶜ│ᶜ F) = ≅-refl
    ⊖₁-✓ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | ᵇ∇ᵇ ∶ _ Δ E/E′ | swap*P′ with pop y *ᵇ E/E′
-   ... | pop-y*E/E′ rewrite pop∘push a y | pop∘swap y (target E/E′) = pop (push * y) *⁼ swap*P′ │ ≅-refl
+   ... | ᵇ∇ᵇ ∶ _ Δ E/E′ | swap*P′ with (pop y *ᵇ) E/E′
+   ... | pop-y*E/E′ rewrite pop∘push a y | pop∘swap y (target E/E′) = (pop ((push *) y) *⁼) swap*P′ │ ≅-refl
    ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | ᶜ∇ᵇ ∶ _ Δ E/E′ | P′ with pop y *ᶜ E/E′
-   ... | pop-y*E/E′ rewrite pop∘push a y = pop y *⁼ P′ │ ≅-refl
+   ... | ᶜ∇ᵇ ∶ _ Δ E/E′ | P′ with (pop y *ᶜ) E/E′
+   ... | pop-y*E/E′ rewrite pop∘push a y = (pop y *⁼) P′ │ ≅-refl
    ⊖₁-✓ (_ᵇ│•_ {y = y} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | ᵇ∇ᶜ ∶ _ Δ _ | Q′ rewrite pop∘suc-push y (target E) = ≅-refl │ Q′
    ⊖₁-✓ (E ᶜ│• F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
@@ -51,8 +51,8 @@ module Transition.Concur.Properties where
    ⊖₁-✓ (E⌣E′ │ᵥᶜ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | ᶜ∇ᵇ ∶ _ Δ _ | P′ = ν (P′ │ ≅-refl)
    ⊖₁-✓ (_ᵇ│ᵥ_ {x = x} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | ᵛ∇ᵛ ∶ _ Δ _ | Q′ with push *ᵇ E
-   ... | push*E rewrite push-* x | pop-zero∘suc-push (target E) = ≅-refl │ Q′
+   ... | ᵛ∇ᵛ ∶ _ Δ _ | Q′ with (push *ᵇ) E
+   ... | push*E rewrite pop-zero∘suc-push (target E) = ≅-refl │ Q′
    ⊖₁-✓ (E ᵇ│ᵥ F⌣F′) | ᵇ∇ᵇ ∶ _ Δ _ | swap*Q′ rewrite swap∘push (target E) = ν (≅-refl │ swap*Q′)
    ⊖₁-✓ (E ᶜ│ᵥ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | ᶜ∇ᵇ ∶ _ Δ _ | Q′ = ν (≅-refl │ Q′)

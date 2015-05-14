@@ -108,3 +108,21 @@ module Ren where
    swap∘suc-swap∘swap (ᴺ.suc zero) = refl
    swap∘suc-swap∘swap (ᴺ.suc (ᴺ.suc zero)) = refl
    swap∘suc-swap∘swap (ᴺ.suc (ᴺ.suc (ᴺ.suc _))) = refl
+
+   -- Additional properties required to prove cofinality of transition residuals.
+   swap∘suc-push : ∀ {Γ} → push {Γ + 1} ≃ₑ swap ∘ suc push
+   swap∘suc-push zero = refl
+   swap∘suc-push (ᴺ.suc _) = refl
+
+   swap∘push : ∀ {Γ} → suc (push {Γ}) ≃ₑ swap ∘ push {Γ + 1}
+   swap∘push zero = refl
+   swap∘push (ᴺ.suc _) = refl
+
+   pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) ≃ₑ pop ((push *) y) ∘ swap
+   pop∘swap _ zero = refl
+   pop∘swap _ (ᴺ.suc zero) = refl
+   pop∘swap _ (ᴺ.suc (ᴺ.suc _)) = refl
+
+   pop∘suc-push : ∀ {Γ} (y : Name Γ) → push ∘ (pop y) ≃ₑ pop ((push *) y) ∘ suc push
+   pop∘suc-push _ zero = refl
+   pop∘suc-push _ (ᴺ.suc _) = refl

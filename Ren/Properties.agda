@@ -47,27 +47,25 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
 
    ᴿ+-comm : ∀ {Γ Γ′} n (ρ : Ren Γ Γ′) → (ρ ᴿ+ n) * ∘ shift {Γ} n * ≃ₑ shift {Γ′} n * ∘ ρ *
    ᴿ+-comm n ρ = ∘-* (ᴿ.ᴿ+-comm n ρ)
+
+   -- Additional properties required to prove cofinality of transition residuals.
+   swap∘suc-push : ∀ {Γ} → push {Γ + 1} * ≃ₑ swap * ∘ suc push *
+   swap∘suc-push a = sym (∘-*₁ (≃ₑ-sym ᴿ.swap∘suc-push) a)
+
+   swap∘push : ∀ {Γ} → suc push * ≃ₑ swap * ∘ push {Γ + 2} *
+   swap∘push a = sym (∘-*₁ (≃ₑ-sym ᴿ.swap∘push) a)
+
+   pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) * ≃ₑ pop ((push *′) y) * ∘ swap {Γ} *
+   pop∘swap y a = sym (∘-*₁ (≃ₑ-sym (ᴿ.pop∘swap y)) a)
+
+   pop∘suc-push : ∀ {Γ} (y : Name Γ) → push * ∘ pop {Γ} y * ≃ₑ pop ((push *′) y) * ∘ suc push *
+   pop∘suc-push y = ∘-* (ᴿ.pop∘suc-push y)
 {-
-   swap∘suc-push : ∀ {Γ} (a : A (Γ + 1)) → push * a ≡ swap * suc push * a
-   swap∘suc-push a = sym (∘-*₁ a (sym ᴿ.swap∘suc-push))
-
-   swap∘push : ∀ {Γ} (a : A (Γ + 1)) → suc push * a ≡ swap * push * a
-   swap∘push a = sym (∘-*₁ a (sym ᴿ.swap∘push))
-
-   pop-swap : ∀ {Γ} (a : A (Γ + 2)) → pop zero * swap * a ≡ pop zero * a
-   pop-swap a = ∘-*₁ a ᴿ.pop-swap
-
    pop-zero∘suc-push : ∀ {Γ} (a : A (Γ + 1)) → pop zero * suc push * a ≡ a
    pop-zero∘suc-push a = trans (∘-*₁ a ᴿ.pop-zero∘suc-push) (*-preserves-id a)
 
-   pop∘swap : ∀ {Γ} (y : Name Γ) (a : A (Γ + 2)) → suc (pop y) * a ≡ pop (push * y) * swap * a
-   pop∘swap y a = sym (∘-*₁ a (sym (ᴿ.pop∘swap y)))
-
    suc-pop∘swap : ∀ {Γ} (y : Name Γ) (a : A (Γ + 2)) → suc (pop y) * swap * a ≡ pop (push * y) * a
    suc-pop∘swap y a = ∘-*₁ a (ᴿ.suc-pop∘swap y)
-
-   pop∘suc-push : ∀ {Γ} (y : Name Γ) (a : A (Γ + 1)) → push * pop y * a ≡ pop (push * y) * suc push * a
-   pop∘suc-push y a = ∘-* a (ᴿ.pop∘suc-push y)
 
    pop-pop-swap : ∀ {Γ} (x y : Name Γ) (a : A (Γ + 2)) → pop x * suc (pop y) * swap * a ≡ pop y * suc (pop x) * a
    pop-pop-swap x y a =
