@@ -29,7 +29,7 @@ module StructuralCong.Transition where
 
    -- Structural congruences.
    ⊖ (ν•_ {x = x} (νᶜ E)) (νν-swapₗ P) with swap *ᶜ E
-   ... | swap*E rewrite swap-involutive P | trans (∘-*₁ x ᴿ.swap∘shift-shift) (ᴿ.shift-* push x) =
+   ... | swap*E rewrite swap-involutive P {-| trans (∘-*₁ x ᴿ.swap∘shift-shift) (ᴿ.shift-* push x)-} =
       ν ≅-reflexive (sym (swap-involutive _)) Δ νᵇ (ν• swap*E)
    ⊖ (νᵇ_ {a = • x} (ν• E)) (νν-swapₗ P) with swap *ᶜ E
    ... | swap*E rewrite swap-involutive P | suc-push∘push x = ≅-refl Δ ν• (νᶜ swap*E)
