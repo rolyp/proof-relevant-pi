@@ -1,6 +1,7 @@
+-- WIP: transition sequences and causal equivalence.
 module Transition.Seq where
 
-   open import SharedModules hiding (_⇒_; sym; trans)
+   open import SharedModules hiding (_⇒_; trans)
 
    open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
    open import Action.Seq using (Action⋆; target⋆; []; _∷_)
@@ -18,14 +19,18 @@ module Transition.Seq where
       [] : P —[ [] ]→⋆ P
       _∷_ : ∀ {a R a⋆ S} (E : P —[ a - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) → P —[ a ∷ a⋆ ]→⋆ S
 
-      -- WIP: the type of the symmetric residual (γ/E , E/γ) for a single transition.
+   target-+ : ∀ {Γ} m (n : Name 3) (a : Action ((Γ + toℕ n) + m)) → ᴬ.target a ≡ (Γ + toℕ n) + (m + toℕ (inc a))
+   target-+ _ _ (_ ᵇ) = refl
+   target-+ _ _ (_ ᶜ) = refl
+
+   -- WIP: the type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
    record _Δ′_ {ι Γ n m a} {P P′ : Proc ((Γ + toℕ n) + m)} {R} (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) : Set where
       constructor _Δ_
       field
          {R′} : _
-         γ/E : ⋈[ Γ , n , m + toℕ (inc a) ] (subst Proc {!!} R) R′
-         E/γ : P′ —[ a - ι ]→ subst Proc {!!} R′
+         γ/E : ⋈[ Γ , n , m + toℕ (inc a) ] (subst Proc (target-+ m n a) R) R′
+         E/γ : P′ —[ a - ι ]→ subst Proc (sym (target-+ m n a)) R′
 
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
    infix 4 _≃_
@@ -43,6 +48,6 @@ module Transition.Seq where
       -- Transitivity and symmetry.
       _∘_ : ∀ {a⋆ R a″⋆ S a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {F⋆ : P —[ a″⋆ ]→⋆ S} {E′⋆ : P —[ a′⋆ ]→⋆ R′} →
             F⋆ ≃ E′⋆ → E⋆ ≃ F⋆ → E⋆ ≃ E′⋆
-      sym : ∀ {a⋆ R a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
+      ≃-sym : ∀ {a⋆ R a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
 
    -- TODO: IsEquivalence instance.

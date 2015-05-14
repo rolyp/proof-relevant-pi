@@ -37,10 +37,14 @@ module Ren where
    suc : ∀ {Γ Γ′} → Ren Γ Γ′ → Ren (Γ + 1) (Γ′ + 1)
    suc ρ = zero ∷ shift ρ
 
+   _ᴿ+_ : ∀ {Γ Γ′} → Ren Γ Γ′ → ∀ n → Ren (Γ + n) (Γ′ + n)
+   ρ ᴿ+ zero = ρ
+   ρ ᴿ+ (ᴺ.suc n) = suc (ρ ᴿ+ n)
+
    id : ∀ {Γ} → Ren Γ Γ
    id {Cxt.zero} = []
    id {Cxt.suc _} = suc id
-   
+
    open import Agda.Primitive
 
    record Renameable {n : Level} (A : Cxt → Set n) : Set n where

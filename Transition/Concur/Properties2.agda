@@ -7,7 +7,7 @@ module Transition.Concur.Properties2 where
    open import Name as ᴺ using (Cxt; Name; _+_; zero; suc; toℕ)
    open import Proc using (Proc)
    open import StructuralCong.Proc using (_≅_; module _≅_); open _≅_
-   open import Ren as ᴿ using (Ren; id; suc; swap); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; id; suc; _ᴿ+_; swap); open ᴿ.Renameable ⦃...⦄
    open import Transition as ᵀ using (_—[_-_]→_; _—[_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Concur
       using (_⌣₁_; module _⌣₁_; module coinitial; _∶_Δ_; module _Δ_; ᴬ⊖; ᴬ⊖-✓; ⊖₁);
@@ -18,11 +18,6 @@ module Transition.Concur.Properties2 where
    braid (suc zero) = id
    braid (suc (suc zero)) = swap
    braid (suc (suc (suc ())))
-
-   -- TODO: move to Ren module.
-   _ᴿ+_ : ∀ {Γ Γ′} → Ren Γ Γ′ → ∀ n → Ren (Γ + n) (Γ′ + n)
-   ρ ᴿ+ zero = ρ
-   ρ ᴿ+ (ᴺ.suc n) = ᴿ.suc (ρ ᴿ+ n)
 
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc ((Γ + toℕ n) + m) → Proc ((Γ + toℕ n) + m) → Set
    ⋈[_,_,_] Γ n m P₁ P₂ = (braid n) ᴿ+ m * P₁ ≅ P₂
