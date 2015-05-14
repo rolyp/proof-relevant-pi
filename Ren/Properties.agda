@@ -10,10 +10,7 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    open ᴺ using (Name; _+_; zero; shift)
    open ᴿ using (module Renameable; suc; pop; push; _ᴿ+_; swap; ᴺren);
       open Renameable ⦃...⦄
-{-
-   suc-push∘push : ∀ {Γ} (a : A Γ) → suc push * push * a ≡ shift push * a
-   suc-push∘push a = ∘-*₁ a ᴿ.suc-push∘push
--}
+
    involutive : ∀ {Γ} {ρ : Ren Γ Γ} → ᴿ.Involutive ρ → (a : A Γ) → ρ * ρ * a ≡ a
    involutive {ρ = ρ} ρ-involutive a = trans (∘-*₁ ρ-involutive a) (id-* a)
 
