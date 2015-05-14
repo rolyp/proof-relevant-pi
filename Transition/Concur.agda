@@ -1,7 +1,8 @@
 module Transition.Concur where
 
    open import SharedModules hiding ([_])
-   open import Common
+
+   open import Ext
 
    open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    import Action.Ren

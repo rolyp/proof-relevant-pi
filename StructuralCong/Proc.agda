@@ -2,7 +2,7 @@ module StructuralCong.Proc where
 
    open import SharedModules hiding ([_]; trans) renaming (sym to ≡-sym)
 
-   open import Common
+   open import Ext
 
    open import Name using (Name; _+_)
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
@@ -17,7 +17,7 @@ module StructuralCong.Proc where
    infixl 6 _➕_ _│_
    data _≅_ {Γ} : Proc Γ → Proc Γ → Set where
       -- Structural congruence. We need left and right versions of the rule to prove the lattice isos,
-      -- although symmetry is derivable without them.   
+      -- although symmetry is derivable without them.
       νν-swapₗ : ∀ P → ν (ν (swap * P)) ≅ ν (ν P)
       νν-swapᵣ : ∀ P → ν (ν P) ≅ ν (ν (swap * P))
       -- Compatibility.

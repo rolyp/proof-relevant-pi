@@ -4,7 +4,7 @@ module Ren where
    open import SharedModules hiding (Involutive)
    import Relation.Binary.EqReasoning as EqReasoning
 
-   open import Common
+   open import Ext
    open import Name as ᴺ using (Cxt; module Cxt; Name; _+_; zero)
 
    -- A renaming ρ represented as a list whose nth element is ρ(n). (Defining a renaming as a function

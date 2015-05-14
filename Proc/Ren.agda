@@ -4,7 +4,7 @@ module Proc.Ren where
    open import SharedModules
    import Relation.Binary.EqReasoning as EqReasoning
 
-   open import Common
+   open import Ext
 
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Ren as ᴿ using (
