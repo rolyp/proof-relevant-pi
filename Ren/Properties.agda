@@ -17,19 +17,9 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    swap-involutive : ∀ {Γ} (a : A (Γ + 2)) → swap * swap * a ≡ a
    swap-involutive = involutive ᴿ.swap-involutive
 
-   postulate swap∘push∘push : ∀ {Γ} (a : A Γ) → swap * push * push * a ≡ push * push * a
-{-
-   swap∘push∘push a =
-      begin
-         swap * push * push * a
-      ≡⟨ cong (_*_ swap) (∘-*-factor a) ⟩
-         swap * (push ∘ push) * a
-      ≡⟨ ∘-*₁ a ᴿ.swap∘push∘push ⟩
-         (push ∘ push) * a
-      ≡⟨ sym (∘-*-factor a) ⟩
-         push * push * a
-      ∎ where open EqReasoning (setoid _)
--}
+   swap∘push∘push : ∀ {Γ} (a : A Γ) → swap * push * push * a ≡ push * push * a
+   swap∘push∘push a = trans (cong (_*_ swap) (∘-*-factor a)) (trans (∘-*₁ (λ _ → refl) a) (sym (∘-*-factor a)))
+
    swap-suc-suc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (a : A (Γ + 2)) → swap * suc (suc ρ) * a ≡ suc (suc ρ) * swap * a
    swap-suc-suc ρ = ∘-* (ᴿ.swap-suc-suc ρ)
 {-
