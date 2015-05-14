@@ -1,14 +1,18 @@
--- A transition survives an arbitrary renaming.
+-- Residual of transitions and renamings.
 module Transition.Ren where
 
    open import SharedModules
 
-   open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
+   open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Ren
+   open import Name using (toℕ; _+_)
    open import Proc.Ren
-   open import Ren as ᴿ using (Ren; suc; pop; push; swap; Renameable; ᴺren); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; suc; pop; push; _ᴿ+_; swap; Renameable; ᴺren); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; action); open ᵀ._—[_-_]→_
+
+   _/_ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P} {a : Action Γ} {R} → P —[ a - ι ]→ R → let n = toℕ (inc a) in Ren (Γ + n) (Γ′ + n)
+   _/_ ρ {a = a} E = ρ ᴿ+ toℕ (inc a)
 
    infixr 8 _*ᵇ_ _*ᶜ_
    _*ᶜ_ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P R} {a : Actionᶜ Γ} → P —[ a ᶜ - ι ]→ R → ρ * P —[ (ρ * a) ᶜ - ι ]→ ρ * R
