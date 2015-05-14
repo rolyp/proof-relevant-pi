@@ -13,13 +13,13 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
 {-
    suc-push∘push : ∀ {Γ} (a : A Γ) → suc push * push * a ≡ shift push * a
    suc-push∘push a = ∘-*₁ a ᴿ.suc-push∘push
-
+-}
    involutive : ∀ {Γ} {ρ : Ren Γ Γ} → ᴿ.Involutive ρ → (a : A Γ) → ρ * ρ * a ≡ a
-   involutive {ρ = ρ} ρ-involutive a = trans (∘-*₁ a ρ-involutive) (id-* a)
+   involutive {ρ = ρ} ρ-involutive a = trans (∘-*₁ ρ-involutive a) (id-* a)
 
    swap-involutive : ∀ {Γ} (a : A (Γ + 2)) → swap * swap * a ≡ a
    swap-involutive = involutive ᴿ.swap-involutive
-
+{-
    swap∘push∘push : ∀ {Γ} (a : A Γ) → swap * push * push * a ≡ push * push * a
    swap∘push∘push a =
       begin
