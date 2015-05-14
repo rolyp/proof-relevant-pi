@@ -5,12 +5,21 @@ module Transition.Seq where
 
    open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
    open import Action.Seq using (Action⋆; target⋆; []; _∷_)
-   open import Name as ᴺ using (Name; _+_; _ᴺ+_; zero; toℕ)
+   open import Name as ᴺ using (Cxt; Name; _+_; _ᴺ+_; zero; toℕ)
    open import Proc using (Proc)
+   open import Ren as ᴿ using (Ren; id; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import StructuralCong.Proc using (_≅_; ≅-sym; ≅-refl)
    open import Transition using (_—[_-_]→_; target)
    open import Transition.Concur using (_⌣_; module _Δ_; ⊖; coinitial; ᴬ⊖; ᴬ⊖-✓)
-   open import Transition.Concur.Properties2 using (⋈[_,_,_])
+
+   braid : ∀ {Γ} (n : Name 3) → Ren (Γ + toℕ n) (Γ + toℕ n)
+   braid zero = id
+   braid (ᴺ.suc zero) = id
+   braid (ᴺ.suc (ᴺ.suc zero)) = swap
+   braid (ᴺ.suc (ᴺ.suc (ᴺ.suc ())))
+
+   ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc ((Γ + toℕ n) + m) → Proc ((Γ + toℕ n) + m) → Set
+   ⋈[_,_,_] Γ n m P₁ P₂ = (braid n) ᴿ+ m * P₁ ≅ P₂
 
    -- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
    -- composition is probably what we eventually want.
