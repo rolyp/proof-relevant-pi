@@ -6,7 +6,7 @@ module Transition.Ren where
    open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Ren
    open import Proc.Ren
-   open import Ren as ᴿ using (Ren; suc; pop; push; shift-*; swap; Renameable; ᴺren); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; suc; pop; push; swap; Renameable; ᴺren); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; action); open ᵀ._—[_-_]→_
 

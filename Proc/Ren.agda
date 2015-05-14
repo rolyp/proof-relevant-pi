@@ -8,9 +8,11 @@ module Proc.Ren where
 
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Ren as ᴿ using (
-         Ren; suc; push; pop; swap; suc-preserves-≃ₑ; suc-preserves-∘; Renameable; module Renameable; ᴺren
+         Ren; suc; push; pop; swap; suc-preserves-≃ₑ; suc-preserves-id; suc-preserves-∘; Renameable; module Renameable; ᴺren
       );
-      open Renameable ⦃...⦄ renaming (_*_ to _*′_; *-preserves-≃ₑ to *-preserves-≃ₑ′; ∘-*-factor to ∘-*-factor′; id-* to id-*′)
+      open Renameable ⦃...⦄ renaming (
+         _*_ to _*′_; *-preserves-≃ₑ to *-preserves-≃ₑ′; ∘-*-factor to ∘-*-factor′; id-* to id-*′
+      )
 
    instance
       ren : Renameable Proc
@@ -50,9 +52,9 @@ module Proc.Ren where
 
             id-* : ∀ {Γ} (P : Proc Γ) → id * P ≡ P
             id-* Ο = refl
-            id-* (x •∙ P) = id-*′ x ⟨ cong₂ _•∙_ ⟩ {!!} --id-* P
+            id-* (x •∙ P) = id-*′ x ⟨ cong₂ _•∙_ ⟩ trans (*-preserves-≃ₑ suc-preserves-id P) (id-* P)
             id-* (• x 〈 y 〉∙ P) = cong₃ •_〈_〉∙_ (id-*′ x) (id-*′ y) (id-* P)
             id-* (P ➕ Q) = id-* P ⟨ cong₂ _➕_ ⟩ id-* Q
             id-* (P │ Q) = id-* P ⟨ cong₂ _│_ ⟩ id-* Q
-            id-* (ν P) = cong ν_ {!!} --(id-* P)
+            id-* (ν P) = cong ν_ (trans (*-preserves-≃ₑ suc-preserves-id P) (id-* P))
             id-* (! P) = cong !_ (id-* P)

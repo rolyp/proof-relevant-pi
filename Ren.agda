@@ -43,6 +43,7 @@ module Ren where
    ᴿ+-comm zero _ _ = refl
    ᴿ+-comm (ᴺ.suc n) ρ = cong ᴺ.suc ∘ ᴿ+-comm n ρ
 
+   -- Functor-like thing. TODO: turn _*_ into a postfix operator.
    record Renameable (A : Cxt → Set) : Set where
       infixr 8 _*_
       field
@@ -52,7 +53,7 @@ module Ren where
          ∘-*-factor : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → _*_ ρ ∘ _*_ σ ≃ₑ _*_ (ρ ∘ σ)
 
       ∘-*₁ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} {ρ′ : Ren Γ Γ′} →
-             ρ ∘ σ ≃ₑ ρ′ → (_*_ ρ) ∘ (_*_ σ) ≃ₑ _*_ ρ′
+             ρ ∘ σ ≃ₑ ρ′ → ∀ a → ρ * σ * a ≡ ρ′ * a
       ∘-*₁ ρ∘σ≃ₑρ′ a = trans (∘-*-factor a) (*-preserves-≃ₑ ρ∘σ≃ₑρ′ a)
 
       ∘-* : ∀ {Γ Δ Δ′ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} {ρ′ : Ren Δ′ Γ′} {σ′ : Ren Γ Δ′} →

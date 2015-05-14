@@ -6,13 +6,10 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    open import SharedModules
    import Relation.Binary.EqReasoning as EqReasoning
 
-   open ᴺ using (Name; _+_; zero)
-   open ᴿ using (module Renameable; _∷_; _∘_; ∘-assoc; shift; suc; id; pop; push; swap; ᴺren; id-rightId);
+   open ᴺ using (Name; _+_; zero; shift)
+   open ᴿ using (module Renameable; suc; pop; push; swap; ᴺren);
       open Renameable ⦃...⦄
-
-   pop∘push : ∀ {Γ} (a : A Γ) (y : Name Γ) → pop y * push * a ≡ a
-   pop∘push a y = trans (∘-*₁ a ᴿ.pop∘push) (id-* a)
-
+{-
    suc-push∘push : ∀ {Γ} (a : A Γ) → suc push * push * a ≡ shift push * a
    suc-push∘push a = ∘-*₁ a ᴿ.suc-push∘push
 
@@ -89,3 +86,4 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
       ≡⟨ ∘-* a (ᴿ.pop-pop-swap x y) ⟩
          pop y * suc (pop x) * a
       ∎ where open EqReasoning (setoid _)
+-}
