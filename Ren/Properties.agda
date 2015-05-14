@@ -22,6 +22,10 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
 
    swap-suc-suc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (a : A (Γ + 2)) → swap * suc (suc ρ) * a ≡ suc (suc ρ) * swap * a
    swap-suc-suc ρ = ∘-* (ᴿ.swap-suc-suc ρ)
+
+   postulate swap∘suc-swap∘swap : ∀ {Γ} (a : A (Γ + 3)) → swap * suc (swap {Γ}) * swap * a ≡ suc swap * swap * suc swap * a
+   -- swap∘suc-swap∘swap a = {!!}
+
 {-
    swap∘suc-push : ∀ {Γ} (a : A (Γ + 1)) → push * a ≡ swap * suc push * a
    swap∘suc-push a = sym (∘-*₁ a (sym ᴿ.swap∘suc-push))

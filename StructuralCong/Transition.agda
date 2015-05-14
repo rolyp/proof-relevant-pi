@@ -33,11 +33,11 @@ module StructuralCong.Transition where
    ⊖ (νᵇ_ {a = • x} (ν• E)) (νν-swapₗ P) with swap *ᶜ E
    ... | swap*E rewrite swap-involutive P = ≅-refl Δ ν• (νᶜ swap*E)
    ⊖ (νᵇ_ {a = x •} (νᵇ E)) (νν-swapₗ P) with swap *ᵇ E
-   ... | swap*E rewrite swap-involutive P {-| swap∘push∘push x -} =
-      ≅-trans (νν-swapᵣ _) (ν (ν ≅-reflexive ({!!} {-ᴿ.swap∘suc-swap∘swap _-}))) Δ νᵇ (νᵇ swap*E)
+   ... | swap*E rewrite swap-involutive P =
+      ≅-trans (νν-swapᵣ _) (ν (ν ≅-reflexive (swap∘suc-swap∘swap _))) Δ νᵇ (νᵇ swap*E)
    ⊖ (νᵇ_ {a = • x} (νᵇ E)) (νν-swapₗ P) with swap *ᵇ E
-   ... | swap*E rewrite swap-involutive P {-| swap∘push∘push x -} =
-      ≅-trans (νν-swapᵣ _) (ν (ν ≅-reflexive {!!} {-(ᴿ.swap∘suc-swap∘swap _)-})) Δ νᵇ (νᵇ swap*E)
+   ... | swap*E rewrite swap-involutive P =
+      ≅-trans (νν-swapᵣ _) (ν (ν ≅-reflexive (swap∘suc-swap∘swap _))) Δ νᵇ (νᵇ swap*E)
    ⊖ (νᶜ_ {a = a} (νᶜ E)) (νν-swapₗ P) with swap *ᶜ E
    ... | swap*E rewrite swap-involutive P | swap∘push∘push a = νν-swapᵣ _ Δ νᶜ (νᶜ swap*E)
    ⊖ (ν•_ {x = x} (νᶜ E)) (νν-swapᵣ P) with swap *ᶜ E
@@ -46,10 +46,10 @@ module StructuralCong.Transition where
    ... | swap*E = ≅-refl Δ ν• (νᶜ swap*E)
    ⊖ (νᵇ_ {a = x •} (νᵇ E)) (νν-swapᵣ P) with swap *ᵇ E
    ... | swap*E {-rewrite swap∘push∘push x-} =
-      ≅-trans (νν-swapᵣ _) (ν (ν ≅-reflexive {!!}{-(ᴿ.swap∘suc-swap∘swap _)-})) Δ νᵇ (νᵇ swap*E)
+      ≅-trans (νν-swapᵣ _) (ν (ν ≅-reflexive (swap∘suc-swap∘swap _))) Δ νᵇ (νᵇ swap*E)
    ⊖ (νᵇ_ {a = • x} (νᵇ E)) (νν-swapᵣ P) with swap *ᵇ E
    ... | swap*E {- rewrite swap∘push∘push x-} =
-      ≅-trans (νν-swapᵣ _) (ν (ν ≅-reflexive {!!}{-(ᴿ.swap∘suc-swap∘swap _)-})) Δ νᵇ (νᵇ swap*E)
+      ≅-trans (νν-swapᵣ _) (ν (ν ≅-reflexive (swap∘suc-swap∘swap _))) Δ νᵇ (νᵇ swap*E)
    ⊖ (νᶜ_ {a = a} (νᶜ E)) (νν-swapᵣ P) with swap *ᶜ E
    ... | swap*E rewrite swap∘push∘push a = νν-swapᵣ _ Δ νᶜ (νᶜ swap*E)
    -- Compatibility.
