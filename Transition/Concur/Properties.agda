@@ -9,22 +9,22 @@ module Transition.Concur.Properties where
    open import Name using (_+_; zero)
    open import Proc using (Proc)
    import Proc.Ren
-   open import StructuralCong.Proc using (_≅_; module _≅_; ≅-refl; ≅-reflexive; ≅-sym; _*⁼_);
+   open import StructuralCong.Proc using (_≅_; module _≅_; ≅-refl; ≅-reflexive; ≅-sym; _*⁼);
       open _≅_ renaming (trans to ≅-trans)
-   open import Ren as ᴿ using (Ren; ᴺren; id; suc; pop; push; swap; shift-*; push-*); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; ᴺren; suc; pop; push; swap); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
-   open import Transition as ᵀ using (_—[_-_]→_; _—[_]→_; target); open ᵀ._—[_-_]→_
+   open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Concur
       using (_⌣₁_; module _⌣₁_; _⌣_; coinitial; module coinitial; _Δ_; _∶_Δ_; module _Δ_; ᴬ⊖; ᴬ⊖-✓; ⊖₁; ⊖);
       open _⌣₁_; open coinitial
-   open import Transition.Ren using (_*ᵇ_; _*ᶜ_)
+   open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
    -- structurally congruent, or structurally congruent with each other's swap image.
    cofinal : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : coinitial a a′) →
              let Γ′ = ᴬ.target (π₁ (ᴬ⊖ a⌣a′)) in Proc Γ′ → Proc Γ′ → Set
    cofinal ᵛ∇ᵛ = _≅_
-   cofinal ᵇ∇ᵇ P₁ P₂ = P₁ ≅ swap * P₂
+   cofinal ᵇ∇ᵇ P₁ P₂ = P₁ ≅ (swap *) P₂
    cofinal ᵇ∇ᶜ = _≅_
    cofinal ᶜ∇ᵇ = _≅_
    cofinal ᶜ∇ᶜ = _≅_
