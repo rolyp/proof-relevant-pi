@@ -7,29 +7,32 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    open import SharedModules
    import Relation.Binary.EqReasoning as EqReasoning
 
-   open ᴺ using (Name; _+_; zero; shift)
-   open ᴿ using (module Renameable; suc; pop; push; _ᴿ+_; swap; ᴺren);
-      open Renameable ⦃...⦄
+   open import Ext
 
-   involutive : ∀ {Γ} {ρ : Ren Γ Γ} → ᴿ.Involutive ρ → (a : A Γ) → ρ * ρ * a ≡ a
+   open ᴺ using (Name; _+_; zero; shift)
+   open ᴿ using (module Renameable; suc; pop; push; _ᴿ+_; swap; ᴺren)
+
+   module Renameable′ = Renameable {A = A}; open Renameable′ ⦃...⦄
+
+   involutive : ∀ {Γ} {ρ : Ren Γ Γ} → ᴿ.Involutive ρ → ρ * ∘ ρ * ≃ₑ id
    involutive {ρ = ρ} ρ-involutive a = trans (∘-*₁ ρ-involutive a) (*-preserves-id a)
 
-   swap-involutive : ∀ {Γ} (a : A (Γ + 2)) → swap * swap * a ≡ a
+   swap-involutive : ∀ {Γ} → swap {Γ} * ∘ swap * ≃ₑ id
    swap-involutive = involutive ᴿ.swap-involutive
 
-   swap∘push∘push : ∀ {Γ} (a : A Γ) → swap * push * push * a ≡ push * push * a
-   swap∘push∘push a = trans (cong (_*_ swap) (*-preserves-∘ a)) (trans (∘-*₁ (λ _ → refl) a) (sym (*-preserves-∘ a)))
+   swap∘push∘push : ∀ {Γ} → swap {Γ} * ∘ push * ∘ push * ≃ₑ push * ∘ push *
+   swap∘push∘push a = trans (cong (swap *) (*-preserves-∘ a)) (trans (∘-*₁ (λ _ → refl) a) (sym (*-preserves-∘ a)))
 
-   swap-suc-suc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (a : A (Γ + 2)) → swap * suc (suc ρ) * a ≡ suc (suc ρ) * swap * a
+   swap-suc-suc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → swap * ∘ suc (suc ρ) * ≃ₑ suc (suc ρ) * ∘ swap {Γ} *
    swap-suc-suc ρ = ∘-* (ᴿ.swap-suc-suc ρ)
 
-   postulate swap∘suc-swap∘swap : ∀ {Γ} (a : A (Γ + 3)) → swap * suc (swap {Γ}) * swap * a ≡ suc swap * swap * suc swap * a
+   postulate swap∘suc-swap∘swap : ∀ {Γ} → swap {Γ + 1} * ∘ suc swap * ∘ swap * ≃ₑ suc swap * ∘ swap * ∘ suc swap *
 -- swap∘suc-swap∘swap a = {!!}
 
-   pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) (a : A (Γ + 1)) → ρ * pop x * a ≡ pop (ρ * x) * suc ρ * a
-   pop-comm ρ x = ∘-* (ᴿ.pop-comm ρ x)
+--   pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) → ρ * ∘ pop x * ≃ₑ pop ((ρ *) x) * ∘ suc ρ *
+--   pop-comm ρ x = ∘-* (ᴿ.pop-comm ρ x)
 
-   ᴿ+-comm : ∀ {Γ Γ′} n (ρ : Ren Γ Γ′) (a : A _) → ρ ᴿ+ n * shift {Γ} n * a ≡ shift {Γ′} n * ρ * a
+   ᴿ+-comm : ∀ {Γ Γ′} n (ρ : Ren Γ Γ′) → (ρ ᴿ+ n) * ∘ shift {Γ} n * ≃ₑ shift {Γ′} n * ∘ ρ *
    ᴿ+-comm n ρ = ∘-* (ᴿ.ᴿ+-comm n ρ)
 {-
    swap∘suc-push : ∀ {Γ} (a : A (Γ + 1)) → push * a ≡ swap * suc push * a
