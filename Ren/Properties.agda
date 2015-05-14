@@ -27,8 +27,17 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    swap-suc-suc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → swap * ∘ suc (suc ρ) * ≃ₑ suc (suc ρ) * ∘ swap {Γ} *
    swap-suc-suc ρ = ∘-* (ᴿ.swap-suc-suc ρ)
 
-   postulate swap∘suc-swap∘swap : ∀ {Γ} → swap {Γ + 1} * ∘ suc swap * ∘ swap * ≃ₑ suc swap * ∘ swap * ∘ suc swap *
--- swap∘suc-swap∘swap a = {!!}
+   swap∘suc-swap∘swap : ∀ {Γ} → swap {Γ + 1} * ∘ suc swap * ∘ swap * ≃ₑ suc swap * ∘ swap * ∘ suc swap *
+   swap∘suc-swap∘swap a =
+      begin
+         (swap * ∘ suc swap * ∘ swap *) a
+      ≡⟨ trans (*-preserves-∘ _) (*-preserves-∘ _) ⟩
+         ((swap ∘ suc swap ∘ swap) *) a
+      ≡⟨ *-preserves-≃ₑ (ᴿ.swap∘suc-swap∘swap) a ⟩
+         ((suc swap ∘ swap ∘ suc swap) *) a
+      ≡⟨ trans (sym (*-preserves-∘ _)) (sym (*-preserves-∘ _)) ⟩
+         (suc swap * ∘ swap * ∘ suc swap *) a
+      ∎ where open EqReasoning (setoid _)
 
    pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) → ρ * ∘ pop x * ≃ₑ pop ((ρ *′) x) * ∘ suc ρ *
    pop-comm ρ x = ∘-* (ᴿ.pop-comm ρ x)
