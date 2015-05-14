@@ -58,6 +58,9 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) * ≃ₑ pop ((push *′) y) * ∘ swap {Γ} *
    pop∘swap y a = sym (∘-*₁ (≃ₑ-sym (ᴿ.pop∘swap y)) a)
 
+   pop-swap : ∀ {Γ} → pop zero * ∘ swap {Γ} * ≃ₑ pop zero *
+   pop-swap = ∘-*₁ ᴿ.pop-swap
+
    pop∘suc-push : ∀ {Γ} (y : Name Γ) → push * ∘ pop {Γ} y * ≃ₑ pop ((push *′) y) * ∘ suc push *
    pop∘suc-push y = ∘-* (ᴿ.pop∘suc-push y)
 

@@ -118,10 +118,16 @@ module Ren where
    swap∘push zero = refl
    swap∘push (ᴺ.suc _) = refl
 
+   -- The names of the next two are too similar.
    pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) ≃ₑ pop ((push *) y) ∘ swap
    pop∘swap _ zero = refl
    pop∘swap _ (ᴺ.suc zero) = refl
    pop∘swap _ (ᴺ.suc (ᴺ.suc _)) = refl
+
+   pop-swap : ∀ {Γ} → pop ᴺ.zero ∘ swap {Γ} ≃ₑ pop ᴺ.zero
+   pop-swap zero = refl
+   pop-swap (ᴺ.suc zero) = refl
+   pop-swap (ᴺ.suc (ᴺ.suc _)) = refl
 
    pop∘suc-push : ∀ {Γ} (y : Name Γ) → push ∘ (pop y) ≃ₑ pop ((push *) y) ∘ suc push
    pop∘suc-push _ zero = refl
