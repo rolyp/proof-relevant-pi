@@ -1,4 +1,4 @@
-Proof-relevant pi calculus - Agda formalisation
+Proof-relevant pi calculus
 ---
 
 Compiles with:
