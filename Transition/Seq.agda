@@ -7,7 +7,7 @@ module Transition.Seq where
    open import Action.Seq using (Action⋆; target⋆; []; _∷_)
    open import Name as ᴺ using (Cxt; Name; _+_; _ᴺ+_; zero; toℕ)
    open import Proc using (Proc)
-   open import Ren as ᴿ using (Ren; id; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import StructuralCong.Proc using (_≅_; ≅-sym; ≅-refl)
    open import Transition using (_—[_-_]→_; target)
    open import Transition.Concur using (_⌣_; module _Δ_; ⊖; coinitial; ᴬ⊖; ᴬ⊖-✓)

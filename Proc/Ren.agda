@@ -11,12 +11,12 @@ module Proc.Ren where
          Ren; suc; push; pop; swap; suc-preserves-≃ₑ; suc-preserves-id; suc-preserves-∘; Renameable; module Renameable; ᴺren
       );
       open Renameable ⦃...⦄ renaming (
-         _*_ to _*′_; *-preserves-≃ₑ to *-preserves-≃ₑ′; ∘-*-factor to ∘-*-factor′; id-* to id-*′
+         _*_ to _*′_; *-preserves-≃ₑ to *-preserves-≃ₑ′; *-preserves-∘ to *-preserves-∘′; id-* to id-*′
       )
 
    instance
       ren : Renameable Proc
-      ren = record { _*_ = _*_; *-preserves-≃ₑ = *-preserves-≃ₑ; ∘-*-factor = ∘-*-factor; id-* = id-* }
+      ren = record { _*_ = _*_; *-preserves-≃ₑ = *-preserves-≃ₑ; *-preserves-∘ = *-preserves-∘; id-* = id-* }
          where
             infixr 8 _*_
             _*_ : ∀ {Γ Γ′} → Ren Γ Γ′ → Proc Γ → Proc Γ′
@@ -41,14 +41,14 @@ module Proc.Ren where
             suc-∘-* : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → _*_ (suc ρ ∘ suc σ) ≃ₑ _*_ (suc (ρ ∘ σ))
             suc-∘-* = *-preserves-≃ₑ (suc-preserves-∘ _ _)
 
-            ∘-*-factor : ∀ {Γ₁ Γ₂ Γ₃} {ρ : Ren Γ₂ Γ₃} {σ : Ren Γ₁ Γ₂} (P : Proc Γ₁) → ρ * σ * P ≡ (ρ ∘ σ) * P
-            ∘-*-factor Ο = refl
-            ∘-*-factor (x •∙ P) = cong₂ _•∙_ refl (trans (∘-*-factor P) (suc-∘-* P))
-            ∘-*-factor (• x 〈 y 〉∙ P) = cong₃ •_〈_〉∙_ refl refl (∘-*-factor P)
-            ∘-*-factor (P ➕ Q) = (∘-*-factor P) ⟨ cong₂ _➕_ ⟩ (∘-*-factor Q)
-            ∘-*-factor (P │ Q) = (∘-*-factor P) ⟨ cong₂ _│_ ⟩ (∘-*-factor Q)
-            ∘-*-factor (ν P) = cong ν_ (trans (∘-*-factor P) (suc-∘-* P))
-            ∘-*-factor (! P) = cong !_ (∘-*-factor P)
+            *-preserves-∘ : ∀ {Γ₁ Γ₂ Γ₃} {ρ : Ren Γ₂ Γ₃} {σ : Ren Γ₁ Γ₂} (P : Proc Γ₁) → ρ * σ * P ≡ (ρ ∘ σ) * P
+            *-preserves-∘ Ο = refl
+            *-preserves-∘ (x •∙ P) = cong₂ _•∙_ refl (trans (*-preserves-∘ P) (suc-∘-* P))
+            *-preserves-∘ (• x 〈 y 〉∙ P) = cong₃ •_〈_〉∙_ refl refl (*-preserves-∘ P)
+            *-preserves-∘ (P ➕ Q) = (*-preserves-∘ P) ⟨ cong₂ _➕_ ⟩ (*-preserves-∘ Q)
+            *-preserves-∘ (P │ Q) = (*-preserves-∘ P) ⟨ cong₂ _│_ ⟩ (*-preserves-∘ Q)
+            *-preserves-∘ (ν P) = cong ν_ (trans (*-preserves-∘ P) (suc-∘-* P))
+            *-preserves-∘ (! P) = cong !_ (*-preserves-∘ P)
 
             id-* : ∀ {Γ} (P : Proc Γ) → id * P ≡ P
             id-* Ο = refl

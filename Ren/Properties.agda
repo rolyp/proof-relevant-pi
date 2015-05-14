@@ -12,38 +12,37 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
       open Renameable ⦃...⦄
 
    involutive : ∀ {Γ} {ρ : Ren Γ Γ} → ᴿ.Involutive ρ → (a : A Γ) → ρ * ρ * a ≡ a
-   involutive {ρ = ρ} ρ-involutive a = trans (∘-*₁ ρ-involutive a) (id-* a)
+   involutive {ρ = ρ} ρ-involutive a = trans (∘-*₁ ρ-involutive a) (*-preserves-id a)
 
    swap-involutive : ∀ {Γ} (a : A (Γ + 2)) → swap * swap * a ≡ a
    swap-involutive = involutive ᴿ.swap-involutive
 
    swap∘push∘push : ∀ {Γ} (a : A Γ) → swap * push * push * a ≡ push * push * a
-   swap∘push∘push a = trans (cong (_*_ swap) (∘-*-factor a)) (trans (∘-*₁ (λ _ → refl) a) (sym (∘-*-factor a)))
+   swap∘push∘push a = trans (cong (_*_ swap) (*-preserves-∘ a)) (trans (∘-*₁ (λ _ → refl) a) (sym (*-preserves-∘ a)))
 
    swap-suc-suc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (a : A (Γ + 2)) → swap * suc (suc ρ) * a ≡ suc (suc ρ) * swap * a
    swap-suc-suc ρ = ∘-* (ᴿ.swap-suc-suc ρ)
 
    postulate swap∘suc-swap∘swap : ∀ {Γ} (a : A (Γ + 3)) → swap * suc (swap {Γ}) * swap * a ≡ suc swap * swap * suc swap * a
-   -- swap∘suc-swap∘swap a = {!!}
+-- swap∘suc-swap∘swap a = {!!}
 
-{-
-   swap∘suc-push : ∀ {Γ} (a : A (Γ + 1)) → push * a ≡ swap * suc push * a
-   swap∘suc-push a = sym (∘-*₁ a (sym ᴿ.swap∘suc-push))
-
-   swap∘push : ∀ {Γ} (a : A (Γ + 1)) → suc push * a ≡ swap * push * a
-   swap∘push a = sym (∘-*₁ a (sym ᴿ.swap∘push))
--}
    pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) (a : A (Γ + 1)) → ρ * pop x * a ≡ pop (ρ * x) * suc ρ * a
    pop-comm ρ x = ∘-* (ᴿ.pop-comm ρ x)
 
    ᴿ+-comm : ∀ {Γ Γ′} n (ρ : Ren Γ Γ′) (a : A _) → ρ ᴿ+ n * shift {Γ} n * a ≡ shift {Γ′} n * ρ * a
    ᴿ+-comm n ρ = ∘-* (ᴿ.ᴿ+-comm n ρ)
 {-
+   swap∘suc-push : ∀ {Γ} (a : A (Γ + 1)) → push * a ≡ swap * suc push * a
+   swap∘suc-push a = sym (∘-*₁ a (sym ᴿ.swap∘suc-push))
+
+   swap∘push : ∀ {Γ} (a : A (Γ + 1)) → suc push * a ≡ swap * push * a
+   swap∘push a = sym (∘-*₁ a (sym ᴿ.swap∘push))
+
    pop-swap : ∀ {Γ} (a : A (Γ + 2)) → pop zero * swap * a ≡ pop zero * a
    pop-swap a = ∘-*₁ a ᴿ.pop-swap
 
    pop-zero∘suc-push : ∀ {Γ} (a : A (Γ + 1)) → pop zero * suc push * a ≡ a
-   pop-zero∘suc-push a = trans (∘-*₁ a ᴿ.pop-zero∘suc-push) (id-* a)
+   pop-zero∘suc-push a = trans (∘-*₁ a ᴿ.pop-zero∘suc-push) (*-preserves-id a)
 
    pop∘swap : ∀ {Γ} (y : Name Γ) (a : A (Γ + 2)) → suc (pop y) * a ≡ pop (push * y) * swap * a
    pop∘swap y a = sym (∘-*₁ a (sym (ᴿ.pop∘swap y)))
@@ -58,7 +57,7 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    pop-pop-swap x y a =
       begin
          pop x * suc (pop y) * swap * a
-      ≡⟨ cong (_*_ (pop x)) (∘-*-factor a) ⟩
+      ≡⟨ cong (_*_ (pop x)) (*-preserves-∘ a) ⟩
          pop x * (suc (pop y) ∘ swap) * a
       ≡⟨ ∘-* a (ᴿ.pop-pop-swap x y) ⟩
          pop y * suc (pop x) * a

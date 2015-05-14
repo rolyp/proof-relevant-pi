@@ -9,71 +9,85 @@ module Action.Ren where
    open import Action as ᴬ using (Actionᵇ; Actionᶜ; Action; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Name using (_+_; toℕ)
    open import Ren as ᴿ using (Ren; suc; suc-preserves-∘; pop; push; swap; Renameable);
-      open ᴿ.Renameable ⦃...⦄ renaming (_*_ to _*′_; *-preserves-≃ₑ to *-preserves-≃ₑ′; ∘-*-factor to ∘-*-factor′; id-* to id-*′)
+      open ᴿ.Renameable ⦃...⦄ renaming (
+         _* to _*′; *-preserves-≃ₑ to *-preserves-≃ₑ′; *-preserves-∘ to *-preserves-∘′; *-preserves-id to *-preserves-id′
+      )
 
    instance
       renᵇ : Renameable Actionᵇ
-      renᵇ = record { _*_ = _*_; *-preserves-≃ₑ = *-preserves-≃ₑ; ∘-*-factor = ∘-*-factor; id-* = id-* }
+      renᵇ = record {
+            _* = _*;
+            *-preserves-≃ₑ = *-preserves-≃ₑ;
+            *-preserves-∘ = *-preserves-∘;
+            *-preserves-id = *-preserves-id
+         }
          where
-            infixr 8 _*_
-            _*_ : ∀ {Γ Γ′} → Ren Γ Γ′ → Actionᵇ Γ → Actionᵇ Γ′
-            ρ * (x •) = (ρ *′ x) •
-            ρ * (• x) = • (ρ *′ x)
+            _* : ∀ {Γ Γ′} → Ren Γ Γ′ → Actionᵇ Γ → Actionᵇ Γ′
+            (ρ *) (x •) = (ρ *′) x •
+            (ρ *) (• x) = • (ρ *′) x
 
-            *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → (_*_ ρ) ≃ₑ (_*_ σ)
+            *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
             *-preserves-≃ₑ ρ≃ₑσ (x •) = cong _• (ρ≃ₑσ x)
             *-preserves-≃ₑ ρ≃ₑσ (• x) = cong •_ (ρ≃ₑσ x)
 
-            ∘-*-factor : ∀ {Γ₁ Γ₂ Γ₃} {ρ : Ren Γ₂ Γ₃} {σ : Ren Γ₁ Γ₂} (a : Actionᵇ Γ₁) → ρ * (σ * a) ≡ (ρ ∘ σ) * a
-            ∘-*-factor (x •) = refl
-            ∘-*-factor (• x) = refl
+            *-preserves-∘ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → ρ * ∘ σ * ≃ₑ (ρ ∘ σ) *
+            *-preserves-∘ (x •) = refl
+            *-preserves-∘ (• x) = refl
 
-            id-* : ∀ {Γ} (a : Actionᵇ Γ) → id * a ≡ a
-            id-* (x •) = cong _• (id-*′ x)
-            id-* (• x) = cong •_ (id-*′ x)
+            *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = Actionᵇ Γ}
+            *-preserves-id (x •) = cong _• (*-preserves-id′ x)
+            *-preserves-id (• x) = cong •_ (*-preserves-id′ x)
 
       renᶜ : Renameable Actionᶜ
-      renᶜ = record { _*_ = _*_; *-preserves-≃ₑ = *-preserves-≃ₑ; ∘-*-factor = ∘-*-factor; id-* = id-* }
+      renᶜ = record {
+            _* = _*;
+            *-preserves-≃ₑ = *-preserves-≃ₑ;
+            *-preserves-∘ = *-preserves-∘;
+            *-preserves-id = *-preserves-id
+         }
          where
-            infixr 8 _*_
-            _*_ : ∀ {Γ Γ′} → Ren Γ Γ′ → Actionᶜ Γ → Actionᶜ Γ′
-            ρ * • x 〈 y 〉 = • ρ *′ x 〈 ρ *′ y 〉
-            ρ * τ = τ
+            _* : ∀ {Γ Γ′} → Ren Γ Γ′ → Actionᶜ Γ → Actionᶜ Γ′
+            (ρ *) • x 〈 y 〉 = • (ρ *′) x 〈 (ρ *′) y 〉
+            (ρ *) τ = τ
 
-            *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → (_*_ ρ) ≃ₑ (_*_ σ)
+            *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
             *-preserves-≃ₑ ρ≃ₑσ • x 〈 y 〉 = cong₂ •_〈_〉 (ρ≃ₑσ x) (ρ≃ₑσ y)
             *-preserves-≃ₑ ρ≃ₑσ τ = refl
 
-            ∘-*-factor : ∀ {Γ₁ Γ₂ Γ₃} {ρ : Ren Γ₂ Γ₃} {σ : Ren Γ₁ Γ₂} (a : Actionᶜ Γ₁) → ρ * (σ * a) ≡ (ρ ∘ σ) * a
-            ∘-*-factor • x 〈 y 〉 = refl
-            ∘-*-factor τ = refl
+            *-preserves-∘ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → ρ * ∘ σ * ≃ₑ (ρ ∘ σ) *
+            *-preserves-∘ • x 〈 y 〉 = refl
+            *-preserves-∘ τ = refl
 
-            id-* : ∀ {Γ} (a : Actionᶜ Γ) → id * a ≡ a
-            id-* • x 〈 y 〉 = cong₂ •_〈_〉 (id-*′ x) (id-*′ y)
-            id-* τ = refl
+            *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = Actionᶜ Γ}
+            *-preserves-id • x 〈 y 〉 = cong₂ •_〈_〉 (*-preserves-id′ x) (*-preserves-id′ y)
+            *-preserves-id τ = refl
 
       ren : Renameable Action
-      ren = record { _*_ = _*_; *-preserves-≃ₑ = *-preserves-≃ₑ; ∘-*-factor = ∘-*-factor; id-* = id-* }
+      ren = record {
+               _* = _*;
+               *-preserves-≃ₑ = *-preserves-≃ₑ;
+               *-preserves-∘ = *-preserves-∘;
+               *-preserves-id = *-preserves-id
+            }
          where
-            infixr 8 _*_
-            _*_ : ∀ {Γ Γ′} → Ren Γ Γ′ → Action Γ → Action Γ′
-            ρ * a ᵇ = (ρ *′ a) ᵇ
-            ρ * a ᶜ = (ρ *′ a) ᶜ
+            _* : ∀ {Γ Γ′} → Ren Γ Γ′ → Action Γ → Action Γ′
+            (ρ *) (a ᵇ) = (ρ *′) a ᵇ
+            (ρ *) (a ᶜ) = (ρ *′) a ᶜ
 
-            *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → (_*_ ρ) ≃ₑ (_*_ σ)
+            *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
             *-preserves-≃ₑ ρ≃ₑσ (a ᵇ) = cong _ᵇ (*-preserves-≃ₑ′ ρ≃ₑσ a)
             *-preserves-≃ₑ ρ≃ₑσ (a ᶜ) = cong _ᶜ (*-preserves-≃ₑ′ ρ≃ₑσ a)
 
-            ∘-*-factor : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} (a : Action Γ) → ρ * (σ * a) ≡ (ρ ∘ σ) * a
-            ∘-*-factor (a ᵇ) = cong _ᵇ (∘-*-factor′ a)
-            ∘-*-factor (a ᶜ) = cong _ᶜ (∘-*-factor′ a)
+            *-preserves-∘ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → ρ * ∘ σ * ≃ₑ (ρ ∘ σ) *
+            *-preserves-∘ (a ᵇ) = cong _ᵇ (*-preserves-∘′ a)
+            *-preserves-∘ (a ᶜ) = cong _ᶜ (*-preserves-∘′ a)
 
-            id-* : ∀ {Γ} (a : Action Γ) → id * a ≡ a
-            id-* (a ᵇ) = cong _ᵇ (id-*′ a)
-            id-* (a ᶜ) = cong _ᶜ (id-*′ a)
+            *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = Action Γ}
+            *-preserves-id (a ᵇ) = cong _ᵇ (*-preserves-id′ a)
+            *-preserves-id (a ᶜ) = cong _ᶜ (*-preserves-id′ a)
 
    -- More generally, (ρ / a) ∘ a ≡ ρ * (a / ρ), where ρ / a = ρ + inc a.
-   ren-preserves-inc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (a : Action Γ) → ᴬ.target (ρ *′ a) ≡ Γ′ + toℕ (inc a)
+   ren-preserves-inc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (a : Action Γ) → ᴬ.target ((ρ *′) a) ≡ Γ′ + toℕ (inc a)
    ren-preserves-inc _ (_ • ᵇ) = refl
    ren-preserves-inc _ ((• _) ᵇ) = refl
    ren-preserves-inc _ (• _ 〈 _ 〉 ᶜ) = refl

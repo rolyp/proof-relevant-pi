@@ -7,13 +7,11 @@ module Transition.Concur where
    open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    import Action.Ren
    open import Name as ᴺ using (Name; Cxt; module Cxt; zero; _+_; toℕ)
-   open import Ren as ᴿ using (
-         Ren; Renameable; ᴺren; []; _∷_; _∘_; id; suc; push; push-*; pop; swap; shift-*
-      ); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; Renameable; ᴺren; suc; push; pop; swap); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    import Proc.Ren
-   open import Transition as ᵀ using (_—[_-_]→_; _—[_]→_; target); open ᵀ._—[_-_]→_
+   open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Ren
 
    -- Whether two coinitial evaluation contexts are concurrent. Only give the left rules, then symmetrise.

@@ -43,26 +43,36 @@ module Ren where
    ᴿ+-comm zero _ _ = refl
    ᴿ+-comm (ᴺ.suc n) ρ = cong ᴺ.suc ∘ ᴿ+-comm n ρ
 
-   -- Functor-like thing. TODO: turn _*_ into a postfix operator.
+   _∗ : Cxt → Cxt → Cxt
+   Γ ∗ = _+_ Γ
+
+   x : Cxt
+   x = ((0 ∗) 1 ∗) 1
+
+   -- Functor from renamings. TODO: turn _*_ into a postfix operator.
    record Renameable (A : Cxt → Set) : Set where
-      infixr 8 _*_
       field
-         _*_ : ∀ {Γ Γ′} → Ren Γ Γ′ → A Γ → A Γ′
-         *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → _*_ ρ ≃ₑ _*_ σ
-         id-* : ∀ {Γ} (a : A Γ) → id * a ≡ a
-         ∘-*-factor : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → _*_ ρ ∘ _*_ σ ≃ₑ _*_ (ρ ∘ σ)
+         _* : ∀ {Γ Γ′} → Ren Γ Γ′ → A Γ → A Γ′
+         *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
+         *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = A Γ}
+         *-preserves-∘ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → ρ * ∘ σ * ≃ₑ (ρ ∘ σ) *
 
       ∘-*₁ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} {ρ′ : Ren Γ Γ′} →
-             ρ ∘ σ ≃ₑ ρ′ → ∀ a → ρ * σ * a ≡ ρ′ * a
-      ∘-*₁ ρ∘σ≃ₑρ′ a = trans (∘-*-factor a) (*-preserves-≃ₑ ρ∘σ≃ₑρ′ a)
+             ρ ∘ σ ≃ₑ ρ′ → ρ * ∘ σ * ≃ₑ ρ′ *
+      ∘-*₁ ρ∘σ≃ₑρ′ a = trans (*-preserves-∘ a) (*-preserves-≃ₑ ρ∘σ≃ₑρ′ a)
 
       ∘-* : ∀ {Γ Δ Δ′ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} {ρ′ : Ren Δ′ Γ′} {σ′ : Ren Γ Δ′} →
-            ρ ∘ σ ≃ₑ ρ′ ∘ σ′ → _*_ ρ ∘ _*_ σ ≃ₑ _*_ ρ′ ∘ _*_ σ′
-      ∘-* ρ∘σ≡ρ′∘σ′ a = trans (∘-*₁ ρ∘σ≡ρ′∘σ′ a) (sym (∘-*-factor a))
+            ρ ∘ σ ≃ₑ ρ′ ∘ σ′ → ρ * ∘ σ * ≃ₑ ρ′ * ∘ σ′ *
+      ∘-* ρ∘σ≡ρ′∘σ′ a = trans (∘-*₁ ρ∘σ≡ρ′∘σ′ a) (sym (*-preserves-∘ a))
 
    instance
       ᴺren : Renameable Name
-      ᴺren = record { _*_ = λ ρ x → ρ x; *-preserves-≃ₑ = id; id-* = λ _ → refl; ∘-*-factor = λ _ → refl }
+      ᴺren = record {
+            _* = λ ρ x → ρ x;
+            *-preserves-≃ₑ = id;
+            *-preserves-id = λ _ → refl;
+            *-preserves-∘ = λ _ → refl
+         }
 
    open Renameable ᴺren
 
@@ -70,7 +80,7 @@ module Ren where
    pop x zero = x
    pop _ (ᴺ.suc n) = n
 
-   pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) → ρ ∘ pop {Γ} x ≃ₑ pop {Γ′} (ρ * x) ∘ suc ρ
+   pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) → ρ ∘ pop {Γ} x ≃ₑ pop {Γ′} ((ρ *) x) ∘ suc ρ
    pop-comm _ x zero = refl
    pop-comm _ x (ᴺ.suc y) = refl
 
