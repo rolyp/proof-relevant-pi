@@ -50,22 +50,6 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    pop-zero∘suc-push : ∀ {Γ} (a : A (Γ + 1)) → pop zero * suc push * a ≡ a
    pop-zero∘suc-push a = trans (∘-*₁ a ᴿ.pop-zero∘suc-push) (id-* a)
 
-   swap∘suc-swap∘swap : ∀ {Γ} (a : A (Γ + 3)) → swap * suc swap * swap * a ≡ suc swap * swap * suc swap * a
-   swap∘suc-swap∘swap a =
-      begin
-         swap * suc swap * swap * a
-      ≡⟨ ∘-*-factor (swap * a) ⟩
-         (swap ∘ suc swap) * swap * a
-      ≡⟨ ∘-*₁ a (sym (∘-assoc _ _ swap))  ⟩
-         (swap ∘ suc swap ∘ swap) * a
-      ≡⟨ cong (flip _*_ a) ᴿ.swap∘suc-swap∘swap ⟩
-         (suc swap ∘ swap ∘ suc swap) * a
-      ≡⟨ cong (flip _*_ a) (∘-assoc _ _ (suc swap)) ⟩
-         ((suc swap ∘ swap) ∘ suc swap) * a
-      ≡⟨ trans (sym (∘-*-factor a)) (sym (∘-*-factor (suc swap * a))) ⟩
-         suc swap * swap * suc swap * a
-      ∎ where open EqReasoning (setoid _)
-
    pop∘swap : ∀ {Γ} (y : Name Γ) (a : A (Γ + 2)) → suc (pop y) * a ≡ pop (push * y) * swap * a
    pop∘swap y a = sym (∘-*₁ a (sym (ᴿ.pop∘swap y)))
 
