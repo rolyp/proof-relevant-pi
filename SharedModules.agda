@@ -10,7 +10,7 @@ module SharedModules where
    open import Data.String public hiding (decSetoid; setoid)
    open import Data.Sum public hiding (map)
    open import Data.Unit public hiding (_≟_; decSetoid; preorder; setoid; _≤_; module _≤_)
-   open import Function public renaming (_∘_ to _∘ᶠ_; id to idᶠ)
+   open import Function public
    open import IO public
    open import Relation.Nullary public
    open import Relation.Binary public
