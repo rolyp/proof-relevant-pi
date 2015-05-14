@@ -126,3 +126,17 @@ module Ren where
    pop∘suc-push : ∀ {Γ} (y : Name Γ) → push ∘ (pop y) ≃ₑ pop ((push *) y) ∘ suc push
    pop∘suc-push _ zero = refl
    pop∘suc-push _ (ᴺ.suc _) = refl
+
+   pop-zero∘suc-push : ∀ {Γ} → pop {Γ + 1} ᴺ.zero ∘ suc push ≃ₑ id
+   pop-zero∘suc-push zero = refl
+   pop-zero∘suc-push (ᴺ.suc _) = refl
+
+   pop-pop-swap : ∀ {Γ} (x y : Name Γ) → pop x ∘ suc (pop y) ∘ swap ≃ₑ pop y ∘ suc (pop x)
+   pop-pop-swap _ _ zero = refl
+   pop-pop-swap _ _ (ᴺ.suc zero) = refl
+   pop-pop-swap _ _ (ᴺ.suc (ᴺ.suc _)) = refl
+
+   suc-pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) ∘ swap ≃ₑ pop ((push *) y)
+   suc-pop∘swap _ zero = refl
+   suc-pop∘swap _ (ᴺ.suc zero) = refl
+   suc-pop∘swap _ (ᴺ.suc (ᴺ.suc _)) = refl

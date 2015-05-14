@@ -60,20 +60,12 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
 
    pop∘suc-push : ∀ {Γ} (y : Name Γ) → push * ∘ pop {Γ} y * ≃ₑ pop ((push *′) y) * ∘ suc push *
    pop∘suc-push y = ∘-* (ᴿ.pop∘suc-push y)
-{-
-   pop-zero∘suc-push : ∀ {Γ} (a : A (Γ + 1)) → pop zero * suc push * a ≡ a
-   pop-zero∘suc-push a = trans (∘-*₁ a ᴿ.pop-zero∘suc-push) (*-preserves-id a)
 
-   suc-pop∘swap : ∀ {Γ} (y : Name Γ) (a : A (Γ + 2)) → suc (pop y) * swap * a ≡ pop (push * y) * a
-   suc-pop∘swap y a = ∘-*₁ a (ᴿ.suc-pop∘swap y)
+   pop-zero∘suc-push : ∀ {Γ} → pop {Γ + 1} zero * ∘ suc push * ≃ₑ id
+   pop-zero∘suc-push a = trans (∘-*₁ ᴿ.pop-zero∘suc-push a) (*-preserves-id a)
 
-   pop-pop-swap : ∀ {Γ} (x y : Name Γ) (a : A (Γ + 2)) → pop x * suc (pop y) * swap * a ≡ pop y * suc (pop x) * a
-   pop-pop-swap x y a =
-      begin
-         pop x * suc (pop y) * swap * a
-      ≡⟨ cong (_*_ (pop x)) (*-preserves-∘ a) ⟩
-         pop x * (suc (pop y) ∘ swap) * a
-      ≡⟨ ∘-* a (ᴿ.pop-pop-swap x y) ⟩
-         pop y * suc (pop x) * a
-      ∎ where open EqReasoning (setoid _)
--}
+   pop-pop-swap : ∀ {Γ} (x y : Name Γ) → pop x * ∘ suc (pop y) * ∘ swap {Γ} * ≃ₑ pop y * ∘ suc (pop x) *
+   pop-pop-swap x y a = trans (cong (pop x *) (*-preserves-∘ a)) (∘-* (ᴿ.pop-pop-swap x y) a)
+
+   suc-pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) * ∘ swap {Γ} * ≃ₑ pop ((push *′) y) *
+   suc-pop∘swap y = ∘-*₁ (ᴿ.suc-pop∘swap y)
