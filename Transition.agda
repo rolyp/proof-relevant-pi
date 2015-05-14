@@ -43,10 +43,10 @@ module Transition where
    out {a = a} {R} _ = a , R
 
    action : ∀ {Γ P} {a : Action Γ} {R} → P —[ a - _ ]→ R → Action Γ
-   action = π₁ ∘ᶠ out
+   action = π₁ ∘ out
 
    target : ∀ {Γ P} {a : Action Γ} {R} → P —[ a - _ ]→ R → Proc (ᴬ.target a)
-   target = π₂ ∘ᶠ out
+   target = π₂ ∘ out
 
    -- Closed τ-transition. (Not sure if we really need the size indices at this level.)
    _—[_]→_ : Proc 0 → Size → Proc 0 → Set

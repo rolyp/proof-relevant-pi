@@ -1,20 +1,18 @@
 open import Name as ᴺ using (Cxt)
 open import Ren as ᴿ using (Renameable; Ren)
 
+-- Agda can't infer the renaming arguments in many cases; these wrappers make them more explicit.
 module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
 
    open import SharedModules
    import Relation.Binary.EqReasoning as EqReasoning
 
    open ᴺ using (Name; _+_; zero; shift)
-   open ᴿ using (module Renameable; suc; pop; push; swap; ᴺren);
+   open ᴿ using (module Renameable; suc; pop; push; _ᴿ+_; swap; ᴺren);
       open Renameable ⦃...⦄
 {-
    suc-push∘push : ∀ {Γ} (a : A Γ) → suc push * push * a ≡ shift push * a
    suc-push∘push a = ∘-*₁ a ᴿ.suc-push∘push
-
-   push-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (a : A Γ) → suc ρ * push * a ≡ push * ρ * a
-   push-comm ρ a = ∘-* a (ᴿ.push-comm ρ)
 
    involutive : ∀ {Γ} {ρ : Ren Γ Γ} → ᴿ.Involutive ρ → (a : A Γ) → ρ * ρ * a ≡ a
    involutive {ρ = ρ} ρ-involutive a = trans (∘-*₁ a ρ-involutive) (id-* a)
@@ -33,19 +31,22 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
       ≡⟨ sym (∘-*-factor a) ⟩
          push * push * a
       ∎ where open EqReasoning (setoid _)
-
+-}
    swap-suc-suc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (a : A (Γ + 2)) → swap * suc (suc ρ) * a ≡ suc (suc ρ) * swap * a
-   swap-suc-suc ρ a = ∘-* a (ᴿ.swap-suc-suc ρ)
-
+   swap-suc-suc ρ = ∘-* (ᴿ.swap-suc-suc ρ)
+{-
    swap∘suc-push : ∀ {Γ} (a : A (Γ + 1)) → push * a ≡ swap * suc push * a
    swap∘suc-push a = sym (∘-*₁ a (sym ᴿ.swap∘suc-push))
 
    swap∘push : ∀ {Γ} (a : A (Γ + 1)) → suc push * a ≡ swap * push * a
    swap∘push a = sym (∘-*₁ a (sym ᴿ.swap∘push))
-
+-}
    pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) (a : A (Γ + 1)) → ρ * pop x * a ≡ pop (ρ * x) * suc ρ * a
-   pop-comm ρ x a = ∘-* a (ᴿ.pop-comm ρ x)
+   pop-comm ρ x = ∘-* (ᴿ.pop-comm ρ x)
 
+   ᴿ+-comm : ∀ {Γ Γ′} n (ρ : Ren Γ Γ′) (a : A _) → ρ ᴿ+ n * shift {Γ} n * a ≡ shift {Γ′} n * ρ * a
+   ᴿ+-comm n ρ = ∘-* (ᴿ.ᴿ+-comm n ρ)
+{-
    pop-swap : ∀ {Γ} (a : A (Γ + 2)) → pop zero * swap * a ≡ pop zero * a
    pop-swap a = ∘-*₁ a ᴿ.pop-swap
 
