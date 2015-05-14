@@ -87,14 +87,14 @@ module StructuralCong.Proc where
       open module IsEquivalence′ {Γ} = IsEquivalence (≅-equiv {Γ}) public
          hiding (sym; refl) renaming (trans to ≅-trans; reflexive to ≅-reflexive)
 
-   -- Substitution preserves ≅. Conceivably this should be another instance of Renameable, but that
-   -- would require the latter to be universe-polymorphic.
+   -- Renaming commutes with ≅. This isn't a Renameable (which is really Functor), but rather
+   -- the action of a functor on a 2-cell.
    infixr 8 _*⁼_
    _*⁼_ : ∀ {Γ Γ′ P R} (ρ : Ren Γ Γ′) → P ≅ R → ρ * P ≅ ρ * R
    ρ *⁼ (νν-swapₗ P) with ᴾ.ν (ν (swap * suc (suc ρ) * P))
-   ... | P′ rewrite ≡-sym (∘-* {σ′ = swap} P (ᴿ.swap-suc-suc ρ)) = νν-swapₗ (suc (suc ρ) * P)
+   ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapₗ (suc (suc ρ) * P)
    ρ *⁼ (νν-swapᵣ P) with ᴾ.ν (ν (swap * suc (suc ρ) * P))
-   ... | P′ rewrite ≡-sym (∘-* {σ′ = swap} P (ᴿ.swap-suc-suc ρ)) = νν-swapᵣ (suc (suc ρ) * P)
+   ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapᵣ (suc (suc ρ) * P)
    -- Compatibility.
    ρ *⁼ Ο = Ο
    ρ *⁼ (x •∙ P) = (ρ * x) •∙ (suc ρ *⁼ P)
