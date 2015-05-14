@@ -66,15 +66,15 @@ module Transition.Concur where
              E ⌣₁ E′ → F ⌣₁ F′ → E │ᵥ F ⌣₁ E′ │ᵥ F′
       ν•_ : ∀ {x u P R R′} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ • ᴺ.suc u 〈 zero 〉 ᶜ - _ ]→ R′} →
             E ⌣₁ E′ → ν• E ⌣₁ ν• E′
-      ν•ᵇ_ : ∀ {x P R R′} {a : Actionᵇ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push * a) ᵇ - _ ]→ R′} →
+      ν•ᵇ_ : ∀ {x P R R′} {a : Actionᵇ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push *) a ᵇ - _ ]→ R′} →
             E ⌣₁ E′ → ν• E ⌣₁ νᵇ_ {a = a} E′
-      ν•ᶜ_ : ∀ {x P R R′} {a : Actionᶜ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push * a) ᶜ - _ ]→ R′} →
+      ν•ᶜ_ : ∀ {x P R R′} {a : Actionᶜ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push *) a ᶜ - _ ]→ R′} →
             E ⌣₁ E′ → ν• E ⌣₁ νᶜ_ {a = a} E′
-      νᵇᵇ_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {E : P —[ (push * a) ᵇ - _ ]→ R} {E′ : P —[ (push * a′) ᵇ - _ ]→ R′} →
+      νᵇᵇ_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᵇ - _ ]→ R′} →
           E ⌣₁ E′ → νᵇ_ {a = a} E ⌣₁ νᵇ_ {a = a′} E′
-      νᵇᶜ_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ (push * a) ᵇ - _ ]→ R} {E′ : P —[ (push * a′) ᶜ - _ ]→ R′} →
+      νᵇᶜ_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
           E ⌣₁ E′ → νᵇ_ {a = a} E ⌣₁ νᶜ_ {a = a′} E′
-      νᶜᶜ_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ (push * a) ᶜ - _ ]→ R} {E′ : P —[ (push * a′) ᶜ - _ ]→ R′} →
+      νᶜᶜ_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ (push *) a ᶜ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
           E ⌣₁ E′ → νᶜ_ {a = a} E ⌣₁ νᶜ_ {a = a′} E′
       !_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {R R′} {E : P │ ! P —[ a - _ ]→ R} {E′ : P │ ! P —[ a′ - _ ]→ R′} →
            E ⌣₁ E′ → ! E ⌣₁ ! E′
@@ -104,9 +104,9 @@ module Transition.Concur where
    -- they represent extrusions of distinct binders.
    ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → a ᴬΔ a′
    ᴬ⊖ (ᵛ∇ᵛ {x} {u}) = • ᴺ.suc u 〈 zero 〉 ᶜ , • ᴺ.suc x 〈 zero 〉 ᶜ
-   ᴬ⊖ (ᵇ∇ᵇ {a} {a′}) = (push * a′) ᵇ , (push * a) ᵇ
-   ᴬ⊖ (ᵇ∇ᶜ {a} {a′}) = (push * a′) ᶜ , a ᵇ
-   ᴬ⊖ (ᶜ∇ᵇ {a} {a′}) = a′ ᵇ , (push * a) ᶜ
+   ᴬ⊖ (ᵇ∇ᵇ {a} {a′}) = (push *) a′ ᵇ , (push *) a ᵇ
+   ᴬ⊖ (ᵇ∇ᶜ {a} {a′}) = (push *) a′ ᶜ , a ᵇ
+   ᴬ⊖ (ᶜ∇ᵇ {a} {a′}) = a′ ᵇ , (push *) a ᶜ
    ᴬ⊖ (ᶜ∇ᶜ {a} {a′}) = a′ ᶜ , a ᶜ
 
    -- Cofinality of action residuals amounts to agreement on target context.
@@ -138,12 +138,12 @@ module Transition.Concur where
    -- paper. Also, the paper defines this over E and E′ and leaves E ⌣ E′ implicit, whereas we work
    -- directly with the proof of E ⌣ E′ and leave E and E′ implicit.
    ⊖₁ : ∀ {Γ P} {a a′ : Action Γ} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} → E ⌣₁ E′ → E Δ E′
-   ⊖₁ (E ᵇ│ᵇ F) = ᵇ∇ᵇ ∶ target E │ᵇ push *ᵇ F Δ push *ᵇ E ᵇ│ target F
-   ⊖₁ (E ᵇ│ᶜ F) = ᵇ∇ᶜ ∶ target E │ᶜ push *ᶜ F Δ E ᵇ│ target F
-   ⊖₁ (E ᶜ│ᵇ F) = ᶜ∇ᵇ ∶ target E │ᵇ F Δ push *ᶜ E ᶜ│ target F
+   ⊖₁ (E ᵇ│ᵇ F) = ᵇ∇ᵇ ∶ target E │ᵇ (push *ᵇ) F Δ (push *ᵇ) E ᵇ│ target F
+   ⊖₁ (E ᵇ│ᶜ F) = ᵇ∇ᶜ ∶ target E │ᶜ (push *ᶜ) F Δ E ᵇ│ target F
+   ⊖₁ (E ᶜ│ᵇ F) = ᶜ∇ᵇ ∶ target E │ᵇ F Δ (push *ᶜ) E ᶜ│ target F
    ⊖₁ (E ᶜ│ᶜ F) = ᶜ∇ᶜ ∶ target E │ᶜ F Δ E ᶜ│ target F
    ⊖₁ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′
-   ... | ᵇ∇ᵇ ∶ E′/E Δ E/E′ with pop y *ᵇ E/E′
+   ... | ᵇ∇ᵇ ∶ E′/E Δ E/E′ with (pop y *ᵇ) E/E′
    ... | pop-y*E/E′ rewrite pop∘push a y = ᵇ∇ᶜ ∶ (E′/E │• push *ᶜ F) Δ (pop-y*E/E′ ᵇ│ target F)
    ⊖₁ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′
    ... | ᶜ∇ᵇ ∶ E′/E Δ E/E′ with pop y *ᶜ E/E′
