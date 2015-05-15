@@ -42,8 +42,8 @@ module Transition.Ren where
    ... | E′ rewrite ᴿ+-comm 1 ρ a | sym (swap-suc-suc ρ R) = νᵇ E′
    (ρ *ᵇ) (! E) = ! (ρ *ᵇ) E
 
-   _*′_ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P} {a : Action Γ} {R} →
-         P —[ a - ι ]→ R → (ρ *) P —[ (ρ *) a - ι ]→ subst Proc (sym (ren-preserves-inc ρ a)) (((ρ ᴿ+ toℕ (inc a)) *) R)
+   _*′_ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P} {a : Action Γ} {R} → P —[ a - ι ]→ R → (ρ *) P —[ (ρ *) a - ι ]→
+         subst Proc (sym (ren-preserves-inc ρ a)) (((ρ ᴿ+ toℕ (inc a)) *) R)
    ρ *′ E with action E
    ... | (_ •) ᵇ = (ρ *ᵇ) E
    ... | (• _) ᵇ = (ρ *ᵇ) E
