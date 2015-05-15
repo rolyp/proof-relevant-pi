@@ -3,15 +3,15 @@ module Transition where
    open import SharedModules
    open import Ext
 
-   open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
+   open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    import Action.Ren
-   open import Name as ᴺ using (Name; _+_; suc; zero)
+   open import Name as ᴺ using (Name; _+_; suc; zero; toℕ)
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    import Proc.Ren
    open import Ren as ᴿ using (push; pop; swap; Renameable); open ᴿ.Renameable ⦃...⦄
 
    -- Transitions carry an explicit size index so we can define residuals to be size-preserving.
-   data _—[_-_]→_ {Γ} : Proc Γ → (a : Action Γ) → Size → Proc (ᴬ.target a) → Set where
+   data _—[_-_]→_ {Γ} : Proc Γ → (a : Action Γ) → Size → Proc (Γ + toℕ (inc a)) → Set where
       _•∙_ : ∀ {ι} (x : Name Γ) (P : Proc (Γ + 1)) → x •∙ P —[ x • ᵇ - ↑ ι ]→ P
       •_〈_〉∙_ : ∀ {ι} (x y : Name Γ) (P : Proc Γ) → • x 〈 y 〉∙ P —[ • x 〈 y 〉 ᶜ - ↑ ι ]→ P
       _➕₁_ : ∀ {ι P} {a : Action Γ} {R} → P —[ a - ι ]→ R → (Q : Proc Γ) → P ➕ Q —[ a - ↑ ι ]→ R
@@ -39,11 +39,11 @@ module Transition where
    source {P = P} _ = P
 
    -- Bundling these together simplifies the proofs that involve these projections on slices.
-   out : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Σ[ a′ ∈ Action Γ ] Proc (ᴬ.target a′)
+   out : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Σ[ a′ ∈ Action Γ ] Proc (Γ + toℕ (inc a′))
    out {a = a} {R} _ = a , R
 
    action : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Action Γ
    action = π₁ ∘ out
 
-   target : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Proc (ᴬ.target a)
+   target : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Proc (Γ + toℕ (inc a))
    target = π₂ ∘ out

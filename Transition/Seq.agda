@@ -23,13 +23,6 @@ module Transition.Seq where
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc ((Γ + toℕ n) + m) → Proc ((Γ + toℕ n) + m) → Set
    ⋈[_,_,_] Γ n m P₁ P₂ = ((braid n ᴿ+ m) *) P₁ ≅ P₂
 
-   -- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
-   -- composition is probably what we eventually want.
-   infixr 5 _∷_
-   data _—[_]→⋆_ {Γ} (P : Proc Γ) : (a⋆ : Action⋆ Γ) → Proc (target⋆ a⋆) → Set where
-      [] : P —[ [] ]→⋆ P
-      _∷_ : ∀ {a R a⋆ S} (E : P —[ a - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) → P —[ a ∷ a⋆ ]→⋆ S
-
    target-+ : ∀ {Γ} m (n : Name 3) (a : Action ((Γ + toℕ n) + m)) → ᴬ.target a ≡ (Γ + toℕ n) + (m + toℕ (inc a))
    target-+ _ _ (_ ᵇ) = refl
    target-+ _ _ (_ ᶜ) = refl
@@ -54,6 +47,13 @@ module Transition.Seq where
    ⊖′[_,_] n m {(ᴬ.• x) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
    ⊖′[_,_] n m {ᴬ.• x 〈 y 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
    ⊖′[_,_] n m {ᴬ.τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+
+   -- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
+   -- composition is probably what we eventually want.
+   infixr 5 _∷_
+   data _—[_]→⋆_ {Γ} (P : Proc Γ) : (a⋆ : Action⋆ Γ) → Proc (target⋆ a⋆) → Set where
+      [] : P —[ [] ]→⋆ P
+      _∷_ : ∀ {a R a⋆ S} (E : P —[ a - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) → P —[ a ∷ a⋆ ]→⋆ S
 
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
    infix 4 _≃_
