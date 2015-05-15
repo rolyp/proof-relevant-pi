@@ -45,8 +45,9 @@ module Transition.Seq where
 
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
-   ⊖′[ n , m ] {a = a} E γ =
-      let _ Δ E′ = E ⊖ᴱ (braid n ᴿ+ m); φ/E′ Δ E′/φ = ⊖† E′ γ in {!!} Δ {!!}
+   ⊖′[_,_] n m {a ᵇ} E γ = {!!}
+   ⊖′[_,_] n m {ᴬ.• _ 〈 _ 〉 ᶜ} E γ = {!!}
+   ⊖′[_,_] n m {ᴬ.τ ᶜ} E γ = let _ Δ E′ = E ⊖ᴱ (braid n ᴿ+ m); φ/E′ Δ E′/φ = ⊖† E′ γ in φ/E′ Δ {!!}
 
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
    infix 4 _≃_
