@@ -34,6 +34,11 @@ module Transition.Seq where
    target-+ _ _ (_ ᵇ) = refl
    target-+ _ _ (_ ᶜ) = refl
 
+   target-+′ : ∀ {Γ} m (n : Name 3) (a : Action ((Γ + toℕ n) + m)) →
+               (Γ + toℕ n) + (m + toℕ (inc a)) ≡ ᴬ.target (((braid n ᴿ+ m) *) a)
+   target-+′ _ _ (_ ᵇ) = refl
+   target-+′ _ _ (_ ᶜ) = refl
+
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
    record _Δ′_ {ι Γ n m a} {P P′ : Proc ((Γ + toℕ n) + m)} {R} (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) : Set where
@@ -41,13 +46,13 @@ module Transition.Seq where
       field
          {R′} : _
          γ/E : ⋈[ Γ , n , m + toℕ (inc a) ] (subst Proc (target-+ m n a) R) R′
-         E/γ : P′ —[ a - ι ]→ subst Proc (sym (target-+ m n a)) R′
+         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ subst Proc (target-+′ m n a) R′
 
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
-   ⊖′[_,_] n m {(x ᴬ.•) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ {!!}
-   ⊖′[_,_] n m {(ᴬ.• x) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ {!!}
-   ⊖′[_,_] n m {ᴬ.• x 〈 y 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ {!!}
+   ⊖′[_,_] n m {(x ᴬ.•) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[_,_] n m {(ᴬ.• x) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[_,_] n m {ᴬ.• x 〈 y 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
    ⊖′[_,_] n m {ᴬ.τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
 
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
