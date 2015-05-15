@@ -12,9 +12,6 @@ module Transition.Ren where
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; action); open ᵀ._—[_-_]→_
 
-   _/_ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P} {a : Action Γ} {R} → P —[ a - ι ]→ R → let n = toℕ (inc a) in Ren (Γ + n) (Γ′ + n)
-   _/_ ρ {a = a} E = ρ ᴿ+ toℕ (inc a)
-
    _*ᶜ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P R} {a : Actionᶜ Γ} → P —[ a ᶜ - ι ]→ R → (ρ *) P —[ (ρ *) a ᶜ - ι ]→ (ρ *) R
    _*ᵇ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P R} {a : Actionᵇ Γ} → P —[ a ᵇ - ι ]→ R → (ρ *) P —[ (ρ *) a ᵇ - ι ]→ (suc ρ *) R
 
@@ -49,3 +46,17 @@ module Transition.Ren where
    ... | (• _) ᵇ = (ρ *ᵇ) E
    ... | • _ 〈 _ 〉 ᶜ = (ρ *ᶜ) E
    ... | τ ᶜ = (ρ *ᶜ) E
+
+   infixl 5 _Δ_
+   record _Δ′_ {ι Γ Γ′} {P} {a : Action Γ} {R} (E : P —[ a - ι ]→ R) (ρ : Ren Γ Γ′) : Set where
+      constructor _Δ_
+      n = toℕ (inc a)
+      field
+         ρ/E : Ren (Γ + n) (Γ′ + n)
+         E/ρ : (ρ *) P —[ (ρ *) a - ι ]→ subst Proc (sym (ren-preserves-inc ρ a)) ((ρ/E *) R)
+
+   _/_ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P} {a : Action Γ} {R} → P —[ a - ι ]→ R → let n = toℕ (inc a) in Ren (Γ + n) (Γ′ + n)
+   _/_ ρ {a = a} E = ρ ᴿ+ toℕ (inc a)
+
+   _⊖_ : ∀ {ι Γ Γ′} {P} {a : Action Γ} {R} (E : P —[ a - ι ]→ R) (ρ : Ren Γ Γ′) → E Δ′ ρ
+   _⊖_ E ρ = ρ / E Δ ρ *′ E

@@ -32,7 +32,7 @@ module Transition.Seq where
    target-+ _ _ (_ ᵇ) = refl
    target-+ _ _ (_ ᶜ) = refl
 
-   -- WIP: the type of the symmetric residual (γ/E , E/γ) for a single transition.
+   -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
    record _Δ′_ {ι Γ n m a} {P P′ : Proc ((Γ + toℕ n) + m)} {R} (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) : Set where
       constructor _Δ_
@@ -40,6 +40,11 @@ module Transition.Seq where
          {R′} : _
          γ/E : ⋈[ Γ , n , m + toℕ (inc a) ] (subst Proc (target-+ m n a) R) R′
          E/γ : P′ —[ a - ι ]→ subst Proc (sym (target-+ m n a)) R′
+
+   ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
+         (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
+   ⊖′[ n , m ] {a = a} E γ =
+      let _ Δ E′ = E ⊖ᴱ (braid n ᴿ+ m); φ/E′ Δ E′/φ = ⊖† E′ γ in {!!} Δ {!!}
 
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
    infix 4 _≃_
