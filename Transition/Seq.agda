@@ -5,7 +5,7 @@ module Transition.Seq where
 
    open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
    open import Action.Seq using (Action⋆; target⋆; []; _∷_)
-   open import Name as ᴺ using (Cxt; Name; _+_; _ᴺ+_; zero; toℕ)
+   open import Name as ᴺ using (Cxt; Name; _+_; zero; toℕ)
    open import Proc using (Proc)
    open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import StructuralCong.Proc using (_≅_; ≅-sym; ≅-refl)
@@ -35,7 +35,7 @@ module Transition.Seq where
    target-+ _ _ (_ ᶜ) = refl
 
    target-+′ : ∀ {Γ} m (n : Name 3) (a : Action ((Γ + toℕ n) + m)) →
-               (Γ + toℕ n) + (m + toℕ (inc a)) ≡ ᴬ.target (((braid n ᴿ+ m) *) a)
+               ᴬ.target (((braid n ᴿ+ m) *) a) ≡ (Γ + toℕ n) + (m + toℕ (inc a))
    target-+′ _ _ (_ ᵇ) = refl
    target-+′ _ _ (_ ᶜ) = refl
 
@@ -46,7 +46,7 @@ module Transition.Seq where
       field
          {R′} : _
          γ/E : ⋈[ Γ , n , m + toℕ (inc a) ] (subst Proc (target-+ m n a) R) R′
-         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ subst Proc (target-+′ m n a) R′
+         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ subst Proc (sym (target-+′ m n a)) R′
 
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
