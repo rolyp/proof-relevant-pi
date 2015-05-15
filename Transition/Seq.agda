@@ -19,7 +19,7 @@ module Transition.Seq where
    braid (ᴺ.suc (ᴺ.suc (ᴺ.suc ())))
 
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc ((Γ + toℕ n) + m) → Proc ((Γ + toℕ n) + m) → Set
-   ⋈[_,_,_] Γ n m P₁ P₂ = (braid n) ᴿ+ m * P₁ ≅ P₂
+   ⋈[_,_,_] Γ n m P₁ P₂ = ((braid n ᴿ+ m) *) P₁ ≅ P₂
 
    -- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
    -- composition is probably what we eventually want.
@@ -43,7 +43,7 @@ module Transition.Seq where
 
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
    infix 4 _≃_
-   infixr 9 _∘_
+   infixr 9 _≃-∘_
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ R a′⋆ R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
       --- Transposition rule.
       [_∶⇋∶_]∷_ : ∀ {a R a′ R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) →
@@ -55,7 +55,7 @@ module Transition.Seq where
       _∷_ : ∀ {a R a⋆ S a′⋆ S′} (E : P —[ a - _ ]→ R) {E⋆ : R —[ a⋆ ]→⋆ S} {E′⋆ : R —[ a′⋆ ]→⋆ S′} →
             E⋆ ≃ E′⋆ → E ∷ E⋆ ≃ E ∷ E′⋆
       -- Transitivity and symmetry.
-      _∘_ : ∀ {a⋆ R a″⋆ S a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {F⋆ : P —[ a″⋆ ]→⋆ S} {E′⋆ : P —[ a′⋆ ]→⋆ R′} →
+      _≃-∘_ : ∀ {a⋆ R a″⋆ S a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {F⋆ : P —[ a″⋆ ]→⋆ S} {E′⋆ : P —[ a′⋆ ]→⋆ R′} →
             F⋆ ≃ E′⋆ → E⋆ ≃ F⋆ → E⋆ ≃ E′⋆
       ≃-sym : ∀ {a⋆ R a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
 
