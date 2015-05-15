@@ -12,7 +12,7 @@ module Transition.Seq where
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; target)
    open import Transition.Concur using (_⌣_; module _Δ_; ⊖; coinitial; ᴬ⊖; ᴬ⊖-✓)
-   open import Transition.Ren using (_Δ_) renaming (_⊖_ to _⊖ᴱ_)
+   open import Transition.Ren using (_Δ_; _*′)
 
    braid : ∀ {Γ} (n : Name 3) → Ren (Γ + toℕ n) (Γ + toℕ n)
    braid zero = id
@@ -45,9 +45,10 @@ module Transition.Seq where
 
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
-   ⊖′[_,_] n m {a ᵇ} E γ = {!!}
-   ⊖′[_,_] n m {ᴬ.• _ 〈 _ 〉 ᶜ} E γ = {!!}
-   ⊖′[_,_] n m {ᴬ.τ ᶜ} E γ = let _ Δ E′ = E ⊖ᴱ (braid n ᴿ+ m); φ/E′ Δ E′/φ = ⊖† E′ γ in φ/E′ Δ {!!}
+   ⊖′[_,_] n m {(x ᴬ.•) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ {!!}
+   ⊖′[_,_] n m {(ᴬ.• x) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ {!!}
+   ⊖′[_,_] n m {ᴬ.• x 〈 _ 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ {!E′/φ!}
+   ⊖′[_,_] n m {ᴬ.τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
 
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
    infix 4 _≃_
