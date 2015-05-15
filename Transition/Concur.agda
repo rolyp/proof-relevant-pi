@@ -12,7 +12,7 @@ module Transition.Concur where
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    import Proc.Ren
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
-   open import Transition.Ren
+   open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Whether two coinitial evaluation contexts are concurrent. Only give the left rules, then symmetrise.
    -- TODO: cases for •│ and ᵥ│.
