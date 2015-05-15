@@ -23,12 +23,12 @@ module Transition.Seq where
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc ((Γ + toℕ n) + m) → Proc ((Γ + toℕ n) + m) → Set
    ⋈[_,_,_] Γ n m P₁ P₂ = ((braid n ᴿ+ m) *) P₁ ≅ P₂
 
-   target-+ : ∀ {Γ} m (n : Name 3) (a : Action ((Γ + toℕ n) + m)) → ᴬ.target a ≡ (Γ + toℕ n) + (m + toℕ (inc a))
+   target-+ : ∀ {Γ} m (n : Name 3) (a : Action ((Γ + toℕ n) + m)) → ᴬ.target a ≡ (Γ + toℕ n) + (m + inc a)
    target-+ _ _ (_ ᵇ) = refl
    target-+ _ _ (_ ᶜ) = refl
 
    target-+′ : ∀ {Γ} m (n : Name 3) (a : Action ((Γ + toℕ n) + m)) →
-               ᴬ.target (((braid n ᴿ+ m) *) a) ≡ (Γ + toℕ n) + (m + toℕ (inc a))
+               ᴬ.target (((braid n ᴿ+ m) *) a) ≡ (Γ + toℕ n) + (m + inc a)
    target-+′ _ _ (_ ᵇ) = refl
    target-+′ _ _ (_ ᶜ) = refl
 
@@ -38,7 +38,7 @@ module Transition.Seq where
       constructor _Δ_
       field
          {R′} : _
-         γ/E : ⋈[ Γ , n , m + toℕ (inc a) ] (subst Proc (target-+ m n a) R) R′
+         γ/E : ⋈[ Γ , n , m + inc a ] (subst Proc (target-+ m n a) R) R′
          E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ subst Proc (sym (target-+′ m n a)) R′
 
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}

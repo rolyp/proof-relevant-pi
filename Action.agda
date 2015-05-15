@@ -17,9 +17,9 @@ module Action where
       _ᶜ : Actionᶜ Γ → Action Γ
 
    -- Action bumps the context by either 0 variables or 1 variable.
-   inc : ∀ {Γ} → Action Γ → Name 2
+   inc : ∀ {Γ} → Action Γ → Cxt
    inc (_ ᵇ) = ᴺ.suc zero
    inc (_ ᶜ) = zero
 
    target : ∀ {Γ} → Action Γ → Cxt
-   target {Γ} a = Γ + toℕ (inc a)
+   target {Γ} a = Γ + inc a

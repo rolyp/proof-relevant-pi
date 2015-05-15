@@ -40,7 +40,7 @@ module Transition.Ren where
    (ρ *ᵇ) (! E) = ! (ρ *ᵇ) E
 
    _*′ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P} {a : Action Γ} {R} → P —[ a - ι ]→ R → (ρ *) P —[ (ρ *) a - ι ]→
-         subst Proc (sym (ren-preserves-inc ρ a)) (((ρ ᴿ+ toℕ (inc a)) *) R)
+         subst Proc (sym (ren-preserves-inc ρ a)) (((ρ ᴿ+ inc a) *) R)
    (ρ *′) E with action E
    ... | (_ •) ᵇ = (ρ *ᵇ) E
    ... | (• _) ᵇ = (ρ *ᵇ) E
@@ -50,13 +50,12 @@ module Transition.Ren where
    infixl 5 _Δ_
    record _Δ′_ {ι Γ Γ′} {P} {a : Action Γ} {R} (E : P —[ a - ι ]→ R) (ρ : Ren Γ Γ′) : Set where
       constructor _Δ_
-      n = toℕ (inc a)
       field
-         ρ/E : Ren (Γ + n) (Γ′ + n)
+         ρ/E : Ren (Γ + inc a) (Γ′ + inc a)
          E/ρ : (ρ *) P —[ (ρ *) a - ι ]→ subst Proc (sym (ren-preserves-inc ρ a)) ((ρ/E *) R)
 
-   _/_ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P} {a : Action Γ} {R} → P —[ a - ι ]→ R → let n = toℕ (inc a) in Ren (Γ + n) (Γ′ + n)
-   _/_ ρ {a = a} E = ρ ᴿ+ toℕ (inc a)
+   _/_ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P} {a : Action Γ} {R} → P —[ a - ι ]→ R → let n = inc a in Ren (Γ + n) (Γ′ + n)
+   _/_ ρ {a = a} E = ρ ᴿ+ inc a
 
    _⊖_ : ∀ {ι Γ Γ′} {P} {a : Action Γ} {R} (E : P —[ a - ι ]→ R) (ρ : Ren Γ Γ′) → E Δ′ ρ
    _⊖_ E ρ = ρ / E Δ (ρ *′) E
