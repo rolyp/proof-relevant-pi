@@ -9,9 +9,10 @@ module Transition.Seq where
    open import Proc using (Proc)
    open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import StructuralCong.Proc using (_≅_; ≅-sym; ≅-refl)
+   open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; target)
    open import Transition.Concur using (_⌣_; module _Δ_; ⊖; coinitial; ᴬ⊖; ᴬ⊖-✓)
---   open import Transition.Ren using () renaming (_⊖_ to _ᴱ⊖_)
+   open import Transition.Ren using (_Δ_) renaming (_⊖_ to _⊖ᴱ_)
 
    braid : ∀ {Γ} (n : Name 3) → Ren (Γ + toℕ n) (Γ + toℕ n)
    braid zero = id
