@@ -1,4 +1,4 @@
--- Residual of a renaming and an action sequence.
+-- Obvious extension of residual of a renaming and an action to action sequences.
 module Action.Seq.Ren where
 
    open import SharedModules
@@ -30,15 +30,15 @@ module Action.Seq.Ren where
 
             *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
             *-preserves-≃ₑ ρ≃ₑσ [] = refl
-            *-preserves-≃ₑ ρ≃ₑσ (a ᵇ∷ a⋆) = {!!}
-            *-preserves-≃ₑ ρ≃ₑσ (a ᶜ∷ a⋆) = {!!}
+            *-preserves-≃ₑ ρ≃ₑσ (a ᵇ∷ a⋆) = cong₂ _ᵇ∷_ (*-preserves-≃ₑ′ ρ≃ₑσ a) {!!}
+            *-preserves-≃ₑ ρ≃ₑσ (a ᶜ∷ a⋆) = cong₂ _ᶜ∷_ (*-preserves-≃ₑ′ ρ≃ₑσ a) (*-preserves-≃ₑ ρ≃ₑσ a⋆)
 
             *-preserves-∘ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → ρ * ∘ σ * ≃ₑ (ρ ∘ σ) *
             *-preserves-∘ [] = refl
-            *-preserves-∘ (a ᵇ∷ a⋆) = {!!}
-            *-preserves-∘ (a ᶜ∷ a⋆) = {!!}
+            *-preserves-∘ (a ᵇ∷ a⋆) = cong₂ _ᵇ∷_ (*-preserves-∘′ a) {!!}
+            *-preserves-∘ (a ᶜ∷ a⋆) = cong₂ _ᶜ∷_ (*-preserves-∘′ a) (*-preserves-∘ a⋆)
 
             *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = Action⋆ Γ}
             *-preserves-id [] = refl
-            *-preserves-id (a ᵇ∷ a⋆) = {!!}
-            *-preserves-id (a ᶜ∷ a⋆) = {!!}
+            *-preserves-id (a ᵇ∷ a⋆) = cong₂ _ᵇ∷_ (*-preserves-id′ a) {!!}
+            *-preserves-id (a ᶜ∷ a⋆) = cong₂ _ᶜ∷_ (*-preserves-id′ a) (*-preserves-id a⋆)
