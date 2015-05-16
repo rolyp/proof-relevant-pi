@@ -72,7 +72,7 @@ module Transition.Seq where
 
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
-   ⊖⋆[ n , m ] [] γ = {!!}
+   ⊖⋆[ n , m ] [] γ = γ Δ []
    ⊖⋆[ n , m ] (E ᵇ∷ E⋆) γ = {!!}
 
 {-
