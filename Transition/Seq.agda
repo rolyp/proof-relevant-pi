@@ -5,7 +5,7 @@ module Transition.Seq where
    import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
-   open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; target⋆; []; _∷_)
+   open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; {-target⋆; -}[]; _∷_)
    open import Name as ᴺ using (Cxt; Name; _+_; zero; toℕ)
    open import Proc using (Proc)
    open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
@@ -25,22 +25,15 @@ module Transition.Seq where
    ⋈[_,_,_] Γ n m P₁ P₂ = ((braid n ᴿ+ m) *) P₁ ≅ P₂
 
    -- TODO: consolidate these a bit.
-   target-+ : ∀ {Γ} (n : Name 3) m (a : Action (Γ + toℕ n + m)) → ᴬ.target a ≡ Γ + toℕ n + (m + inc a)
+   target-+ : ∀ {Γ} (n : Name 3) m (a : Action (Γ + toℕ n + m)) → (Γ + toℕ n + m) + inc a ≡ Γ + toℕ n + (m + inc a)
    target-+ _ _ (_ ᵇ) = refl
    target-+ _ _ (_ ᶜ) = refl
 
-   target⋆-+ : ∀ {Γ} (n : Name 3) m (a⋆ : Action⋆ (Γ + toℕ n + m)) → ᴬ⋆.target⋆ a⋆ ≡ Γ + toℕ n + (m + inc⋆ a⋆)
-   target⋆-+ _ _ [] = refl
-   target⋆-+ {Γ} n m (a ∷ a⋆) =
-      let blah = target⋆-+ _ _ a⋆ in
-      begin
-         target⋆ a⋆
-      ≡⟨ {!!} ⟩
-         Γ + toℕ n + (m + (inc a + inc⋆ a⋆))
-      ∎ where open EqReasoning (setoid _)
+   target⋆-+ : ∀ {Γ} (n : Name 3) m (a⋆ : Action⋆ (Γ + toℕ n + m)) → (Γ + toℕ n + m) + inc⋆ a⋆ ≡ Γ + toℕ n + (m + inc⋆ a⋆)
+   target⋆-+ = {!!}
 
    target-+′ : ∀ {Γ} m (n : Name 3) (a : Action (Γ + toℕ n + m)) →
-               ᴬ.target (((braid n ᴿ+ m) *) a) ≡ Γ + toℕ n + (m + inc a)
+              (Γ + toℕ n + m) + inc (((braid n ᴿ+ m) *) a) ≡ Γ + toℕ n + (m + inc a)
    target-+′ _ _ (_ ᵇ) = refl
    target-+′ _ _ (_ ᶜ) = refl
 
@@ -64,9 +57,9 @@ module Transition.Seq where
    -- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
    -- composition is probably what we eventually want.
    infixr 5 _∷_
-   data _—[_]→⋆_ {Γ} (P : Proc Γ) : (a⋆ : Action⋆ Γ) → Proc (target⋆ a⋆) → Set where
+   data _—[_]→⋆_ {Γ} (P : Proc Γ) : (a⋆ : Action⋆ Γ) → Proc (Γ + inc⋆ a⋆) → Set where
       [] : P —[ [] ]→⋆ P
-      _∷_ : ∀ {a R a⋆ S} (E : P —[ a - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) → P —[ a ∷ a⋆ ]→⋆ S
+      _∷_ : ∀ {a R a⋆ S} (E : P —[ a - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) → P —[ a ∷ a⋆ ]→⋆ subst Proc {!!} S
 
    -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace.
    infixl 5 _Δ⋆_

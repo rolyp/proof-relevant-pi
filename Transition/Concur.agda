@@ -4,7 +4,7 @@ module Transition.Concur where
 
    open import Ext
 
-   open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
+   open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    import Action.Ren
    open import Name as ᴺ using (Name; Cxt; module Cxt; zero; _+_; toℕ)
    open import Ren as ᴿ using (Ren; Renameable; ᴺren; suc; push; pop; swap); open ᴿ.Renameable ⦃...⦄
@@ -98,7 +98,7 @@ module Transition.Concur where
    -- The type of the symmetric residual of concurrent actions a and a'. Not easy to bake
    -- cofinality into the definition (see 0.6.9 release notes for discussion).
    _ᴬΔ_ : ∀ {Γ} (a a′ : Action Γ) → Set
-   a ᴬΔ a′ = Action (ᴬ.target a) × Action (ᴬ.target a′)
+   _ᴬΔ_ {Γ} a a′ = Action (Γ + inc a) × Action (Γ + inc a′)
 
    -- The symmetric residual (a′/a, a/a′). Note that ᵇ∇ᵇ may also relate two bound outputs, but only if
    -- they represent extrusions of distinct binders.
@@ -110,7 +110,7 @@ module Transition.Concur where
    ᴬ⊖ (ᶜ∇ᶜ {a} {a′}) = a′ ᶜ , a ᶜ
 
    -- Cofinality of action residuals amounts to agreement on target context.
-   ᴬ⊖-✓ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : coinitial a a′) → ᴬ.target (π₁ (ᴬ⊖ a⌣a′)) ≡ ᴬ.target (π₂ (ᴬ⊖ a⌣a′))
+   ᴬ⊖-✓ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : coinitial a a′) → Γ + inc a + inc (π₁ (ᴬ⊖ a⌣a′)) ≡ Γ + inc a′ + inc (π₂ (ᴬ⊖ a⌣a′))
    ᴬ⊖-✓ ᵛ∇ᵛ = refl
    ᴬ⊖-✓ ᵇ∇ᵇ = refl
    ᴬ⊖-✓ ᵇ∇ᶜ = refl
@@ -126,7 +126,7 @@ module Transition.Concur where
          a⌣a′ : coinitial a a′
       a′/a = π₁ (ᴬ⊖ a⌣a′)
       a/a′ = π₂ (ᴬ⊖ a⌣a′)
-      Γ′ = ᴬ.target a′/a
+      Γ′ = Γ + inc a + inc a′/a
       field
          {P₁ P₂} : Proc Γ′
          E′/E : R —[ a′/a - _ ]→ P₁

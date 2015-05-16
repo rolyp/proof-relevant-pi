@@ -93,5 +93,5 @@ module Action.Ren where
    ren-preserves-inc _ (• _ 〈 _ 〉 ᶜ) = refl
    ren-preserves-inc _ (τ ᶜ) = refl
 
-   ren-preserves-target : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (a : Action Γ) → Γ′ + inc a ≡ ᴬ.target ((ρ *′) a)
+   ren-preserves-target : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (a : Action Γ) → Γ′ + inc a ≡ Γ′ + inc ((ρ *′) a)
    ren-preserves-target {Γ′ = Γ′} ρ = cong (_+_ Γ′) ∘ ren-preserves-inc ρ
