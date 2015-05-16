@@ -6,7 +6,7 @@ module Transition.Seq where
 
    open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; {-target⋆; -}[]; _∷_)
-   open import Name as ᴺ using (Cxt; Name; _+_; zero; toℕ)
+   open import Name as ᴺ using (Cxt; Name; _+_; +-assoc; zero; toℕ)
    open import Proc using (Proc)
    open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import StructuralCong.Proc using (_≅_; ≅-sym; ≅-refl)
@@ -26,8 +26,16 @@ module Transition.Seq where
 
    -- TODO: consolidate these a bit.
    target-+ : ∀ {Γ} (n : Name 3) m (a : Action (Γ + toℕ n + m)) → (Γ + toℕ n + m) + inc a ≡ Γ + toℕ n + (m + inc a)
-   target-+ _ _ (_ ᵇ) = refl
-   target-+ _ _ (_ ᶜ) = refl
+   target-+ {Γ} n m a =
+      let Γ′ = Γ + toℕ n in
+      begin
+         Γ′ + m + inc a
+      ≡⟨ {!!} ⟩
+         Γ′ + (m + inc a)
+      ∎ where open EqReasoning (setoid _)
+
+   bibble : ∀ {Γ} (n : Cxt) m m′ → ((Γ + n) + m) + m′ ≡ (Γ + n) + (m + m′)
+   bibble {Γ} n m m′ = let blah = +-assoc (Γ + n) m m′ in {!!}
 
    target⋆-+ : ∀ {Γ} (n : Name 3) m (a⋆ : Action⋆ (Γ + toℕ n + m)) → (Γ + toℕ n + m) + inc⋆ a⋆ ≡ Γ + toℕ n + (m + inc⋆ a⋆)
    target⋆-+ = {!!}
@@ -59,7 +67,8 @@ module Transition.Seq where
    infixr 5 _∷_
    data _—[_]→⋆_ {Γ} (P : Proc Γ) : (a⋆ : Action⋆ Γ) → Proc (Γ + inc⋆ a⋆) → Set where
       [] : P —[ [] ]→⋆ P
-      _∷_ : ∀ {a R a⋆ S} (E : P —[ a - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) → P —[ a ∷ a⋆ ]→⋆ subst Proc {!!} S
+      _∷_ : ∀ {a R a⋆ S} (E : P —[ a - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) → P —[ a ∷ a⋆ ]→⋆
+            let blah = +-assoc Γ (inc a) (inc⋆ a⋆) in subst Proc {!!} S
 
    -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace.
    infixl 5 _Δ⋆_
