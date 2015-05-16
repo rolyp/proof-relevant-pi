@@ -2,13 +2,12 @@
 module Action.Ren where
 
    open import SharedModules
-   import Relation.Binary.EqReasoning as EqReasoning
 
    open import Ext
 
    open import Action as ᴬ using (Actionᵇ; Actionᶜ; Action; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Name using (_+_; toℕ)
-   open import Ren as ᴿ using (Ren; suc; suc-preserves-∘; pop; push; swap; Renameable);
+   open import Ren as ᴿ using (Ren; Renameable);
       open ᴿ.Renameable ⦃...⦄ renaming (
          _* to _*′; *-preserves-≃ₑ to *-preserves-≃ₑ′; *-preserves-∘ to *-preserves-∘′; *-preserves-id to *-preserves-id′
       )
