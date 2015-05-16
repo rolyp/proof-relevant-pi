@@ -1,4 +1,4 @@
--- Apply a renaming to an action.
+-- Residual of a renaming and an action. TODO: define ρ / a.
 module Action.Ren where
 
    open import SharedModules

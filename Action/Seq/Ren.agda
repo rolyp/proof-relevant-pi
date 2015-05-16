@@ -1,4 +1,4 @@
--- Apply a renaming to an action sequence.
+-- Residual of a renaming and an action sequence.
 module Action.Seq.Ren where
 
    open import SharedModules
@@ -25,7 +25,7 @@ module Action.Seq.Ren where
          where
             _* : ∀ {Γ Γ′} → Ren Γ Γ′ → Action⋆ Γ → Action⋆ Γ′
             _* _ [] = []
-            _* ρ (a ∷ a⋆) = let blah = ((ρ ᴿ+ inc a) *) a⋆ in (ρ *′) a ∷ {!!}
+            _* ρ (a ∷ a⋆) = (ρ *′) a ∷ subst Action⋆ (ren-preserves-target ρ a) (((ρ ᴿ+ inc a) *) a⋆)
 
             *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
             *-preserves-≃ₑ ρ≃ₑσ a∗ = {!!}
