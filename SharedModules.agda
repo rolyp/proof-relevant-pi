@@ -20,6 +20,3 @@ module SharedModules where
       using (module ≅-Reasoning; ≅-to-≡; ≡-to-≅; subst-removable; ≡-subst-removable)
       renaming (_≅_ to _≅⁺_; refl to ≅⁺-refl; sym to ≅⁺-sym; cong to ≅-cong; cong₂ to ≅-cong₂; subst to ≅-subst)
    open import Size public
-
-   -- Categories library by copumpkin (Daniel Peebles)
-   open import Categories.Category public

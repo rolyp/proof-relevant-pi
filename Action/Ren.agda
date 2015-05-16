@@ -87,8 +87,11 @@ module Action.Ren where
             *-preserves-id (a ᶜ) = cong _ᶜ (*-preserves-id′ a)
 
    -- More generally, (ρ / a) ∘ a ≡ ρ * (a / ρ), where ρ / a = ρ + inc a.
-   ren-preserves-inc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → inc ∘ ρ *′ ≃ₑ inc
+   ren-preserves-inc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) →  inc ≃ₑ inc ∘ ρ *′
    ren-preserves-inc _ (_ • ᵇ) = refl
    ren-preserves-inc _ ((• _) ᵇ) = refl
    ren-preserves-inc _ (• _ 〈 _ 〉 ᶜ) = refl
    ren-preserves-inc _ (τ ᶜ) = refl
+
+   ren-preserves-target : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (a : Action Γ) → Γ′ + inc a ≡ ᴬ.target ((ρ *′) a)
+   ren-preserves-target {Γ′ = Γ′} ρ = cong (_+_ Γ′) ∘ ren-preserves-inc ρ
