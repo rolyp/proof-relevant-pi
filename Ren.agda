@@ -43,12 +43,6 @@ module Ren where
    ᴿ+-comm zero _ _ = refl
    ᴿ+-comm (ᴺ.suc n) ρ = cong ᴺ.suc ∘ ᴿ+-comm n ρ
 
-   _∗ : Cxt → Cxt → Cxt
-   Γ ∗ = _+_ Γ
-
-   x : Cxt
-   x = ((0 ∗) 1 ∗) 1
-
    -- Functor from renamings.
    record Renameable (A : Cxt → Set) : Set where
       field

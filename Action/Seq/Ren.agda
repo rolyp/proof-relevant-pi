@@ -25,16 +25,20 @@ module Action.Seq.Ren where
          where
             _* : ∀ {Γ Γ′} → Ren Γ Γ′ → Action⋆ Γ → Action⋆ Γ′
             (_ *) [] = []
-            (ρ *) (a ∷ a⋆) = (ρ *′) a ∷ subst Action⋆ (ren-preserves-target ρ a) (((ρ ᴿ+ inc a) *) a⋆)
+            (ρ *) (a ᵇ∷ a⋆) = (ρ *′) a ᵇ∷ ((ρ ᴿ+ 1) *) a⋆
+            (ρ *) (a ᶜ∷ a⋆) = (ρ *′) a ᶜ∷ (ρ *) a⋆
 
             *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
             *-preserves-≃ₑ ρ≃ₑσ [] = refl
-            *-preserves-≃ₑ ρ≃ₑσ (a ∷ a⋆) = {!!}
+            *-preserves-≃ₑ ρ≃ₑσ (a ᵇ∷ a⋆) = {!!}
+            *-preserves-≃ₑ ρ≃ₑσ (a ᶜ∷ a⋆) = {!!}
 
             *-preserves-∘ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → ρ * ∘ σ * ≃ₑ (ρ ∘ σ) *
             *-preserves-∘ [] = refl
-            *-preserves-∘ (a ∷ a⋆) = {!!}
+            *-preserves-∘ (a ᵇ∷ a⋆) = {!!}
+            *-preserves-∘ (a ᶜ∷ a⋆) = {!!}
 
             *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = Action⋆ Γ}
             *-preserves-id [] = refl
-            *-preserves-id (a ∷ a⋆) = {!!}
+            *-preserves-id (a ᵇ∷ a⋆) = {!!}
+            *-preserves-id (a ᶜ∷ a⋆) = {!!}
