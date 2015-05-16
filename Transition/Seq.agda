@@ -5,7 +5,7 @@ module Transition.Seq where
    import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
-   open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; {-target⋆; -}[]; _∷_)
+   open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _∷_)
    open import Name as ᴺ using (Cxt; Name; _+_; +-assoc; zero; toℕ)
    open import Proc using (Proc)
    open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
@@ -27,8 +27,7 @@ module Transition.Seq where
    -- TODO: consolidate a bit.
    target-+′ : ∀ {Γ} m (n : Name 3) (a : Action (Γ + toℕ n + m)) →
               (Γ + toℕ n + m) + inc (((braid n ᴿ+ m) *) a) ≡ Γ + toℕ n + (m + inc a)
-   target-+′ _ _ (_ ᵇ) = refl
-   target-+′ _ _ (_ ᶜ) = refl
+   target-+′ m n a = {!!}
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_

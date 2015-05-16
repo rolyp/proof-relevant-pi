@@ -1,7 +1,7 @@
 module Action.Seq where
 
    open import SharedModules
-   open import Action using (Action; inc{-; target-})
+   open import Action using (Action; inc)
    open import Name as ᴺ using (Cxt; Name; _+_)
 
    data Action⋆ (Γ : Cxt) : Set where
@@ -11,7 +11,3 @@ module Action.Seq where
    inc⋆ : ∀ {Γ} → Action⋆ Γ → Cxt
    inc⋆ [] = 0
    inc⋆ (a ∷ a⋆) = inc a + inc⋆ a⋆
-
--- target⋆ : ∀ {Γ} → Action⋆ Γ → Cxt
--- target⋆ {Γ} [] = Γ
--- target⋆ (_ ∷ a⋆) = target⋆ a⋆
