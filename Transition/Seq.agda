@@ -68,7 +68,7 @@ module Transition.Seq where
       field
          {R′} : _
          γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (subst Proc (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ subst Proc {!!} R′ --subst Proc (sym (target-+′ m n a⋆)) R′
+         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n m a⋆)) R′
 
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
