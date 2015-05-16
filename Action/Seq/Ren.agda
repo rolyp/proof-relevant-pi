@@ -46,3 +46,8 @@ module Action.Seq.Ren where
             *-preserves-id (a ᵇ∷ a⋆) =
                cong₂ _ᵇ∷_ (*-preserves-id′ a) (trans (*-preserves-≃ₑ suc-preserves-id a⋆) (*-preserves-id a⋆))
             *-preserves-id (a ᶜ∷ a⋆) = cong₂ _ᶜ∷_ (*-preserves-id′ a) (*-preserves-id a⋆)
+
+   ren-preserves-inc⋆ : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → inc⋆ ≃ₑ inc⋆ ∘ ρ *′
+   ren-preserves-inc⋆ ρ [] = refl
+   ren-preserves-inc⋆ ρ (a ᵇ∷ a⋆) rewrite ren-preserves-inc⋆ (suc ρ) a⋆ = refl
+   ren-preserves-inc⋆ ρ (a ᶜ∷ a⋆) rewrite ren-preserves-inc⋆ ρ a⋆ = refl

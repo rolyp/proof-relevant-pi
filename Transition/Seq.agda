@@ -26,9 +26,14 @@ module Transition.Seq where
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
    ⋈[_,_,_] Γ n m P₁ P₂ = ((braid n ᴿ+ m) *) P₁ ≅ P₂
 
-   braid-preserves-inc : ∀ {Γ} m (n : Name 3) (a : Action (Γ + toℕ n + m)) →
+   -- TODO: consolidate.
+   braid-preserves-inc : ∀ {Γ} (n : Name 3) m (a : Action (Γ + toℕ n + m)) →
                          Γ + toℕ n + m + inc (((braid n ᴿ+ m) *) a) ≡ Γ + toℕ n + (m + inc a)
-   braid-preserves-inc m n a rewrite sym (ren-preserves-inc (braid n ᴿ+ m) a) = +-assoc _ m (inc a)
+   braid-preserves-inc n m a rewrite sym (ren-preserves-inc (braid n ᴿ+ m) a) = +-assoc _ m (inc a)
+
+   braid-preserves-inc⋆ : ∀ {Γ} (n : Name 3) m (a⋆ : Action⋆ (Γ + toℕ n + m)) →
+                         Γ + toℕ n + (m + inc⋆ a⋆) ≡ Γ + toℕ n + m + inc⋆ (((braid n ᴿ+ m) *) a⋆)
+   braid-preserves-inc⋆ n m a⋆ = {!!}
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
@@ -38,7 +43,7 @@ module Transition.Seq where
       field
          {R′} : _
          γ/E : ⋈[ Γ , n , m + inc a ] (subst Proc (+-assoc _ m (inc a)) R) R′
-         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ subst Proc (sym (braid-preserves-inc m n a)) R′
+         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ subst Proc (sym (braid-preserves-inc n m a)) R′
 
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
@@ -63,7 +68,7 @@ module Transition.Seq where
       field
          {R′} : _
          γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (subst Proc (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ ? --subst Proc (sym (target-+′ m n a⋆)) R′
+         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ subst Proc {!!} R′ --subst Proc (sym (target-+′ m n a⋆)) R′
 
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
