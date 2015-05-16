@@ -24,13 +24,7 @@ module Transition.Seq where
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
    ⋈[_,_,_] Γ n m P₁ P₂ = ((braid n ᴿ+ m) *) P₁ ≅ P₂
 
-   -- TODO: consolidate these a bit.
-   target-+ : ∀ {Γ} (n : Name 3) m (a : Action (Γ + toℕ n + m)) → (Γ + toℕ n + m) + inc a ≡ Γ + toℕ n + (m + inc a)
-   target-+ n m = +-assoc _ m ∘ inc
-
-   target⋆-+ : ∀ {Γ} (n : Name 3) m (a⋆ : Action⋆ (Γ + toℕ n + m)) → (Γ + toℕ n + m) + inc⋆ a⋆ ≡ Γ + toℕ n + (m + inc⋆ a⋆)
-   target⋆-+ n m = +-assoc _ m ∘ inc⋆
-
+   -- TODO: consolidate a bit.
    target-+′ : ∀ {Γ} m (n : Name 3) (a : Action (Γ + toℕ n + m)) →
               (Γ + toℕ n + m) + inc (((braid n ᴿ+ m) *) a) ≡ Γ + toℕ n + (m + inc a)
    target-+′ _ _ (_ ᵇ) = refl
@@ -43,7 +37,7 @@ module Transition.Seq where
       constructor _Δ_
       field
          {R′} : _
-         γ/E : ⋈[ Γ , n , m + inc a ] (subst Proc (target-+ n m a) R) R′
+         γ/E : ⋈[ Γ , n , m + inc a ] (subst Proc (+-assoc _ m (inc a)) R) R′
          E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ subst Proc (sym (target-+′ m n a)) R′
 
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
@@ -58,8 +52,8 @@ module Transition.Seq where
    infixr 5 _∷_
    data _—[_]→⋆_ {Γ} (P : Proc Γ) : (a⋆ : Action⋆ Γ) → Proc (Γ + inc⋆ a⋆) → Set where
       [] : P —[ [] ]→⋆ P
-      _∷_ : ∀ {a R a⋆ S} (E : P —[ a - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) → P —[ a ∷ a⋆ ]→⋆
-            let blah = +-assoc Γ (inc a) (inc⋆ a⋆) in subst Proc {!!} S
+      _∷_ : ∀ {a R a⋆ S} (E : P —[ a - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) →
+            P —[ a ∷ a⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ a⋆)) S
 
    -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace.
    infixl 5 _Δ⋆_
@@ -68,7 +62,7 @@ module Transition.Seq where
       constructor _Δ_
       field
          {R′} : _
-         γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (subst Proc (target⋆-+ n m a⋆) R) R′
+         γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (subst Proc (+-assoc _ _ (inc⋆ a⋆)) R) R′
 --         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ subst Proc (sym (target-+′ m n a⋆)) R′
 
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
