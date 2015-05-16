@@ -26,19 +26,10 @@ module Transition.Seq where
 
    -- TODO: consolidate these a bit.
    target-+ : ∀ {Γ} (n : Name 3) m (a : Action (Γ + toℕ n + m)) → (Γ + toℕ n + m) + inc a ≡ Γ + toℕ n + (m + inc a)
-   target-+ {Γ} n m a =
-      let Γ′ = Γ + toℕ n in
-      begin
-         Γ′ + m + inc a
-      ≡⟨ {!!} ⟩
-         Γ′ + (m + inc a)
-      ∎ where open EqReasoning (setoid _)
-
-   bibble : ∀ {Γ} (n : Cxt) m m′ → ((Γ + n) + m) + m′ ≡ (Γ + n) + (m + m′)
-   bibble {Γ} n m m′ = let blah = +-assoc (Γ + n) m m′ in {!!}
+   target-+ n m = +-assoc _ m ∘ inc
 
    target⋆-+ : ∀ {Γ} (n : Name 3) m (a⋆ : Action⋆ (Γ + toℕ n + m)) → (Γ + toℕ n + m) + inc⋆ a⋆ ≡ Γ + toℕ n + (m + inc⋆ a⋆)
-   target⋆-+ = {!!}
+   target⋆-+ n m = +-assoc _ m ∘ inc⋆
 
    target-+′ : ∀ {Γ} m (n : Name 3) (a : Action (Γ + toℕ n + m)) →
               (Γ + toℕ n + m) + inc (((braid n ᴿ+ m) *) a) ≡ Γ + toℕ n + (m + inc a)
