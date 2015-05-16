@@ -29,6 +29,7 @@ module Action.Seq.Ren where
             (ρ *) (a ᵇ∷ a⋆) = (ρ *′) a ᵇ∷ ((ρ ᴿ+ 1) *) a⋆
             (ρ *) (a ᶜ∷ a⋆) = (ρ *′) a ᶜ∷ (ρ *) a⋆
 
+            -- Easy induction, using functoriality of * and suc.
             *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
             *-preserves-≃ₑ ρ≃ₑσ [] = refl
             *-preserves-≃ₑ ρ≃ₑσ (a ᵇ∷ a⋆) = cong₂ _ᵇ∷_ (*-preserves-≃ₑ′ ρ≃ₑσ a) (*-preserves-≃ₑ (suc-preserves-≃ₑ ρ≃ₑσ) a⋆)

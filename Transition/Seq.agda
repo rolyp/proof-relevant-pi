@@ -6,7 +6,8 @@ module Transition.Seq where
 
    open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
    open import Action.Ren using (ren-preserves-inc)
-   open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _∷_)
+   open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _ᵇ∷_)
+   import Action.Seq.Ren
    open import Name as ᴺ using (Cxt; Name; _+_; +-assoc; zero; toℕ)
    open import Proc using (Proc)
    open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
@@ -48,11 +49,11 @@ module Transition.Seq where
 
    -- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
    -- composition is probably what we eventually want.
-   infixr 5 _∷_
+   infixr 5 _ᵇ∷_
    data _—[_]→⋆_ {Γ} (P : Proc Γ) : (a⋆ : Action⋆ Γ) → Proc (Γ + inc⋆ a⋆) → Set where
       [] : P —[ [] ]→⋆ P
-      _∷_ : ∀ {a R a⋆ S} (E : P —[ a - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) →
-            P —[ a ∷ a⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ a⋆)) S
+      _ᵇ∷_ : ∀ {a R a⋆ S} (E : P —[ a ᵇ - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) →
+            P —[ a ᵇ∷ a⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ a⋆)) S
 
    -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace.
    infixl 5 _Δ⋆_
@@ -67,8 +68,9 @@ module Transition.Seq where
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = {!!}
-   ⊖⋆[ n , m ] (E ∷ E⋆) γ = {!!}
+   ⊖⋆[ n , m ] (E ᵇ∷ E⋆) γ = {!!}
 
+{-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
    infix 4 _≃_
    infixr 9 _≃-∘_
@@ -88,3 +90,4 @@ module Transition.Seq where
       ≃-sym : ∀ {a⋆ R a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
 
    -- TODO: IsEquivalence instance.
+-}
