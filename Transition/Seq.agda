@@ -7,7 +7,7 @@ module Transition.Seq where
    open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
    open import Action.Ren using (ren-preserves-inc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _ᵇ∷_)
-   import Action.Seq.Ren
+   open import Action.Seq.Ren using (ren-preserves-inc⋆)
    open import Name as ᴺ using (Cxt; Name; _+_; +-assoc; zero; toℕ)
    open import Proc using (Proc)
    open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
@@ -32,8 +32,8 @@ module Transition.Seq where
    braid-preserves-inc n m a rewrite sym (ren-preserves-inc (braid n ᴿ+ m) a) = +-assoc _ m (inc a)
 
    braid-preserves-inc⋆ : ∀ {Γ} (n : Name 3) m (a⋆ : Action⋆ (Γ + toℕ n + m)) →
-                         Γ + toℕ n + (m + inc⋆ a⋆) ≡ Γ + toℕ n + m + inc⋆ (((braid n ᴿ+ m) *) a⋆)
-   braid-preserves-inc⋆ n m a⋆ = {!!}
+                         Γ + toℕ n + m + inc⋆ (((braid n ᴿ+ m) *) a⋆) ≡ Γ + toℕ n + (m + inc⋆ a⋆)
+   braid-preserves-inc⋆ n m a⋆ rewrite sym (ren-preserves-inc⋆ (braid n ᴿ+ m) a⋆) = +-assoc _ m (inc⋆ a⋆)
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
