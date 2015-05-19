@@ -74,12 +74,14 @@ module Transition.Seq where
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = γ Δ []
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ =
-      let γ/E Δ E/γ = ⊖′[ n , m ] E γ; _Δ_ {R′} γ/E/E⋆ E⋆/γ/E = ⊖⋆[ n , m + 1 ] E⋆ γ/E
+      let _Δ_ {R′} γ/E E/γ = ⊖′[ n , m ] E γ; _Δ_ {S′} γ/E/E⋆ E⋆/γ/E = ⊖⋆[ n , m + 1 ] E⋆ γ/E
           x : source E/γ —[ ((braid n ᴿ+ m) *) (a ᵇ∷ a⋆) ]→⋆
               subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
-                    (subst Proc (cong (λ m → Γ + toℕ n + m) (+-assoc m 1 (inc⋆ a⋆))) R′)
-          x = {!!} in
-      {! !} Δ x
+                    (subst Proc (cong (λ m → Γ + toℕ n + m) (+-assoc m 1 (inc⋆ a⋆))) S′)
+          x = {!!}
+          y : R′ —[ (ᴿ.suc (braid n ᴿ+ m) *) a⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) _
+          y = E⋆/γ/E
+      in {! !} Δ {!? ᵇ∷ ?!}
 
 {-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
