@@ -73,20 +73,20 @@ module Transition.Seq where
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = γ Δ []
-   ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ =
-      let _Δ_ {R′} γ/E E/γ = ⊖′[ n , m ] E γ; _Δ_ {S′} γ/E/E⋆ E⋆/γ/E = ⊖⋆[ n , m + 1 ] E⋆ γ/E
-          x : source E/γ —[ ((braid n ᴿ+ m) *) (a ᵇ∷ a⋆) ]→⋆
+   ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ n , m ] E γ
+   ... | _Δ_ {R′} γ/E E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | sym (braid-preserves-inc n m (a ᵇ))
+   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
+      let x : source E/γ —[ ((braid n ᴿ+ m) *) (a ᵇ∷ a⋆) ]→⋆
               subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
                     (subst Proc (cong (λ m → Γ + toℕ n + m) (+-assoc m 1 (inc⋆ a⋆))) S′)
           x = {!!}
-          F : source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ - _ ]→ subst Proc (sym (braid-preserves-inc n m (a ᵇ))) R′
-          F = E/γ
+          b = ((braid n ᴿ+ m) *) a
           S† = subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′
           F⋆ : R′ —[ (ᴿ.suc (braid n ᴿ+ m) *) a⋆ ]→⋆ S†
           F⋆ = E⋆/γ/E
           b⋆ = (ᴿ.suc (braid n ᴿ+ m) *) a⋆
-          F∷F⋆ : source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ∷ b⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ b⋆)) S†
-          F∷F⋆ = {!!}
+          F∷F⋆ : source E/γ —[ b ᵇ∷ b⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ b⋆)) S†
+          F∷F⋆ = E/γ ᵇ∷ F⋆
           goal : source E/γ —[ ((braid n ᴿ+ m) *) (a ᵇ∷ a⋆) ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))) _
           goal = {!!}
       in {! !} Δ {!!}
