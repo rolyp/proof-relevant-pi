@@ -82,12 +82,12 @@ module Transition.Seq where
           x = {!!}
           b = ((braid n ᴿ+ m) *) a
           S† = subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′
-          F⋆ : R′ —[ (ᴿ.suc (braid n ᴿ+ m) *) a⋆ ]→⋆ S†
+          F⋆ : R′ —[ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ S†
           F⋆ = E⋆/γ/E
-          b⋆ = (ᴿ.suc (braid n ᴿ+ m) *) a⋆
+          b⋆ = ((braid n ᴿ+ m ᴿ+ 1) *) a⋆
           F∷F⋆ : source E/γ —[ b ᵇ∷ b⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ b⋆)) S†
           F∷F⋆ = E/γ ᵇ∷ F⋆
-          goal : source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ∷ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))) _
+          goal : source E/γ —[ b ᵇ∷ b⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))) _
           goal = {!!}
       in {! !} Δ {!!}
 
