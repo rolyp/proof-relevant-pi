@@ -73,7 +73,8 @@ module Transition.Seq where
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = γ Δ []
-   ⊖⋆[ n , m ] (E ᵇ∷ E⋆) γ = let γ/E Δ E/γ = ⊖′[ n , m ] E γ in {!!} Δ {!!}
+   ⊖⋆[ n , m ] (E ᵇ∷ E⋆) γ =
+      let γ/E Δ E/γ = ⊖′[ n , m ] E γ; _ = ⊖⋆[ n , m + 1 ] E⋆ γ/E in {!!} Δ {!!}
 
 {-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
