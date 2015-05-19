@@ -13,7 +13,7 @@ module Transition.Seq where
    open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import StructuralCong.Proc using (_≅_; ≅-sym; ≅-refl)
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
-   open import Transition using (_—[_-_]→_; target)
+   open import Transition using (_—[_-_]→_; source; target)
    open import Transition.Concur using (_⌣_; module _Δ_; ⊖; coinitial; ᴬ⊖; ᴬ⊖-✓)
    open import Transition.Ren using (_Δ_; _*′)
 
@@ -73,8 +73,13 @@ module Transition.Seq where
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = γ Δ []
-   ⊖⋆[ n , m ] (E ᵇ∷ E⋆) γ =
-      let γ/E Δ E/γ = ⊖′[ n , m ] E γ; _ = ⊖⋆[ n , m + 1 ] E⋆ γ/E in {!!} Δ {!!}
+   ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ =
+      let γ/E Δ E/γ = ⊖′[ n , m ] E γ; _Δ_ {R′} γ/E/E⋆ E⋆/γ/E = ⊖⋆[ n , m + 1 ] E⋆ γ/E
+          x : source E/γ —[ ((braid n ᴿ+ m) *) (a ᵇ∷ a⋆) ]→⋆
+              subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
+                    (subst Proc (cong (λ m → Γ + toℕ n + m) (+-assoc m 1 (inc⋆ a⋆))) R′)
+          x = {!!} in
+      {! !} Δ x
 
 {-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
