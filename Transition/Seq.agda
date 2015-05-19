@@ -60,7 +60,7 @@ module Transition.Seq where
       _ᵇ∷_ : ∀ {a R a⋆ S} (E : P —[ a ᵇ - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) →
             P —[ a ᵇ∷ a⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ a⋆)) S
 
-   -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace.
+   -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. Cofinal by construction.
    infixl 5 _Δ⋆_
    record _Δ⋆_ {Γ n m a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
           (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) : Set where
@@ -79,9 +79,15 @@ module Transition.Seq where
               subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
                     (subst Proc (cong (λ m → Γ + toℕ n + m) (+-assoc m 1 (inc⋆ a⋆))) S′)
           x = {!!}
-          y : R′ —[ (ᴿ.suc (braid n ᴿ+ m) *) a⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) _
-          y = E⋆/γ/E
-      in {! !} Δ {!? ᵇ∷ ?!}
+          F : source E/γ —[ ((braid n ᴿ+ m) *)a ᵇ - _ ]→ subst Proc (sym (braid-preserves-inc n m (a ᵇ))) R′
+          F = E/γ
+          F⋆ : R′ —[ (ᴿ.suc (braid n ᴿ+ m) *) a⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′
+          F⋆ = E⋆/γ/E
+--        F∷F⋆ : source E/γ —[ a ᵇ∷ a⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ a⋆)) S
+--        F∷F⋆ = {!!}
+          goal : source E/γ —[ ((braid n ᴿ+ m) *) (a ᵇ∷ a⋆) ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))) _
+          goal = {!!}
+      in {! !} Δ {!!}
 
 {-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
