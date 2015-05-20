@@ -4,7 +4,7 @@ module Transition.Seq where
    open import SharedModules hiding (_⇒_; trans)
    import Relation.Binary.EqReasoning as EqReasoning
 
-   open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
+   open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Ren using (ren-preserves-inc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _ᵇ∷_)
    open import Action.Seq.Ren using (ren-preserves-inc⋆)
@@ -37,20 +37,28 @@ module Transition.Seq where
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
-   record _Δ′_ {ι Γ n m a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
+   record _Δ′_ {ι Γ n m a} {P P′ : Proc (Γ + toℕ n + m)} {R : Proc (Γ + toℕ n + m + inc a)}
           (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) : Set where
       constructor _Δ_
       field
-         {R′} : _
+         {R′} : Proc (Γ + toℕ n + (m + inc a))
+         {R″} : Proc (Γ + toℕ n + m + inc (((braid n ᴿ+ m) *) a))
          γ/E : ⋈[ Γ , n , m + inc a ] (subst Proc (+-assoc _ m (inc a)) R) R′
-         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ subst Proc (sym (braid-preserves-inc n m a)) R′
+         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ R″
 
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
-         (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
-   ⊖′[ n , m ] {(x ᴬ.•) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ n , m ] {(ᴬ.• x) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ n , m ] {ᴬ.• x 〈 y 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ n , m ] {ᴬ.τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+            (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
+   ⊖′[ n , m ] {(_ •) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ n , m ] {(• _) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ n , m ] {• _ 〈 _ 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ n , m ] {τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+
+   ⊖′[_,_]-✓ : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
+               (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → let _Δ_ {R′} {R″} _ _ = ⊖′[ n , m ] E γ in R′ ≅⁺ R″
+   ⊖′[ n , m ]-✓ {(_ •) ᵇ} E γ = ≡-to-≅ refl
+   ⊖′[_,_]-✓ n m {(• _) ᵇ} E γ = ≡-to-≅ refl
+   ⊖′[_,_]-✓ n m {• _ 〈 _ 〉 ᶜ} E γ = ≡-to-≅ refl
+   ⊖′[_,_]-✓ n m {τ ᶜ} E γ = ≡-to-≅ refl
 
    -- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
    -- composition is probably what we eventually want.
@@ -58,39 +66,48 @@ module Transition.Seq where
    data _—[_]→⋆_ {Γ} (P : Proc Γ) : (a⋆ : Action⋆ Γ) → Proc (Γ + inc⋆ a⋆) → Set where
       [] : P —[ [] ]→⋆ P
       _ᵇ∷_ : ∀ {a R a⋆ S} (E : P —[ a ᵇ - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) →
-            P —[ a ᵇ∷ a⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ a⋆)) S
+             P —[ a ᵇ∷ a⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ a⋆)) S
 
-   -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. Cofinal by construction.
+   -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace.
    infixl 5 _Δ⋆_
    record _Δ⋆_ {Γ n m a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
           (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) : Set where
       constructor _Δ_
       field
-         {R′} : _
-         γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (subst Proc (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n m a⋆)) R′
+         {R′} : Proc (Γ + toℕ n + (m + inc⋆ a⋆))
+         {R″} : Proc (Γ + toℕ n + m + inc⋆ (((braid n ᴿ+ m) *) a⋆))
+         γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (subst Proc (+-assoc (Γ + toℕ n) m (inc⋆ a⋆)) R) R′
+         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ R″
 
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = γ Δ []
-   ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ n , m ] E γ
-   ... | _Δ_ {R′} γ/E E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | sym (braid-preserves-inc n m (a ᵇ))
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
-      let x : source E/γ —[ ((braid n ᴿ+ m) *) (a ᵇ∷ a⋆) ]→⋆
-              subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
-                    (subst Proc (cong (λ m → Γ + toℕ n + m) (+-assoc m 1 (inc⋆ a⋆))) S′)
-          x = {!!}
-          b = ((braid n ᴿ+ m) *) a
-          S† = subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′
-          F⋆ : R′ —[ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ S†
-          F⋆ = E⋆/γ/E
+   ⊖⋆[_,_] {Γ} n m {a⋆ = • x ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ n , m ] E γ | ⊖′[ n , m ]-✓ E γ
+   ... | _Δ_ {R′} {R″} γ/E E/γ | q with ⊖⋆[ n , m + 1 ] E⋆ γ/E
+   ... | _Δ_ {S′} {S″} γ/E/E⋆ E⋆/γ/E =
+      let b = ((braid n ᴿ+ m) *) (• x)
           b⋆ = ((braid n ᴿ+ m ᴿ+ 1) *) a⋆
-          F∷F⋆ : source E/γ —[ b ᵇ∷ b⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ b⋆)) S†
-          F∷F⋆ = E/γ ᵇ∷ F⋆
-          goal : source E/γ —[ b ᵇ∷ b⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))) _
-          goal = {!!}
-      in {! !} Δ {!!}
-
+          E/γ∷E⋆/γ/E : source E/γ —[ b ᵇ∷ b⋆ ]→⋆ subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ b⋆)) S″
+          E/γ∷E⋆/γ/E = E/γ ᵇ∷ {!E⋆/γ/E!}
+      in {!!} Δ {!!}
+{-
+      let b = ((braid n ᴿ+ m) *) a
+          b⋆ = ((braid n ᴿ+ m ᴿ+ 1) *) a⋆
+          E/γ∷E⋆/γ/E : source E/γ —[ b ᵇ∷ b⋆ ]→⋆
+                       subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ b⋆))
+                             (subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′)
+          E/γ∷E⋆/γ/E = E/γ ᵇ∷ E⋆/γ/E
+          goalᵣ : source E/γ —[ b ᵇ∷ b⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))) _
+          goalᵣ = {!!}
+          goalₗ′ : ⋈[ Γ , n , m + 1 + inc⋆ a⋆ ] (subst Proc (+-assoc (Γ + toℕ n) (m + 1) (inc⋆ a⋆)) _) S′
+          goalₗ′ = γ/E/E⋆
+          goalₗ : ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ] (subst Proc (+-assoc (Γ + toℕ n) m (1 + inc⋆ a⋆))
+                                                       (subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ a⋆))
+                                                              _)) {!!}
+          goalₗ = {!!}
+      in goalₗ Δ goalᵣ
+-}
+   ⊖⋆[_,_] {Γ} n m {a⋆ = x • ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
 {-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
    infix 4 _≃_
