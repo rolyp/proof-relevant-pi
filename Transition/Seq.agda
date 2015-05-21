@@ -84,10 +84,12 @@ module Transition.Seq where
           E/γ∷E⋆/γ/E = E/γ ᵇ∷ E⋆/γ/E
           goalₗ : ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ]
                  (subst Proc (+-assoc (Γ + toℕ n) m (1 + inc⋆ a⋆))
-                 (subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ a⋆)) _))
+                        (subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ a⋆)) _))
                  (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
           goalₗ = {!!}
-          goalᵣ : source E/γ —[ b ᵇ∷ b⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))) _
+          goalᵣ : source E/γ —[ b ᵇ∷ b⋆ ]→⋆
+                 subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
+                       (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
           goalᵣ = {!!}
       in  goalₗ Δ goalᵣ
 
