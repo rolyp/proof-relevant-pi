@@ -11,7 +11,7 @@ module Transition.Seq where
    open import Action.Ren using (ren-preserves-inc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _ᵇ∷_; _ᶜ∷_)
    open import Action.Seq.Ren using (ren-preserves-inc⋆)
-   open import Name as ᴺ using (Cxt; Name; _+_; +-assoc; zero; toℕ)
+   open import Name as ᴺ using (Cxt; Name; _+_; +-assoc; zero; toℕ; +-left-identity)
    open import Proc using (Proc)
    open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import StructuralCong.Proc using (_≅_; ≅-sym; ≅-refl)
@@ -116,7 +116,11 @@ module Transition.Seq where
       in quibble _ σ m 1 (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆ Δ E/γ∷E⋆/γ/E
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ n , m ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ n , m ] E⋆ γ/E | braid-preserves-inc n m (a ᶜ)
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl = {!!} Δ {!!}
+   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
+      let Γ′ = Γ + toℕ n
+          σ = braid {Γ} n
+          open ≅-Reasoning
+      in quibble _ σ m 0 (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆ Δ {!!}
 
 {-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
