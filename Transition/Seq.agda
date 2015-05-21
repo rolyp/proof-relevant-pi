@@ -87,10 +87,17 @@ module Transition.Seq where
                         (subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ a⋆)) _))
                  (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
           goalₗ = {!!}
+          open EqReasoning (setoid _)
           goalᵣ : source E/γ —[ b ᵇ∷ b⋆ ]→⋆
                  subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
                        (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
-          goalᵣ = {!!}
+          goalᵣ = subst (λ P → source E/γ —[ b ᵇ∷ b⋆ ]→⋆ P) (
+                begin
+                   {!!}
+                ≡⟨ {!!} ⟩
+                   {!!}
+                ∎
+             ) E/γ∷E⋆/γ/E
       in  goalₗ Δ goalᵣ
 
 {-
