@@ -76,17 +76,12 @@ module Transition.Seq where
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ n , m ] E γ
    ... | _Δ_ {R′} γ/E E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | sym (braid-preserves-inc n m (a ᵇ))
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
-      let x : source E/γ —[ ((braid n ᴿ+ m) *) (a ᵇ∷ a⋆) ]→⋆
-              subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
-                    (subst Proc (cong (λ m → Γ + toℕ n + m) (+-assoc m 1 (inc⋆ a⋆))) S′)
-          x = {!!}
-          b = ((braid n ᴿ+ m) *) a
-          S† = subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′
-          F⋆ : R′ —[ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ S†
-          F⋆ = E⋆/γ/E
+      let b = ((braid n ᴿ+ m) *) a
           b⋆ = ((braid n ᴿ+ m ᴿ+ 1) *) a⋆
-          F∷F⋆ : source E/γ —[ b ᵇ∷ b⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ b⋆)) S†
-          F∷F⋆ = E/γ ᵇ∷ F⋆
+          E/γ∷E⋆/γ/E : source E/γ —[ b ᵇ∷ b⋆ ]→⋆
+                       subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ b⋆))
+                             (subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′)
+          E/γ∷E⋆/γ/E = E/γ ᵇ∷ E⋆/γ/E
           goal : source E/γ —[ b ᵇ∷ b⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))) _
           goal = {!!}
       in {! !} Δ {!!}
