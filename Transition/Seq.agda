@@ -29,20 +29,25 @@ module Transition.Seq where
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
    ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≅ P′
 
-   α : ∀ {Γ Γ′} Δ Δ′ Δ″ (ρ : Ren Γ Γ′) (P : Proc (Γ + (Δ + Δ′ + Δ″))) →
-       ((ρ ᴿ+ (Δ + Δ′ + Δ″))*) P ≅⁺ ((ρ ᴿ+ (Δ + (Δ′ + Δ″)))*) (subst Proc {!!} P)
-   α Γ′ Γ″ ρ = {!!}
+   quib : ∀ {Γ Γ′} Δ† Δ′ Δ″ (ρ : Ren Γ Γ′) (P : Proc (Γ + (Δ† + Δ′ + Δ″))) P′ →
+       ((ρ ᴿ+ (Δ† + Δ′ + Δ″))*) P ≅ P′ →
+       ((ρ ᴿ+ (Δ† + (Δ′ + Δ″)))*)
+       (subst Proc {!!}
+              (subst Proc {!!} P)) ≅ subst Proc ((cong (_+_ Γ′) (+-assoc Δ† Δ′ Δ″))) P′
+   quib Δ† Δ′ Δ″ ρ P = {!!}
 
-   bibble : ∀ Γ (n : Name 3) (m : Cxt) (a⋆ : Action⋆ (Γ + toℕ n + m + 1))
-            (S : Proc (Γ + toℕ n + m + 1 + inc⋆ a⋆)) (S′ : Proc (Γ + toℕ n + (m + 1 + inc⋆ a⋆))) →
-            let Γ′ = Γ + toℕ n
-                blah = α in
-            ((braid n ᴿ+ (m + 1 + inc⋆ a⋆))*)
-            (subst Proc (+-assoc Γ′ (m + 1) (inc⋆ a⋆)) S) ≅ S′ →
-            ((braid n ᴿ+ (m + (1 + inc⋆ a⋆)))*)
-            (subst Proc (+-assoc Γ′ m (1 + inc⋆ a⋆))
-                   (subst Proc (+-assoc (Γ′ + m) 1 (inc⋆ a⋆)) S)) ≅ subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′
-   bibble Γ n m a⋆ S S′ γ = {!!}
+   bibble : ∀ Γ (n : Name 3) (m : Cxt) (m′ : Cxt)
+            (S : Proc (Γ + toℕ n + m + 1 + m′)) (S′ : Proc (Γ + toℕ n + (m + 1 + m′))) →
+            let Γ′ = Γ + toℕ n in
+            ((braid n ᴿ+ (m + 1 + m′))*)
+            (subst Proc (+-assoc Γ′ (m + 1) m′) S) ≅ S′ →
+            ((braid n ᴿ+ (m + (1 + m′)))*)
+            (subst Proc (+-assoc Γ′ m (1 + m′))
+                   (subst Proc (+-assoc (Γ′ + m) 1 m′) S)) ≅ subst Proc (cong (_+_ Γ′) (+-assoc m 1 m′)) S′
+   bibble Γ n m m′ S S′ γ =
+      let Γ′ = Γ + toℕ n
+          blah = quib m 1 m′ (braid {Γ} n) (subst Proc (+-assoc Γ′ (m + 1) m′) S) S′ γ in
+      {!!}
 
    -- TODO: consolidate.
    braid-preserves-inc : ∀ {Γ} (n : Name 3) m (a : Action (Γ + toℕ n + m)) →
@@ -105,7 +110,7 @@ module Transition.Seq where
                  (subst Proc (+-assoc Γ′ m (1 + inc⋆ a⋆))
                         (subst Proc (+-assoc (Γ′ + m) 1 (inc⋆ a⋆)) (target⋆ E⋆)))
                  (subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
-          goalₗ = bibble Γ n m a⋆ (target⋆ E⋆) S′ γ/E/E⋆
+          goalₗ = bibble Γ n m (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
              subst (λ P → source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ∷ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
