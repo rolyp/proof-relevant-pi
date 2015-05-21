@@ -7,6 +7,7 @@ module Name where
       using (zero; suc; pred; fromℕ; toℕ; inject+) renaming (Fin to Name; raise to shift)
    open Data.Fin using (raise)
    open import Data.Nat as Nat public using (zero; suc) renaming (ℕ to Cxt; module ℕ to Cxt)
+   open import Data.Nat.Properties.Simple public using () renaming (+-right-identity to +-left-identity)
 
    -- More convenient definition given the convention of writing Γ + n.
    infixl 6 _+_
