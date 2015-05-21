@@ -5,6 +5,8 @@ module Transition.Seq where
    import Relation.Binary.EqReasoning as EqReasoning
    import Relation.Binary.HeterogeneousEquality
 
+   open import Ext
+
    open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
    open import Action.Ren using (ren-preserves-inc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _ᵇ∷_)
@@ -25,7 +27,7 @@ module Transition.Seq where
    braid (ᴺ.suc (ᴺ.suc (ᴺ.suc ())))
 
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
-   ⋈[_,_,_] Γ n m P₁ P₂ = ((braid n ᴿ+ m) *) P₁ ≅ P₂
+   ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≅ P′
 
    -- TODO: consolidate.
    braid-preserves-inc : ∀ {Γ} (n : Name 3) m (a : Action (Γ + toℕ n + m)) →
@@ -81,7 +83,8 @@ module Transition.Seq where
    ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | sym (braid-preserves-inc n m (a ᵇ))
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
       let Γ′ = Γ + toℕ n
-          γ/E/E⋆′ : ⋈[ Γ , n , m + 1 + inc⋆ a⋆ ] (subst Proc (+-assoc (Γ + toℕ n) (m + 1) (inc⋆ a⋆)) (target⋆ E⋆)) S′
+          γ/E/E⋆′ : ⋈[ Γ , n , m + 1 + inc⋆ a⋆ ]
+                   (subst Proc (+-assoc Γ′ (m + 1) (inc⋆ a⋆)) (target⋆ E⋆)) S′
           γ/E/E⋆′ = {!!}
           goalₗ : ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ]
                  (subst Proc (+-assoc Γ′ m (1 + inc⋆ a⋆))
