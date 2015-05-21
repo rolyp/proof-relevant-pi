@@ -97,6 +97,10 @@ module Transition.Seq where
                    subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ ((ᴿ.suc (braid n ᴿ+ m) *) a⋆)))
                          (subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′)
                 ≅⟨ {!!} ⟩
+                   subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′
+                ≅⟨ ≡-subst-removable Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′ ⟩
+                   S′
+                ≅⟨ {!!} ⟩
                    subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
                          (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
                 ∎)
