@@ -29,13 +29,14 @@ module Transition.Seq where
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
    ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≅ P′
 
-   -- Associativity of tensor product.
-   α : ∀ {Γ Γ′ Γ″ Δ} (ρ : Ren (Γ + Γ′ + Γ″) (Δ + Γ′ + Γ″)) → Ren (Γ + (Γ′ + Γ″)) (Δ + (Γ′ + Γ″))
-   α ρ = ?
+   α : ∀ {Γ Γ′} Δ Δ′ Δ″ (ρ : Ren Γ Γ′) (P : Proc (Γ + (Δ + Δ′ + Δ″))) →
+       ((ρ ᴿ+ (Δ + Δ′ + Δ″))*) P ≅⁺ ((ρ ᴿ+ (Δ + (Δ′ + Δ″)))*) (subst Proc {!!} P)
+   α Γ′ Γ″ ρ = {!!}
 
    bibble : ∀ Γ (n : Name 3) (m : Cxt) (a⋆ : Action⋆ (Γ + toℕ n + m + 1))
             (S : Proc (Γ + toℕ n + m + 1 + inc⋆ a⋆)) (S′ : Proc (Γ + toℕ n + (m + 1 + inc⋆ a⋆))) →
-            let Γ′ = Γ + toℕ n in
+            let Γ′ = Γ + toℕ n
+                blah = α in
             ((braid n ᴿ+ (m + 1 + inc⋆ a⋆))*)
             (subst Proc (+-assoc Γ′ (m + 1) (inc⋆ a⋆)) S) ≅ S′ →
             ((braid n ᴿ+ (m + (1 + inc⋆ a⋆)))*)
