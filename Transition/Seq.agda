@@ -120,7 +120,25 @@ module Transition.Seq where
       let Γ′ = Γ + toℕ n
           σ = braid {Γ} n
           open ≅-Reasoning
-      in quibble _ σ m 0 (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆ Δ {!!}
+          E/γ∷E⋆/γ/E =
+             let Proc∼ = subst Proc
+                 Proc≅ = ≡-subst-removable Proc in
+             subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᶜ∷ ((σ ᴿ+ m ᴿ+ 0) *) a⋆ ]→⋆ P) (≅-to-≡ (
+                begin
+                   Proc∼ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m ᴿ+ 0) *) a⋆)))
+                         (Proc∼ (braid-preserves-inc⋆ n (m + 0) a⋆) S′)
+                ≅⟨ Proc≅ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m ᴿ+ 0) *) a⋆))) _ ⟩
+                   Proc∼ (braid-preserves-inc⋆ n (m + 0) a⋆) S′
+                ≅⟨ Proc≅ (braid-preserves-inc⋆ n (m + 0) a⋆) S′ ⟩
+                   S′
+                ≅⟨ ≅⁺-sym (Proc≅ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′) ⟩
+                   Proc∼ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′
+                ≅⟨ ≅⁺-sym (Proc≅ (braid-preserves-inc⋆ n m (a ᶜ∷ a⋆)) _) ⟩
+                   Proc∼ (braid-preserves-inc⋆ n m (a ᶜ∷ a⋆))
+                         (Proc∼ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′)
+                ∎)
+             ) (E/γ ᶜ∷ E⋆/γ/E)
+      in quibble _ σ m 0 (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆ Δ E/γ∷E⋆/γ/E
 
 {-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
