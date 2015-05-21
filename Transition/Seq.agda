@@ -1,7 +1,7 @@
 -- WIP: transition sequences and causal equivalence.
 module Transition.Seq where
 
-   open import SharedModules hiding (_⇒_)
+   open import SharedModules hiding (_⇒_; trans)
    import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
@@ -87,17 +87,9 @@ module Transition.Seq where
                         (subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ a⋆)) _))
                  (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
           goalₗ = {!!}
-          open EqReasoning (setoid _)
-          bibble : Γ + toℕ n + (m + 1 + inc⋆ a⋆) ≡ Γ + toℕ n + m + (1 + inc⋆ ((ᴿ.suc (braid n ᴿ+ m) *) a⋆))
-          bibble =
-             begin
-                Γ + toℕ n + (m + 1 + inc⋆ a⋆)
-             ≡⟨ cong (λ m′ → Γ + toℕ n + m′) (+-assoc _ _ (inc⋆ a⋆)) ⟩
-                Γ + toℕ n + (m + (1 + inc⋆ a⋆))
-             ≡⟨ sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)) ⟩
-                Γ + toℕ n + m + (1 + inc⋆ ((ᴿ.suc (braid n ᴿ+ m) *) a⋆))
-             ∎
-          goalᵣ : source E/γ —[ b ᵇ∷ b⋆ ]→⋆ subst Proc bibble S′
+          goalᵣ : source E/γ —[ b ᵇ∷ b⋆ ]→⋆
+                 subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
+                       (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
           goalᵣ = {!!}
       in  goalₗ Δ goalᵣ
 
