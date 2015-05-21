@@ -88,9 +88,9 @@ module Transition.Seq where
                        (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
           goalᵣ = subst (λ P → source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ∷ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
-                   subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ ((ᴿ.suc (braid n ᴿ+ m) *) a⋆)))
+                   subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ (((braid n ᴿ+ m ᴿ+ 1) *) a⋆)))
                          (subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′)
-                ≅⟨ ≡-subst-removable Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ ((ᴿ.suc (braid n ᴿ+ m) *) a⋆))) _ ⟩
+                ≅⟨ ≡-subst-removable Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ (((braid n ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
                    subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′
                 ≅⟨ ≡-subst-removable Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′ ⟩
                    S′
