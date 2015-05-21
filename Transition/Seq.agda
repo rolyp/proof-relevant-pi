@@ -39,12 +39,12 @@ module Transition.Seq where
 
    -- TODO: consolidate.
    braid-preserves-inc : ∀ {Γ} (n : Name 3) m (a : Action (Γ + toℕ n + m)) →
-                         Γ + toℕ n + m + inc (((braid n ᴿ+ m) *) a) ≡ Γ + toℕ n + (m + inc a)
-   braid-preserves-inc n m a rewrite sym (ren-preserves-inc (braid n ᴿ+ m) a) = +-assoc _ m (inc a)
+                         Γ + toℕ n + (m + inc a) ≡ Γ + toℕ n + m + inc (((braid n ᴿ+ m) *) a)
+   braid-preserves-inc n m a rewrite sym (ren-preserves-inc (braid n ᴿ+ m) a) = sym (+-assoc _ m (inc a))
 
    braid-preserves-inc⋆ : ∀ {Γ} (n : Name 3) m (a⋆ : Action⋆ (Γ + toℕ n + m)) →
-                         Γ + toℕ n + m + inc⋆ (((braid n ᴿ+ m) *) a⋆) ≡ Γ + toℕ n + (m + inc⋆ a⋆)
-   braid-preserves-inc⋆ n m a⋆ rewrite sym (ren-preserves-inc⋆ (braid n ᴿ+ m) a⋆) = +-assoc _ m (inc⋆ a⋆)
+                         Γ + toℕ n + (m + inc⋆ a⋆) ≡ Γ + toℕ n + m + inc⋆ (((braid n ᴿ+ m) *) a⋆)
+   braid-preserves-inc⋆ n m a⋆ rewrite sym (ren-preserves-inc⋆ (braid n ᴿ+ m) a⋆) = sym (+-assoc _ m (inc⋆ a⋆))
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
@@ -54,7 +54,7 @@ module Transition.Seq where
       field
          {R′} : _
          γ/E : ⋈[ Γ , n , m + inc a ] (subst Proc (+-assoc _ m (inc a)) R) R′
-         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ subst Proc (sym (braid-preserves-inc n m a)) R′
+         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ subst Proc (braid-preserves-inc n m a) R′
 
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
@@ -82,41 +82,36 @@ module Transition.Seq where
       field
          {R′} : _
          γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (subst Proc (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n m a⋆)) R′
+         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ subst Proc (braid-preserves-inc⋆ n m a⋆) R′
+
+   Proc∼ = subst Proc
+   Proc≅ = ≡-subst-removable Proc
 
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = γ Δ []
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ n , m ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | sym (braid-preserves-inc n m (a ᵇ))
+   ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | braid-preserves-inc n m (a ᵇ)
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
       let Γ′ = Γ + toℕ n
-          γ/E/E⋆′ : ⋈[ Γ , n , m + 1 + inc⋆ a⋆ ]
-                   (subst Proc (+-assoc (Γ + toℕ n) (m + 1) (inc⋆ a⋆)) (target⋆ E⋆)) S′
-          γ/E/E⋆′ = γ/E/E⋆
-          goalₗ : ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ]
-                 (subst Proc (+-assoc Γ′ m (1 + inc⋆ a⋆))
-                        (subst Proc (+-assoc (Γ′ + m) 1 (inc⋆ a⋆)) (target⋆ E⋆)))
-                 (subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
-          goalₗ = quibble (Γ + toℕ n) (braid n) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
              subst (λ P → source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ∷ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
-                   subst Proc (+-assoc (Γ′ + m) 1 (inc⋆ (((braid n ᴿ+ m ᴿ+ 1) *) a⋆)))
-                         (subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′)
-                ≅⟨ ≡-subst-removable Proc (+-assoc (Γ′ + m) 1 (inc⋆ (((braid n ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
-                   subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′
-                ≅⟨ ≡-subst-removable Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′ ⟩
+                   Proc∼ (+-assoc (Γ′ + m) 1 (inc⋆ (((braid n ᴿ+ m ᴿ+ 1) *) a⋆)))
+                         (Proc∼ (braid-preserves-inc⋆ n (m + 1) a⋆) S′)
+                ≅⟨ Proc≅ (+-assoc (Γ′ + m) 1 (inc⋆ (((braid n ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
+                   Proc∼ (braid-preserves-inc⋆ n (m + 1) a⋆) S′
+                ≅⟨ Proc≅ (braid-preserves-inc⋆ n (m + 1) a⋆) S′ ⟩
                    S′
-                ≅⟨ ≅⁺-sym (≡-subst-removable Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
-                   subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′
-                ≅⟨ ≅⁺-sym (≡-subst-removable Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))) _) ⟩
-                   subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
-                         (subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
+                ≅⟨ ≅⁺-sym (Proc≅ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
+                   Proc∼ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′
+                ≅⟨ ≅⁺-sym (Proc≅ (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)) _) ⟩
+                   Proc∼ (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))
+                         (Proc∼ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᵇ∷ E⋆/γ/E)
-      in goalₗ Δ E/γ∷E⋆/γ/E
+      in quibble _ (braid n) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆ Δ E/γ∷E⋆/γ/E
 
 {-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
