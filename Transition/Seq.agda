@@ -75,33 +75,34 @@ module Transition.Seq where
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = γ Δ []
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ n , m ] E γ
-   ... | _Δ_ {R′} γ/E E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | sym (braid-preserves-inc n m (a ᵇ))
+   ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | sym (braid-preserves-inc n m (a ᵇ))
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
-      let goalₗ : ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ]
-                 (subst Proc (+-assoc (Γ + toℕ n) m (1 + inc⋆ a⋆))
-                        (subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ a⋆)) _))
-                 (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
+      let Γ′ = Γ + toℕ n
+          γ/E/E⋆′ : ⋈[ Γ , n , m + 1 + inc⋆ a⋆ ] (subst Proc (+-assoc (Γ + toℕ n) (m + 1) (inc⋆ a⋆)) _) S′
+          γ/E/E⋆′ = {!!}
+          goalₗ : ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ]
+                 (subst Proc (+-assoc Γ′ m (1 + inc⋆ a⋆))
+                        (subst Proc (+-assoc (Γ′ + m) 1 (inc⋆ a⋆)) _))
+                 (subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
           goalₗ = {!!}
           open ≅-Reasoning
-          goalᵣ : source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ∷ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆
-                 subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
-                       (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
-          goalᵣ = subst (λ P → source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ∷ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
+          E/γ∷E⋆/γ/E =
+             subst (λ P → source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ∷ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
-                   subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ (((braid n ᴿ+ m ᴿ+ 1) *) a⋆)))
+                   subst Proc (+-assoc (Γ′ + m) 1 (inc⋆ (((braid n ᴿ+ m ᴿ+ 1) *) a⋆)))
                          (subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′)
-                ≅⟨ ≡-subst-removable Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ (((braid n ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
+                ≅⟨ ≡-subst-removable Proc (+-assoc (Γ′ + m) 1 (inc⋆ (((braid n ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
                    subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′
                 ≅⟨ ≡-subst-removable Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′ ⟩
                    S′
-                ≅⟨ ≅⁺-sym (≡-subst-removable Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
-                   subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′
+                ≅⟨ ≅⁺-sym (≡-subst-removable Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
+                   subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′
                 ≅⟨ ≅⁺-sym (≡-subst-removable Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))) _) ⟩
                    subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
-                         (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
+                         (subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᵇ∷ E⋆/γ/E)
-      in  goalₗ Δ goalᵣ
+      in  goalₗ Δ E/γ∷E⋆/γ/E
 
 {-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
