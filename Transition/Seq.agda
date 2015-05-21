@@ -36,15 +36,17 @@ module Transition.Seq where
               (subst Proc {!!} P)) ≅ subst Proc ((cong (_+_ Γ′) (+-assoc Δ† Δ′ Δ″))) P′
    quib Δ† Δ′ Δ″ ρ P = {!!}
 
-   bibble : ∀ Γ (n : Name 3) (m : Cxt) (m′ : Cxt)
+   bibble : ∀ Γ (n : Name 3) → Ren (Γ + toℕ n) (Γ + toℕ n) → (m : Cxt) (m′ : Cxt)
             (S : Proc (Γ + toℕ n + m + 1 + m′)) (S′ : Proc (Γ + toℕ n + (m + 1 + m′))) →
-            let Γ′ = Γ + toℕ n in
-            ((braid n ᴿ+ (m + 1 + m′))*)
+            let Γ′ = Γ + toℕ n
+                ρ : Ren Γ′ Γ′
+                ρ = braid n in
+            ((ρ ᴿ+ (m + 1 + m′))*)
             (subst Proc (+-assoc Γ′ (m + 1) m′) S) ≅ S′ →
             ((braid n ᴿ+ (m + (1 + m′)))*)
             (subst Proc (+-assoc Γ′ m (1 + m′))
                    (subst Proc (+-assoc (Γ′ + m) 1 m′) S)) ≅ subst Proc (cong (_+_ Γ′) (+-assoc m 1 m′)) S′
-   bibble Γ n m m′ S S′ γ =
+   bibble Γ n ρ m m′ S S′ γ =
       let Γ′ = Γ + toℕ n
           blah = quib m 1 m′ (braid {Γ} n) (subst Proc (+-assoc Γ′ (m + 1) m′) S) S′ γ in
       {!!}
@@ -110,7 +112,7 @@ module Transition.Seq where
                  (subst Proc (+-assoc Γ′ m (1 + inc⋆ a⋆))
                         (subst Proc (+-assoc (Γ′ + m) 1 (inc⋆ a⋆)) (target⋆ E⋆)))
                  (subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
-          goalₗ = bibble Γ n m (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆
+          goalₗ = bibble Γ n (braid n) m (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
              subst (λ P → source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ∷ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
