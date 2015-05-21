@@ -3,6 +3,7 @@ module Transition.Seq where
 
    open import SharedModules hiding (_⇒_; trans)
    import Relation.Binary.EqReasoning as EqReasoning
+   import Relation.Binary.HeterogeneousEquality
 
    open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
    open import Action.Ren using (ren-preserves-inc)
@@ -87,16 +88,18 @@ module Transition.Seq where
                         (subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ a⋆)) _))
                  (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
           goalₗ = {!!}
-          open EqReasoning (setoid _)
+          open ≅-Reasoning
           goalᵣ : source E/γ —[ b ᵇ∷ b⋆ ]→⋆
                  subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
                        (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
-          goalᵣ = subst (λ P → source E/γ —[ b ᵇ∷ b⋆ ]→⋆ P) (
+          goalᵣ = subst (λ P → source E/γ —[ b ᵇ∷ b⋆ ]→⋆ P) (≅-to-≡ (
                 begin
-                   {!!}
-                ≡⟨ {!!} ⟩
-                   {!!}
-                ∎
+                   subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ ((ᴿ.suc (braid n ᴿ+ m) *) a⋆)))
+                         (subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′)
+                ≅⟨ {!!} ⟩
+                   subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
+                         (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
+                ∎)
              ) E/γ∷E⋆/γ/E
       in  goalₗ Δ goalᵣ
 
