@@ -20,6 +20,9 @@ module Transition.Seq where
    open import Transition.Concur using (_⌣_; module _Δ_; ⊖; coinitial; ᴬ⊖; ᴬ⊖-✓)
    open import Transition.Ren using (_Δ_; _*′)
 
+   Proc∼ = subst Proc
+   Proc≅ = ≡-subst-removable Proc
+
    braid : ∀ {Γ} (n : Name 3) → Ren (Γ + toℕ n) (Γ + toℕ n)
    braid zero = id
    braid (ᴺ.suc zero) = id
@@ -31,10 +34,10 @@ module Transition.Seq where
 
    quibble : ∀ Γ (ρ : Ren Γ Γ) Δ† Δ′ Δ″ (S : Proc (Γ + Δ† + Δ′ + Δ″)) (S′ : Proc (Γ + (Δ† + Δ′ + Δ″))) →
              ((ρ ᴿ+ (Δ† + Δ′ + Δ″))*)
-             (subst Proc (+-assoc Γ (Δ† + Δ′) Δ″) (subst Proc (cong (flip _+_ Δ″) (+-assoc Γ Δ† Δ′)) S)) ≅ S′ →
+             (Proc∼ (+-assoc Γ (Δ† + Δ′) Δ″) (Proc∼ (cong (flip _+_ Δ″) (+-assoc Γ Δ† Δ′)) S)) ≅ S′ →
              ((ρ ᴿ+ (Δ† + (Δ′ + Δ″)))*)
-             (subst Proc (+-assoc Γ Δ† (Δ′ + Δ″))
-                    (subst Proc (+-assoc (Γ + Δ†) Δ′ Δ″) S)) ≅ subst Proc (cong (_+_ Γ) (+-assoc Δ† Δ′ Δ″)) S′
+             (Proc∼ (+-assoc Γ Δ† (Δ′ + Δ″))
+                    (Proc∼ (+-assoc (Γ + Δ†) Δ′ Δ″) S)) ≅ Proc∼ (cong (_+_ Γ) (+-assoc Δ† Δ′ Δ″)) S′
    quibble = {!!}
 
    -- TODO: consolidate.
@@ -53,8 +56,8 @@ module Transition.Seq where
       constructor _Δ_
       field
          {R′} : _
-         γ/E : ⋈[ Γ , n , m + inc a ] (subst Proc (+-assoc _ m (inc a)) R) R′
-         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ subst Proc (braid-preserves-inc n m a) R′
+         γ/E : ⋈[ Γ , n , m + inc a ] (Proc∼ (+-assoc _ m (inc a)) R) R′
+         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ Proc∼ (braid-preserves-inc n m a) R′
 
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
@@ -69,9 +72,9 @@ module Transition.Seq where
    data _—[_]→⋆_ {Γ} (P : Proc Γ) : (a⋆ : Action⋆ Γ) → Proc (Γ + inc⋆ a⋆) → Set where
       [] : P —[ [] ]→⋆ P
       _ᵇ∷_ : ∀ {a R a⋆ S} (E : P —[ a ᵇ - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) →
-             P —[ a ᵇ∷ a⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ a⋆)) S
+             P —[ a ᵇ∷ a⋆ ]→⋆ Proc∼ (+-assoc _ _ (inc⋆ a⋆)) S
       _ᶜ∷_ : ∀ {a R a⋆ S} (E : P —[ a ᶜ - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) →
-            P —[ a ᶜ∷ a⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ a⋆)) S
+             P —[ a ᶜ∷ a⋆ ]→⋆ Proc∼ (+-assoc _ _ (inc⋆ a⋆)) S
 
    target⋆ : ∀ {Γ} {P : Proc Γ} {a⋆ : Action⋆ Γ} {R} → P —[ a⋆ ]→⋆ R → Proc (Γ + inc⋆ a⋆)
    target⋆ {R = R} _ = R
@@ -83,8 +86,8 @@ module Transition.Seq where
       constructor _Δ_
       field
          {R′} : _
-         γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (subst Proc (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ subst Proc (braid-preserves-inc⋆ n m a⋆) R′
+         γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (Proc∼ (+-assoc _ _ (inc⋆ a⋆)) R) R′
+         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ Proc∼ (braid-preserves-inc⋆ n m a⋆) R′
 
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
@@ -96,8 +99,6 @@ module Transition.Seq where
           σ = braid {Γ} n
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
-             let Proc∼ = subst Proc
-                 Proc≅ = ≡-subst-removable Proc in
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᵇ∷ ((σ ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
                    Proc∼ (+-assoc (Γ′ + m) 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆)))
@@ -121,8 +122,6 @@ module Transition.Seq where
           σ = braid {Γ} n
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
-             let Proc∼ = subst Proc
-                 Proc≅ = ≡-subst-removable Proc in
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᶜ∷ ((σ ᴿ+ m ᴿ+ 0) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
                    Proc∼ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m ᴿ+ 0) *) a⋆)))
