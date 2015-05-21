@@ -82,9 +82,13 @@ module Transition.Seq where
                        subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ b⋆))
                              (subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′)
           E/γ∷E⋆/γ/E = E/γ ᵇ∷ E⋆/γ/E
-          goal : source E/γ —[ b ᵇ∷ b⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))) _
-          goal = {!!}
-      in {! !} Δ {!!}
+          goalₗ : ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ]
+                 (subst Proc (+-assoc (Γ + toℕ n) m (1 + inc⋆ a⋆))
+                 (subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ a⋆)) _)) _
+          goalₗ = {!!}
+          goalᵣ : source E/γ —[ b ᵇ∷ b⋆ ]→⋆ subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))) _
+          goalᵣ = {!!}
+      in  goalₗ Δ goalᵣ
 
 {-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
