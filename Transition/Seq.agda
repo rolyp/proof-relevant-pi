@@ -84,9 +84,6 @@ module Transition.Seq where
          γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (subst Proc (+-assoc _ _ (inc⋆ a⋆)) R) R′
          E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ subst Proc (braid-preserves-inc⋆ n m a⋆) R′
 
-   Proc∼ = subst Proc
-   Proc≅ = ≡-subst-removable Proc
-
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = γ Δ []
@@ -94,13 +91,16 @@ module Transition.Seq where
    ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | braid-preserves-inc n m (a ᵇ)
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
       let Γ′ = Γ + toℕ n
+          σ = braid {Γ} n
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
-             subst (λ P → source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ∷ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
+             let Proc∼ = subst Proc
+                 Proc≅ = ≡-subst-removable Proc in
+             subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᵇ∷ ((σ ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
-                   Proc∼ (+-assoc (Γ′ + m) 1 (inc⋆ (((braid n ᴿ+ m ᴿ+ 1) *) a⋆)))
+                   Proc∼ (+-assoc (Γ′ + m) 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆)))
                          (Proc∼ (braid-preserves-inc⋆ n (m + 1) a⋆) S′)
-                ≅⟨ Proc≅ (+-assoc (Γ′ + m) 1 (inc⋆ (((braid n ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
+                ≅⟨ Proc≅ (+-assoc (Γ′ + m) 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
                    Proc∼ (braid-preserves-inc⋆ n (m + 1) a⋆) S′
                 ≅⟨ Proc≅ (braid-preserves-inc⋆ n (m + 1) a⋆) S′ ⟩
                    S′
@@ -111,7 +111,7 @@ module Transition.Seq where
                          (Proc∼ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᵇ∷ E⋆/γ/E)
-      in quibble _ (braid n) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆ Δ E/γ∷E⋆/γ/E
+      in quibble {!!} σ m 1 (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆ Δ E/γ∷E⋆/γ/E
 
 {-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
