@@ -36,19 +36,17 @@ module Transition.Seq where
               (subst Proc {!!} P)) ≅ subst Proc ((cong (_+_ Γ′) (+-assoc Δ† Δ′ Δ″))) P′
    quib Δ† Δ′ Δ″ ρ P = {!!}
 
-   bibble : ∀ Γ (n : Name 3) → Ren (Γ + toℕ n) (Γ + toℕ n) → (m : Cxt) (m′ : Cxt)
+   bibble : ∀ Γ (n : Name 3) (ρ : Ren (Γ + toℕ n) (Γ + toℕ n)) → (m : Cxt) (m′ : Cxt)
             (S : Proc (Γ + toℕ n + m + 1 + m′)) (S′ : Proc (Γ + toℕ n + (m + 1 + m′))) →
-            let Γ′ = Γ + toℕ n
-                ρ : Ren Γ′ Γ′
-                ρ = braid n in
+            let Γ′ = Γ + toℕ n in
             ((ρ ᴿ+ (m + 1 + m′))*)
             (subst Proc (+-assoc Γ′ (m + 1) m′) S) ≅ S′ →
-            ((braid n ᴿ+ (m + (1 + m′)))*)
+            ((ρ ᴿ+ (m + (1 + m′)))*)
             (subst Proc (+-assoc Γ′ m (1 + m′))
                    (subst Proc (+-assoc (Γ′ + m) 1 m′) S)) ≅ subst Proc (cong (_+_ Γ′) (+-assoc m 1 m′)) S′
    bibble Γ n ρ m m′ S S′ γ =
       let Γ′ = Γ + toℕ n
-          blah = quib m 1 m′ (braid {Γ} n) (subst Proc (+-assoc Γ′ (m + 1) m′) S) S′ γ in
+          blah = quib m 1 m′ ρ (subst Proc (+-assoc Γ′ (m + 1) m′) S) S′ γ in
       {!!}
 
    -- TODO: consolidate.
