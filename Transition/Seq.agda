@@ -31,19 +31,11 @@ module Transition.Seq where
 
    quibble : ∀ Γ (ρ : Ren Γ Γ) Δ† Δ′ Δ″ (S : Proc (Γ + Δ† + Δ′ + Δ″)) (S′ : Proc (Γ + (Δ† + Δ′ + Δ″))) →
              ((ρ ᴿ+ (Δ† + Δ′ + Δ″))*)
-             (subst Proc {!!}{-(+-assoc Γ (Δ† + Δ′) Δ″)-} S) ≅ S′ →
+             (subst Proc (+-assoc Γ (Δ† + Δ′) Δ″) (subst Proc (cong (flip _+_ Δ″) (+-assoc Γ Δ† Δ′)) S)) ≅ S′ →
              ((ρ ᴿ+ (Δ† + (Δ′ + Δ″)))*)
              (subst Proc (+-assoc Γ Δ† (Δ′ + Δ″))
                     (subst Proc (+-assoc (Γ + Δ†) Δ′ Δ″) S)) ≅ subst Proc (cong (_+_ Γ) (+-assoc Δ† Δ′ Δ″)) S′
    quibble = {!!}
-
-   bibble : ∀ Γ (ρ : Ren Γ Γ) Δ† Δ″ (S : Proc (Γ + Δ† + 1 + Δ″)) (S′ : Proc (Γ + (Δ† + 1 + Δ″))) →
-            ((ρ ᴿ+ (Δ† + 1 + Δ″))*)
-            (subst Proc (+-assoc Γ (Δ† + 1) Δ″) S) ≅ S′ →
-            ((ρ ᴿ+ (Δ† + (1 + Δ″)))*)
-            (subst Proc (+-assoc Γ Δ† (1 + Δ″))
-                   (subst Proc (+-assoc (Γ + Δ†) 1 Δ″) S)) ≅ subst Proc (cong (_+_ Γ) (+-assoc Δ† 1 Δ″)) S′
-   bibble = {!!}
 
    -- TODO: consolidate.
    braid-preserves-inc : ∀ {Γ} (n : Name 3) m (a : Action (Γ + toℕ n + m)) →
