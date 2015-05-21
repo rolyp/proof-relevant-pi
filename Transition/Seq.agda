@@ -37,7 +37,7 @@ module Transition.Seq where
             ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ]
             (subst Proc (+-assoc Γ′ m (1 + inc⋆ a⋆)) (subst Proc (+-assoc (Γ′ + m) 1 (inc⋆ a⋆)) S))
             (subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
-   bibble = {!!}
+   bibble Γ n m a⋆ S S′ γ = {!!}
 
    -- TODO: consolidate.
    braid-preserves-inc : ∀ {Γ} (n : Name 3) m (a : Action (Γ + toℕ n + m)) →
@@ -100,7 +100,7 @@ module Transition.Seq where
                  (subst Proc (+-assoc Γ′ m (1 + inc⋆ a⋆))
                         (subst Proc (+-assoc (Γ′ + m) 1 (inc⋆ a⋆)) (target⋆ E⋆)))
                  (subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
-          goalₗ = {!!}
+          goalₗ = bibble Γ n m a⋆ (target⋆ E⋆) S′ γ/E/E⋆
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
              subst (λ P → source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ∷ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
