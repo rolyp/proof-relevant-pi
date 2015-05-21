@@ -32,8 +32,7 @@ module Transition.Seq where
    bibble : ∀ Γ (n : Name 3) (m : Cxt) (a⋆ : Action⋆ (Γ + toℕ n + m + 1))
             (S : Proc (Γ + toℕ n + m + 1 + inc⋆ a⋆)) (S′ : Proc (Γ + toℕ n + (m + 1 + inc⋆ a⋆))) →
             let Γ′ = Γ + toℕ n in
-            ⋈[ Γ , n , m + 1 + inc⋆ a⋆ ]
-            (subst Proc (+-assoc (Γ + toℕ n) (m + 1) (inc⋆ a⋆)) S) S′ →
+            ((braid n ᴿ+ (m + 1 + inc⋆ a⋆)) *) (subst Proc (+-assoc Γ′ (m + 1) (inc⋆ a⋆)) S) ≅ S′ →
             ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ]
             (subst Proc (+-assoc Γ′ m (1 + inc⋆ a⋆)) (subst Proc (+-assoc (Γ′ + m) 1 (inc⋆ a⋆)) S))
             (subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
