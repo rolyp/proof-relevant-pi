@@ -77,34 +77,30 @@ module Transition.Seq where
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ n , m ] E γ
    ... | _Δ_ {R′} γ/E E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | sym (braid-preserves-inc n m (a ᵇ))
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
-      let b = ((braid n ᴿ+ m) *) a
-          b⋆ = ((braid n ᴿ+ m ᴿ+ 1) *) a⋆
-          E/γ∷E⋆/γ/E : source E/γ —[ b ᵇ∷ b⋆ ]→⋆
-                       subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ b⋆))
-                             (subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′)
-          E/γ∷E⋆/γ/E = E/γ ᵇ∷ E⋆/γ/E
-          goalₗ : ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ]
+      let goalₗ : ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ]
                  (subst Proc (+-assoc (Γ + toℕ n) m (1 + inc⋆ a⋆))
                         (subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ a⋆)) _))
                  (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
           goalₗ = {!!}
           open ≅-Reasoning
-          goalᵣ : source E/γ —[ b ᵇ∷ b⋆ ]→⋆
+          goalᵣ : source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ∷ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆
                  subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
                        (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
-          goalᵣ = subst (λ P → source E/γ —[ b ᵇ∷ b⋆ ]→⋆ P) (≅-to-≡ (
+          goalᵣ = subst (λ P → source E/γ —[ ((braid n ᴿ+ m) *) a ᵇ∷ ((braid n ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
                    subst Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ ((ᴿ.suc (braid n ᴿ+ m) *) a⋆)))
                          (subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′)
-                ≅⟨ {!!} ⟩
+                ≅⟨ ≡-subst-removable Proc (+-assoc (Γ + toℕ n + m) 1 (inc⋆ ((ᴿ.suc (braid n ᴿ+ m) *) a⋆))) _ ⟩
                    subst Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′
                 ≅⟨ ≡-subst-removable Proc (sym (braid-preserves-inc⋆ n (m + 1) a⋆)) S′ ⟩
                    S′
-                ≅⟨ {!!} ⟩
+                ≅⟨ ≅⁺-sym (≡-subst-removable Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
+                   subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′
+                ≅⟨ ≅⁺-sym (≡-subst-removable Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))) _) ⟩
                    subst Proc (sym (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)))
                          (subst Proc (cong (λ m′ → Γ + toℕ n + m′) (+-assoc m 1 (inc⋆ a⋆))) S′)
                 ∎)
-             ) E/γ∷E⋆/γ/E
+             ) (E/γ ᵇ∷ E⋆/γ/E)
       in  goalₗ Δ goalᵣ
 
 {-
