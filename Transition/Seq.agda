@@ -1,7 +1,7 @@
 -- WIP: transition sequences and causal equivalence.
 module Transition.Seq where
 
-   open import SharedModules hiding (_⇒_; trans)
+   open import SharedModules hiding (_⇒_)
    import Relation.Binary.EqReasoning as EqReasoning
    import Relation.Binary.HeterogeneousEquality
 
@@ -28,6 +28,16 @@ module Transition.Seq where
 
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
    ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≅ P′
+
+   bibble : ∀ Γ (n : Name 3) (m : Cxt) (a⋆ : Action⋆ (Γ + toℕ n + m + 1))
+            (S : Proc (Γ + toℕ n + m + 1 + inc⋆ a⋆)) (S′ : Proc (Γ + toℕ n + (m + 1 + inc⋆ a⋆))) →
+            let Γ′ = Γ + toℕ n in
+            ⋈[ Γ , n , m + 1 + inc⋆ a⋆ ]
+            (subst Proc (+-assoc (Γ + toℕ n) (m + 1) (inc⋆ a⋆)) S) S′ →
+            ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ]
+            (subst Proc (+-assoc Γ′ m (1 + inc⋆ a⋆)) (subst Proc (+-assoc (Γ′ + m) 1 (inc⋆ a⋆)) S))
+            (subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
+   bibble = {!!}
 
    -- TODO: consolidate.
    braid-preserves-inc : ∀ {Γ} (n : Name 3) m (a : Action (Γ + toℕ n + m)) →
@@ -84,11 +94,11 @@ module Transition.Seq where
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
       let Γ′ = Γ + toℕ n
           γ/E/E⋆′ : ⋈[ Γ , n , m + 1 + inc⋆ a⋆ ]
-                   (subst Proc (+-assoc Γ′ (m + 1) (inc⋆ a⋆)) (target⋆ E⋆)) S′
-          γ/E/E⋆′ = {!!}
+                   (subst Proc (+-assoc (Γ + toℕ n) (m + 1) (inc⋆ a⋆)) (target⋆ E⋆)) S′
+          γ/E/E⋆′ = γ/E/E⋆
           goalₗ : ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ]
                  (subst Proc (+-assoc Γ′ m (1 + inc⋆ a⋆))
-                        (subst Proc (+-assoc (Γ′ + m) 1 (inc⋆ a⋆)) _))
+                        (subst Proc (+-assoc (Γ′ + m) 1 (inc⋆ a⋆)) (target⋆ E⋆)))
                  (subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
           goalₗ = {!!}
           open ≅-Reasoning
@@ -108,7 +118,7 @@ module Transition.Seq where
                          (subst Proc (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᵇ∷ E⋆/γ/E)
-      in  goalₗ Δ E/γ∷E⋆/γ/E
+      in goalₗ Δ E/γ∷E⋆/γ/E
 
 {-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
