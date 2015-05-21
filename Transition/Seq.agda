@@ -61,6 +61,9 @@ module Transition.Seq where
       _ᵇ∷_ : ∀ {a R a⋆ S} (E : P —[ a ᵇ - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) →
             P —[ a ᵇ∷ a⋆ ]→⋆ subst Proc (+-assoc _ _ (inc⋆ a⋆)) S
 
+   target⋆ : ∀ {Γ} {P : Proc Γ} {a⋆ : Action⋆ Γ} {R} → P —[ a⋆ ]→⋆ R → Proc (Γ + inc⋆ a⋆)
+   target⋆ {R = R} _ = R
+
    -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. Cofinal by construction.
    infixl 5 _Δ⋆_
    record _Δ⋆_ {Γ n m a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
@@ -78,7 +81,7 @@ module Transition.Seq where
    ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | sym (braid-preserves-inc n m (a ᵇ))
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
       let Γ′ = Γ + toℕ n
-          γ/E/E⋆′ : ⋈[ Γ , n , m + 1 + inc⋆ a⋆ ] (subst Proc (+-assoc (Γ + toℕ n) (m + 1) (inc⋆ a⋆)) _) S′
+          γ/E/E⋆′ : ⋈[ Γ , n , m + 1 + inc⋆ a⋆ ] (subst Proc (+-assoc (Γ + toℕ n) (m + 1) (inc⋆ a⋆)) (target⋆ E⋆)) S′
           γ/E/E⋆′ = {!!}
           goalₗ : ⋈[ Γ , n , m + (1 + inc⋆ a⋆) ]
                  (subst Proc (+-assoc Γ′ m (1 + inc⋆ a⋆))
