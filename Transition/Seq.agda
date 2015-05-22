@@ -40,13 +40,11 @@ module Transition.Seq where
                     (Proc∼ (+-assoc (Γ + Δ†) Δ′ Δ″) S)) ≅ Proc∼ (cong (_+_ Γ) (+-assoc Δ† Δ′ Δ″)) S′
    quibble = {!!}
 
-   -- TODO: consolidate.
-   braid-preserves-inc : ∀ {Γ} (n : Name 3) m (a : Action (Γ + toℕ n + m)) →
-                         Γ + toℕ n + (m + inc a) ≡ Γ + toℕ n + m + inc (((braid n ᴿ+ m) *) a)
-   braid-preserves-inc n m a rewrite sym (ren-preserves-inc (braid n ᴿ+ m) a) = sym (+-assoc _ m (inc a))
+   ren-preserves-inc′ : ∀ {Γ′} (ρ : Ren Γ′ Γ′) → ∀ m (a : Action (Γ′ + m)) → Γ′ + (m + inc a) ≡ Γ′ + m + inc (((ρ ᴿ+ m) *) a)
+   ren-preserves-inc′ ρ m a rewrite sym (ren-preserves-inc (ρ ᴿ+ m) a) = sym (+-assoc _ m (inc a))
 
-   braid-preserves-inc⋆ : ∀ {Γ} (n : Name 3) m (a⋆ : Action⋆ (Γ + toℕ n + m)) →
-                         Γ + toℕ n + (m + inc⋆ a⋆) ≡ Γ + toℕ n + m + inc⋆ (((braid n ᴿ+ m) *) a⋆)
+   braid-preserves-inc⋆ : ∀ {Γ} (n : Name 3) → let Γ′ = Γ + toℕ n in
+                          ∀ m (a⋆ : Action⋆ (Γ′ + m)) → Γ′ + (m + inc⋆ a⋆) ≡ Γ′ + m + inc⋆ (((braid n ᴿ+ m) *) a⋆)
    braid-preserves-inc⋆ n m a⋆ rewrite sym (ren-preserves-inc⋆ (braid n ᴿ+ m) a⋆) = sym (+-assoc _ m (inc⋆ a⋆))
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
@@ -57,7 +55,7 @@ module Transition.Seq where
       field
          {R′} : _
          γ/E : ⋈[ Γ , n , m + inc a ] (Proc∼ (+-assoc _ m (inc a)) R) R′
-         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ Proc∼ (braid-preserves-inc n m a) R′
+         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ Proc∼ (ren-preserves-inc′ (braid n) m a) R′
 
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
@@ -93,7 +91,7 @@ module Transition.Seq where
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = γ Δ []
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ n , m ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | braid-preserves-inc n m (a ᵇ)
+   ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | ren-preserves-inc′ (braid n) m (a ᵇ)
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
       let Γ′ = Γ + toℕ n
           σ = braid {Γ} n
@@ -116,7 +114,7 @@ module Transition.Seq where
              ) (E/γ ᵇ∷ E⋆/γ/E)
       in quibble _ σ m 1 (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆ Δ E/γ∷E⋆/γ/E
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ n , m ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ n , m ] E⋆ γ/E | braid-preserves-inc n m (a ᶜ)
+   ... | γ/E Δ E/γ with ⊖⋆[ n , m ] E⋆ γ/E | ren-preserves-inc′ (braid n) m (a ᶜ)
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
       let Γ′ = Γ + toℕ n
           σ = braid {Γ} n
