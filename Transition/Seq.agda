@@ -38,17 +38,17 @@ module Transition.Seq where
              ((ρ ᴿ+ (Δ† + (Δ′ + Δ″)))*)
              (Proc∼ (+-assoc Γ Δ† (Δ′ + Δ″))
                     (Proc∼ (+-assoc (Γ + Δ†) Δ′ Δ″) S)) ≅ Proc∼ (cong (_+_ Γ) (+-assoc Δ† Δ′ Δ″)) S′
-   quibble = {!!}
+   quibble Γ ρ Δ† Δ′ Δ″ S S′ = {!!}
 
-   ren-preserves-inc-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ m (a : Action (Γ + m)) →
-                             Γ + (m + inc a) ≡ Γ + m + inc (((ρ ᴿ+ m) *) a)
-   ren-preserves-inc-assoc {Γ} ρ m a =
-      trans (sym (+-assoc Γ m (inc a))) (cong (_+_ (Γ + m)) (ren-preserves-inc (ρ ᴿ+ m) a))
+   ren-preserves-inc-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ Δ′ (a : Action (Γ + Δ′)) →
+                             Γ + (Δ′ + inc a) ≡ Γ + Δ′ + inc (((ρ ᴿ+ Δ′) *) a)
+   ren-preserves-inc-assoc {Γ} ρ Δ′ a =
+      trans (sym (+-assoc Γ Δ′ (inc a))) (cong (_+_ (Γ + Δ′)) (ren-preserves-inc (ρ ᴿ+ Δ′) a))
 
-   ren-preserves-inc⋆-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ m (a⋆ : Action⋆ (Γ + m)) →
-                              Γ + (m + inc⋆ a⋆) ≡ Γ + m + inc⋆ (((ρ ᴿ+ m) *) a⋆)
-   ren-preserves-inc⋆-assoc {Γ} ρ m a⋆ =
-      trans (sym (+-assoc Γ m (inc⋆ a⋆))) (cong (_+_ (Γ + m)) (ren-preserves-inc⋆ (ρ ᴿ+ m) a⋆))
+   ren-preserves-inc⋆-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ Δ′ (a⋆ : Action⋆ (Γ + Δ′)) →
+                              Γ + (Δ′ + inc⋆ a⋆) ≡ Γ + Δ′ + inc⋆ (((ρ ᴿ+ Δ′) *) a⋆)
+   ren-preserves-inc⋆-assoc {Γ} ρ Δ′ a⋆ =
+      trans (sym (+-assoc Γ Δ′ (inc⋆ a⋆))) (cong (_+_ (Γ + Δ′)) (ren-preserves-inc⋆ (ρ ᴿ+ Δ′) a⋆))
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
