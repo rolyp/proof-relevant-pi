@@ -42,11 +42,13 @@ module Transition.Seq where
 
    ren-preserves-inc-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ m (a : Action (Γ + m)) →
                              Γ + (m + inc a) ≡ Γ + m + inc (((ρ ᴿ+ m) *) a)
-   ren-preserves-inc-assoc ρ m a rewrite sym (ren-preserves-inc (ρ ᴿ+ m) a) = sym (+-assoc _ m (inc a))
+   ren-preserves-inc-assoc {Γ} ρ m a =
+      trans (sym (+-assoc Γ m (inc a))) (cong (_+_ (Γ + m)) (ren-preserves-inc (ρ ᴿ+ m) a))
 
    ren-preserves-inc⋆-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ m (a⋆ : Action⋆ (Γ + m)) →
                               Γ + (m + inc⋆ a⋆) ≡ Γ + m + inc⋆ (((ρ ᴿ+ m) *) a⋆)
-   ren-preserves-inc⋆-assoc ρ m a⋆ rewrite sym (ren-preserves-inc⋆ (ρ ᴿ+ m) a⋆) = sym (+-assoc _ m (inc⋆ a⋆))
+   ren-preserves-inc⋆-assoc {Γ} ρ m a⋆ =
+      trans (sym (+-assoc Γ m (inc⋆ a⋆))) (cong (_+_ (Γ + m)) (ren-preserves-inc⋆ (ρ ᴿ+ m) a⋆))
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
