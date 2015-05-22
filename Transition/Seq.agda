@@ -40,12 +40,13 @@ module Transition.Seq where
                     (Proc∼ (+-assoc (Γ + Δ†) Δ′ Δ″) S)) ≅ Proc∼ (cong (_+_ Γ) (+-assoc Δ† Δ′ Δ″)) S′
    quibble = {!!}
 
-   ren-preserves-inc′ : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ m (a : Action (Γ + m)) → Γ + (m + inc a) ≡ Γ + m + inc (((ρ ᴿ+ m) *) a)
+   ren-preserves-inc′ : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ m (a : Action (Γ + m)) →
+                       Γ + (m + inc a) ≡ Γ + m + inc (((ρ ᴿ+ m) *) a)
    ren-preserves-inc′ ρ m a rewrite sym (ren-preserves-inc (ρ ᴿ+ m) a) = sym (+-assoc _ m (inc a))
 
-   braid-preserves-inc⋆ : ∀ {Γ} (n : Name 3) → let Γ′ = Γ + toℕ n in
-                          ∀ m (a⋆ : Action⋆ (Γ′ + m)) → Γ′ + (m + inc⋆ a⋆) ≡ Γ′ + m + inc⋆ (((braid n ᴿ+ m) *) a⋆)
-   braid-preserves-inc⋆ n m a⋆ rewrite sym (ren-preserves-inc⋆ (braid n ᴿ+ m) a⋆) = sym (+-assoc _ m (inc⋆ a⋆))
+   ren-preserves-inc⋆′ : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ m (a⋆ : Action⋆ (Γ + m)) →
+                        Γ + (m + inc⋆ a⋆) ≡ Γ + m + inc⋆ (((ρ ᴿ+ m) *) a⋆)
+   ren-preserves-inc⋆′ ρ m a⋆ rewrite sym (ren-preserves-inc⋆ (ρ ᴿ+ m) a⋆) = sym (+-assoc _ m (inc⋆ a⋆))
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
@@ -85,7 +86,7 @@ module Transition.Seq where
       field
          {R′} : _
          γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (Proc∼ (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ Proc∼ (braid-preserves-inc⋆ n m a⋆) R′
+         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ Proc∼ (ren-preserves-inc⋆′ (braid n) m a⋆) R′
 
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
@@ -100,15 +101,15 @@ module Transition.Seq where
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᵇ∷ ((σ ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
                    Proc∼ (+-assoc (Γ′ + m) 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆)))
-                         (Proc∼ (braid-preserves-inc⋆ n (m + 1) a⋆) S′)
+                         (Proc∼ (ren-preserves-inc⋆′ σ (m + 1) a⋆) S′)
                 ≅⟨ Proc≅ (+-assoc (Γ′ + m) 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
-                   Proc∼ (braid-preserves-inc⋆ n (m + 1) a⋆) S′
-                ≅⟨ Proc≅ (braid-preserves-inc⋆ n (m + 1) a⋆) S′ ⟩
+                   Proc∼ (ren-preserves-inc⋆′ σ (m + 1) a⋆) S′
+                ≅⟨ Proc≅ (ren-preserves-inc⋆′ σ (m + 1) a⋆) S′ ⟩
                    S′
                 ≅⟨ ≅⁺-sym (Proc≅ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
                    Proc∼ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′
-                ≅⟨ ≅⁺-sym (Proc≅ (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆)) _) ⟩
-                   Proc∼ (braid-preserves-inc⋆ n m (a ᵇ∷ a⋆))
+                ≅⟨ ≅⁺-sym (Proc≅ (ren-preserves-inc⋆′ σ m (a ᵇ∷ a⋆)) _) ⟩
+                   Proc∼ (ren-preserves-inc⋆′ σ m (a ᵇ∷ a⋆))
                          (Proc∼ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᵇ∷ E⋆/γ/E)
@@ -123,15 +124,15 @@ module Transition.Seq where
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᶜ∷ ((σ ᴿ+ m) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
                    Proc∼ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m) *) a⋆)))
-                         (Proc∼ (braid-preserves-inc⋆ n m a⋆) S′)
+                         (Proc∼ (ren-preserves-inc⋆′ σ m a⋆) S′)
                 ≅⟨ Proc≅ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m) *) a⋆))) _ ⟩
-                   Proc∼ (braid-preserves-inc⋆ n m a⋆) S′
-                ≅⟨ Proc≅ (braid-preserves-inc⋆ n m a⋆) S′ ⟩
+                   Proc∼ (ren-preserves-inc⋆′ σ m a⋆) S′
+                ≅⟨ Proc≅ (ren-preserves-inc⋆′ σ m a⋆) S′ ⟩
                    S′
                 ≅⟨ ≅⁺-sym (Proc≅ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′) ⟩
                    Proc∼ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′
-                ≅⟨ ≅⁺-sym (Proc≅ (braid-preserves-inc⋆ n m (a ᶜ∷ a⋆)) _) ⟩
-                   Proc∼ (braid-preserves-inc⋆ n m (a ᶜ∷ a⋆))
+                ≅⟨ ≅⁺-sym (Proc≅ (ren-preserves-inc⋆′ σ m (a ᶜ∷ a⋆)) _) ⟩
+                   Proc∼ (ren-preserves-inc⋆′ σ m (a ᶜ∷ a⋆))
                          (Proc∼ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᶜ∷ E⋆/γ/E)
