@@ -40,13 +40,13 @@ module Transition.Seq where
                     (Proc∼ (+-assoc (Γ + Δ†) Δ′ Δ″) S)) ≅ Proc∼ (cong (_+_ Γ) (+-assoc Δ† Δ′ Δ″)) S′
    quibble = {!!}
 
-   ren-preserves-inc′ : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ m (a : Action (Γ + m)) →
-                       Γ + (m + inc a) ≡ Γ + m + inc (((ρ ᴿ+ m) *) a)
-   ren-preserves-inc′ ρ m a rewrite sym (ren-preserves-inc (ρ ᴿ+ m) a) = sym (+-assoc _ m (inc a))
+   ren-preserves-inc-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ m (a : Action (Γ + m)) →
+                             Γ + (m + inc a) ≡ Γ + m + inc (((ρ ᴿ+ m) *) a)
+   ren-preserves-inc-assoc ρ m a rewrite sym (ren-preserves-inc (ρ ᴿ+ m) a) = sym (+-assoc _ m (inc a))
 
-   ren-preserves-inc⋆′ : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ m (a⋆ : Action⋆ (Γ + m)) →
-                        Γ + (m + inc⋆ a⋆) ≡ Γ + m + inc⋆ (((ρ ᴿ+ m) *) a⋆)
-   ren-preserves-inc⋆′ ρ m a⋆ rewrite sym (ren-preserves-inc⋆ (ρ ᴿ+ m) a⋆) = sym (+-assoc _ m (inc⋆ a⋆))
+   ren-preserves-inc⋆-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ m (a⋆ : Action⋆ (Γ + m)) →
+                              Γ + (m + inc⋆ a⋆) ≡ Γ + m + inc⋆ (((ρ ᴿ+ m) *) a⋆)
+   ren-preserves-inc⋆-assoc ρ m a⋆ rewrite sym (ren-preserves-inc⋆ (ρ ᴿ+ m) a⋆) = sym (+-assoc _ m (inc⋆ a⋆))
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
@@ -56,18 +56,20 @@ module Transition.Seq where
       field
          {R′} : _
          γ/E : ⋈[ Γ , n , m + inc a ] (Proc∼ (+-assoc _ m (inc a)) R) R′
-         E/γ : P′ —[ ((braid n ᴿ+ m) *) a - ι ]→ Proc∼ (ren-preserves-inc′ (braid n) m a) R′
+      σ = braid {Γ} n
+      field
+         E/γ : P′ —[ ((σ ᴿ+ m) *) a - ι ]→ Proc∼ (ren-preserves-inc-assoc σ m a) R′
 
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
-   ⊖′[ n , m ] {(x ᴬ.•) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ n , m ] {(ᴬ.• x) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ n , m ] {ᴬ.• x 〈 y 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ n , m ] {(_ ᴬ.•) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ n , m ] {(ᴬ.• _) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ n , m ] {ᴬ.• _ 〈 _ 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
    ⊖′[ n , m ] {ᴬ.τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
 
    -- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
    -- composition is probably what we eventually want.
-   infixr 5 _ᵇ∷_
+   infixr 5 _ᵇ∷_ _ᶜ∷_
    data _—[_]→⋆_ {Γ} (P : Proc Γ) : (a⋆ : Action⋆ Γ) → Proc (Γ + inc⋆ a⋆) → Set where
       [] : P —[ [] ]→⋆ P
       _ᵇ∷_ : ∀ {a R a⋆ S} (E : P —[ a ᵇ - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) →
@@ -86,13 +88,13 @@ module Transition.Seq where
       field
          {R′} : _
          γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (Proc∼ (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ Proc∼ (ren-preserves-inc⋆′ (braid n) m a⋆) R′
+         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ Proc∼ (ren-preserves-inc⋆-assoc (braid n) m a⋆) R′
 
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = γ Δ []
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ n , m ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | ren-preserves-inc′ (braid n) m (a ᵇ)
+   ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | ren-preserves-inc-assoc (braid n) m (a ᵇ)
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
       let Γ′ = Γ + toℕ n
           σ = braid {Γ} n
@@ -101,21 +103,21 @@ module Transition.Seq where
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᵇ∷ ((σ ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
                    Proc∼ (+-assoc (Γ′ + m) 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆)))
-                         (Proc∼ (ren-preserves-inc⋆′ σ (m + 1) a⋆) S′)
+                         (Proc∼ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′)
                 ≅⟨ Proc≅ (+-assoc (Γ′ + m) 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
-                   Proc∼ (ren-preserves-inc⋆′ σ (m + 1) a⋆) S′
-                ≅⟨ Proc≅ (ren-preserves-inc⋆′ σ (m + 1) a⋆) S′ ⟩
+                   Proc∼ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′
+                ≅⟨ Proc≅ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′ ⟩
                    S′
                 ≅⟨ ≅⁺-sym (Proc≅ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
                    Proc∼ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′
-                ≅⟨ ≅⁺-sym (Proc≅ (ren-preserves-inc⋆′ σ m (a ᵇ∷ a⋆)) _) ⟩
-                   Proc∼ (ren-preserves-inc⋆′ σ m (a ᵇ∷ a⋆))
+                ≅⟨ ≅⁺-sym (Proc≅ (ren-preserves-inc⋆-assoc σ m (a ᵇ∷ a⋆)) _) ⟩
+                   Proc∼ (ren-preserves-inc⋆-assoc σ m (a ᵇ∷ a⋆))
                          (Proc∼ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᵇ∷ E⋆/γ/E)
       in quibble _ σ m 1 (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆ Δ E/γ∷E⋆/γ/E
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ n , m ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ n , m ] E⋆ γ/E | ren-preserves-inc′ (braid n) m (a ᶜ)
+   ... | γ/E Δ E/γ with ⊖⋆[ n , m ] E⋆ γ/E | ren-preserves-inc-assoc (braid n) m (a ᶜ)
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
       let Γ′ = Γ + toℕ n
           σ = braid {Γ} n
@@ -124,15 +126,15 @@ module Transition.Seq where
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᶜ∷ ((σ ᴿ+ m) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
                    Proc∼ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m) *) a⋆)))
-                         (Proc∼ (ren-preserves-inc⋆′ σ m a⋆) S′)
+                         (Proc∼ (ren-preserves-inc⋆-assoc σ m a⋆) S′)
                 ≅⟨ Proc≅ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m) *) a⋆))) _ ⟩
-                   Proc∼ (ren-preserves-inc⋆′ σ m a⋆) S′
-                ≅⟨ Proc≅ (ren-preserves-inc⋆′ σ m a⋆) S′ ⟩
+                   Proc∼ (ren-preserves-inc⋆-assoc σ m a⋆) S′
+                ≅⟨ Proc≅ (ren-preserves-inc⋆-assoc σ m a⋆) S′ ⟩
                    S′
                 ≅⟨ ≅⁺-sym (Proc≅ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′) ⟩
                    Proc∼ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′
-                ≅⟨ ≅⁺-sym (Proc≅ (ren-preserves-inc⋆′ σ m (a ᶜ∷ a⋆)) _) ⟩
-                   Proc∼ (ren-preserves-inc⋆′ σ m (a ᶜ∷ a⋆))
+                ≅⟨ ≅⁺-sym (Proc≅ (ren-preserves-inc⋆-assoc σ m (a ᶜ∷ a⋆)) _) ⟩
+                   Proc∼ (ren-preserves-inc⋆-assoc σ m (a ᶜ∷ a⋆))
                          (Proc∼ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᶜ∷ E⋆/γ/E)
