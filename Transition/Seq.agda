@@ -40,7 +40,7 @@ module Transition.Seq where
                     (Proc∼ (+-assoc (Γ + Δ†) Δ′ Δ″) S)) ≅ Proc∼ (cong (_+_ Γ) (+-assoc Δ† Δ′ Δ″)) S′
    quibble = {!!}
 
-   ren-preserves-inc′ : ∀ {Γ′} (ρ : Ren Γ′ Γ′) → ∀ m (a : Action (Γ′ + m)) → Γ′ + (m + inc a) ≡ Γ′ + m + inc (((ρ ᴿ+ m) *) a)
+   ren-preserves-inc′ : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ m (a : Action (Γ + m)) → Γ + (m + inc a) ≡ Γ + m + inc (((ρ ᴿ+ m) *) a)
    ren-preserves-inc′ ρ m a rewrite sym (ren-preserves-inc (ρ ᴿ+ m) a) = sym (+-assoc _ m (inc a))
 
    braid-preserves-inc⋆ : ∀ {Γ} (n : Name 3) → let Γ′ = Γ + toℕ n in
