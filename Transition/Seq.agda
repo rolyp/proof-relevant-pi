@@ -122,13 +122,13 @@ module Transition.Seq where
           σ = braid {Γ} n
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
-             subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᶜ∷ ((σ ᴿ+ m ᴿ+ 0) *) a⋆ ]→⋆ P) (≅-to-≡ (
+             subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᶜ∷ ((σ ᴿ+ m) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
-                   Proc∼ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m ᴿ+ 0) *) a⋆)))
-                         (Proc∼ (braid-preserves-inc⋆ n (m + 0) a⋆) S′)
-                ≅⟨ Proc≅ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m ᴿ+ 0) *) a⋆))) _ ⟩
-                   Proc∼ (braid-preserves-inc⋆ n (m + 0) a⋆) S′
-                ≅⟨ Proc≅ (braid-preserves-inc⋆ n (m + 0) a⋆) S′ ⟩
+                   Proc∼ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m) *) a⋆)))
+                         (Proc∼ (braid-preserves-inc⋆ n m a⋆) S′)
+                ≅⟨ Proc≅ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m) *) a⋆))) _ ⟩
+                   Proc∼ (braid-preserves-inc⋆ n m a⋆) S′
+                ≅⟨ Proc≅ (braid-preserves-inc⋆ n m a⋆) S′ ⟩
                    S′
                 ≅⟨ ≅⁺-sym (Proc≅ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′) ⟩
                    Proc∼ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′
