@@ -162,7 +162,7 @@ module Transition.Seq where
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule.
 {-
    infix 4 _≃_
--- infixr 9 _≃-∘_
+   infixr 9 _≃-∘_
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ R a′⋆ R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
       --- Transposition rule.
       [_ᵇ∶⇋∶ᵇ_] : ∀ {a R a′ R′} (E : P —[ a ᵇ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
