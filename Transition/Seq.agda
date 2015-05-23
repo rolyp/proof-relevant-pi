@@ -159,13 +159,6 @@ module Transition.Seq where
              ) (E/γ ᶜ∷ E⋆/γ/E)
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
 
-   blah : ∀ {Γ} (a a′ : Action Γ) (a⌣a′ : coinitial a a′) → Action⋆ Γ × Action⋆ Γ
-   blah ((• x) ᵇ) ((• u) ᵇ) ᵛ∇ᵛ = (• x) ᵇ∷ • ᴺ.suc u 〈 zero 〉 ᶜ∷ [] , (• u) ᵇ∷ • ᴺ.suc x 〈 zero 〉 ᶜ∷ []
-   blah (a ᵇ) (a′ ᵇ) ᵇ∇ᵇ = a ᵇ∷ (push *) a′ ᵇ∷ [] , a′ ᵇ∷ (push *) a ᵇ∷ []
-   blah (a ᵇ) (a′ ᶜ) ᵇ∇ᶜ = a ᵇ∷ (push *) a′ ᶜ∷ [] , a′ ᶜ∷ a ᵇ∷ []
-   blah (a ᶜ) (a′ ᵇ) ᶜ∇ᵇ = a ᶜ∷ a′ ᵇ∷ [] , a′ ᵇ∷ (push *) a ᶜ∷ []
-   blah (a ᶜ) (a′ ᶜ) ᶜ∇ᶜ = a ᶜ∷ a′ ᶜ∷ [] , a′ ᶜ∷ a ᶜ∷ []
-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule.
 {-
    infix 4 _≃_
