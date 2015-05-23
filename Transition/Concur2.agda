@@ -91,9 +91,9 @@ module Transition.Concur2 where
       νᵇᵇ_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {a⌣a′} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᵇ - _ ]→ R′} →
           E ⌣₁[ (push *†) a⌣a′ ] E′ → νᵇ E ⌣₁[ a⌣a′ ] νᵇ E′
       νᵇᶜ_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
-          E ⌣₁[ {!!} ] E′ → νᵇ E ⌣₁[ {!!} ] νᶜ E′
+          E ⌣₁[ ᵇ∇ᶜ ] E′ → νᵇ E ⌣₁[ ᵇ∇ᶜ ] νᶜ E′
       νᶜᶜ_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ (push *) a ᶜ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
-          E ⌣₁[ {!!} ] E′ → νᶜ E ⌣₁[ {!!} ] νᶜ E′
+          E ⌣₁[ ᶜ∇ᶜ ] E′ → νᶜ E ⌣₁[ ᶜ∇ᶜ ] νᶜ E′
       !_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {a⌣a′} {R R′} {E : P │ ! P —[ a - _ ]→ R} {E′ : P │ ! P —[ a′ - _ ]→ R′} →
            E ⌣₁[ a⌣a′ ] E′ → ! E ⌣₁[ a⌣a′ ] ! E′
 
