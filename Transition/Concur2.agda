@@ -25,6 +25,13 @@ module Transition.Concur2 where
       ᶜ∇ᵇ : (a : Actionᶜ Γ) (a′ : Actionᵇ Γ) → coinitial (a ᶜ) (a′ ᵇ)
       ᶜ∇ᶜ : (a a′ : Actionᶜ Γ) → coinitial (a ᶜ) (a′ ᶜ)
 
+   ᴬΔ′ : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → Set
+   ᴬΔ′ {Γ} (ᵛ∇ᵛ x u) = Actionᶜ Γ × Actionᶜ Γ
+   ᴬΔ′ {Γ} (ᵇ∇ᵇ a a′) = Actionᵇ Γ × Actionᵇ Γ
+   ᴬΔ′ {Γ} (ᵇ∇ᶜ a a′) = Actionᶜ Γ × Actionᵇ Γ
+   ᴬΔ′ {Γ} (ᶜ∇ᵇ a a′) = Actionᵇ Γ × Actionᶜ Γ
+   ᴬΔ′ {Γ} (ᶜ∇ᶜ a a′) = Actionᶜ Γ × Actionᶜ Γ
+
    -- The symmetric residual (a′/a, a/a′). Note that ᵇ∇ᵇ may also relate two bound outputs, but only if
    -- they represent extrusions of distinct binders.
    ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → a ᴬΔ a′
@@ -85,7 +92,7 @@ module Transition.Concur2 where
               E ⌣₁[ a′/a ] E′ → (Q : Proc Γ) → E ᶜ│ Q ⌣₁[ a′/a ] E′ ᶜ│ Q
       _│•_ : ∀ {x y u z P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ • u 〈 z 〉 ᶜ - _ ]→ S′} →
-             E ⌣₁[ ? ] E′ → F ⌣₁[ z • ᵇ ] F′ → E │• F ⌣₁[ τ ᶜ ] E′ │• F′
+             E ⌣₁[ {!!} ] E′ → F ⌣₁[ z • ᵇ ] F′ → E │• F ⌣₁[ τ ᶜ ] E′ │• F′
 {-
       _│ᵥ_ : ∀ {x u P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
