@@ -14,7 +14,7 @@ module Transition.Seq where
    open import Name as ᴺ using (Cxt; Name; _+_; +-assoc; zero; toℕ; +-left-identity)
    open import Proc using (Proc)
    open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
-   open import StructuralCong.Proc using (_≅_; ≅-sym; ≅-refl)
+   open import StructuralCong.Proc using (_≈_; ≈-sym; ≈-refl)
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; source; target)
    open import Transition.Concur using (_⌣_; module _Δ_; ⊖; coinitial; ᴬ⊖; ᴬ⊖-✓)
@@ -30,11 +30,11 @@ module Transition.Seq where
    braid (ᴺ.suc (ᴺ.suc (ᴺ.suc ())))
 
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
-   ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≅ P′
+   ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≈ P′
 
    bibble : ∀ Γ (ρ : Ren Γ Γ) Δ† Δ′ Δ″ (S : Proc (Γ + Δ† + Δ′ + Δ″)) (S′ : Proc (Γ + (Δ† + Δ′ + Δ″))) →
             ((ρ ᴿ+ (Δ† + Δ′ + Δ″))*)
-            (Proc∼ (+-assoc Γ (Δ† + Δ′) Δ″) (Proc∼ (cong (flip _+_ Δ″) (+-assoc Γ Δ† Δ′)) S)) ≅⁺
+            (Proc∼ (+-assoc Γ (Δ† + Δ′) Δ″) (Proc∼ (cong (flip _+_ Δ″) (+-assoc Γ Δ† Δ′)) S)) ≅
             ((ρ ᴿ+ (Δ† + (Δ′ + Δ″)))*)
             (Proc∼ (+-assoc Γ Δ† (Δ′ + Δ″)) (Proc∼ (+-assoc (Γ + Δ†) Δ′ Δ″) S))
 
@@ -42,10 +42,10 @@ module Transition.Seq where
 
    quibble : ∀ Γ (ρ : Ren Γ Γ) Δ† Δ′ Δ″ (S : Proc (Γ + Δ† + Δ′ + Δ″)) (S′ : Proc (Γ + (Δ† + Δ′ + Δ″))) →
              ((ρ ᴿ+ (Δ† + Δ′ + Δ″))*)
-             (Proc∼ (+-assoc Γ (Δ† + Δ′) Δ″) (Proc∼ (cong (flip _+_ Δ″) (+-assoc Γ Δ† Δ′)) S)) ≅ S′ →
+             (Proc∼ (+-assoc Γ (Δ† + Δ′) Δ″) (Proc∼ (cong (flip _+_ Δ″) (+-assoc Γ Δ† Δ′)) S)) ≈ S′ →
              ((ρ ᴿ+ (Δ† + (Δ′ + Δ″)))*)
              (Proc∼ (+-assoc Γ Δ† (Δ′ + Δ″))
-                    (Proc∼ (+-assoc (Γ + Δ†) Δ′ Δ″) S)) ≅ Proc∼ (cong (_+_ Γ) (+-assoc Δ† Δ′ Δ″)) S′
+                    (Proc∼ (+-assoc (Γ + Δ†) Δ′ Δ″) S)) ≈ Proc∼ (cong (_+_ Γ) (+-assoc Δ† Δ′ Δ″)) S′
    quibble Γ ρ Δ† Δ′ Δ″ S S′ = {!!}
 
    ren-preserves-inc-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ Δ′ (a : Action (Γ + Δ′)) →
@@ -118,9 +118,9 @@ module Transition.Seq where
                    Proc∼ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′
                 ≅⟨ Proc≅ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′ ⟩
                    S′
-                ≅⟨ ≅⁺-sym (Proc≅ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
+                ≅⟨ ≅-sym (Proc≅ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
                    Proc∼ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′
-                ≅⟨ ≅⁺-sym (Proc≅ (ren-preserves-inc⋆-assoc σ m (a ᵇ∷ a⋆)) _) ⟩
+                ≅⟨ ≅-sym (Proc≅ (ren-preserves-inc⋆-assoc σ m (a ᵇ∷ a⋆)) _) ⟩
                    Proc∼ (ren-preserves-inc⋆-assoc σ m (a ᵇ∷ a⋆))
                          (Proc∼ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
                 ∎)
@@ -141,9 +141,9 @@ module Transition.Seq where
                    Proc∼ (ren-preserves-inc⋆-assoc σ m a⋆) S′
                 ≅⟨ Proc≅ (ren-preserves-inc⋆-assoc σ m a⋆) S′ ⟩
                    S′
-                ≅⟨ ≅⁺-sym (Proc≅ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′) ⟩
+                ≅⟨ ≅-sym (Proc≅ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′) ⟩
                    Proc∼ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′
-                ≅⟨ ≅⁺-sym (Proc≅ (ren-preserves-inc⋆-assoc σ m (a ᶜ∷ a⋆)) _) ⟩
+                ≅⟨ ≅-sym (Proc≅ (ren-preserves-inc⋆-assoc σ m (a ᶜ∷ a⋆)) _) ⟩
                    Proc∼ (ren-preserves-inc⋆-assoc σ m (a ᶜ∷ a⋆))
                          (Proc∼ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′)
                 ∎)
