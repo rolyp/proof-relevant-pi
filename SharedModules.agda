@@ -18,6 +18,7 @@ module SharedModules where
    open import Relation.Binary.HeterogeneousEquality as ᴴ public
       using (module ≅-Reasoning; ≅-to-≡; ≡-to-≅; subst-removable; ≡-subst-removable)
       renaming (
-         _≅_ to _≅_; refl to ≅-refl; sym to ≅-sym; cong to ≅-cong; cong₂ to ≅-cong₂; subst to ≅-subst; subst₂ to ≅-subst₂
+         _≅_ to _≅_; refl to ≅-refl; sym to ≅-sym; trans to ≅-trans;
+         cong to ≅-cong; cong₂ to ≅-cong₂; subst to ≅-subst; subst₂ to ≅-subst₂
       )
    open import Size public
