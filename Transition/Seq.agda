@@ -54,17 +54,10 @@ module Transition.Seq where
              (Proc∼ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈
              Proc∼ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′)
    bibble Γ ρ Δ₁ Δ₂ Δ₃ S S′ =
-      begin
-         ((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
-         (Proc∼ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′
-      ≅⟨ ≅-cong₃ (λ Δ† P P′ → ((ρ ᴿ+ Δ†)*) P ≈ P′)
-                 (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃))
-                 (fibble Γ ρ Δ₁ Δ₂ Δ₃ S S′)
-                 (≅-sym (Proc≅ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′)) ⟩
-         ((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*)
-         (Proc∼ (+-assoc Γ Δ₁ (Δ₂ + Δ₃))
-                (Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈ Proc∼ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′
-      ∎ where open ≅-Reasoning
+      ≅-cong₃ (λ Δ† P P′ → ((ρ ᴿ+ Δ†)*) P ≈ P′)
+         (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃))
+         (fibble Γ ρ Δ₁ Δ₂ Δ₃ S S′)
+         (≅-sym (Proc≅ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
 
    quibble : ∀ Γ (ρ : Ren Γ Γ) Δ₁ Δ₂ Δ₃ (S : Proc (Γ + Δ₁ + Δ₂ + Δ₃)) (S′ : Proc (Γ + (Δ₁ + Δ₂ + Δ₃))) →
              ((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
