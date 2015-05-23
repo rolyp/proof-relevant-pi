@@ -5,7 +5,8 @@ module Action.Ren where
 
    open import Ext
 
-   open import Action as ᴬ using (Actionᵇ; Actionᶜ; Action; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
+   open import Action as ᴬ using (Actionᵇ; Actionᶜ; Action; _ᵇ; _ᶜ; inc; coinitial);
+      open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ.coinitial
    open import Name using (_+_; toℕ)
    open import Ren as ᴿ using (Ren; Renameable);
       open ᴿ.Renameable ⦃...⦄ renaming (
@@ -94,3 +95,10 @@ module Action.Ren where
 
    ren-preserves-target : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → (_+_ Γ′) ∘ inc ≃ₑ (_+_ Γ′) ∘ inc ∘ ρ *′
    ren-preserves-target {Γ′ = Γ′} ρ = cong (_+_ Γ′) ∘ ren-preserves-inc ρ
+
+   _*† : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → {a a′ : Action Γ} → coinitial a a′ → coinitial ((ρ *′) a) ((ρ *′) a′)
+   (ρ *†) ᵛ∇ᵛ = ᵛ∇ᵛ
+   (ρ *†) ᵇ∇ᵇ = ᵇ∇ᵇ
+   (ρ *†) ᵇ∇ᶜ = ᵇ∇ᶜ
+   (ρ *†) ᶜ∇ᵇ = ᶜ∇ᵇ
+   (ρ *†) ᶜ∇ᶜ = ᶜ∇ᶜ

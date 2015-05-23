@@ -4,8 +4,9 @@ module Transition.Concur2 where
 
    open import Ext
 
-   open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
-   import Action.Ren
+   open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc; coinitial; coinitial-sym);
+      open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ.coinitial
+   open import Action.Ren using (_*†)
    open import Name as ᴺ using (Name; Cxt; module Cxt; zero; _+_; toℕ)
    open import Ren as ᴿ using (Ren; Renameable; ᴺren; suc; push; pop; swap); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
@@ -13,21 +14,6 @@ module Transition.Concur2 where
    import Proc.Ren
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
-
-   -- The 5 kinds of coinitial action residual. The ᵛ∇ᵛ case is what really makes this necessary.
-   data coinitial {Γ} : (a a′ : Action Γ) → Set where
-      ᵛ∇ᵛ : {x u : Name Γ} → coinitial ((• x) ᵇ) ((• u) ᵇ)
-      ᵇ∇ᵇ : {a a′ : Actionᵇ Γ} → coinitial (a ᵇ) (a′ ᵇ)
-      ᵇ∇ᶜ : {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} → coinitial (a ᵇ) (a′ ᶜ)
-      ᶜ∇ᵇ : {a : Actionᶜ Γ} {a′ : Actionᵇ Γ} → coinitial (a ᶜ) (a′ ᵇ)
-      ᶜ∇ᶜ : {a a′ : Actionᶜ Γ} → coinitial (a ᶜ) (a′ ᶜ)
-
-   coinitial-sym : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → coinitial a′ a
-   coinitial-sym ᵛ∇ᵛ = ᵛ∇ᵛ
-   coinitial-sym ᵇ∇ᵇ = ᵇ∇ᵇ
-   coinitial-sym ᵇ∇ᶜ = ᶜ∇ᵇ
-   coinitial-sym ᶜ∇ᵇ = ᵇ∇ᶜ
-   coinitial-sym ᶜ∇ᶜ = {!ᶜ∇ᶜ!}
 
    ᴬΔ : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → Set
    ᴬΔ {Γ} ᵛ∇ᵛ = Actionᶜ (Γ + 1)
@@ -93,25 +79,24 @@ module Transition.Concur2 where
       _│•_ : ∀ {x y u z P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ • u 〈 z 〉 ᶜ - _ ]→ S′} →
              E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ ᶜ∇ᶜ ] F′ → E │• F ⌣₁[ ᶜ∇ᶜ ] E′ │• F′
-{-
       _│ᵥ_ : ∀ {x u P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
-             {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
-             E ⌣₁ E′ → F ⌣₁ F′ → E │ᵥ F ⌣₁ E′ │ᵥ F′
+             {•x⌣•u} {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
+             E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ •x⌣•u ] F′ → E │ᵥ F ⌣₁[ ᶜ∇ᶜ ] E′ │ᵥ F′
       ν•_ : ∀ {x u P R R′} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ • ᴺ.suc u 〈 zero 〉 ᶜ - _ ]→ R′} →
-            E ⌣₁ E′ → ν• E ⌣₁ ν• E′
+            E ⌣₁[ ᶜ∇ᶜ ] E′ → ν• E ⌣₁[ ᵛ∇ᵛ ] ν• E′
       ν•ᵇ_ : ∀ {x P R R′} {a : Actionᵇ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push *) a ᵇ - _ ]→ R′} →
-            E ⌣₁ E′ → ν• E ⌣₁ νᵇ_ {a = a} E′
+            E ⌣₁[ ᶜ∇ᵇ ] E′ → ν• E ⌣₁[ ᵇ∇ᵇ ] νᵇ E′
       ν•ᶜ_ : ∀ {x P R R′} {a : Actionᶜ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push *) a ᶜ - _ ]→ R′} →
-            E ⌣₁ E′ → ν• E ⌣₁ νᶜ_ {a = a} E′
-      νᵇᵇ_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᵇ - _ ]→ R′} →
-          E ⌣₁ E′ → νᵇ_ {a = a} E ⌣₁ νᵇ_ {a = a′} E′
+            E ⌣₁[ ᶜ∇ᶜ ] E′ → ν• E ⌣₁[ ᵇ∇ᶜ ] νᶜ E′
+      νᵇᵇ_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {a⌣a′} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᵇ - _ ]→ R′} →
+          E ⌣₁[ (push *†) a⌣a′ ] E′ → νᵇ E ⌣₁[ a⌣a′ ] νᵇ E′
       νᵇᶜ_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
-          E ⌣₁ E′ → νᵇ_ {a = a} E ⌣₁ νᶜ_ {a = a′} E′
+          E ⌣₁[ {!!} ] E′ → νᵇ E ⌣₁[ {!!} ] νᶜ E′
       νᶜᶜ_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ (push *) a ᶜ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
-          E ⌣₁ E′ → νᶜ_ {a = a} E ⌣₁ νᶜ_ {a = a′} E′
-      !_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {R R′} {E : P │ ! P —[ a - _ ]→ R} {E′ : P │ ! P —[ a′ - _ ]→ R′} →
-           E ⌣₁ E′ → ! E ⌣₁ ! E′
--}
+          E ⌣₁[ {!!} ] E′ → νᶜ E ⌣₁[ {!!} ] νᶜ E′
+      !_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {a⌣a′} {R R′} {E : P │ ! P —[ a - _ ]→ R} {E′ : P │ ! P —[ a′ - _ ]→ R′} →
+           E ⌣₁[ a⌣a′ ] E′ → ! E ⌣₁[ a⌣a′ ] ! E′
+
    syntax Concur E E′ a′/a = E ⌣[ a′/a ] E′
 
    Concur : ∀ {Γ} {a : Action Γ} {a′ : Action Γ} {P R R′}
