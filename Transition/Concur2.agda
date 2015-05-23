@@ -22,6 +22,13 @@ module Transition.Concur2 where
       ᶜ∇ᵇ : {a : Actionᶜ Γ} {a′ : Actionᵇ Γ} → coinitial (a ᶜ) (a′ ᵇ)
       ᶜ∇ᶜ : {a a′ : Actionᶜ Γ} → coinitial (a ᶜ) (a′ ᶜ)
 
+   coinitial-sym : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → coinitial a′ a
+   coinitial-sym ᵛ∇ᵛ = ᵛ∇ᵛ
+   coinitial-sym ᵇ∇ᵇ = ᵇ∇ᵇ
+   coinitial-sym ᵇ∇ᶜ = ᶜ∇ᵇ
+   coinitial-sym ᶜ∇ᵇ = ᵇ∇ᶜ
+   coinitial-sym ᶜ∇ᶜ = {!ᶜ∇ᶜ!}
+
    ᴬΔ : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → Set
    ᴬΔ {Γ} ᵛ∇ᵛ = Actionᶜ (Γ + 1)
    ᴬΔ {Γ} ᵇ∇ᵇ = Actionᵇ (Γ + 1)
@@ -71,22 +78,21 @@ module Transition.Concur2 where
              (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁[ ᶜ∇ᵇ ] F′ → P │ᶜ F ⌣₁[ ᶜ∇ᶜ ] E │ᵥ F′
       _➕₁_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {a⌣a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
              E ⌣₁[ a⌣a′ ] E′ → (Q : Proc Γ) → E ➕₁ Q ⌣₁[ a⌣a′ ] E′ ➕₁ Q
-{-
-      _│ᵇᵇ_ : ∀ {Q S S′} {a a′ : Actionᵇ Γ} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ a′ ᵇ - _ ]→ S′} →
-             (P : Proc Γ) → F ⌣₁[ a′/a ] F′ → P │ᵇ F ⌣₁[ a′/a ] P │ᵇ F′
+      _│ᵇᵇ_ : ∀ {Q S S′} {a a′ : Actionᵇ Γ} {a⌣a′} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ a′ ᵇ - _ ]→ S′} →
+             (P : Proc Γ) → F ⌣₁[ a⌣a′ ] F′ → P │ᵇ F ⌣₁[ a⌣a′ ] P │ᵇ F′
       _│ᵇᶜ_ : ∀ {Q S S′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ a′ ᶜ - _ ]→ S′} →
-             (P : Proc Γ) → F ⌣₁[ a′/a ] F′ → P │ᵇ F ⌣₁[ a′/a ] P │ᶜ F′
+             (P : Proc Γ) → F ⌣₁[ ᵇ∇ᶜ ] F′ → P │ᵇ F ⌣₁[ ᵇ∇ᶜ ] P │ᶜ F′
       _│ᶜᶜ_ : ∀ {Q S S′} {a a′ : Actionᶜ Γ} {F : Q —[ a ᶜ - _ ]→ S} {F′ : Q —[ a′ ᶜ - _ ]→ S′} →
-             (P : Proc Γ) → F ⌣₁[ a′/a ] F′ → P │ᶜ F ⌣₁[ a′/a ] P │ᶜ F′
-      _ᵇᵇ│_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᵇ - _ ]→ R′} →
-              E ⌣₁[ a′/a ] E′ → (Q : Proc Γ) → E ᵇ│ Q ⌣₁[ a′/a ] E′ ᵇ│ Q
+             (P : Proc Γ) → F ⌣₁[ ᶜ∇ᶜ ] F′ → P │ᶜ F ⌣₁[ ᶜ∇ᶜ ] P │ᶜ F′
+      _ᵇᵇ│_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {a⌣a′} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᵇ - _ ]→ R′} →
+              E ⌣₁[ a⌣a′ ] E′ → (Q : Proc Γ) → E ᵇ│ Q ⌣₁[ a⌣a′ ] E′ ᵇ│ Q
       _ᵇᶜ│_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′} →
-              E ⌣₁[ a′/a ] E′ → (Q : Proc Γ) → E ᵇ│ Q ⌣₁[ a′/a ] E′ ᶜ│ Q
+              E ⌣₁[ ᵇ∇ᶜ ] E′ → (Q : Proc Γ) → E ᵇ│ Q ⌣₁[ ᵇ∇ᶜ ] E′ ᶜ│ Q
       _ᶜᶜ│_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′} →
-              E ⌣₁[ a′/a ] E′ → (Q : Proc Γ) → E ᶜ│ Q ⌣₁[ a′/a ] E′ ᶜ│ Q
+              E ⌣₁[ ᶜ∇ᶜ ] E′ → (Q : Proc Γ) → E ᶜ│ Q ⌣₁[ ᶜ∇ᶜ ] E′ ᶜ│ Q
       _│•_ : ∀ {x y u z P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ • u 〈 z 〉 ᶜ - _ ]→ S′} →
-             E ⌣₁[ {!!} ] E′ → F ⌣₁[ z • ᵇ ] F′ → E │• F ⌣₁[ τ ᶜ ] E′ │• F′
+             E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ ᶜ∇ᶜ ] F′ → E │• F ⌣₁[ ᶜ∇ᶜ ] E′ │• F′
 {-
       _│ᵥ_ : ∀ {x u P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
@@ -108,6 +114,6 @@ module Transition.Concur2 where
 -}
    syntax Concur E E′ a′/a = E ⌣[ a′/a ] E′
 
-   Concur : ∀ {Γ} {a : Action Γ} {a′ : Action Γ} {P R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → a ᴬΔ a′ → Set
-   Concur E E′ ( a′/a , a/a′ ) = E ⌣₁[ a′/a ] E′ ⊎ E′ ⌣₁[ a/a′ ] E
--}
+   Concur : ∀ {Γ} {a : Action Γ} {a′ : Action Γ} {P R R′}
+            (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → coinitial a a′ → Set
+   Concur E E′ a′/a = E ⌣₁[ a′/a ] E′ ⊎ E′ ⌣₁[ coinitial-sym a′/a ] E
