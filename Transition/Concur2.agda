@@ -83,13 +83,10 @@ module Transition.Concur2 where
               E ⌣₁[ a′/a ] E′ → (Q : Proc Γ) → E ᵇ│ Q ⌣₁[ a′/a ] E′ ᶜ│ Q
       _ᶜᶜ│_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {a′/a} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′} →
               E ⌣₁[ a′/a ] E′ → (Q : Proc Γ) → E ᶜ│ Q ⌣₁[ a′/a ] E′ ᶜ│ Q
-{-
       _│•_ : ∀ {x y u z P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ • u 〈 z 〉 ᶜ - _ ]→ S′} →
-             E ⌣₁ E′ → F ⌣₁ F′ → E │• F ⌣₁ E′ │• F′
-      _│•ᵥ_ : ∀ {x u y P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
-             {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
-             E ⌣₁ E′ → F ⌣₁ F′ → E │• F ⌣₁ E′ │ᵥ F′
+             E ⌣₁[ ? ] E′ → F ⌣₁[ z • ᵇ ] F′ → E │• F ⌣₁[ τ ᶜ ] E′ │• F′
+{-
       _│ᵥ_ : ∀ {x u P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
              E ⌣₁ E′ → F ⌣₁ F′ → E │ᵥ F ⌣₁ E′ │ᵥ F′
