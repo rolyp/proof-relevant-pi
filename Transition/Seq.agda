@@ -32,31 +32,6 @@ module Transition.Seq where
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
    ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≈ P′
 
-   bibble : ∀ Γ (ρ : Ren Γ Γ) Δ₁ Δ₂ Δ₃ S S′ →
-            (((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
-             (Proc∼ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′) ≅
-            (((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*)
-             (Proc∼ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈
-             Proc∼ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′)
-   bibble Γ ρ Δ₁ Δ₂ Δ₃ S S′ =
-      ≅-cong₃ (λ Δ† P P′ → ((ρ ᴿ+ Δ†)*) P ≈ P′)
-         (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃))
-         (
-            let open ≅-Reasoning in
-            begin
-               Proc∼ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)
-            ≅⟨ Proc≅ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) _ ⟩
-               Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S
-            ≅⟨ Proc≅ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S ⟩
-               S
-            ≅⟨ ≅-sym (Proc≅ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S) ⟩
-               Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S
-            ≅⟨ ≅-sym (Proc≅ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) _) ⟩
-               Proc∼ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)
-            ∎
-         )
-         (≅-sym (Proc≅ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
-
    ren-preserves-inc-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ Δ′ (a : Action (Γ + Δ′)) →
                              Γ + (Δ′ + inc a) ≡ Γ + Δ′ + inc (((ρ ᴿ+ Δ′) *) a)
    ren-preserves-inc-assoc {Γ} ρ Δ′ a =
@@ -109,12 +84,37 @@ module Transition.Seq where
          γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (Proc∼ (+-assoc _ _ (inc⋆ a⋆)) R) R′
          E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ Proc∼ (ren-preserves-inc⋆-assoc (braid n) m a⋆) R′
 
+   braid-assoc : ∀ Γ (ρ : Ren Γ Γ) Δ₁ Δ₂ Δ₃ S S′ →
+                 (((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
+                 (Proc∼ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′) ≅
+                 (((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*)
+                 (Proc∼ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈
+                 Proc∼ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′)
+   braid-assoc Γ ρ Δ₁ Δ₂ Δ₃ S S′ =
+      ≅-cong₃ (λ Δ† P P′ → ((ρ ᴿ+ Δ†)*) P ≈ P′)
+         (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃))
+         (
+            let open ≅-Reasoning in
+            begin
+               Proc∼ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)
+            ≅⟨ Proc≅ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) _ ⟩
+               Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S
+            ≅⟨ Proc≅ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S ⟩
+               S
+            ≅⟨ ≅-sym (Proc≅ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S) ⟩
+               Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S
+            ≅⟨ ≅-sym (Proc≅ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) _) ⟩
+               Proc∼ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)
+            ∎
+         )
+         (≅-sym (Proc≅ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
+
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = γ Δ []
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ n , m ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | ren-preserves-inc-assoc (braid n) m (a ᵇ)
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (bibble (Γ + toℕ n) (braid {Γ} n) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′) =
+   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (Γ + toℕ n) (braid {Γ} n) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′) =
       let Γ′ = Γ + toℕ n
           σ = braid {Γ} n
           open ≅-Reasoning
@@ -137,7 +137,7 @@ module Transition.Seq where
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ n , m ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ n , m ] E⋆ γ/E | ren-preserves-inc-assoc (braid n) m (a ᶜ)
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (bibble (Γ + toℕ n) (braid {Γ} n) m 0 (inc⋆ a⋆) (target⋆ E⋆) S′) =
+   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (Γ + toℕ n) (braid {Γ} n) m 0 (inc⋆ a⋆) (target⋆ E⋆) S′) =
       let Γ′ = Γ + toℕ n
           σ = braid {Γ} n
           open ≅-Reasoning
