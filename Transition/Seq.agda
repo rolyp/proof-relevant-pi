@@ -32,6 +32,14 @@ module Transition.Seq where
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
    ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≅ P′
 
+   bibble : ∀ Γ (ρ : Ren Γ Γ) Δ† Δ′ Δ″ (S : Proc (Γ + Δ† + Δ′ + Δ″)) (S′ : Proc (Γ + (Δ† + Δ′ + Δ″))) →
+            ((ρ ᴿ+ (Δ† + Δ′ + Δ″))*)
+            (Proc∼ (+-assoc Γ (Δ† + Δ′) Δ″) (Proc∼ (cong (flip _+_ Δ″) (+-assoc Γ Δ† Δ′)) S)) ≅⁺
+            ((ρ ᴿ+ (Δ† + (Δ′ + Δ″)))*)
+            (Proc∼ (+-assoc Γ Δ† (Δ′ + Δ″)) (Proc∼ (+-assoc (Γ + Δ†) Δ′ Δ″) S))
+
+   bibble Γ ρ Δ† Δ′ Δ″ S S′ = {!!}
+
    quibble : ∀ Γ (ρ : Ren Γ Γ) Δ† Δ′ Δ″ (S : Proc (Γ + Δ† + Δ′ + Δ″)) (S′ : Proc (Γ + (Δ† + Δ′ + Δ″))) →
              ((ρ ᴿ+ (Δ† + Δ′ + Δ″))*)
              (Proc∼ (+-assoc Γ (Δ† + Δ′) Δ″) (Proc∼ (cong (flip _+_ Δ″) (+-assoc Γ Δ† Δ′)) S)) ≅ S′ →
