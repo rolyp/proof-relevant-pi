@@ -32,20 +32,21 @@ module Transition.Seq where
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
    ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≈ P′
 
-   nibble : ∀ Γ Γ′ Δ₁ Δ₂ Δ₃ (ρ : Ren Γ Γ′) (P : Proc _) →
-            ((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*) P ≅ ((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*) (Proc∼ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) P)
-   nibble Γ Γ′ Δ₁ Δ₂ Δ₃ ρ P =
-      begin
-         ((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*) P
-      ≅⟨ ≅-cong₂ (λ Δ† P′ → ((ρ ᴿ+ Δ†)*) P′)
-                 (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃)) (≅-sym (Proc≅ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) P)) ⟩
-         ((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*) (Proc∼ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) P)
-      ∎ where open ≅-Reasoning
-
    fibble : ∀ Γ (ρ : Ren Γ Γ) Δ₁ Δ₂ Δ₃ (S : Proc (Γ + Δ₁ + Δ₂ + Δ₃)) (S′ : Proc (Γ + (Δ₁ + Δ₂ + Δ₃))) →
-            (Proc∼ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≅
-            (Proc∼ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S))
-   fibble = {!!}
+            Proc∼ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S) ≅
+            Proc∼ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)
+   fibble Γ ρ Δ₁ Δ₂ Δ₃ S S′ =
+      begin
+         Proc∼ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)
+      ≅⟨ Proc≅ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) _ ⟩
+         Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S
+      ≅⟨ Proc≅ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S ⟩
+         S
+      ≅⟨ ≅-sym (Proc≅ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S) ⟩
+         Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S
+      ≅⟨ ≅-sym (Proc≅ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) _) ⟩
+         Proc∼ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)
+      ∎ where open ≅-Reasoning
 
    bibble : ∀ Γ (ρ : Ren Γ Γ) Δ₁ Δ₂ Δ₃ (S : Proc (Γ + Δ₁ + Δ₂ + Δ₃)) (S′ : Proc (Γ + (Δ₁ + Δ₂ + Δ₃))) →
             (((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
