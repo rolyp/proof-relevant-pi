@@ -35,3 +35,11 @@ module Action where
    coinitial-sym ᵇ∇ᶜ = ᶜ∇ᵇ
    coinitial-sym ᶜ∇ᵇ = ᵇ∇ᶜ
    coinitial-sym ᶜ∇ᶜ = ᶜ∇ᶜ
+
+   coinitial-sym-involutive : ∀ {Γ} {a a′ : Action Γ} →
+                              (a⌣a′ : coinitial a a′) → coinitial-sym (coinitial-sym a⌣a′) ≡ a⌣a′
+   coinitial-sym-involutive ᵛ∇ᵛ = refl
+   coinitial-sym-involutive ᵇ∇ᵇ = refl
+   coinitial-sym-involutive ᵇ∇ᶜ = refl
+   coinitial-sym-involutive ᶜ∇ᵇ = refl
+   coinitial-sym-involutive ᶜ∇ᶜ = refl

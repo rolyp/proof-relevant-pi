@@ -4,7 +4,8 @@ module Transition.Concur2 where
 
    open import Ext
 
-   open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc; coinitial; coinitial-sym);
+   open import Action as ᴬ
+      using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc; coinitial; coinitial-sym; coinitial-sym-involutive);
       open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ.coinitial
    open import Action.Ren using (_*†)
    open import Name as ᴺ using (Name; Cxt; module Cxt; zero; _+_; toℕ)
@@ -97,8 +98,13 @@ module Transition.Concur2 where
       !_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {a⌣a′} {R R′} {E : P │ ! P —[ a - _ ]→ R} {E′ : P │ ! P —[ a′ - _ ]→ R′} →
            E ⌣₁[ a⌣a′ ] E′ → ! E ⌣₁[ a⌣a′ ] ! E′
 
-   syntax Concur E E′ a′/a = E ⌣[ a′/a ] E′
+   syntax Concur E E′ a⌣a′ = E ⌣[ a⌣a′ ] E′
 
-   Concur : ∀ {Γ} {a : Action Γ} {a′ : Action Γ} {P R R′}
+   Concur : ∀ {Γ} {a a′ : Action Γ} {P R R′}
             (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → coinitial a a′ → Set
-   Concur E E′ a′/a = E ⌣₁[ a′/a ] E′ ⊎ E′ ⌣₁[ coinitial-sym a′/a ] E
+   Concur E E′ a⌣a′ = E ⌣₁[ a⌣a′ ] E′ ⊎ E′ ⌣₁[ coinitial-sym a⌣a′ ] E
+
+   ⌣-sym : ∀ {Γ} {P : Proc Γ} {a : Action Γ} {a′ : Action Γ} {a⌣a′ : coinitial a a′} {R R′} →
+           Sym (λ (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → E ⌣[ a⌣a′ ] E′) (λ E E′ → E ⌣[ coinitial-sym a⌣a′ ] E′)
+   ⌣-sym (inj₁ E⌣E′) = inj₂ (subst (Concur₁ _ _) (sym (coinitial-sym-involutive _)) E⌣E′)
+   ⌣-sym (inj₂ E⌣E′) = inj₁ E⌣E′
