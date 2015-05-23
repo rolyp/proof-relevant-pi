@@ -32,7 +32,7 @@ module Transition.Seq where
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
    ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≈ P′
 
-   bibble : ∀ Γ (ρ : Ren Γ Γ) Δ₁ Δ₂ Δ₃ (S : Proc (Γ + Δ₁ + Δ₂ + Δ₃)) (S′ : Proc (Γ + (Δ₁ + Δ₂ + Δ₃))) →
+   bibble : ∀ Γ (ρ : Ren Γ Γ) Δ₁ Δ₂ Δ₃ S S′ →
             (((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
              (Proc∼ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′) ≅
             (((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*)
@@ -56,14 +56,6 @@ module Transition.Seq where
             ∎
          )
          (≅-sym (Proc≅ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
-
-   quibble : ∀ Γ (ρ : Ren Γ Γ) Δ₁ Δ₂ Δ₃ (S : Proc (Γ + Δ₁ + Δ₂ + Δ₃)) (S′ : Proc (Γ + (Δ₁ + Δ₂ + Δ₃))) →
-             ((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
-             (Proc∼ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′ →
-             ((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*)
-             (Proc∼ (+-assoc Γ Δ₁ (Δ₂ + Δ₃))
-                    (Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈ Proc∼ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′
-   quibble Γ ρ Δ₁ Δ₂ Δ₃ S S′ = {!!}
 
    ren-preserves-inc-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ Δ′ (a : Action (Γ + Δ′)) →
                              Γ + (Δ′ + inc a) ≡ Γ + Δ′ + inc (((ρ ᴿ+ Δ′) *) a)
@@ -122,7 +114,7 @@ module Transition.Seq where
    ⊖⋆[ n , m ] [] γ = γ Δ []
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ n , m ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | ren-preserves-inc-assoc (braid n) m (a ᵇ)
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
+   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (bibble (Γ + toℕ n) (braid {Γ} n) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′) =
       let Γ′ = Γ + toℕ n
           σ = braid {Γ} n
           open ≅-Reasoning
@@ -142,10 +134,10 @@ module Transition.Seq where
                          (Proc∼ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᵇ∷ E⋆/γ/E)
-      in quibble _ σ m 1 (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆ Δ E/γ∷E⋆/γ/E
+      in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ n , m ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ n , m ] E⋆ γ/E | ren-preserves-inc-assoc (braid n) m (a ᶜ)
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl =
+   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (bibble (Γ + toℕ n) (braid {Γ} n) m 0 (inc⋆ a⋆) (target⋆ E⋆) S′) =
       let Γ′ = Γ + toℕ n
           σ = braid {Γ} n
           open ≅-Reasoning
@@ -165,7 +157,7 @@ module Transition.Seq where
                          (Proc∼ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᶜ∷ E⋆/γ/E)
-      in quibble _ σ m 0 (inc⋆ a⋆) (target⋆ E⋆) S′ γ/E/E⋆ Δ E/γ∷E⋆/γ/E
+      in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
 {-
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule; needs more general notion of cofinality.
    infix 4 _≃_
