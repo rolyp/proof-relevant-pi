@@ -14,9 +14,6 @@ module Transition.Concur2 where
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
-   _ᴬΔ_ : ∀ {Γ} (a a′ : Action Γ) → Set
-   _ᴬΔ_ {Γ} a a′ = Action (Γ + inc a) × Action (Γ + inc a′)
-
    -- The 5 kinds of coinitial action residual. The ᵛ∇ᵛ case is what really makes this necessary.
    data coinitial {Γ} : (a a′ : Action Γ) → Set where
       ᵛ∇ᵛ : (x u : Name Γ) → coinitial ((• x) ᵇ) ((• u) ᵇ)
@@ -25,50 +22,40 @@ module Transition.Concur2 where
       ᶜ∇ᵇ : (a : Actionᶜ Γ) (a′ : Actionᵇ Γ) → coinitial (a ᶜ) (a′ ᵇ)
       ᶜ∇ᶜ : (a a′ : Actionᶜ Γ) → coinitial (a ᶜ) (a′ ᶜ)
 
-   ᴬΔ′ : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → Set
-   ᴬΔ′ {Γ} (ᵛ∇ᵛ x u) = Actionᶜ (Γ + 1) × Actionᶜ (Γ + 1)
-   ᴬΔ′ {Γ} (ᵇ∇ᵇ a a′) = Actionᵇ (Γ + 1) × Actionᵇ (Γ + 1)
-   ᴬΔ′ {Γ} (ᵇ∇ᶜ a a′) = Actionᶜ (Γ + 1) × Actionᵇ Γ
-   ᴬΔ′ {Γ} (ᶜ∇ᵇ a a′) = Actionᵇ Γ × Actionᶜ (Γ + 1)
-   ᴬΔ′ {Γ} (ᶜ∇ᶜ a a′) = Actionᶜ Γ × Actionᶜ Γ
+   ᴬΔ : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → Set
+   ᴬΔ {Γ} (ᵛ∇ᵛ x u) = Actionᶜ (Γ + 1)
+   ᴬΔ {Γ} (ᵇ∇ᵇ a a′) = Actionᵇ (Γ + 1)
+   ᴬΔ {Γ} (ᵇ∇ᶜ a a′) = Actionᶜ (Γ + 1)
+   ᴬΔ {Γ} (ᶜ∇ᵇ a a′) = Actionᵇ Γ
+   ᴬΔ {Γ} (ᶜ∇ᶜ a a′) = Actionᶜ Γ
 
-   -- The symmetric residual (a′/a, a/a′). Note that ᵇ∇ᵇ may also relate two bound outputs, but only if
-   -- they represent extrusions of distinct binders.
-   ᴬ⊖′ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : coinitial a a′) → ᴬΔ′ a⌣a′
-   ᴬ⊖′ (ᵛ∇ᵛ x u) = • ᴺ.suc u 〈 zero 〉 , • ᴺ.suc x 〈 zero 〉
-   ᴬ⊖′ (ᵇ∇ᵇ a a′) = (push *) a′ , (push *) a
-   ᴬ⊖′ (ᵇ∇ᶜ a a′) = (push *) a′ , a
-   ᴬ⊖′ (ᶜ∇ᵇ a a′) = a′ , (push *) a
-   ᴬ⊖′ (ᶜ∇ᶜ a a′) = a′ , a
-
-   ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → a ᴬΔ a′
-   ᴬ⊖ (ᵛ∇ᵛ x u) = • ᴺ.suc u 〈 zero 〉 ᶜ , • ᴺ.suc x 〈 zero 〉 ᶜ
-   ᴬ⊖ (ᵇ∇ᵇ a a′) = (push *) a′ ᵇ , (push *) a ᵇ
-   ᴬ⊖ (ᵇ∇ᶜ a a′) = (push *) a′ ᶜ , a ᵇ
-   ᴬ⊖ (ᶜ∇ᵇ a a′) = a′ ᵇ , (push *) a ᶜ
-   ᴬ⊖ (ᶜ∇ᶜ a a′) = a′ ᶜ , a ᶜ
-
-   -- Action residuation is symmetric, so could have just defined this.
-   ᴬ/ : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → Action (Γ + inc a)
-   ᴬ/ a⌣a′ = π₁ (ᴬ⊖ a⌣a′)
+   -- The residual a′/a. Note that ᵇ∇ᵇ may also relate two bound outputs, but only if they represent
+   -- extrusions of distinct binders.
+   ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : coinitial a a′) → ᴬΔ a⌣a′
+   ᴬ⊖ (ᵛ∇ᵛ x u) = • ᴺ.suc u 〈 zero 〉
+   ᴬ⊖ (ᵇ∇ᵇ a a′) = (push *) a′
+   ᴬ⊖ (ᵇ∇ᶜ a a′) = (push *) a′
+   ᴬ⊖ (ᶜ∇ᵇ a a′) = a′
+   ᴬ⊖ (ᶜ∇ᶜ a a′) = a′
 
    -- Whether two coinitial evaluation contexts are concurrent. Only give the left rules, then symmetrise.
-   -- Convenient to have this indexed by the residual actions. TODO: cases for •│ and ᵥ│.
+   -- Convenient to have this indexed by the kind of action residual. TODO: cases for •│ and ᵥ│.
    syntax Concur₁ E E′ a′/a = E ⌣₁[ a′/a ] E′
    infix 4 Concur₁
 
    data Concur₁ {Γ} : ∀ {a : Action Γ} {a′ : Action Γ} {P R R′} →
-                P —[ a - _ ]→ R → P —[ a′ - _ ]→ R′ → Action (Γ + inc a) → Set where
+                P —[ a - _ ]→ R → P —[ a′ - _ ]→ R′ → coinitial a a′ → Set where
       _ᵇ│ᵇ_ : ∀ {P Q R S} {a a′ : Actionᵇ Γ}
-             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᴬ/ (ᵇ∇ᵇ a a′) ] P │ᵇ F
+             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᵇ a a′ ] P │ᵇ F
       _ᵇ│ᶜ_ : ∀ {P Q R S} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ}
-             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᴬ/ (ᵇ∇ᶜ a a′) ] P │ᶜ F
+             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᶜ a a′ ] P │ᶜ F
       _ᶜ│ᵇ_ : ∀ {P Q R S} {a : Actionᶜ Γ} {a′ : Actionᵇ Γ}  →
-             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᴬ/ (ᶜ∇ᵇ a a′) ] P │ᵇ F
+             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᶜ∇ᵇ a a′ ] P │ᵇ F
       _ᶜ│ᶜ_ : ∀ {P Q R S} {a a′ : Actionᶜ Γ}  →
-             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᴬ/ (ᶜ∇ᶜ a a′) ] P │ᶜ F
-      _│•ᵇ_ : ∀ {x y P R R′ S Q} {a : Actionᵇ Γ} {a′/a} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
-              E ⌣₁[ a′/a ] E′ → (F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁[ a′/a ] E′ │• F
+             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᶜ∇ᶜ a a′ ] P │ᶜ F
+      _│•ᵇ_ : ∀ {x y P R R′ S Q} {a : Actionᵇ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
+              E ⌣₁[ ᵇ∇ᵇ a (x •) ] E′ → (F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁[ {!!} ] E′ │• F
+{-
       _│•ᶜ_ : ∀ {x y P R R′ S Q} {a : Actionᶜ Γ} {a′/a} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
               E ⌣₁[ a′/a ] E′ → (F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S) → E ᶜ│ Q ⌣₁[ a′/a ] E′ │• F
       _ᵇ│•_ : ∀ {x y P Q R S S′} {a : Actionᵇ Γ} {a′/a} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S′}
@@ -123,3 +110,4 @@ module Transition.Concur2 where
 
    Concur : ∀ {Γ} {a : Action Γ} {a′ : Action Γ} {P R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → a ᴬΔ a′ → Set
    Concur E E′ ( a′/a , a/a′ ) = E ⌣₁[ a′/a ] E′ ⊎ E′ ⌣₁[ a/a′ ] E
+-}
