@@ -134,9 +134,8 @@ module Transition.Concur where
 
    open import Ren.Properties
 
-   -- The symmetric residual  (E′/E , E/E′). Note that we use 'target E' to mean P / E as defined in the
-   -- paper. Also, the paper defines this over E and E′ and leaves E ⌣ E′ implicit, whereas we work
-   -- directly with the proof of E ⌣ E′ and leave E and E′ implicit.
+   -- The symmetric residual  (E′/E , E/E′). Note that the paper defines this over E and E′ and leaves E ⌣ E′
+   -- implicit, whereas we work directly with the proof of E ⌣ E′ and leave E and E′ implicit.
    ⊖₁ : ∀ {Γ P} {a a′ : Action Γ} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} → E ⌣₁ E′ → E Δ E′
    ⊖₁ (E ᵇ│ᵇ F) = ᵇ∇ᵇ ∶ target E │ᵇ (push *ᵇ) F Δ (push *ᵇ) E ᵇ│ target F
    ⊖₁ (E ᵇ│ᶜ F) = ᵇ∇ᶜ ∶ target E │ᶜ (push *ᶜ) F Δ E ᵇ│ target F
