@@ -16,27 +16,27 @@ module Transition.Concur2 where
 
    -- The 5 kinds of coinitial action residual. The ᵛ∇ᵛ case is what really makes this necessary.
    data coinitial {Γ} : (a a′ : Action Γ) → Set where
-      ᵛ∇ᵛ : (x u : Name Γ) → coinitial ((• x) ᵇ) ((• u) ᵇ)
-      ᵇ∇ᵇ : (a a′ : Actionᵇ Γ) → coinitial (a ᵇ) (a′ ᵇ)
-      ᵇ∇ᶜ : (a : Actionᵇ Γ) (a′ : Actionᶜ Γ) → coinitial (a ᵇ) (a′ ᶜ)
-      ᶜ∇ᵇ : (a : Actionᶜ Γ) (a′ : Actionᵇ Γ) → coinitial (a ᶜ) (a′ ᵇ)
-      ᶜ∇ᶜ : (a a′ : Actionᶜ Γ) → coinitial (a ᶜ) (a′ ᶜ)
+      ᵛ∇ᵛ : {x u : Name Γ} → coinitial ((• x) ᵇ) ((• u) ᵇ)
+      ᵇ∇ᵇ : {a a′ : Actionᵇ Γ} → coinitial (a ᵇ) (a′ ᵇ)
+      ᵇ∇ᶜ : {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} → coinitial (a ᵇ) (a′ ᶜ)
+      ᶜ∇ᵇ : {a : Actionᶜ Γ} {a′ : Actionᵇ Γ} → coinitial (a ᶜ) (a′ ᵇ)
+      ᶜ∇ᶜ : {a a′ : Actionᶜ Γ} → coinitial (a ᶜ) (a′ ᶜ)
 
    ᴬΔ : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → Set
-   ᴬΔ {Γ} (ᵛ∇ᵛ x u) = Actionᶜ (Γ + 1)
-   ᴬΔ {Γ} (ᵇ∇ᵇ a a′) = Actionᵇ (Γ + 1)
-   ᴬΔ {Γ} (ᵇ∇ᶜ a a′) = Actionᶜ (Γ + 1)
-   ᴬΔ {Γ} (ᶜ∇ᵇ a a′) = Actionᵇ Γ
-   ᴬΔ {Γ} (ᶜ∇ᶜ a a′) = Actionᶜ Γ
+   ᴬΔ {Γ} ᵛ∇ᵛ = Actionᶜ (Γ + 1)
+   ᴬΔ {Γ} ᵇ∇ᵇ = Actionᵇ (Γ + 1)
+   ᴬΔ {Γ} ᵇ∇ᶜ = Actionᶜ (Γ + 1)
+   ᴬΔ {Γ} ᶜ∇ᵇ = Actionᵇ Γ
+   ᴬΔ {Γ} ᶜ∇ᶜ = Actionᶜ Γ
 
    -- The residual a′/a. Note that ᵇ∇ᵇ may also relate two bound outputs, but only if they represent
    -- extrusions of distinct binders.
    ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : coinitial a a′) → ᴬΔ a⌣a′
-   ᴬ⊖ (ᵛ∇ᵛ x u) = • ᴺ.suc u 〈 zero 〉
-   ᴬ⊖ (ᵇ∇ᵇ a a′) = (push *) a′
-   ᴬ⊖ (ᵇ∇ᶜ a a′) = (push *) a′
-   ᴬ⊖ (ᶜ∇ᵇ a a′) = a′
-   ᴬ⊖ (ᶜ∇ᶜ a a′) = a′
+   ᴬ⊖ (ᵛ∇ᵛ {u = u}) = • ᴺ.suc u 〈 zero 〉
+   ᴬ⊖ (ᵇ∇ᵇ {a′ = a′}) = (push *) a′
+   ᴬ⊖ (ᵇ∇ᶜ {a′ = a′}) = (push *) a′
+   ᴬ⊖ (ᶜ∇ᵇ {a′ = a′}) = a′
+   ᴬ⊖ (ᶜ∇ᶜ {a′ = a′}) = a′
 
    -- Whether two coinitial evaluation contexts are concurrent. Only give the left rules, then symmetrise.
    -- Convenient to have this indexed by the kind of action residual. TODO: cases for •│ and ᵥ│.
@@ -46,18 +46,18 @@ module Transition.Concur2 where
    data Concur₁ {Γ} : ∀ {a : Action Γ} {a′ : Action Γ} {P R R′} →
                 P —[ a - _ ]→ R → P —[ a′ - _ ]→ R′ → coinitial a a′ → Set where
       _ᵇ│ᵇ_ : ∀ {P Q R S} {a a′ : Actionᵇ Γ}
-             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᵇ a a′ ] P │ᵇ F
+             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᵇ ] P │ᵇ F
       _ᵇ│ᶜ_ : ∀ {P Q R S} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ}
-             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᶜ a a′ ] P │ᶜ F
+             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᶜ ] P │ᶜ F
       _ᶜ│ᵇ_ : ∀ {P Q R S} {a : Actionᶜ Γ} {a′ : Actionᵇ Γ}  →
-             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᶜ∇ᵇ a a′ ] P │ᵇ F
+             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᶜ∇ᵇ ] P │ᵇ F
       _ᶜ│ᶜ_ : ∀ {P Q R S} {a a′ : Actionᶜ Γ}  →
-             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᶜ∇ᶜ a a′ ] P │ᶜ F
+             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᶜ∇ᶜ ] P │ᶜ F
       _│•ᵇ_ : ∀ {x y P R R′ S Q} {a : Actionᵇ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
-              E ⌣₁[ ᵇ∇ᵇ a (x •) ] E′ → (F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁[ {!!} ] E′ │• F
+              E ⌣₁[ ᵇ∇ᵇ ] E′ → (F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᶜ ] E′ │• F
+      _│•ᶜ_ : ∀ {x y P R R′ S Q} {a : Actionᶜ Γ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
+              E ⌣₁[ ᶜ∇ᵇ ] E′ → (F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᶜ∇ᶜ ] E′ │• F
 {-
-      _│•ᶜ_ : ∀ {x y P R R′ S Q} {a : Actionᶜ Γ} {a′/a} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
-              E ⌣₁[ a′/a ] E′ → (F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S) → E ᶜ│ Q ⌣₁[ a′/a ] E′ │• F
       _ᵇ│•_ : ∀ {x y P Q R S S′} {a : Actionᵇ Γ} {a′/a} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S′}
               (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁[ a′/a ] F′ → P │ᵇ F ⌣₁[ a′/a ] E │• F′
       _ᶜ│•_ : ∀ {x y P Q R S S′} {a : Actionᶜ Γ} {a′/a} {F : Q —[ a ᶜ - _ ]→ S} {F′ : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S′}
