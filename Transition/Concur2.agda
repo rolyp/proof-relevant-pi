@@ -104,7 +104,7 @@ module Transition.Concur2 where
             (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → coinitial a a′ → Set
    Concur E E′ a⌣a′ = E ⌣₁[ a⌣a′ ] E′ ⊎ E′ ⌣₁[ coinitial-sym a⌣a′ ] E
 
-   ⌣-sym : ∀ {Γ} {P : Proc Γ} {a : Action Γ} {a′ : Action Γ} {a⌣a′ : coinitial a a′} {R R′} →
+   ⌣-sym : ∀ {Γ} {P : Proc Γ} {a a′ : Action Γ} {a⌣a′ : coinitial a a′} {R R′} →
            Sym (λ (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → E ⌣[ a⌣a′ ] E′) (λ E E′ → E ⌣[ coinitial-sym a⌣a′ ] E′)
    ⌣-sym (inj₁ E⌣E′) = inj₂ (subst (Concur₁ _ _) (sym (coinitial-sym-involutive _)) E⌣E′)
    ⌣-sym (inj₂ E⌣E′) = inj₁ E⌣E′
