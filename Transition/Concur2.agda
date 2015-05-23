@@ -17,7 +17,7 @@ module Transition.Concur2 where
    _ᴬΔ_ : ∀ {Γ} (a a′ : Action Γ) → Set
    _ᴬΔ_ {Γ} a a′ = Action (Γ + inc a) × Action (Γ + inc a′)
 
-   -- The 5 kinds of coinitial action residual.
+   -- The 5 kinds of coinitial action residual. The ᵛ∇ᵛ case is what really makes this necessary.
    data coinitial {Γ} : (a a′ : Action Γ) → Set where
       ᵛ∇ᵛ : (x u : Name Γ) → coinitial ((• x) ᵇ) ((• u) ᵇ)
       ᵇ∇ᵇ : (a a′ : Actionᵇ Γ) → coinitial (a ᵇ) (a′ ᵇ)
@@ -34,11 +34,23 @@ module Transition.Concur2 where
    ᴬ⊖ (ᶜ∇ᵇ a a′) = a′ ᵇ , (push *) a ᶜ
    ᴬ⊖ (ᶜ∇ᶜ a a′) = a′ ᶜ , a ᶜ
 
+   -- Action residuation is symmetric, so could have just defined this.
+   ᴬ/ : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → Action (Γ + inc a)
+   ᴬ/ a⌣a′ = π₁ (ᴬ⊖ a⌣a′)
+
    -- Whether two coinitial evaluation contexts are concurrent. Only give the left rules, then symmetrise.
    -- Convenient to have this indexed by the residual actions. TODO: cases for •│ and ᵥ│.
-   syntax Concur₁ E E′ a⊖a′ = E ⌣₁[ a⊖a′ ] E′
+   syntax Concur₁ E E′ a′/a = E ⌣₁[ a′/a ] E′
+   infix 4 Concur₁
 
    data Concur₁ {Γ} : ∀ {a : Action Γ} {a′ : Action Γ} {P R R′} →
-                P —[ a - _ ]→ R → P —[ a′ - _ ]→ R′ → a ᴬΔ a → Set where
+                P —[ a - _ ]→ R → P —[ a′ - _ ]→ R′ → Action (Γ + inc a) → Set where
       _ᵇ│ᵇ_ : ∀ {P Q R S} {a a′ : Actionᵇ Γ}
-             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᴬ⊖ (ᵇ∇ᵇ a a′) ] P │ᵇ F
+             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᴬ/ (ᵇ∇ᵇ a a′) ] P │ᵇ F
+      _ᵇ│ᶜ_ : ∀ {P Q R S} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ}
+             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᴬ/ (ᵇ∇ᶜ a a′) ] P │ᶜ F
+
+   syntax Concur E E′ a′/a = E ⌣[ a′/a ] E′
+
+   Concur : ∀ {Γ} {a : Action Γ} {a′ : Action Γ} {P R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → a ᴬΔ a′ → Set
+   Concur E E′ ( a′/a , a/a′ ) = E ⌣₁[ a′/a ] E′ ⊎ E′ ⌣₁[ a/a′ ] E
