@@ -32,19 +32,13 @@ module Transition.Seq where
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
    ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≈ P′
 
-   bibble : ∀ Γ Γ′ Δ₁ Δ₂ Δ₃ →
-            Ren (Γ + (Δ₁ + Δ₂ + Δ₃)) (Γ′ + (Δ₁ + Δ₂ + Δ₃)) → Ren (Γ + (Δ₁ + (Δ₂ + Δ₃))) (Γ′ + (Δ₁ + (Δ₂ + Δ₃)))
-   bibble Γ Γ′ Δ₁ Δ₂ Δ₃ = subst (λ Δ₁ → Ren (Γ + Δ₁) (Γ′ + Δ₁)) (+-assoc Δ₁ Δ₂ Δ₃)
-
-   blah : ∀ Γ Δ₁ Δ₂ Δ₃ (P : Proc (Γ + (Δ₁ + Δ₂ + Δ₃))) → Proc∼ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) P ≅ P
-   blah = {!!}
-
    nibble : ∀ Γ Γ′ Δ₁ Δ₂ Δ₃ (ρ : Ren Γ Γ′) (P : Proc _) →
             ((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*) P ≅ ((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*) (Proc∼ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) P)
    nibble Γ Γ′ Δ₁ Δ₂ Δ₃ ρ P =
       begin
          ((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*) P
-      ≅⟨ ≅-cong₂ (λ Δ† P′ → ((ρ ᴿ+ Δ†)*) P′) (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃)) (≅-sym (blah Γ Δ₁ Δ₂ Δ₃ P)) ⟩
+      ≅⟨ ≅-cong₂ (λ Δ† P′ → ((ρ ᴿ+ Δ†)*) P′)
+                 (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃)) (≅-sym (Proc≅ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) P)) ⟩
          ((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*) (Proc∼ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) P)
       ∎ where open ≅-Reasoning
 
@@ -54,7 +48,7 @@ module Transition.Seq where
              ((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*)
              (Proc∼ (+-assoc Γ Δ₁ (Δ₂ + Δ₃))
                     (Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈ Proc∼ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′
-   quibble Γ ρ Δ₁ Δ₂ Δ₃ S S′ = let ρ′ = bibble Γ Γ Δ₁ Δ₂ Δ₃ (ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃)) in {!!}
+   quibble Γ ρ Δ₁ Δ₂ Δ₃ S S′ = {!!}
 
    ren-preserves-inc-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ Δ′ (a : Action (Γ + Δ′)) →
                              Γ + (Δ′ + inc a) ≡ Γ + Δ′ + inc (((ρ ᴿ+ Δ′) *) a)
