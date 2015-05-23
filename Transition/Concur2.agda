@@ -49,7 +49,65 @@ module Transition.Concur2 where
              (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᴬ/ (ᵇ∇ᵇ a a′) ] P │ᵇ F
       _ᵇ│ᶜ_ : ∀ {P Q R S} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ}
              (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᴬ/ (ᵇ∇ᶜ a a′) ] P │ᶜ F
-
+      _ᶜ│ᵇ_ : ∀ {P Q R S} {a : Actionᶜ Γ} {a′ : Actionᵇ Γ}  →
+             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᴬ/ (ᶜ∇ᵇ a a′) ] P │ᵇ F
+      _ᶜ│ᶜ_ : ∀ {P Q R S} {a a′ : Actionᶜ Γ}  →
+             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᴬ/ (ᶜ∇ᶜ a a′) ] P │ᶜ F
+{-
+      _│•ᵇ_ : ∀ {x y P R R′ S Q} {a : Actionᵇ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
+              E ⌣₁ E′ → (F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁ E′ │• F
+      _│•ᶜ_ : ∀ {x y P R R′ S Q} {a : Actionᶜ Γ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
+              E ⌣₁ E′ → (F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S) → E ᶜ│ Q ⌣₁ E′ │• F
+      _ᵇ│•_ : ∀ {x y P Q R S S′} {a : Actionᵇ Γ} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S′}
+              (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁ F′ → P │ᵇ F ⌣₁ E │• F′
+      _ᶜ│•_ : ∀ {x y P Q R S S′} {a : Actionᶜ Γ} {F : Q —[ a ᶜ - _ ]→ S} {F′ : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S′}
+              (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁ F′ → P │ᶜ F ⌣₁ E │• F′
+      _│ᵥᵇ_ : ∀ {x P R R′ S Q} {a : Actionᵇ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
+              E ⌣₁ E′ → (F : Q —[ (• x) ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁ E′ │ᵥ F
+      _│ᵥᶜ_ : ∀ {x P R R′ S Q} {a : Actionᶜ Γ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
+              E ⌣₁ E′ → (F : Q —[ (• x) ᵇ - _ ]→ S) → E ᶜ│ Q ⌣₁ E′ │ᵥ F
+      _ᵇ│ᵥ_ : ∀ {x P Q R S S′} {a : Actionᵇ Γ} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ (• x) ᵇ - _ ]→ S′} →
+             (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁ F′ → P │ᵇ F ⌣₁ E │ᵥ F′
+      _ᶜ│ᵥ_ : ∀ {x P Q R S S′} {a : Actionᶜ Γ} {F : Q —[ a ᶜ - _ ]→ S} {F′ : Q —[ (• x) ᵇ - _ ]→ S′} →
+             (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁ F′ → P │ᶜ F ⌣₁ E │ᵥ F′
+      _➕₁_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
+             E ⌣₁ E′ → (Q : Proc Γ) → E ➕₁ Q ⌣₁ E′ ➕₁ Q
+      _│ᵇᵇ_ : ∀ {Q S S′} {a a′ : Actionᵇ Γ} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ a′ ᵇ - _ ]→ S′} →
+             (P : Proc Γ) → F ⌣₁ F′ → P │ᵇ F ⌣₁ P │ᵇ F′
+      _│ᵇᶜ_ : ∀ {Q S S′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ a′ ᶜ - _ ]→ S′} →
+             (P : Proc Γ) → F ⌣₁ F′ → P │ᵇ F ⌣₁ P │ᶜ F′
+      _│ᶜᶜ_ : ∀ {Q S S′} {a a′ : Actionᶜ Γ} {F : Q —[ a ᶜ - _ ]→ S} {F′ : Q —[ a′ ᶜ - _ ]→ S′} →
+             (P : Proc Γ) → F ⌣₁ F′ → P │ᶜ F ⌣₁ P │ᶜ F′
+      _ᵇᵇ│_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᵇ - _ ]→ R′} →
+              E ⌣₁ E′ → (Q : Proc Γ) → E ᵇ│ Q ⌣₁ E′ ᵇ│ Q
+      _ᵇᶜ│_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′} →
+              E ⌣₁ E′ → (Q : Proc Γ) → E ᵇ│ Q ⌣₁ E′ ᶜ│ Q
+      _ᶜᶜ│_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′} →
+              E ⌣₁ E′ → (Q : Proc Γ) → E ᶜ│ Q ⌣₁ E′ ᶜ│ Q
+      _│•_ : ∀ {x y u z P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
+             {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ • u 〈 z 〉 ᶜ - _ ]→ S′} →
+             E ⌣₁ E′ → F ⌣₁ F′ → E │• F ⌣₁ E′ │• F′
+      _│•ᵥ_ : ∀ {x u y P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
+             {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
+             E ⌣₁ E′ → F ⌣₁ F′ → E │• F ⌣₁ E′ │ᵥ F′
+      _│ᵥ_ : ∀ {x u P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
+             {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
+             E ⌣₁ E′ → F ⌣₁ F′ → E │ᵥ F ⌣₁ E′ │ᵥ F′
+      ν•_ : ∀ {x u P R R′} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ • ᴺ.suc u 〈 zero 〉 ᶜ - _ ]→ R′} →
+            E ⌣₁ E′ → ν• E ⌣₁ ν• E′
+      ν•ᵇ_ : ∀ {x P R R′} {a : Actionᵇ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push *) a ᵇ - _ ]→ R′} →
+            E ⌣₁ E′ → ν• E ⌣₁ νᵇ_ {a = a} E′
+      ν•ᶜ_ : ∀ {x P R R′} {a : Actionᶜ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push *) a ᶜ - _ ]→ R′} →
+            E ⌣₁ E′ → ν• E ⌣₁ νᶜ_ {a = a} E′
+      νᵇᵇ_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᵇ - _ ]→ R′} →
+          E ⌣₁ E′ → νᵇ_ {a = a} E ⌣₁ νᵇ_ {a = a′} E′
+      νᵇᶜ_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
+          E ⌣₁ E′ → νᵇ_ {a = a} E ⌣₁ νᶜ_ {a = a′} E′
+      νᶜᶜ_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ (push *) a ᶜ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
+          E ⌣₁ E′ → νᶜ_ {a = a} E ⌣₁ νᶜ_ {a = a′} E′
+      !_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {R R′} {E : P │ ! P —[ a - _ ]→ R} {E′ : P │ ! P —[ a′ - _ ]→ R′} →
+           E ⌣₁ E′ → ! E ⌣₁ ! E′
+-}
    syntax Concur E E′ a′/a = E ⌣[ a′/a ] E′
 
    Concur : ∀ {Γ} {a : Action Γ} {a′ : Action Γ} {P R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → a ᴬΔ a′ → Set
