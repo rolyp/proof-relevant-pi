@@ -7,17 +7,17 @@ module Transition.Seq where
 
    open import Ext
 
-   open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc)
+   open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Ren using (ren-preserves-inc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _ᵇ∷_; _ᶜ∷_)
    open import Action.Seq.Ren using (ren-preserves-inc⋆)
    open import Name as ᴺ using (Cxt; Name; _+_; +-assoc; zero; toℕ; +-left-identity)
    open import Proc using (Proc)
-   open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; push; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import StructuralCong.Proc using (_≈_; ≈-sym; ≈-refl)
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; source; target)
-   open import Transition.Concur using (_⌣_; module _Δ_; ⊖; coinitial; ᴬ⊖; ᴬ⊖-✓)
+   open import Transition.Concur using (_⌣_; module _Δ_; _∶_Δ_; ⊖; coinitial; module coinitial; ᴬ⊖; ᴬ⊖-✓); open coinitial
    open import Transition.Ren using (_Δ_; _*′)
 
    Proc∼ = subst Proc
@@ -159,16 +159,22 @@ module Transition.Seq where
              ) (E/γ ᶜ∷ E⋆/γ/E)
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
 
+   blah : ∀ {Γ} (a a′ : Action Γ) (a⌣a′ : coinitial a a′) → Action⋆ Γ × Action⋆ Γ
+   blah ((• x) ᵇ) ((• u) ᵇ) ᵛ∇ᵛ = (• x) ᵇ∷ • ᴺ.suc u 〈 zero 〉 ᶜ∷ [] , (• u) ᵇ∷ • ᴺ.suc x 〈 zero 〉 ᶜ∷ []
+   blah (a ᵇ) (a′ ᵇ) ᵇ∇ᵇ = a ᵇ∷ (push *) a′ ᵇ∷ [] , a′ ᵇ∷ (push *) a ᵇ∷ []
+   blah (a ᵇ) (a′ ᶜ) ᵇ∇ᶜ = a ᵇ∷ (push *) a′ ᶜ∷ [] , a′ ᶜ∷ a ᵇ∷ []
+   blah (a ᶜ) (a′ ᵇ) ᶜ∇ᵇ = a ᶜ∷ a′ ᵇ∷ [] , a′ ᵇ∷ (push *) a ᶜ∷ []
+   blah (a ᶜ) (a′ ᶜ) ᶜ∇ᶜ = a ᶜ∷ a′ ᶜ∷ [] , a′ ᶜ∷ a ᶜ∷ []
+
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule.
+{-
    infix 4 _≃_
 -- infixr 9 _≃-∘_
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ R a′⋆ R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
       --- Transposition rule.
-      [_ᵇ∶⇋∶ᵇ_]∷_ : ∀ {a R a′ R′} (E : P —[ a ᵇ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
+      [_ᵇ∶⇋∶ᵇ_] : ∀ {a R a′ R′} (E : P —[ a ᵇ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
                   ⦃ E⌣E′ : E ⌣ E′ ⦄ → E ⌣ E′ → let open _Δ_ (⊖ E⌣E′); Q = target E′/E in
-                  ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
-                  E ᵇ∷ E′/E ᵇ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᵇ∷ []
-{-
+                  E ᵇ∷ E′/E ᵇ∷ [] ≃ E′ ᵇ∷ E/E′ ᵇ∷ []
       -- Close under trace constructors.
       [] : [] ≃ []
       _∷_ : ∀ {a R a⋆ S a′⋆ S′} (E : P —[ a - _ ]→ R) {E⋆ : R —[ a⋆ ]→⋆ S} {E′⋆ : R —[ a′⋆ ]→⋆ S′} →
