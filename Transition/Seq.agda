@@ -166,7 +166,7 @@ module Transition.Seq where
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ a′⋆ R R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
       --- Transposition rule.
       [_ᵇ∶⇋∶ᵇ_] : ∀ {a a′} {R R′} (E : P —[ a ᵇ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
-                 ⦃ E⌣E′ : E ⌣[ ᵇ∇ᵇ ] E′ ⦄ → let open Delta′ (⊖ E⌣E′) in E ᵇ∷ {!E′/E!} ᵇ∷ [] ≃ E′ ᵇ∷ {!!} ᵇ∷ []
+                 ⦃ E⌣E′ : E ⌣[ ᵇ∇ᵇ ] E′ ⦄ → let open Delta′ (⊖ E⌣E′) in E ᵇ∷ E′/E ᵇ∷ [] ≃ E′ ᵇ∷ {!!} ᵇ∷ []
 {-
       -- Close under trace constructors.
       [] : [] ≃ []
