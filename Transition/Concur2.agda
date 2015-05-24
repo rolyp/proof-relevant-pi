@@ -93,6 +93,9 @@ module Transition.Concur2 where
       _│•_ : ∀ {x y u z P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ • u 〈 z 〉 ᶜ - _ ]→ S′} →
              E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ ᶜ∇ᶜ ] F′ → E │• F ⌣₁[ ᶜ∇ᶜ ] E′ │• F′
+      _│•ᵥ_ : ∀ {x u y P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
+             {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
+             E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ ᶜ∇ᵇ ] F′ → E │• F ⌣₁[ ᶜ∇ᶜ ] E′ │ᵥ F′
       _│ᵥ_ : ∀ {x u P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {•x⌣•u} {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
              E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ •x⌣•u ] F′ → E │ᵥ F ⌣₁[ ᶜ∇ᶜ ] E′ │ᵥ F′
@@ -143,4 +146,5 @@ module Transition.Concur2 where
    -- implicit, whereas we work directly with the proof of E ⌣ E′, with E and E′ implicit.
    ⊖₁ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
         E ⌣₁[ a⌣a′ ] E′ → E Δ E′
-   ⊖₁ E⌣E′ = ?
+   ⊖₁ (E ᵇ│ᵇ F) = ᵇ∇ᵇ ∶ target E │ᵇ (push *ᵇ) F Δ (push *ᵇ) E ᵇ│ target F
+   ⊖₁ E⌣E′ = {!!}
