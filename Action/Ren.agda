@@ -95,10 +95,3 @@ module Action.Ren where
 
    ren-preserves-target : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → (_+_ Γ′) ∘ inc ≃ₑ (_+_ Γ′) ∘ inc ∘ ρ *′
    ren-preserves-target {Γ′ = Γ′} ρ = cong (_+_ Γ′) ∘ ren-preserves-inc ρ
-
-   _*† : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → {a a′ : Action Γ} → a ᴬ⌣ a′ → (ρ *′) a ᴬ⌣ (ρ *′) a′
-   (ρ *†) ᵛ∇ᵛ = ᵛ∇ᵛ
-   (ρ *†) ᵇ∇ᵇ = ᵇ∇ᵇ
-   (ρ *†) ᵇ∇ᶜ = ᵇ∇ᶜ
-   (ρ *†) ᶜ∇ᵇ = ᶜ∇ᵇ
-   (ρ *†) ᶜ∇ᶜ = ᶜ∇ᶜ

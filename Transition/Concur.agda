@@ -7,7 +7,7 @@ module Transition.Concur where
    open import Action as ᴬ
       using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc; _ᴬ⌣_; ᴬ⌣-sym; ᴬ⌣-sym-involutive);
       open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ._ᴬ⌣_
-   open import Action.Ren using (_*†)
+   import Action.Ren
    open import Name as ᴺ using (Name; Cxt; module Cxt; zero; _+_; toℕ)
    open import Ren as ᴿ using (Ren; Renameable; ᴺren; suc; push; pop; swap); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
@@ -105,8 +105,10 @@ module Transition.Concur where
             E ⌣₁[ ᶜ∇ᵇ ] E′ → ν• E ⌣₁[ ᵇ∇ᵇ ] νᵇ E′
       ν•ᶜ_ : ∀ {x P R R′} {a : Actionᶜ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push *) a ᶜ - _ ]→ R′} →
             E ⌣₁[ ᶜ∇ᶜ ] E′ → ν• E ⌣₁[ ᵇ∇ᶜ ] νᶜ E′
-      νᵇᵇ_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {a⌣a′} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᵇ - _ ]→ R′} →
-          E ⌣₁[ (push *†) a⌣a′ ] E′ → νᵇ E ⌣₁[ a⌣a′ ] νᵇ E′
+      νᵇᵇ_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᵇ - _ ]→ R′} →
+          E ⌣₁[ ᵇ∇ᵇ ] E′ → νᵇ E ⌣₁[ ᵇ∇ᵇ ] νᵇ E′
+      νᵛᵛ_ : ∀ {P R R′} {x u : Name Γ} {E : P —[ (push *) (• x) ᵇ - _ ]→ R} {E′ : P —[ (push *) (• u) ᵇ - _ ]→ R′} →
+          E ⌣₁[ ᵛ∇ᵛ ] E′ → νᵇ E ⌣₁[ ᵇ∇ᵇ ] νᵇ E′
       νᵇᶜ_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
           E ⌣₁[ ᵇ∇ᶜ ] E′ → νᵇ E ⌣₁[ ᵇ∇ᶜ ] νᶜ E′
       νᶜᶜ_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ (push *) a ᶜ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
@@ -124,7 +126,7 @@ module Transition.Concur where
            Sym (λ (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → E ⌣[ a⌣a′ ] E′) (λ E E′ → E ⌣[ ᴬ⌣-sym a⌣a′ ] E′)
    ⌣-sym (inj₁ E⌣E′) = inj₂ (subst (Concur₁ _ _) (sym (ᴬ⌣-sym-involutive _)) E⌣E′)
    ⌣-sym (inj₂ E⌣E′) = inj₁ E⌣E′
-
+{-
    -- The type of the symmetric residual of concurrent transitions E and E′. Because cofinality of action
    -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
    record Delta′ {Γ P} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) {R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) : Set where
@@ -235,3 +237,4 @@ module Transition.Concur where
    ⊖ {a⌣a′ = ᵇ∇ᶜ} (inj₂ E′⌣E) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
    ⊖ {a⌣a′ = ᶜ∇ᵇ} (inj₂ E′⌣E) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
    ⊖ {a⌣a′ = ᶜ∇ᶜ} (inj₂ E′⌣E) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
+-}
