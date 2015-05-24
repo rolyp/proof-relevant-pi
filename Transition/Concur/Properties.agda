@@ -103,11 +103,9 @@ module Transition.Concur.Properties where
    ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u =
       ν ≈-trans ((swap *⁼ ∘ suc swap *⁼) swap*P′) (≈-reflexive (swap∘suc-swap∘swap (target E/E′)))
    ⊖₁-✓ (νᵇᵇ_ {a = • x} {• u} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | E′/E ᵀΔ E/E′ | P′ = {!!} -- with (swap *ᶜ) E/E′ | (swap *ᶜ) E′/E
-   -- ... | swap*E/E′ | swap*E′/E = ν (swap *⁼) P′
-   -- ⊖₁-✓ (νᵇᵇ_ {a = • x} {• u} E⌣E′) | E′/E ᵀΔ E/E′ | swap*P′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
-   -- ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u | sym (swap∘suc-swap∘swap (target E/E′)) =
-   --   ν (swap *⁼ ∘ suc swap *⁼) swap*P′
+   ... | E′/E ᵀΔ E/E′ | swap*P′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
+   ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u | sym (swap∘suc-swap∘swap (target E/E′)) =
+      ν (swap *⁼ ∘ suc swap *⁼) swap*P′
    ⊖₁-✓ (νᵛᵛ_ {x = x} {u} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | E′/E ᵀΔ E/E′ | P′ = ν (swap *⁼) P′
    ⊖₁-✓ (νᵇᶜ_ {a′ = a′} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
