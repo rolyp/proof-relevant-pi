@@ -4,7 +4,7 @@ module Transition.Concur.Properties where
 
    open import Data.Fin using (Fin; toℕ)
 
-   open import Action as ᴬ using (Action; inc; _ᴬ⌣_; module _ᴬ⌣_); open ᴬ.Actionᵇ
+   open import Action as ᴬ using (Action; inc; _ᴬ⌣_; module _ᴬ⌣_); open ᴬ.Actionᵇ; open _ᴬ⌣_
    import Action.Ren
    open import Name using (_+_; zero)
    open import Proc using (Proc)
@@ -15,13 +15,12 @@ module Transition.Concur.Properties where
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Concur
-      using (_⌣₁_; module _⌣₁_; _⌣_; _Δ_; _∶_Δ_; module _Δ_; ᴬ⊖; ᴬ⊖-✓; ⊖₁; ⊖);
-      open _⌣₁_; open coinitial
+      using (Concur₁; module Concur₁; Concur; _Δ_; _∶_Δ_; module _Δ_; ᴬ⊖; ᴬ⊖-✓; ⊖₁; ⊖); open Concur₁
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
    -- structurally congruent, or structurally congruent with each other's swap image.
-   cofinal : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : coinitial a a′) →
+   cofinal : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) →
              let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ a⌣a′)) in Proc Γ′ → Proc Γ′ → Set
    cofinal ᵛ∇ᵛ = _≈_
    cofinal ᵇ∇ᵇ P₁ P₂ = P₁ ≈ (swap *) P₂
@@ -30,8 +29,8 @@ module Transition.Concur.Properties where
    cofinal ᶜ∇ᶜ = _≈_
 
    -- Correctness of residuals, with respect to the above notion of cofinality.
-   ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} (E⌣E′ : E ⌣₁ E′) →
-           let open _Δ_ (⊖₁ E⌣E′) in cofinal a⌣a′ P₁ P₂
+   ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
+          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open _Δ_ (⊖₁ E⌣E′) in cofinal a⌣a′ P₁ P₂
    ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) | swap∘push (target F) = ≈-refl
    ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-refl
    ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-refl
