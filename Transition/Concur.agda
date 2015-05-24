@@ -107,8 +107,8 @@ module Transition.Concur where
             E ⌣₁[ ᶜ∇ᶜ ] E′ → ν• E ⌣₁[ ᵇ∇ᶜ ] νᶜ E′
       νᵇᵇ_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᵇ - _ ]→ R′} →
           E ⌣₁[ ᵇ∇ᵇ ] E′ → νᵇ E ⌣₁[ ᵇ∇ᵇ ] νᵇ E′
-      νᵛᵛ_ : ∀ {P R R′} {x u : Name Γ} {E : P —[ (push *) (• x) ᵇ - _ ]→ R} {E′ : P —[ (push *) (• u) ᵇ - _ ]→ R′} →
-          E ⌣₁[ ᵛ∇ᵛ ] E′ → νᵇ E ⌣₁[ ᵇ∇ᵇ ] νᵇ E′
+      νᵛᵛ_ : ∀ {P R R′} {x u : Name Γ} {E : P —[ (• (push *) x) ᵇ - _ ]→ R} {E′ : P —[ (• (push *) u) ᵇ - _ ]→ R′} →
+          E ⌣₁[ ᵛ∇ᵛ ] E′ → νᵇ E ⌣₁[ ᵛ∇ᵛ ] νᵇ E′
       νᵇᶜ_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
           E ⌣₁[ ᵇ∇ᶜ ] E′ → νᵇ E ⌣₁[ ᵇ∇ᶜ ] νᶜ E′
       νᶜᶜ_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ (push *) a ᶜ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
@@ -126,6 +126,10 @@ module Transition.Concur where
            Sym (λ (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → E ⌣[ a⌣a′ ] E′) (λ E E′ → E ⌣[ ᴬ⌣-sym a⌣a′ ] E′)
    ⌣-sym (inj₁ E⌣E′) = inj₂ (subst (Concur₁ _ _) (sym (ᴬ⌣-sym-involutive _)) E⌣E′)
    ⌣-sym (inj₂ E⌣E′) = inj₁ E⌣E′
+
+   blah₂ : ∀ {Γ} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {P R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
+           E ⌣₁[ a⌣a′ ] E′ → a ᴬ⌣ a′
+   blah₂ {a⌣a′ = a⌣a′} _ = a⌣a′
 
    -- The type of the symmetric residual of concurrent transitions E and E′. Because cofinality of action
    -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
@@ -214,12 +218,12 @@ module Transition.Concur where
    ⊖₁ (νᵇᵇ_ {a = • x} {u •} E⌣E′) with Delta′.blah (⊖₁ E⌣E′) | ⊖₁ E⌣E′
    ... | ᵇ∇ᵇ | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
    ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
-   ⊖₁ (νᵇᵇ_ {a = • x} {• u} E⌣E′) with Delta′.blah (⊖₁ E⌣E′) | ⊖₁ E⌣E′
-   ... | ᵇ∇ᵇ | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
+   ⊖₁ (νᵇᵇ_ {a = • x} {• u} E⌣E′) with ⊖₁ {a⌣a′ = blah₂ E⌣E′} E⌣E′
+   ... | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
    ... | swap*E/E′ | swap*E′/E = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
-   ⊖₁ (νᵇᵇ_ {a = • x} {• u} E⌣E′) | ᵛ∇ᵛ | E′/E ᵀΔ E/E′ with (swap *ᶜ) E/E′ | (swap *ᶜ) E′/E
-   ... | swap*E/E′ | swap*E′/E = {!!} ᵀΔ {!!} -- νᶜ swap*E′/E ᵀΔ νᶜ swap*E/E′
-   ⊖₁ (νᵛᵛ_ {x = x} {u} E⌣E′) = {!!}
+   ⊖₁ (νᵛᵛ_ {x = x} {u} E⌣E′) with ⊖₁ {a⌣a′ = blah₂ E⌣E′} E⌣E′
+   ... | E′/E ᵀΔ E/E′ with (swap *ᶜ) E/E′ | (swap *ᶜ) E′/E
+   ... | swap*E/E′ | swap*E′/E = νᶜ swap*E′/E ᵀΔ νᶜ swap*E/E′
    ⊖₁ (νᵇᶜ_ {a′ = a′} E⌣E′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ with (swap *ᶜ) E′/E
    ... | swap*E′/E rewrite swap∘push∘push a′ = νᶜ swap*E′/E ᵀΔ νᵇ E/E′
