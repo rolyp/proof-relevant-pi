@@ -6,7 +6,7 @@ module Transition.Concur.Properties where
 
    open import Action as ᴬ using (Action; inc; _ᴬ⌣_; module _ᴬ⌣_); open ᴬ.Actionᵇ; open _ᴬ⌣_
    import Action.Ren
-   open import Name using (_+_; zero)
+   open import Name as ᴺ using (Name; _+_; zero)
    open import Proc using (Proc)
    import Proc.Ren
    open import StructuralCong.Proc using (_≈_; module _≈_; ≈-refl; ≈-reflexive; ≈-sym; _*⁼);
