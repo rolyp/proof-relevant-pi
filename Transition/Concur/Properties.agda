@@ -63,66 +63,58 @@ module Transition.Concur.Properties where
    ... | _ ᵀΔ _ | Q′ = ≈-refl │ Q′
    ⊖₁-✓ (P │ᶜᶜ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | Q′ = ≈-refl │ Q′
-   ⊖₁-✓ E⌣E′ = {!!}
-{-
    ⊖₁-✓ (E⌣E′ ᵇᵇ│ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ Δ[ ᵛ∇ᵛ ] _ | P′ = P′ │ ≈-refl
-   ... | _ Δ[ ᵇ∇ᵇ ] _ | swap*P′ rewrite swap∘push∘push Q = swap*P′ │ ≈-refl
+   ... | _ ᵀΔ _ | P′ = {!!} -- P′ │ ≈-refl
+   -- ... | _ Δ[ ᵇ∇ᵇ ] _ | swap*P′ rewrite swap∘push∘push Q = swap*P′ │ ≈-refl
    ⊖₁-✓ (E⌣E′ ᵇᶜ│ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ Δ[ ᵇ∇ᶜ ] _ | P′ = P′ │ ≈-refl
+   ... | _ ᵀΔ _ | P′ = P′ │ ≈-refl
    ⊖₁-✓ (E⌣E′ ᶜᶜ│ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ Δ[ ᶜ∇ᶜ ] _ | P′ = P′ │ ≈-refl
+   ... | _ ᵀΔ _ | P′ = P′ │ ≈-refl
    ⊖₁-✓ (E⌣E′ ➕₁ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ Δ[ ᵛ∇ᵛ ] _ | P′ = P′
-   ... | _ Δ[ ᵇ∇ᵇ ] _ | P′ = P′
-   ... | _ Δ[ ᵇ∇ᶜ ] _ | P′ = P′
-   ... | _ Δ[ ᶜ∇ᵇ ] _ | P′ = P′
-   ... | _ Δ[ ᶜ∇ᶜ ] _ | P′ = P′
+   ... | _ ᵀΔ _ | P′ = P′
    ⊖₁-✓ (_│•_ {x = x} {y} {u} {z} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
-   ... | E′/E Δ[ ᵇ∇ᵇ ] E/E′ | _ Δ[ ᶜ∇ᶜ ] _ | swap*P′ | Q′ with (pop y *ᵇ) E′/E | (pop z *ᵇ) E/E′
+   ... | E′/E ᵀΔ E/E′ | _ ᵀΔ _ | swap*P′ | Q′ with (pop y *ᵇ) E′/E | (pop z *ᵇ) E/E′
    ... | pop-y*E′/E | pop-z*E/E′ rewrite pop∘push u y | pop∘push x z | sym (pop-pop-swap z y (target E/E′)) =
       (pop z *⁼ ∘ suc (pop y) *⁼) swap*P′ │ Q′
    ⊖₁-✓ (_│•ᵥ_ {u = u} {y} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
-   ... | E′/E Δ[ ᵇ∇ᵇ ] _ | _ Δ[ ᶜ∇ᵇ ] _ | swap*P′ | Q′ with (pop y *ᵇ) E′/E
+   ... | E′/E ᵀΔ _ | _ ᵀΔ _ | swap*P′ | Q′ with (pop y *ᵇ) E′/E
    ... | pop-y*E′/E rewrite pop∘push u y =
       ν (≈-trans ((suc (pop y) *⁼) swap*P′) (≈-reflexive (suc-pop∘swap y _)) │ Q′)
    ⊖₁-✓ (_│ᵥ_ {x = x} {u} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
-   ... | _ Δ[ ᵇ∇ᵇ ] _ | _ Δ[ ᵛ∇ᵛ ] _ | swap*P′ | Q′ =
-      ν (≈-trans ((pop zero *⁼) swap*P′) (≈-reflexive (pop-swap _)) │ Q′)
-   ... | E′/E Δ[ ᵇ∇ᵇ ] E/E′ | F′/F Δ[ ᵇ∇ᵇ ] F/F′ | swap*P′ | swap*Q′ =
-      ≈-trans (ν (ν (swap*P′ │ swap*Q′))) (νν-swapₗ _)
+   ... | _ ᵀΔ _ | _ ᵀΔ _ | swap*P′ | Q′ =
+      {!!} -- ν (≈-trans ((pop zero *⁼) swap*P′) (≈-reflexive (pop-swap _)) │ Q′)
+   -- ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ | swap*P′ | swap*Q′ =
+   --    ≈-trans (ν (ν (swap*P′ │ swap*Q′))) (νν-swapₗ _)
    ⊖₁-✓ (ν• E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ Δ[ ᶜ∇ᶜ ] _ | P′ = P′
+   ... | _ ᵀΔ _ | P′ = P′
    ⊖₁-✓ (ν•ᵇ_ {x = x} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ Δ[ ᶜ∇ᵇ ] E/E′ | P′ with (swap *ᶜ) E/E′
+   ... | _ ᵀΔ E/E′ | P′ with (swap *ᶜ) E/E′
    ... | swap*E/E′ rewrite swap-involutive (target E/E′) = P′
    ⊖₁-✓ (ν•ᶜ E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ Δ[ ᶜ∇ᶜ ] _ | P′ = P′
+   ... | _ ᵀΔ _ | P′ = P′
    ⊖₁-✓ (νᵇᵇ_ {a = x •} {a} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | E′/E Δ[ ᵇ∇ᵇ ] E/E′ | swap*P′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
+   ... | E′/E ᵀΔ E/E′ | swap*P′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
    ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push a | sym (swap∘suc-swap∘swap (target E/E′)) =
       ν (swap *⁼ ∘ suc swap *⁼) swap*P′
    ⊖₁-✓ (νᵇᵇ_ {a = • x} {u •} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | E′/E Δ[ ᵇ∇ᵇ ] E/E′ | swap*P′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
+   ... | E′/E ᵀΔ E/E′ | swap*P′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
    ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u =
       ν ≈-trans ((swap *⁼ ∘ suc swap *⁼) swap*P′) (≈-reflexive (swap∘suc-swap∘swap (target E/E′)))
    ⊖₁-✓ (νᵇᵇ_ {a = • x} {• u} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | E′/E Δ[ ᵛ∇ᵛ ] E/E′ | P′ with (swap *ᶜ) E/E′ | (swap *ᶜ) E′/E
-   ... | swap*E/E′ | swap*E′/E = ν (swap *⁼) P′
-   ⊖₁-✓ (νᵇᵇ_ {a = • x} {• u} E⌣E′) | E′/E Δ[ ᵇ∇ᵇ ] E/E′ | swap*P′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
-   ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u | sym (swap∘suc-swap∘swap (target E/E′)) =
-      ν (swap *⁼ ∘ suc swap *⁼) swap*P′
+   ... | E′/E ᵀΔ E/E′ | P′ = {!!} -- with (swap *ᶜ) E/E′ | (swap *ᶜ) E′/E
+   -- ... | swap*E/E′ | swap*E′/E = ν (swap *⁼) P′
+   -- ⊖₁-✓ (νᵇᵇ_ {a = • x} {• u} E⌣E′) | E′/E ᵀΔ E/E′ | swap*P′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
+   -- ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u | sym (swap∘suc-swap∘swap (target E/E′)) =
+   --   ν (swap *⁼ ∘ suc swap *⁼) swap*P′
    ⊖₁-✓ (νᵇᶜ_ {a′ = a′} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | E′/E Δ[ ᵇ∇ᶜ ] _ | P′ with (swap *ᶜ) E′/E
+   ... | E′/E ᵀΔ _ | P′ with (swap *ᶜ) E′/E
    ... | swap*E′/E rewrite swap∘push∘push a′ = ν (swap *⁼) P′
    ⊖₁-✓ (νᶜᶜ E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ Δ[ ᶜ∇ᶜ ] _ | P′ = ν P′
+   ... | _ ᵀΔ _ | P′ = ν P′
    ⊖₁-✓ (! E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ Δ[ ᵛ∇ᵛ ] _ | P′ = P′
-   ... | _ Δ[ ᵇ∇ᵇ ] _ | P′ = P′
-   ... | _ Δ[ ᵇ∇ᶜ ] _ | P′ = P′
-   ... | _ Δ[ ᶜ∇ᵇ ] _ | P′ = P′
-   ... | _ Δ[ ᶜ∇ᶜ ] _ | P′ = P′
+   ... | _ ᵀΔ _ | P′ = P′
+   ⊖₁-✓ E⌣E′ = {!!}
+{-
 
    -- Now symmetrise.
    ⊖-✓ : ∀ {Γ P} {a a′ : Action Γ} {FIXME : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
