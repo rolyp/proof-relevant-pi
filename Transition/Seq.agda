@@ -164,7 +164,7 @@ module Transition.Seq where
    infix 4 _≃_
    -- infixr 9 _≃-∘_
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ a′⋆ R R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
-      --- Transposition rule.
+      --- Transposition cases.
       [_ᶜ∶⇋∶ᶜ_] : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᶜ - _ ]→ R′) →
                  ⦃ E⌣E′ : E ⌣[ ᶜ∇ᶜ ] E′ ⦄ → let open Delta′ (⊖ E⌣E′) in E ᶜ∷ E′/E ᶜ∷ [] ≃ E′ ᶜ∷ E/E′ ᶜ∷ []
       [_ᶜ∶⇋∶ᵇ_] : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
@@ -173,9 +173,9 @@ module Transition.Seq where
                  ⦃ E⌣E′ : E ⌣[ ᵇ∇ᵇ ] E′ ⦄ → let open Delta′ (⊖ E⌣E′) in E ᵇ∷ E′/E ᵇ∷ [] ≃ E′ ᵇ∷ E/E′ ᵇ∷ []
       [_ᵛ∶⇋∶ᵛ_] : ∀ {x u} {R R′} (E : P —[ (• x) ᵇ - _ ]→ R) (E′ : P —[ (• u) ᵇ - _ ]→ R′) →
                  ⦃ E⌣E′ : E ⌣[ ᵛ∇ᵛ ] E′ ⦄ → let open Delta′ (⊖ E⌣E′) in E ᵇ∷ E′/E ᶜ∷ [] ≃ E′ ᵇ∷ E/E′ ᶜ∷ []
-{-
       -- Close under trace constructors.
       [] : [] ≃ []
+{-
       _∷_ : ∀ {a R a⋆ S a′⋆ S′} (E : P —[ a - _ ]→ R) {E⋆ : R —[ a⋆ ]→⋆ S} {E′⋆ : R —[ a′⋆ ]→⋆ S′} →
             E⋆ ≃ E′⋆ → E ∷ E⋆ ≃ E ∷ E′⋆
       -- Transitivity and symmetry.

@@ -15,7 +15,7 @@ module Transition.Concur.Properties where
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Concur
-      using (Concur₁; module Concur₁; Concur; _Δ_; Delta; module _Δ_; ᴬ⊖; ᴬ⊖-✓; ⊖₁; ⊖); open Concur₁
+      using (Concur₁; module Concur₁; Concur; blah₂; Delta′; Delta; module Delta′; ᴬ⊖; ᴬ⊖-✓; ⊖₁; ⊖); open Concur₁
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
@@ -30,39 +30,41 @@ module Transition.Concur.Properties where
 
    -- Correctness of residuals, with respect to the above notion of cofinality. TODO: feels wrong to have
    -- the a ᴬ⌣ a′ index on E ⌣ E′, but not to relate it to the one in E Δ E′.
-   ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {FIXME : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (E⌣E′ : E ⌣₁[ FIXME ] E′) → let open _Δ_ (⊖₁ E⌣E′) in cofinal a⌣a′ S S′
+   ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
+          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in cofinal a⌣a′ S S′
    ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) | swap∘push (target F) = ≈-refl
    ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-refl
    ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-refl
    ⊖₁-✓ (E ᶜ│ᶜ F) = ≈-refl
    ⊖₁-✓ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ Δ[ ᵇ∇ᵇ ] E/E′ | swap*P′ with (pop y *ᵇ) E/E′
+   ... | _ ᵀΔ E/E′ | swap*P′ with (pop y *ᵇ) E/E′
    ... | pop-y*E/E′ rewrite pop∘push y a | pop∘swap y (target E/E′) = (pop ((push *) y) *⁼) swap*P′ │ ≈-refl
    ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ Δ[ ᶜ∇ᵇ ] E/E′ | P′ with (pop y *ᶜ) E/E′
+   ... | _ ᵀΔ E/E′ | P′ with (pop y *ᶜ) E/E′
    ... | pop-y*E/E′ rewrite pop∘push y a = (pop y *⁼) P′ │ ≈-refl
    ⊖₁-✓ (_ᵇ│•_ {y = y} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | _ Δ[ ᵇ∇ᶜ ] _ | Q′ rewrite pop∘suc-push y (target E) = ≈-refl │ Q′
+   ... | _ ᵀΔ _ | Q′ rewrite pop∘suc-push y (target E) = ≈-refl │ Q′
    ⊖₁-✓ (E ᶜ│• F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | _ Δ[ ᶜ∇ᶜ ] _ | Q′ = ≈-refl │ Q′
+   ... | _ ᵀΔ _ | Q′ = ≈-refl │ Q′
    ⊖₁-✓ (E⌣E′ │ᵥᵇ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ Δ[ ᵇ∇ᵇ ] _ | swap*P′ rewrite swap∘push (target F) = ν (swap*P′ │ ≈-refl)
+   ... | _ ᵀΔ _ | swap*P′ rewrite swap∘push (target F) = ν (swap*P′ │ ≈-refl)
    ⊖₁-✓ (E⌣E′ │ᵥᶜ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ Δ[ ᶜ∇ᵇ ] _ | P′ = ν (P′ │ ≈-refl)
+   ... | _ ᵀΔ _ | P′ = ν (P′ │ ≈-refl)
    ⊖₁-✓ (_ᵇ│ᵥ_ {x = x} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | _ Δ[ ᵛ∇ᵛ ] _ | Q′ with (push *ᵇ) E
-   ... | push*E rewrite pop-zero∘suc-push (target E) = ≈-refl │ Q′
-   ⊖₁-✓ (E ᵇ│ᵥ F⌣F′) | _ Δ[ ᵇ∇ᵇ ] _ | swap*Q′ rewrite swap∘push (target E) = ν (≈-refl │ swap*Q′)
+   ... | _ ᵀΔ _ | Q′ with (push *ᵇ) E
+   ... | push*E rewrite pop-zero∘suc-push (target E) = {!!} -- ≈-refl │ Q′
+   -- ⊖₁-✓ (E ᵇ│ᵥ F⌣F′) | _ ᵀΔ _ | swap*Q′ rewrite swap∘push (target E) = ? -- ν (≈-refl │ swap*Q′)
    ⊖₁-✓ (E ᶜ│ᵥ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | _ Δ[ ᶜ∇ᵇ ] _ | Q′ = ν (≈-refl │ Q′)
+   ... | _ ᵀΔ _ | Q′ = ν (≈-refl │ Q′)
    ⊖₁-✓ (P │ᵇᵇ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | _ Δ[ ᵛ∇ᵛ ] _ | Q′ = ≈-refl │ Q′
-   ... | _ Δ[ ᵇ∇ᵇ ] _ | swap*Q′ rewrite swap∘push∘push P = ≈-refl │ swap*Q′
+   ... | _ ᵀΔ _ | Q′ = {!!} -- ≈-refl │ Q′
+   -- ... | _ ᵀΔ[ ᵇ∇ᵇ ] _ | swap*Q′ rewrite swap∘push∘push P = ≈-refl │ swap*Q′
    ⊖₁-✓ (P │ᵇᶜ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | _ Δ[ ᵇ∇ᶜ ] _ | Q′ = ≈-refl │ Q′
+   ... | _ ᵀΔ _ | Q′ = ≈-refl │ Q′
    ⊖₁-✓ (P │ᶜᶜ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | _ Δ[ ᶜ∇ᶜ ] _ | Q′ = ≈-refl │ Q′
+   ... | _ ᵀΔ _ | Q′ = ≈-refl │ Q′
+   ⊖₁-✓ E⌣E′ = {!!}
+{-
    ⊖₁-✓ (E⌣E′ ᵇᵇ│ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ Δ[ ᵛ∇ᵛ ] _ | P′ = P′ │ ≈-refl
    ... | _ Δ[ ᵇ∇ᵇ ] _ | swap*P′ rewrite swap∘push∘push Q = swap*P′ │ ≈-refl
@@ -132,3 +134,4 @@ module Transition.Concur.Properties where
    ... | _ Δ[ ᵇ∇ᶜ ] _ | P′ = ≈-sym P′
    ... | _ Δ[ ᶜ∇ᵇ ] _ | P′ = ≈-sym P′
    ... | _ Δ[ ᶜ∇ᶜ ] _ | P′ = ≈-sym P′
+-}
