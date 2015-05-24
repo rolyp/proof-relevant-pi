@@ -109,7 +109,7 @@ module Transition.Concur.Properties where
    -- ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u | sym (swap∘suc-swap∘swap (target E/E′)) =
    --   ν (swap *⁼ ∘ suc swap *⁼) swap*P′
    ⊖₁-✓ (νᵛᵛ_ {x = x} {u} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | E′/E ᵀΔ E/E′ | P′ = {!!}
+   ... | E′/E ᵀΔ E/E′ | P′ = ν (swap *⁼) P′
    ⊖₁-✓ (νᵇᶜ_ {a′ = a′} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | E′/E ᵀΔ _ | P′ with (swap *ᶜ) E′/E
    ... | swap*E′/E rewrite swap∘push∘push a′ = ν (swap *⁼) P′
