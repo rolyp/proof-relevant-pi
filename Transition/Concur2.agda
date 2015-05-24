@@ -16,16 +16,16 @@ module Transition.Concur2 where
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
-   ᴬΔ : ∀ {Γ} {a a′ : Action Γ} → a ᴬ⌣ a′ → Set
-   ᴬΔ {Γ} ᵛ∇ᵛ = Actionᶜ (Γ + 1)
-   ᴬΔ {Γ} ᵇ∇ᵇ = Actionᵇ (Γ + 1)
-   ᴬΔ {Γ} ᵇ∇ᶜ = Actionᶜ (Γ + 1)
-   ᴬΔ {Γ} ᶜ∇ᵇ = Actionᵇ Γ
-   ᴬΔ {Γ} ᶜ∇ᶜ = Actionᶜ Γ
+   ᴬΔ : ∀ {Γ} {a a′ : Action Γ} → a ᴬ⌣ a′ → Σ[ A ∈ Set ] (A → Action (Γ + inc a))
+   ᴬΔ {Γ} ᵛ∇ᵛ = Actionᶜ (Γ + 1) , _ᶜ
+   ᴬΔ {Γ} ᵇ∇ᵇ = Actionᵇ (Γ + 1) , _ᵇ
+   ᴬΔ {Γ} ᵇ∇ᶜ = Actionᶜ (Γ + 1) , _ᶜ
+   ᴬΔ {Γ} ᶜ∇ᵇ = Actionᵇ Γ , _ᵇ
+   ᴬΔ {Γ} ᶜ∇ᶜ = Actionᶜ Γ , _ᶜ
 
    -- The residual a′/a. Note that ᵇ∇ᵇ may also relate two bound outputs, but only if they represent
    -- extrusions of distinct binders.
-   ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → ᴬΔ a⌣a′
+   ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → π₁ (ᴬΔ a⌣a′)
    ᴬ⊖ (ᵛ∇ᵛ {u = u}) = • ᴺ.suc u 〈 zero 〉
    ᴬ⊖ (ᵇ∇ᵇ {a′ = a′}) = (push *) a′
    ᴬ⊖ (ᵇ∇ᶜ {a′ = a′}) = (push *) a′
