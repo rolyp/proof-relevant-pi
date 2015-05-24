@@ -50,10 +50,11 @@ module Transition.Concur.Properties where
    ... | _ ᵀΔ _ | swap*P′ rewrite swap∘push (target F) = ν (swap*P′ │ ≈-refl)
    ⊖₁-✓ (E⌣E′ │ᵥᶜ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | P′ = ν (P′ │ ≈-refl)
-   ⊖₁-✓ (_ᵇ│ᵥ_ {x = x} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
+   ⊖₁-✓ (_ᵇ│ᵥ_ {x = x} {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | Q′ with (push *ᵇ) E
-   ... | push*E rewrite pop-zero∘suc-push (target E) = {!!} -- ≈-refl │ Q′
-   -- ⊖₁-✓ (E ᵇ│ᵥ F⌣F′) | _ ᵀΔ _ | swap*Q′ rewrite swap∘push (target E) = ? -- ν (≈-refl │ swap*Q′)
+   ... | push*E rewrite pop-zero∘suc-push (target E) = ≈-refl │ Q′
+   ⊖₁-✓ (_ᵇ│ᵥ_ {x = x} {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
+   ... | _ ᵀΔ _ | swap*Q′ rewrite swap∘push (target E) = ν (≈-refl │ swap*Q′)
    ⊖₁-✓ (E ᶜ│ᵥ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | Q′ = ν (≈-refl │ Q′)
    ⊖₁-✓ (P │ᵇᵇ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
