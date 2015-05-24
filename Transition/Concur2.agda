@@ -5,8 +5,8 @@ module Transition.Concur2 where
    open import Ext
 
    open import Action as ᴬ
-      using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc; coinitial; coinitial-sym; coinitial-sym-involutive);
-      open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ.coinitial
+      using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc; _ᴬ⌣_; ᴬ⌣-sym; ᴬ⌣-sym-involutive);
+      open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ._ᴬ⌣_
    open import Action.Ren using (_*†)
    open import Name as ᴺ using (Name; Cxt; module Cxt; zero; _+_; toℕ)
    open import Ren as ᴿ using (Ren; Renameable; ᴺren; suc; push; pop; swap); open ᴿ.Renameable ⦃...⦄
@@ -16,7 +16,7 @@ module Transition.Concur2 where
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
-   ᴬΔ : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → Set
+   ᴬΔ : ∀ {Γ} {a a′ : Action Γ} → a ᴬ⌣ a′ → Set
    ᴬΔ {Γ} ᵛ∇ᵛ = Actionᶜ (Γ + 1)
    ᴬΔ {Γ} ᵇ∇ᵇ = Actionᵇ (Γ + 1)
    ᴬΔ {Γ} ᵇ∇ᶜ = Actionᶜ (Γ + 1)
@@ -25,7 +25,7 @@ module Transition.Concur2 where
 
    -- The residual a′/a. Note that ᵇ∇ᵇ may also relate two bound outputs, but only if they represent
    -- extrusions of distinct binders.
-   ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : coinitial a a′) → ᴬΔ a⌣a′
+   ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → ᴬΔ a⌣a′
    ᴬ⊖ (ᵛ∇ᵛ {u = u}) = • ᴺ.suc u 〈 zero 〉
    ᴬ⊖ (ᵇ∇ᵇ {a′ = a′}) = (push *) a′
    ᴬ⊖ (ᵇ∇ᶜ {a′ = a′}) = (push *) a′
@@ -38,7 +38,7 @@ module Transition.Concur2 where
    infix 4 Concur₁
 
    data Concur₁ {Γ} : ∀ {a : Action Γ} {a′ : Action Γ} {P R R′} →
-                P —[ a - _ ]→ R → P —[ a′ - _ ]→ R′ → coinitial a a′ → Set where
+                P —[ a - _ ]→ R → P —[ a′ - _ ]→ R′ → a ᴬ⌣ a′ → Set where
       _ᵇ│ᵇ_ : ∀ {P Q R S} {a a′ : Actionᵇ Γ}
              (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᵇ ] P │ᵇ F
       _ᵇ│ᶜ_ : ∀ {P Q R S} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ}
@@ -101,10 +101,10 @@ module Transition.Concur2 where
    syntax Concur E E′ a⌣a′ = E ⌣[ a⌣a′ ] E′
 
    Concur : ∀ {Γ} {a a′ : Action Γ} {P R R′}
-            (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → coinitial a a′ → Set
-   Concur E E′ a⌣a′ = E ⌣₁[ a⌣a′ ] E′ ⊎ E′ ⌣₁[ coinitial-sym a⌣a′ ] E
+            (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → a ᴬ⌣ a′ → Set
+   Concur E E′ a⌣a′ = E ⌣₁[ a⌣a′ ] E′ ⊎ E′ ⌣₁[ ᴬ⌣-sym a⌣a′ ] E
 
-   ⌣-sym : ∀ {Γ} {P : Proc Γ} {a a′ : Action Γ} {a⌣a′ : coinitial a a′} {R R′} →
-           Sym (λ (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → E ⌣[ a⌣a′ ] E′) (λ E E′ → E ⌣[ coinitial-sym a⌣a′ ] E′)
-   ⌣-sym (inj₁ E⌣E′) = inj₂ (subst (Concur₁ _ _) (sym (coinitial-sym-involutive _)) E⌣E′)
+   ⌣-sym : ∀ {Γ} {P : Proc Γ} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} →
+           Sym (λ (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → E ⌣[ a⌣a′ ] E′) (λ E E′ → E ⌣[ ᴬ⌣-sym a⌣a′ ] E′)
+   ⌣-sym (inj₁ E⌣E′) = inj₂ (subst (Concur₁ _ _) (sym (ᴬ⌣-sym-involutive _)) E⌣E′)
    ⌣-sym (inj₂ E⌣E′) = inj₁ E⌣E′
