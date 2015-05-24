@@ -65,9 +65,10 @@ module Transition.Concur.Properties where
    ... | _ ᵀΔ _ | Q′ = ≈-refl │ Q′
    ⊖₁-✓ (P │ᶜᶜ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | Q′ = ≈-refl │ Q′
-   ⊖₁-✓ (E⌣E′ ᵇᵇ│ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ ᵀΔ _ | P′ = {!!} -- P′ │ ≈-refl
-   -- ... | _ Δ[ ᵇ∇ᵇ ] _ | swap*P′ rewrite swap∘push∘push Q = swap*P′ │ ≈-refl
+   ⊖₁-✓ (_ᵇᵇ│_ {a⌣a′ = ᵛ∇ᵛ} E⌣E′ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
+   ... | _ ᵀΔ _ | P′ = P′ │ ≈-refl
+   ⊖₁-✓ (_ᵇᵇ│_ {a⌣a′ = ᵇ∇ᵇ} E⌣E′ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
+   ... | _ ᵀΔ _ | swap*P′ rewrite swap∘push∘push Q = swap*P′ │ ≈-refl
    ⊖₁-✓ (E⌣E′ ᵇᶜ│ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | P′ = P′ │ ≈-refl
    ⊖₁-✓ (E⌣E′ ᶜᶜ│ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
