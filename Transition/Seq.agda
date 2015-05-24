@@ -20,8 +20,8 @@ module Transition.Seq where
    open import Transition.Concur using (_⌣_; module _Δ_; _∶_Δ_; ⊖; coinitial; module coinitial; ᴬ⊖; ᴬ⊖-✓); open coinitial
    open import Transition.Ren using (_Δ_; _*′)
 
-   Proc∼ = subst Proc
-   Proc≅ = ≡-subst-removable Proc
+   Proc↱ = subst Proc
+   Proc↲ = ≡-subst-removable Proc
 
    braid : ∀ {Γ} (n : Name 3) → Ren (Γ + toℕ n) (Γ + toℕ n)
    braid zero = id
@@ -49,10 +49,10 @@ module Transition.Seq where
       constructor _Δ_
       field
          {R′} : _
-         γ/E : ⋈[ Γ , n , m + inc a ] (Proc∼ (+-assoc _ m (inc a)) R) R′
+         γ/E : ⋈[ Γ , n , m + inc a ] (Proc↱ (+-assoc _ m (inc a)) R) R′
       σ = braid {Γ} n
       field
-         E/γ : P′ —[ ((σ ᴿ+ m) *) a - ι ]→ Proc∼ (ren-preserves-inc-assoc σ m a) R′
+         E/γ : P′ —[ ((σ ᴿ+ m) *) a - ι ]→ Proc↱ (ren-preserves-inc-assoc σ m a) R′
 
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
@@ -67,9 +67,9 @@ module Transition.Seq where
    data _—[_]→⋆_ {Γ} (P : Proc Γ) : (a⋆ : Action⋆ Γ) → Proc (Γ + inc⋆ a⋆) → Set where
       [] : P —[ [] ]→⋆ P
       _ᵇ∷_ : ∀ {a R a⋆ S} (E : P —[ a ᵇ - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) →
-             P —[ a ᵇ∷ a⋆ ]→⋆ Proc∼ (+-assoc _ _ (inc⋆ a⋆)) S
+             P —[ a ᵇ∷ a⋆ ]→⋆ Proc↱ (+-assoc _ _ (inc⋆ a⋆)) S
       _ᶜ∷_ : ∀ {a R a⋆ S} (E : P —[ a ᶜ - _ ]→ R) (E⋆ : R —[ a⋆ ]→⋆ S) →
-             P —[ a ᶜ∷ a⋆ ]→⋆ Proc∼ (+-assoc _ _ (inc⋆ a⋆)) S
+             P —[ a ᶜ∷ a⋆ ]→⋆ Proc↱ (+-assoc _ _ (inc⋆ a⋆)) S
 
    target⋆ : ∀ {Γ} {P : Proc Γ} {a⋆ : Action⋆ Γ} {R} → P —[ a⋆ ]→⋆ R → Proc (Γ + inc⋆ a⋆)
    target⋆ {R = R} _ = R
@@ -81,33 +81,33 @@ module Transition.Seq where
       constructor _Δ_
       field
          {R′} : _
-         γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (Proc∼ (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ Proc∼ (ren-preserves-inc⋆-assoc (braid n) m a⋆) R′
+         γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) R′
+         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid n) m a⋆) R′
 
    braid-assoc : ∀ Γ (ρ : Ren Γ Γ) Δ₁ Δ₂ Δ₃ S S′ →
                  (((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
-                 (Proc∼ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′) ≅
+                 (Proc↱ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′) ≅
                  (((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*)
-                 (Proc∼ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈
-                 Proc∼ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′)
+                 (Proc↱ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc↱ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈
+                 Proc↱ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′)
    braid-assoc Γ ρ Δ₁ Δ₂ Δ₃ S S′ =
       ≅-cong₃ (λ Δ† P P′ → ((ρ ᴿ+ Δ†)*) P ≈ P′)
          (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃))
          (
             let open ≅-Reasoning in
             begin
-               Proc∼ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)
-            ≅⟨ Proc≅ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) _ ⟩
-               Proc∼ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S
-            ≅⟨ Proc≅ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S ⟩
+               Proc↱ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)
+            ≅⟨ Proc↲ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) _ ⟩
+               Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S
+            ≅⟨ Proc↲ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S ⟩
                S
-            ≅⟨ ≅-sym (Proc≅ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S) ⟩
-               Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S
-            ≅⟨ ≅-sym (Proc≅ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) _) ⟩
-               Proc∼ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc∼ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)
+            ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S) ⟩
+               Proc↱ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S
+            ≅⟨ ≅-sym (Proc↲ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) _) ⟩
+               Proc↱ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc↱ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)
             ∎
          )
-         (≅-sym (Proc≅ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
+         (≅-sym (Proc↲ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
 
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
@@ -121,17 +121,17 @@ module Transition.Seq where
           E/γ∷E⋆/γ/E =
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᵇ∷ ((σ ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
-                   Proc∼ (+-assoc (Γ′ + m) 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆)))
-                         (Proc∼ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′)
-                ≅⟨ Proc≅ (+-assoc (Γ′ + m) 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
-                   Proc∼ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′
-                ≅⟨ Proc≅ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′ ⟩
+                   Proc↱ (+-assoc (Γ′ + m) 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆)))
+                         (Proc↱ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′)
+                ≅⟨ Proc↲ (+-assoc (Γ′ + m) 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
+                   Proc↱ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′
+                ≅⟨ Proc↲ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′ ⟩
                    S′
-                ≅⟨ ≅-sym (Proc≅ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
-                   Proc∼ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′
-                ≅⟨ ≅-sym (Proc≅ (ren-preserves-inc⋆-assoc σ m (a ᵇ∷ a⋆)) _) ⟩
-                   Proc∼ (ren-preserves-inc⋆-assoc σ m (a ᵇ∷ a⋆))
-                         (Proc∼ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
+                ≅⟨ ≅-sym (Proc↲ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
+                   Proc↱ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′
+                ≅⟨ ≅-sym (Proc↲ (ren-preserves-inc⋆-assoc σ m (a ᵇ∷ a⋆)) _) ⟩
+                   Proc↱ (ren-preserves-inc⋆-assoc σ m (a ᵇ∷ a⋆))
+                         (Proc↱ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᵇ∷ E⋆/γ/E)
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
@@ -144,17 +144,17 @@ module Transition.Seq where
           E/γ∷E⋆/γ/E =
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᶜ∷ ((σ ᴿ+ m) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
-                   Proc∼ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m) *) a⋆)))
-                         (Proc∼ (ren-preserves-inc⋆-assoc σ m a⋆) S′)
-                ≅⟨ Proc≅ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m) *) a⋆))) _ ⟩
-                   Proc∼ (ren-preserves-inc⋆-assoc σ m a⋆) S′
-                ≅⟨ Proc≅ (ren-preserves-inc⋆-assoc σ m a⋆) S′ ⟩
+                   Proc↱ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m) *) a⋆)))
+                         (Proc↱ (ren-preserves-inc⋆-assoc σ m a⋆) S′)
+                ≅⟨ Proc↲ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m) *) a⋆))) _ ⟩
+                   Proc↱ (ren-preserves-inc⋆-assoc σ m a⋆) S′
+                ≅⟨ Proc↲ (ren-preserves-inc⋆-assoc σ m a⋆) S′ ⟩
                    S′
-                ≅⟨ ≅-sym (Proc≅ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′) ⟩
-                   Proc∼ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′
-                ≅⟨ ≅-sym (Proc≅ (ren-preserves-inc⋆-assoc σ m (a ᶜ∷ a⋆)) _) ⟩
-                   Proc∼ (ren-preserves-inc⋆-assoc σ m (a ᶜ∷ a⋆))
-                         (Proc∼ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′)
+                ≅⟨ ≅-sym (Proc↲ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′) ⟩
+                   Proc↱ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′
+                ≅⟨ ≅-sym (Proc↲ (ren-preserves-inc⋆-assoc σ m (a ᶜ∷ a⋆)) _) ⟩
+                   Proc↱ (ren-preserves-inc⋆-assoc σ m (a ᶜ∷ a⋆))
+                         (Proc↱ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᶜ∷ E⋆/γ/E)
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
