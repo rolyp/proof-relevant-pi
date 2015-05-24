@@ -129,6 +129,7 @@ module Transition.Concur where
    -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
    record Delta′ {Γ P} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) {R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) : Set where
       constructor Delta
+      blah = a⌣a′ --- EXPERIMENTAL
       a′/a = π₁ (ᴬ⊖ a⌣a′)
       a/a′ = π₂ (ᴬ⊖ a⌣a′)
       Γ′ = Γ + inc a + inc a′/a
@@ -138,8 +139,8 @@ module Transition.Concur where
          E/E′ : R′ —[ a/a′ - _ ]→ subst Proc (ᴬ⊖-✓ a⌣a′) S′
 
    infixl 5 Delta
+   syntax Delta E E′ = E ᵀΔ E′
    syntax Delta′ a⌣a′ E E′ = E Δ′[ a⌣a′ ] E′
-   syntax Delta E E′ = E Δ E′
 
    open import Ren.Properties
 
@@ -232,14 +233,13 @@ module Transition.Concur where
    ... | E′/E Δ[ ᶜ∇ᵇ ] E/E′ = E′/E Δ[ ᶜ∇ᵇ ] E/E′
    ... | E′/E Δ[ ᶜ∇ᶜ ] E/E′ = E′/E Δ[ ᶜ∇ᶜ ] E/E′
 -}
-
    -- Now symmetrise.
    ⊖ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
        E ⌣[ a⌣a′ ] E′ → E Δ′[ a⌣a′ ] E′
    ⊖ (inj₁ E⌣E′) = ⊖₁ E⌣E′
    ⊖ {a⌣a′ = a⌣a′} (inj₂ E′⌣E) with ⊖₁ E′⌣E
-   ⊖ {a⌣a′ = ᵛ∇ᵛ} (inj₂ E′⌣E) | E/E′ Δ E′/E = E′/E Δ E/E′
-   ⊖ {a⌣a′ = ᵇ∇ᵇ} (inj₂ E′⌣E) | E/E′ Δ E′/E = E′/E Δ E/E′
-   ⊖ {a⌣a′ = ᵇ∇ᶜ} (inj₂ E′⌣E) | E/E′ Δ E′/E = E′/E Δ E/E′
-   ⊖ {a⌣a′ = ᶜ∇ᵇ} (inj₂ E′⌣E) | E/E′ Δ E′/E = E′/E Δ E/E′
-   ⊖ {a⌣a′ = ᶜ∇ᶜ} (inj₂ E′⌣E) | E/E′ Δ E′/E = E′/E Δ E/E′
+   ⊖ {a⌣a′ = ᵛ∇ᵛ} (inj₂ E′⌣E) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
+   ⊖ {a⌣a′ = ᵇ∇ᵇ} (inj₂ E′⌣E) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
+   ⊖ {a⌣a′ = ᵇ∇ᶜ} (inj₂ E′⌣E) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
+   ⊖ {a⌣a′ = ᶜ∇ᵇ} (inj₂ E′⌣E) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
+   ⊖ {a⌣a′ = ᶜ∇ᶜ} (inj₂ E′⌣E) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′

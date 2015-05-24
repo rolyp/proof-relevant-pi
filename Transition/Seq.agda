@@ -18,7 +18,7 @@ module Transition.Seq where
    open import StructuralCong.Proc using (_≈_; ≈-sym; ≈-refl)
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; source; target)
-   open import Transition.Concur using (Concur; module _Δ_; Delta; ⊖; ᴬ⊖; ᴬ⊖-✓)
+   open import Transition.Concur using (Concur; module Delta′; Delta; ⊖; ᴬ⊖; ᴬ⊖-✓)
    open import Transition.Ren using (_Δ_; _*′)
 
    Proc↱ = subst Proc
@@ -166,7 +166,7 @@ module Transition.Seq where
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ a′⋆ R R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
       --- Transposition rule.
       [_ᵇ∶⇋∶ᵇ_] : ∀ {a a′} {R R′} (E : P —[ a ᵇ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
-                 ⦃ E⌣E′ : E ⌣[ ᵇ∇ᵇ ] E′ ⦄ → let open _Δ_ (⊖ E⌣E′) in E ᵇ∷ {!E′/E!} ᵇ∷ [] ≃ E′ ᵇ∷ {!!} ᵇ∷ []
+                 ⦃ E⌣E′ : E ⌣[ ᵇ∇ᵇ ] E′ ⦄ → let open Delta′ (⊖ E⌣E′) in E ᵇ∷ {!E′/E!} ᵇ∷ [] ≃ E′ ᵇ∷ {!!} ᵇ∷ []
 {-
       -- Close under trace constructors.
       [] : [] ≃ []
