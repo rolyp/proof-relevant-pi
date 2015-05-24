@@ -210,9 +210,9 @@ module Transition.Concur where
    ... | swap*E/E′ = E′/E ᵀΔ ν• swap*E/E′
    ⊖₁ (ν•ᶜ E⌣E′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ = E′/E ᵀΔ ν• E/E′
-   ⊖₁ (νᵇᵇ_ {a = x •} {a} E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = {!!} -- with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
-   -- ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push a = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
+   ⊖₁ (νᵇᵇ_ {a = x •} {a} E⌣E′) with Delta′.blah (⊖₁ E⌣E′) | ⊖₁ E⌣E′
+   ... | ᵇ∇ᵇ | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
+   ... | swap*E/E′ | swap*E′/E = {!!} --rewrite swap∘push∘push x | swap∘push∘push a = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
    ⊖₁ (νᵇᵇ_ {a = • x} {u •} E⌣E′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ = {!!} -- with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
    -- ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
