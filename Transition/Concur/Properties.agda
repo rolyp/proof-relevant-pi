@@ -106,6 +106,8 @@ module Transition.Concur.Properties where
    -- ⊖₁-✓ (νᵇᵇ_ {a = • x} {• u} E⌣E′) | E′/E ᵀΔ E/E′ | swap*P′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
    -- ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u | sym (swap∘suc-swap∘swap (target E/E′)) =
    --   ν (swap *⁼ ∘ suc swap *⁼) swap*P′
+   ⊖₁-✓ (νᵛᵛ_ {x = x} {u} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
+   ... | E′/E ᵀΔ E/E′ | P′ = ?
    ⊖₁-✓ (νᵇᶜ_ {a′ = a′} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | E′/E ᵀΔ _ | P′ with (swap *ᶜ) E′/E
    ... | swap*E′/E rewrite swap∘push∘push a′ = ν (swap *⁼) P′
@@ -113,7 +115,6 @@ module Transition.Concur.Properties where
    ... | _ ᵀΔ _ | P′ = ν P′
    ⊖₁-✓ (! E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | P′ = P′
-   ⊖₁-✓ E⌣E′ = {!!}
 {-
 
    -- Now symmetrise.
