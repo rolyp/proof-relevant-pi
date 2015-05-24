@@ -212,14 +212,14 @@ module Transition.Concur where
    ... | E′/E ᵀΔ E/E′ = E′/E ᵀΔ ν• E/E′
    ⊖₁ (νᵇᵇ_ {a = x •} {a} E⌣E′) with Delta′.blah (⊖₁ E⌣E′) | ⊖₁ E⌣E′
    ... | ᵇ∇ᵇ | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
-   ... | swap*E/E′ | swap*E′/E = {!!} --rewrite swap∘push∘push x | swap∘push∘push a = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
-   ⊖₁ (νᵇᵇ_ {a = • x} {u •} E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = {!!} -- with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
-   -- ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
-   ⊖₁ (νᵇᵇ_ {a = • x} {• u} E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = {!!} -- with (swap *ᶜ) E/E′ | (swap *ᶜ) E′/E
+   ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push a = {!!} ᵀΔ {!!} -- νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
+   ⊖₁ (νᵇᵇ_ {a = • x} {u •} E⌣E′) with Delta′.blah (⊖₁ E⌣E′) | ⊖₁ E⌣E′
+   ... | ᵇ∇ᵇ | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
+   ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u = {!!} ᵀΔ {!!} --νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
+   ⊖₁ (νᵇᵇ_ {a = • x} {• u} E⌣E′) with Delta′.blah (⊖₁ E⌣E′) | ⊖₁ E⌣E′
+   ... | ᵇ∇ᵇ | E′/E ᵀΔ E/E′ = {!!} -- with (swap *ᶜ) E/E′ | (swap *ᶜ) E′/E
    -- ... | swap*E/E′ | swap*E′/E = νᶜ swap*E′/E ᵀΔ νᶜ swap*E/E′
-   -- ⊖₁ (νᵇᵇ_ {a = • x} {• u} E⌣E′) | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
+   ⊖₁ (νᵇᵇ_ {a = • x} {• u} E⌣E′) | ᵛ∇ᵛ | E′/E ᵀΔ E/E′ = {!!} --with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
    -- ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
    ⊖₁ (νᵇᶜ_ {a′ = a′} E⌣E′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ with (swap *ᶜ) E′/E
