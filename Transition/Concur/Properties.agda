@@ -83,11 +83,10 @@ module Transition.Concur.Properties where
    ... | E′/E ᵀΔ _ | _ ᵀΔ _ | swap*P′ | Q′ with (pop y *ᵇ) E′/E
    ... | pop-y*E′/E rewrite pop∘push u y =
       ν (≈-trans ((suc (pop y) *⁼) swap*P′) (≈-reflexive (suc-pop∘swap y _)) │ Q′)
-   ⊖₁-✓ (_│ᵥ_ {x = x} {u} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
-   ... | _ ᵀΔ _ | _ ᵀΔ _ | swap*P′ | Q′ =
-      {!!} -- ν (≈-trans ((pop zero *⁼) swap*P′) (≈-reflexive (pop-swap _)) │ Q′)
-   -- ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ | swap*P′ | swap*Q′ =
-   --    ≈-trans (ν (ν (swap*P′ │ swap*Q′))) (νν-swapₗ _)
+   ⊖₁-✓ (_│ᵥ_ {x = x} {u} {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
+   ... | _ ᵀΔ _ | _ ᵀΔ _ | swap*P′ | Q′ = ν (≈-trans ((pop zero *⁼) swap*P′) (≈-reflexive (pop-swap _)) │ Q′)
+   ⊖₁-✓ (_│ᵥ_ {x = x} {u} {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
+   ... | _ ᵀΔ _ | _ ᵀΔ _ | swap*P′ | swap*Q′ = ≈-trans (ν (ν (swap*P′ │ swap*Q′))) (νν-swapₗ _)
    ⊖₁-✓ (ν• E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | P′ = P′
    ⊖₁-✓ (ν•ᵇ_ {x = x} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
