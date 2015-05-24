@@ -28,9 +28,10 @@ module Transition.Concur.Properties where
    cofinal ᶜ∇ᵇ = _≈_
    cofinal ᶜ∇ᶜ = _≈_
 
-   -- Correctness of residuals, with respect to the above notion of cofinality.
-   ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {blah : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (E⌣E′ : E ⌣₁[ blah ] E′) → let open _Δ_ (⊖₁ E⌣E′) in cofinal a⌣a′ S S′
+   -- Correctness of residuals, with respect to the above notion of cofinality. TODO: feels wrong to have
+   -- the a ᴬ⌣ a′ index on E ⌣ E′, but not to relate it to the one in E Δ E′.
+   ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {FIXME : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
+          (E⌣E′ : E ⌣₁[ FIXME ] E′) → let open _Δ_ (⊖₁ E⌣E′) in cofinal a⌣a′ S S′
    ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) | swap∘push (target F) = ≈-refl
    ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-refl
    ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-refl
@@ -120,15 +121,14 @@ module Transition.Concur.Properties where
    ... | _ Δ[ ᵇ∇ᶜ ] _ | P′ = P′
    ... | _ Δ[ ᶜ∇ᵇ ] _ | P′ = P′
    ... | _ Δ[ ᶜ∇ᶜ ] _ | P′ = P′
-{-
+
    -- Now symmetrise.
-   ⊖-✓ : ∀ {Γ P} {a a′ : Action Γ} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} (E⌣E′ : E ⌣ E′) →
-         let open _Δ_ (⊖ E⌣E′) in cofinal a⌣a′ P₁ P₂
+   ⊖-✓ : ∀ {Γ P} {a a′ : Action Γ} {FIXME : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
+         (E⌣E′ : E ⌣[ FIXME ] E′) → let open _Δ_ (⊖ E⌣E′) in cofinal a⌣a′ S S′
    ⊖-✓ (inj₁ E⌣E′) = ⊖₁-✓ E⌣E′
    ⊖-✓ (inj₂ E′⌣E) with ⊖₁ E′⌣E | ⊖₁-✓ E′⌣E
-   ... | ᵛ∇ᵛ ∶ _ Δ _ | P′ = ≈-sym P′
-   ... | ᵇ∇ᵇ ∶ _ Δ _ | P′ = ≈-sym (≈-trans ((swap *⁼) P′) (≈-reflexive (swap-involutive _)))
-   ... | ᵇ∇ᶜ ∶ _ Δ _ | P′ = ≈-sym P′
-   ... | ᶜ∇ᵇ ∶ _ Δ _ | P′ = ≈-sym P′
-   ... | ᶜ∇ᶜ ∶ _ Δ _ | P′ = ≈-sym P′
--}
+   ... | _ Δ[ ᵛ∇ᵛ ] _ | P′ = ≈-sym P′
+   ... | _ Δ[ ᵇ∇ᵇ ] _ | P′ = ≈-sym (≈-trans ((swap *⁼) P′) (≈-reflexive (swap-involutive _)))
+   ... | _ Δ[ ᵇ∇ᶜ ] _ | P′ = ≈-sym P′
+   ... | _ Δ[ ᶜ∇ᵇ ] _ | P′ = ≈-sym P′
+   ... | _ Δ[ ᶜ∇ᶜ ] _ | P′ = ≈-sym P′

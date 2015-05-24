@@ -7,7 +7,8 @@ module Transition.Seq where
 
    open import Ext
 
-   open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
+   open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc; _ᴬ⌣_; module _ᴬ⌣_);
+      open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ._ᴬ⌣_
    open import Action.Ren using (ren-preserves-inc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _ᵇ∷_; _ᶜ∷_)
    open import Action.Seq.Ren using (ren-preserves-inc⋆)
@@ -17,7 +18,7 @@ module Transition.Seq where
    open import StructuralCong.Proc using (_≈_; ≈-sym; ≈-refl)
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; source; target)
-   open import Transition.Concur using (_⌣_; module _Δ_; _∶_Δ_; ⊖; coinitial; module coinitial; ᴬ⊖; ᴬ⊖-✓); open coinitial
+   open import Transition.Concur using (Concur; module _Δ_; Delta; ⊖; ᴬ⊖; ᴬ⊖-✓)
    open import Transition.Ren using (_Δ_; _*′)
 
    Proc↱ = subst Proc
