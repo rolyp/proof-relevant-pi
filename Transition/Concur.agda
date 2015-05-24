@@ -127,10 +127,6 @@ module Transition.Concur where
    ⌣-sym (inj₁ E⌣E′) = inj₂ (subst (Concur₁ _ _) (sym (ᴬ⌣-sym-involutive _)) E⌣E′)
    ⌣-sym (inj₂ E⌣E′) = inj₁ E⌣E′
 
-   blah₂ : ∀ {Γ} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {P R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
-           E ⌣₁[ a⌣a′ ] E′ → a ᴬ⌣ a′
-   blah₂ {a⌣a′ = a⌣a′} _ = a⌣a′
-
    -- The type of the symmetric residual of concurrent transitions E and E′. Because cofinality of action
    -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
    record Delta′ {Γ P} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) {R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) : Set where
@@ -142,9 +138,6 @@ module Transition.Concur where
          {S S′} : Proc Γ′
          E′/E : R —[ a′/a - _ ]→ S
          E/E′ : R′ —[ a/a′ - _ ]→ subst Proc (ᴬ⊖-✓ a⌣a′) S′
-
-      blah : a ᴬ⌣ a′
-      blah = a⌣a′
 
    infixl 5 Delta
    syntax Delta E E′ = E ᵀΔ E′
@@ -222,10 +215,10 @@ module Transition.Concur where
    ⊖₁ (νᵇᵇ_ {a = • x} {u •} E⌣E′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
    ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
-   ⊖₁ (νᵇᵇ_ {a = • x} {• u} E⌣E′) with ⊖₁ {a⌣a′ = blah₂ E⌣E′} E⌣E′
+   ⊖₁ (νᵇᵇ_ {a = • x} {• u} E⌣E′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
    ... | swap*E/E′ | swap*E′/E = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
-   ⊖₁ (νᵛᵛ_ {x = x} {u} E⌣E′) with ⊖₁ {a⌣a′ = blah₂ E⌣E′} E⌣E′
+   ⊖₁ (νᵛᵛ_ {x = x} {u} E⌣E′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ with (swap *ᶜ) E/E′ | (swap *ᶜ) E′/E
    ... | swap*E/E′ | swap*E′/E = νᶜ swap*E′/E ᵀΔ νᶜ swap*E/E′
    ⊖₁ (νᵇᶜ_ {a′ = a′} E⌣E′) with ⊖₁ E⌣E′
