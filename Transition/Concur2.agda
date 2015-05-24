@@ -16,6 +16,7 @@ module Transition.Concur2 where
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
+   -- Some complexity here to abstract over two different action constructors.
    ᴬΔ : ∀ {Γ} {a a′ : Action Γ} → a ᴬ⌣ a′ → Σ[ A ∈ Set ] (A → Action (Γ + inc a))
    ᴬΔ {Γ} ᵛ∇ᵛ = Actionᶜ (Γ + 1) , _ᶜ
    ᴬΔ {Γ} ᵇ∇ᵇ = Actionᵇ (Γ + 1) , _ᵇ
@@ -31,6 +32,21 @@ module Transition.Concur2 where
    ᴬ⊖ (ᵇ∇ᶜ {a′ = a′}) = (push *) a′
    ᴬ⊖ (ᶜ∇ᵇ {a′ = a′}) = a′
    ᴬ⊖ (ᶜ∇ᶜ {a′ = a′}) = a′
+
+   -- The type of the symmetric residual of concurrent transitions E and E′. Because cofinality of action
+   -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
+   infixl 5 _∶_Δ_
+   record _Δ_ {Γ P} {a a′ : Action Γ} {R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) : Set where
+      constructor _∶_Δ_
+      field
+         a⌣a′ : a ᴬ⌣ a′
+      a′/a = π₂ (ᴬΔ a⌣a′) (ᴬ⊖ a⌣a′)
+      a/a′ = π₂ (ᴬΔ (ᴬ⌣-sym a⌣a′)) (ᴬ⊖ (ᴬ⌣-sym a⌣a′))
+      Γ′ = Γ + inc a + inc a′/a
+      field
+         {P₁ P₂} : Proc Γ′
+         E′/E : R —[ a′/a - _ ]→ P₁
+         E/E′ : R′ —[ a/a′ - _ ]→ {!!}
 
    -- Whether two coinitial evaluation contexts are concurrent. Only give the left rules, then symmetrise.
    -- Convenient to have this indexed by the kind of action residual. TODO: cases for •│ and ᵥ│.
