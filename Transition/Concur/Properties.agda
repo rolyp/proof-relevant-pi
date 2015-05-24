@@ -4,7 +4,7 @@ module Transition.Concur.Properties where
 
    open import Data.Fin using (Fin; toℕ)
 
-   open import Action as ᴬ using (Action; inc); open ᴬ.Actionᵇ
+   open import Action as ᴬ using (Action; inc; _ᴬ⌣_; module _ᴬ⌣_); open ᴬ.Actionᵇ
    import Action.Ren
    open import Name using (_+_; zero)
    open import Proc using (Proc)
@@ -15,7 +15,7 @@ module Transition.Concur.Properties where
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Concur
-      using (_⌣₁_; module _⌣₁_; _⌣_; coinitial; module coinitial; _Δ_; _∶_Δ_; module _Δ_; ᴬ⊖; ᴬ⊖-✓; ⊖₁; ⊖);
+      using (_⌣₁_; module _⌣₁_; _⌣_; _Δ_; _∶_Δ_; module _Δ_; ᴬ⊖; ᴬ⊖-✓; ⊖₁; ⊖);
       open _⌣₁_; open coinitial
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 

@@ -4,8 +4,10 @@ module Transition.Concur where
 
    open import Ext
 
-   open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
-   import Action.Ren
+   open import Action as ᴬ
+      using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc; _ᴬ⌣_; ᴬ⌣-sym; ᴬ⌣-sym-involutive);
+      open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ._ᴬ⌣_
+   open import Action.Ren using (_*†)
    open import Name as ᴺ using (Name; Cxt; module Cxt; zero; _+_; toℕ)
    open import Ren as ᴿ using (Ren; Renameable; ᴺren; suc; push; pop; swap); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
@@ -14,108 +16,114 @@ module Transition.Concur where
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
-   -- Whether two coinitial evaluation contexts are concurrent. Only give the left rules, then symmetrise.
-   -- TODO: cases for •│ and ᵥ│.
-   data _⌣₁_ {Γ} : ∀ {a : Action Γ} {a′ : Action Γ} {P R R′} → P —[ a - _ ]→ R → P —[ a′ - _ ]→ R′ → Set where
-      _ᵇ│ᵇ_ : ∀ {P Q R S} {a a′ : Actionᵇ Γ}
-             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁ P │ᵇ F
-      _ᵇ│ᶜ_ : ∀ {P Q R S} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ}
-             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁ P │ᶜ F
-      _ᶜ│ᵇ_ : ∀ {P Q R S} {a : Actionᶜ Γ} {a′ : Actionᵇ Γ}  →
-             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᶜ│ Q ⌣₁ P │ᵇ F
-      _ᶜ│ᶜ_ : ∀ {P Q R S} {a a′ : Actionᶜ Γ}  →
-             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᶜ│ Q ⌣₁ P │ᶜ F
-      _│•ᵇ_ : ∀ {x y P R R′ S Q} {a : Actionᵇ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
-              E ⌣₁ E′ → (F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁ E′ │• F
-      _│•ᶜ_ : ∀ {x y P R R′ S Q} {a : Actionᶜ Γ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
-              E ⌣₁ E′ → (F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S) → E ᶜ│ Q ⌣₁ E′ │• F
-      _ᵇ│•_ : ∀ {x y P Q R S S′} {a : Actionᵇ Γ} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S′}
-              (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁ F′ → P │ᵇ F ⌣₁ E │• F′
-      _ᶜ│•_ : ∀ {x y P Q R S S′} {a : Actionᶜ Γ} {F : Q —[ a ᶜ - _ ]→ S} {F′ : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S′}
-              (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁ F′ → P │ᶜ F ⌣₁ E │• F′
-      _│ᵥᵇ_ : ∀ {x P R R′ S Q} {a : Actionᵇ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
-              E ⌣₁ E′ → (F : Q —[ (• x) ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁ E′ │ᵥ F
-      _│ᵥᶜ_ : ∀ {x P R R′ S Q} {a : Actionᶜ Γ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
-              E ⌣₁ E′ → (F : Q —[ (• x) ᵇ - _ ]→ S) → E ᶜ│ Q ⌣₁ E′ │ᵥ F
-      _ᵇ│ᵥ_ : ∀ {x P Q R S S′} {a : Actionᵇ Γ} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ (• x) ᵇ - _ ]→ S′} →
-             (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁ F′ → P │ᵇ F ⌣₁ E │ᵥ F′
-      _ᶜ│ᵥ_ : ∀ {x P Q R S S′} {a : Actionᶜ Γ} {F : Q —[ a ᶜ - _ ]→ S} {F′ : Q —[ (• x) ᵇ - _ ]→ S′} →
-             (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁ F′ → P │ᶜ F ⌣₁ E │ᵥ F′
-      _➕₁_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
-             E ⌣₁ E′ → (Q : Proc Γ) → E ➕₁ Q ⌣₁ E′ ➕₁ Q
-      _│ᵇᵇ_ : ∀ {Q S S′} {a a′ : Actionᵇ Γ} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ a′ ᵇ - _ ]→ S′} →
-             (P : Proc Γ) → F ⌣₁ F′ → P │ᵇ F ⌣₁ P │ᵇ F′
-      _│ᵇᶜ_ : ∀ {Q S S′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ a′ ᶜ - _ ]→ S′} →
-             (P : Proc Γ) → F ⌣₁ F′ → P │ᵇ F ⌣₁ P │ᶜ F′
-      _│ᶜᶜ_ : ∀ {Q S S′} {a a′ : Actionᶜ Γ} {F : Q —[ a ᶜ - _ ]→ S} {F′ : Q —[ a′ ᶜ - _ ]→ S′} →
-             (P : Proc Γ) → F ⌣₁ F′ → P │ᶜ F ⌣₁ P │ᶜ F′
-      _ᵇᵇ│_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᵇ - _ ]→ R′} →
-              E ⌣₁ E′ → (Q : Proc Γ) → E ᵇ│ Q ⌣₁ E′ ᵇ│ Q
-      _ᵇᶜ│_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′} →
-              E ⌣₁ E′ → (Q : Proc Γ) → E ᵇ│ Q ⌣₁ E′ ᶜ│ Q
-      _ᶜᶜ│_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′} →
-              E ⌣₁ E′ → (Q : Proc Γ) → E ᶜ│ Q ⌣₁ E′ ᶜ│ Q
-      _│•_ : ∀ {x y u z P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
-             {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ • u 〈 z 〉 ᶜ - _ ]→ S′} →
-             E ⌣₁ E′ → F ⌣₁ F′ → E │• F ⌣₁ E′ │• F′
-      _│•ᵥ_ : ∀ {x u y P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
-             {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
-             E ⌣₁ E′ → F ⌣₁ F′ → E │• F ⌣₁ E′ │ᵥ F′
-      _│ᵥ_ : ∀ {x u P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
-             {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
-             E ⌣₁ E′ → F ⌣₁ F′ → E │ᵥ F ⌣₁ E′ │ᵥ F′
-      ν•_ : ∀ {x u P R R′} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ • ᴺ.suc u 〈 zero 〉 ᶜ - _ ]→ R′} →
-            E ⌣₁ E′ → ν• E ⌣₁ ν• E′
-      ν•ᵇ_ : ∀ {x P R R′} {a : Actionᵇ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push *) a ᵇ - _ ]→ R′} →
-            E ⌣₁ E′ → ν• E ⌣₁ νᵇ_ {a = a} E′
-      ν•ᶜ_ : ∀ {x P R R′} {a : Actionᶜ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push *) a ᶜ - _ ]→ R′} →
-            E ⌣₁ E′ → ν• E ⌣₁ νᶜ_ {a = a} E′
-      νᵇᵇ_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᵇ - _ ]→ R′} →
-          E ⌣₁ E′ → νᵇ_ {a = a} E ⌣₁ νᵇ_ {a = a′} E′
-      νᵇᶜ_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
-          E ⌣₁ E′ → νᵇ_ {a = a} E ⌣₁ νᶜ_ {a = a′} E′
-      νᶜᶜ_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ (push *) a ᶜ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
-          E ⌣₁ E′ → νᶜ_ {a = a} E ⌣₁ νᶜ_ {a = a′} E′
-      !_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {R R′} {E : P │ ! P —[ a - _ ]→ R} {E′ : P │ ! P —[ a′ - _ ]→ R′} →
-           E ⌣₁ E′ → ! E ⌣₁ ! E′
+   -- Second component here abstracts over the two action constructors.
+   ᴬΔ : ∀ {Γ} {a a′ : Action Γ} → a ᴬ⌣ a′ → Σ[ A ∈ Set ] (A → Action (Γ + inc a))
+   ᴬΔ {Γ} ᵛ∇ᵛ = Actionᶜ (Γ + 1) , _ᶜ
+   ᴬΔ {Γ} ᵇ∇ᵇ = Actionᵇ (Γ + 1) , _ᵇ
+   ᴬΔ {Γ} ᵇ∇ᶜ = Actionᶜ (Γ + 1) , _ᶜ
+   ᴬΔ {Γ} ᶜ∇ᵇ = Actionᵇ Γ , _ᵇ
+   ᴬΔ {Γ} ᶜ∇ᶜ = Actionᶜ Γ , _ᶜ
 
-   _⌣_ : ∀ {Γ} {a : Action Γ} {a′ : Action Γ} {P R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → Set
-   E ⌣ E′ = E ⌣₁ E′ ⊎ E′ ⌣₁ E
+   -- The residual a′/a. Note that ᵇ∇ᵇ may also relate two bound outputs, but only if they represent
+   -- extrusions of distinct binders.
+   ᴬ/ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → π₁ (ᴬΔ a⌣a′)
+   ᴬ/ (ᵛ∇ᵛ {u = u}) = • ᴺ.suc u 〈 zero 〉
+   ᴬ/ (ᵇ∇ᵇ {a′ = a′}) = (push *) a′
+   ᴬ/ (ᵇ∇ᶜ {a′ = a′}) = (push *) a′
+   ᴬ/ (ᶜ∇ᵇ {a′ = a′}) = a′
+   ᴬ/ (ᶜ∇ᶜ {a′ = a′}) = a′
 
-   infix 4 _⌣₁_
-
-   ⌣-sym : ∀ {Γ} {a : Action Γ} {a′ : Action Γ} {P R R′} → Sym (_⌣_ {a = a} {a′} {P = P} {R = R} {R′}) (_⌣_ {a = a′} {a})
-   ⌣-sym = swap⁺
-
-   -- Concurrent actions are classified according to how their residuals turn out. TODO: rename to _ᴬ⌣_?
-   data coinitial {Γ} : (a a′ : Action Γ) → Set where
-      ᵛ∇ᵛ : {x u : Name Γ} → coinitial ((• x) ᵇ) ((• u) ᵇ)
-      ᵇ∇ᵇ : {a a′ : Actionᵇ Γ} → coinitial (a ᵇ) (a′ ᵇ)
-      ᵇ∇ᶜ : {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} → coinitial (a ᵇ) (a′ ᶜ)
-      ᶜ∇ᵇ : {a : Actionᶜ Γ} {a′ : Actionᵇ Γ} → coinitial (a ᶜ) (a′ ᵇ)
-      ᶜ∇ᶜ : {a a′ : Actionᶜ Γ} → coinitial (a ᶜ) (a′ ᶜ)
-
-   -- The type of the symmetric residual of concurrent actions a and a'. Not easy to bake
-   -- cofinality into the definition (see 0.6.9 release notes for discussion).
-   _ᴬΔ_ : ∀ {Γ} (a a′ : Action Γ) → Set
-   _ᴬΔ_ {Γ} a a′ = Action (Γ + inc a) × Action (Γ + inc a′)
-
-   -- The symmetric residual (a′/a, a/a′). Note that ᵇ∇ᵇ may also relate two bound outputs, but only if
-   -- they represent extrusions of distinct binders.
-   ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} → coinitial a a′ → a ᴬΔ a′
-   ᴬ⊖ (ᵛ∇ᵛ {x} {u}) = • ᴺ.suc u 〈 zero 〉 ᶜ , • ᴺ.suc x 〈 zero 〉 ᶜ
-   ᴬ⊖ (ᵇ∇ᵇ {a} {a′}) = (push *) a′ ᵇ , (push *) a ᵇ
-   ᴬ⊖ (ᵇ∇ᶜ {a} {a′}) = (push *) a′ ᶜ , a ᵇ
-   ᴬ⊖ (ᶜ∇ᵇ {a} {a′}) = a′ ᵇ , (push *) a ᶜ
-   ᴬ⊖ (ᶜ∇ᶜ {a} {a′}) = a′ ᶜ , a ᶜ
+   -- Symmetrise.
+   ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Action (Γ + inc a) × Action (Γ + inc a′)
+   ᴬ⊖ a⌣a′ = π₂ (ᴬΔ a⌣a′) (ᴬ/ a⌣a′) , π₂ (ᴬΔ (ᴬ⌣-sym a⌣a′)) (ᴬ/ (ᴬ⌣-sym a⌣a′))
 
    -- Cofinality of action residuals amounts to agreement on target context.
-   ᴬ⊖-✓ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : coinitial a a′) → Γ + inc a + inc (π₁ (ᴬ⊖ a⌣a′)) ≡ Γ + inc a′ + inc (π₂ (ᴬ⊖ a⌣a′))
+   ᴬ⊖-✓ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Γ + inc a + inc (π₁ (ᴬ⊖ a⌣a′)) ≡ Γ + inc a′ + inc (π₂ (ᴬ⊖ a⌣a′))
    ᴬ⊖-✓ ᵛ∇ᵛ = refl
    ᴬ⊖-✓ ᵇ∇ᵇ = refl
    ᴬ⊖-✓ ᵇ∇ᶜ = refl
    ᴬ⊖-✓ ᶜ∇ᵇ = refl
    ᴬ⊖-✓ ᶜ∇ᶜ = refl
+
+   -- Whether two coinitial evaluation contexts are concurrent. Only give the left rules, then symmetrise.
+   -- Convenient to have this indexed by the kind of action residual. TODO: cases for •│ and ᵥ│.
+   syntax Concur₁ E E′ a′/a = E ⌣₁[ a′/a ] E′
+   infix 4 Concur₁
+
+   data Concur₁ {Γ} : ∀ {a : Action Γ} {a′ : Action Γ} {P R R′} →
+                P —[ a - _ ]→ R → P —[ a′ - _ ]→ R′ → a ᴬ⌣ a′ → Set where
+      _ᵇ│ᵇ_ : ∀ {P Q R S} {a a′ : Actionᵇ Γ}
+             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᵇ ] P │ᵇ F
+      _ᵇ│ᶜ_ : ∀ {P Q R S} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ}
+             (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᶜ ] P │ᶜ F
+      _ᶜ│ᵇ_ : ∀ {P Q R S} {a : Actionᶜ Γ} {a′ : Actionᵇ Γ}  →
+             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᶜ∇ᵇ ] P │ᵇ F
+      _ᶜ│ᶜ_ : ∀ {P Q R S} {a a′ : Actionᶜ Γ}  →
+             (E : P —[ a ᶜ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᶜ∇ᶜ ] P │ᶜ F
+      _│•ᵇ_ : ∀ {x y P R R′ S Q} {a : Actionᵇ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
+              E ⌣₁[ ᵇ∇ᵇ ] E′ → (F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᶜ ] E′ │• F
+      _│•ᶜ_ : ∀ {x y P R R′ S Q} {a : Actionᶜ Γ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
+              E ⌣₁[ ᶜ∇ᵇ ] E′ → (F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᶜ∇ᶜ ] E′ │• F
+      _ᵇ│•_ : ∀ {x y P Q R S S′} {a : Actionᵇ Γ} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S′}
+              (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁[ ᵇ∇ᶜ ] F′ → P │ᵇ F ⌣₁[ ᵇ∇ᶜ ] E │• F′
+      _ᶜ│•_ : ∀ {x y P Q R S S′} {a : Actionᶜ Γ} {F : Q —[ a ᶜ - _ ]→ S} {F′ : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S′}
+              (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁[ ᶜ∇ᶜ ] F′ → P │ᶜ F ⌣₁[ ᶜ∇ᶜ ] E │• F′
+      _│ᵥᵇ_ : ∀ {x P R R′ S Q} {a : Actionᵇ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
+             E ⌣₁[ ᵇ∇ᵇ ] E′ → (F : Q —[ (• x) ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᶜ ] E′ │ᵥ F
+      _│ᵥᶜ_ : ∀ {x P R R′ S Q} {a : Actionᶜ Γ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ x • ᵇ - _ ]→ R′} →
+              E ⌣₁[ ᶜ∇ᵇ ] E′ → (F : Q —[ (• x) ᵇ - _ ]→ S) → E ᶜ│ Q ⌣₁[ ᶜ∇ᶜ ] E′ │ᵥ F
+      _ᵇ│ᵥ_ : ∀ {x P Q R S S′} {a : Actionᵇ Γ} {a⌣a′} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ (• x) ᵇ - _ ]→ S′} →
+             (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁[ a⌣a′ ] F′ → P │ᵇ F ⌣₁[ ᵇ∇ᶜ ] E │ᵥ F′
+      _ᶜ│ᵥ_ : ∀ {x P Q R S S′} {a : Actionᶜ Γ} {F : Q —[ a ᶜ - _ ]→ S} {F′ : Q —[ (• x) ᵇ - _ ]→ S′} →
+             (E : P —[ x • ᵇ - _ ]→ R) → F ⌣₁[ ᶜ∇ᵇ ] F′ → P │ᶜ F ⌣₁[ ᶜ∇ᶜ ] E │ᵥ F′
+      _➕₁_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {a⌣a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
+             E ⌣₁[ a⌣a′ ] E′ → (Q : Proc Γ) → E ➕₁ Q ⌣₁[ a⌣a′ ] E′ ➕₁ Q
+      _│ᵇᵇ_ : ∀ {Q S S′} {a a′ : Actionᵇ Γ} {a⌣a′} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ a′ ᵇ - _ ]→ S′} →
+             (P : Proc Γ) → F ⌣₁[ a⌣a′ ] F′ → P │ᵇ F ⌣₁[ a⌣a′ ] P │ᵇ F′
+      _│ᵇᶜ_ : ∀ {Q S S′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ a′ ᶜ - _ ]→ S′} →
+             (P : Proc Γ) → F ⌣₁[ ᵇ∇ᶜ ] F′ → P │ᵇ F ⌣₁[ ᵇ∇ᶜ ] P │ᶜ F′
+      _│ᶜᶜ_ : ∀ {Q S S′} {a a′ : Actionᶜ Γ} {F : Q —[ a ᶜ - _ ]→ S} {F′ : Q —[ a′ ᶜ - _ ]→ S′} →
+             (P : Proc Γ) → F ⌣₁[ ᶜ∇ᶜ ] F′ → P │ᶜ F ⌣₁[ ᶜ∇ᶜ ] P │ᶜ F′
+      _ᵇᵇ│_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {a⌣a′} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᵇ - _ ]→ R′} →
+              E ⌣₁[ a⌣a′ ] E′ → (Q : Proc Γ) → E ᵇ│ Q ⌣₁[ a⌣a′ ] E′ ᵇ│ Q
+      _ᵇᶜ│_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′} →
+              E ⌣₁[ ᵇ∇ᶜ ] E′ → (Q : Proc Γ) → E ᵇ│ Q ⌣₁[ ᵇ∇ᶜ ] E′ ᶜ│ Q
+      _ᶜᶜ│_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′} →
+              E ⌣₁[ ᶜ∇ᶜ ] E′ → (Q : Proc Γ) → E ᶜ│ Q ⌣₁[ ᶜ∇ᶜ ] E′ ᶜ│ Q
+      _│•_ : ∀ {x y u z P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
+             {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ • u 〈 z 〉 ᶜ - _ ]→ S′} →
+             E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ ᶜ∇ᶜ ] F′ → E │• F ⌣₁[ ᶜ∇ᶜ ] E′ │• F′
+      _│•ᵥ_ : ∀ {x u y P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
+             {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
+             E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ ᶜ∇ᵇ ] F′ → E │• F ⌣₁[ ᶜ∇ᶜ ] E′ │ᵥ F′
+      _│ᵥ_ : ∀ {x u P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
+             {•x⌣•u} {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
+             E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ •x⌣•u ] F′ → E │ᵥ F ⌣₁[ ᶜ∇ᶜ ] E′ │ᵥ F′
+      ν•_ : ∀ {x u P R R′} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ • ᴺ.suc u 〈 zero 〉 ᶜ - _ ]→ R′} →
+            E ⌣₁[ ᶜ∇ᶜ ] E′ → ν• E ⌣₁[ ᵛ∇ᵛ ] ν• E′
+      ν•ᵇ_ : ∀ {x P R R′} {a : Actionᵇ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push *) a ᵇ - _ ]→ R′} →
+            E ⌣₁[ ᶜ∇ᵇ ] E′ → ν• E ⌣₁[ ᵇ∇ᵇ ] νᵇ E′
+      ν•ᶜ_ : ∀ {x P R R′} {a : Actionᶜ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push *) a ᶜ - _ ]→ R′} →
+            E ⌣₁[ ᶜ∇ᶜ ] E′ → ν• E ⌣₁[ ᵇ∇ᶜ ] νᶜ E′
+      νᵇᵇ_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {a⌣a′} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᵇ - _ ]→ R′} →
+          E ⌣₁[ (push *†) a⌣a′ ] E′ → νᵇ E ⌣₁[ a⌣a′ ] νᵇ E′
+      νᵇᶜ_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
+          E ⌣₁[ ᵇ∇ᶜ ] E′ → νᵇ E ⌣₁[ ᵇ∇ᶜ ] νᶜ E′
+      νᶜᶜ_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ (push *) a ᶜ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
+          E ⌣₁[ ᶜ∇ᶜ ] E′ → νᶜ E ⌣₁[ ᶜ∇ᶜ ] νᶜ E′
+      !_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {a⌣a′} {R R′} {E : P │ ! P —[ a - _ ]→ R} {E′ : P │ ! P —[ a′ - _ ]→ R′} →
+           E ⌣₁[ a⌣a′ ] E′ → ! E ⌣₁[ a⌣a′ ] ! E′
+
+   syntax Concur E E′ a⌣a′ = E ⌣[ a⌣a′ ] E′
+
+   Concur : ∀ {Γ} {a a′ : Action Γ} {P R R′}
+            (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → a ᴬ⌣ a′ → Set
+   Concur E E′ a⌣a′ = E ⌣₁[ a⌣a′ ] E′ ⊎ E′ ⌣₁[ ᴬ⌣-sym a⌣a′ ] E
+
+   ⌣-sym : ∀ {Γ} {P : Proc Γ} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} →
+           Sym (λ (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → E ⌣[ a⌣a′ ] E′) (λ E E′ → E ⌣[ ᴬ⌣-sym a⌣a′ ] E′)
+   ⌣-sym (inj₁ E⌣E′) = inj₂ (subst (Concur₁ _ _) (sym (ᴬ⌣-sym-involutive _)) E⌣E′)
+   ⌣-sym (inj₂ E⌣E′) = inj₁ E⌣E′
 
    -- The type of the symmetric residual of concurrent transitions E and E′. Because cofinality of action
    -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
@@ -123,7 +131,7 @@ module Transition.Concur where
    record _Δ_ {Γ P} {a a′ : Action Γ} {R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) : Set where
       constructor _∶_Δ_
       field
-         a⌣a′ : coinitial a a′
+         a⌣a′ : a ᴬ⌣ a′
       a′/a = π₁ (ᴬ⊖ a⌣a′)
       a/a′ = π₂ (ᴬ⊖ a⌣a′)
       Γ′ = Γ + inc a + inc a′/a
@@ -136,7 +144,8 @@ module Transition.Concur where
 
    -- The symmetric residual  (E′/E , E/E′). The paper defines the residual using E and E′, with E ⌣ E′
    -- implicit, whereas we work directly with the proof of E ⌣ E′, with E and E′ implicit.
-   ⊖₁ : ∀ {Γ P} {a a′ : Action Γ} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} → E ⌣₁ E′ → E Δ E′
+   ⊖₁ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
+        E ⌣₁[ a⌣a′ ] E′ → E Δ E′
    ⊖₁ (E ᵇ│ᵇ F) = ᵇ∇ᵇ ∶ target E │ᵇ (push *ᵇ) F Δ (push *ᵇ) E ᵇ│ target F
    ⊖₁ (E ᵇ│ᶜ F) = ᵇ∇ᶜ ∶ target E │ᶜ (push *ᶜ) F Δ E ᵇ│ target F
    ⊖₁ (E ᶜ│ᵇ F) = ᶜ∇ᵇ ∶ target E │ᵇ F Δ (push *ᶜ) E ᶜ│ target F
@@ -224,7 +233,8 @@ module Transition.Concur where
    ... | ᶜ∇ᶜ ∶ E′/E Δ E/E′ = ᶜ∇ᶜ ∶ E′/E Δ E/E′
 
    -- Now symmetrise.
-   ⊖ : ∀ {Γ P} {a a′ : Action Γ} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} → E ⌣ E′ → E Δ E′
+   ⊖ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
+       E ⌣[ a⌣a′ ] E′ → E Δ E′
    ⊖ (inj₁ E⌣E′) = ⊖₁ E⌣E′
    ⊖ (inj₂ E′⌣E) with ⊖₁ E′⌣E
    ... | ᵛ∇ᵛ ∶ E/E′ Δ E′/E = ᵛ∇ᵛ ∶ E′/E Δ E/E′
