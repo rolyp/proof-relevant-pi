@@ -161,14 +161,13 @@ module Transition.Seq where
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
 
    -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule.
-{-
    infix 4 _≃_
-   infixr 9 _≃-∘_
-   data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ R a′⋆ R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
+   -- infixr 9 _≃-∘_
+   data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ a′⋆ R R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
       --- Transposition rule.
-      [_ᵇ∶⇋∶ᵇ_] : ∀ {a R a′ R′} (E : P —[ a ᵇ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
-                  ⦃ E⌣E′ : E ⌣ E′ ⦄ → E ⌣ E′ → let open _Δ_ (⊖ E⌣E′); Q = target E′/E in
-                  E ᵇ∷ E′/E ᵇ∷ [] ≃ E′ ᵇ∷ E/E′ ᵇ∷ []
+      [_ᵇ∶⇋∶ᵇ_] : ∀ {a a′} {R R′} (E : P —[ a ᵇ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
+                 ⦃ E⌣E′ : E ⌣[ ᵇ∇ᵇ ] E′ ⦄ → let open _Δ_ (⊖ E⌣E′) in E ᵇ∷ {!E′/E!} ᵇ∷ [] ≃ E′ ᵇ∷ {!!} ᵇ∷ []
+{-
       -- Close under trace constructors.
       [] : [] ≃ []
       _∷_ : ∀ {a R a⋆ S a′⋆ S′} (E : P —[ a - _ ]→ R) {E⋆ : R —[ a⋆ ]→⋆ S} {E′⋆ : R —[ a′⋆ ]→⋆ S′} →
