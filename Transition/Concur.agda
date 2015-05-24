@@ -174,9 +174,9 @@ module Transition.Concur where
    ⊖₁ (E ᵇ│ᵥ F⌣F′) | ᵇ∇ᵇ | F′/F ᵀΔ F/F′ = (push *ᵇ) E │ᵥ F′/F ᵀΔ νᵇ (target E │ᵇ F/F′)
    ⊖₁ (E ᶜ│ᵥ F⌣F′) with ⊖₁ F⌣F′
    ... | F′/F ᵀΔ F/F′ = E │ᵥ F′/F ᵀΔ νᶜ (target E │ᶜ F/F′)
-   ⊖₁ (P │ᵇᵇ F⌣F′) with ⊖₁ F⌣F′
-   ... | F′/F ᵀΔ F/F′ = {!!} --(push *) P │ᶜ F′/F ᵀΔ (push *) P │ᶜ F/F′
-   -- ... | F′/F ᵀΔ F/F′ = (push *) P │ᵇ F′/F ᵀΔ (push *) P │ᵇ F/F′
+   ⊖₁ (P │ᵇᵇ F⌣F′) with Delta′.blah (⊖₁ F⌣F′) | ⊖₁ F⌣F′
+   ... | ᵛ∇ᵛ | F′/F ᵀΔ F/F′ = (push *) P │ᶜ F′/F ᵀΔ (push *) P │ᶜ F/F′
+   ... | ᵇ∇ᵇ | F′/F ᵀΔ F/F′ = (push *) P │ᵇ F′/F ᵀΔ (push *) P │ᵇ F/F′
    ⊖₁ (P │ᵇᶜ F⌣F′) with ⊖₁ F⌣F′
    ... | F′/F ᵀΔ F/F′ = (push *) P │ᶜ F′/F ᵀΔ P │ᵇ F/F′
    ⊖₁ (P │ᶜᶜ F⌣F′) with ⊖₁ F⌣F′
