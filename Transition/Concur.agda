@@ -181,9 +181,9 @@ module Transition.Concur where
    ... | F′/F ᵀΔ F/F′ = (push *) P │ᶜ F′/F ᵀΔ P │ᵇ F/F′
    ⊖₁ (P │ᶜᶜ F⌣F′) with ⊖₁ F⌣F′
    ... | F′/F ᵀΔ F/F′ = P │ᶜ F′/F ᵀΔ P │ᶜ F/F′
-   ⊖₁ (E⌣E′ ᵇᵇ│ Q) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = {!!} --E′/E ᶜ│ (push *) Q ᵀΔ E/E′ ᶜ│ (push *) Q
-   -- ... | E′/E ᵀΔ E/E′ = E′/E ᵇ│ (push *) Q ᵀΔ E/E′ ᵇ│ (push *) Q
+   ⊖₁ (E⌣E′ ᵇᵇ│ Q) with Delta′.blah (⊖₁ E⌣E′) | ⊖₁ E⌣E′
+   ... | ᵛ∇ᵛ | E′/E ᵀΔ E/E′ = E′/E ᶜ│ (push *) Q ᵀΔ E/E′ ᶜ│ (push *) Q
+   ... | ᵇ∇ᵇ | E′/E ᵀΔ E/E′ = E′/E ᵇ│ (push *) Q ᵀΔ E/E′ ᵇ│ (push *) Q
    ⊖₁ (E⌣E′ ᵇᶜ│ Q) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ = E′/E ᶜ│ (push *) Q ᵀΔ E/E′ ᵇ│ Q
    ⊖₁ (E⌣E′ ᶜᶜ│ Q) with ⊖₁ E⌣E′
