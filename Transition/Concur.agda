@@ -126,7 +126,7 @@ module Transition.Concur where
            Sym (λ (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → E ⌣[ a⌣a′ ] E′) (λ E E′ → E ⌣[ ᴬ⌣-sym a⌣a′ ] E′)
    ⌣-sym (inj₁ E⌣E′) = inj₂ (subst (Concur₁ _ _) (sym (ᴬ⌣-sym-involutive _)) E⌣E′)
    ⌣-sym (inj₂ E⌣E′) = inj₁ E⌣E′
-{-
+
    -- The type of the symmetric residual of concurrent transitions E and E′. Because cofinality of action
    -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
    record Delta′ {Γ P} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) {R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) : Set where
@@ -210,15 +210,16 @@ module Transition.Concur where
    ... | E′/E ᵀΔ E/E′ = E′/E ᵀΔ ν• E/E′
    ⊖₁ (νᵇᵇ_ {a = x •} {a} E⌣E′) with Delta′.blah (⊖₁ E⌣E′) | ⊖₁ E⌣E′
    ... | ᵇ∇ᵇ | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
-   ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push a = {!!} ᵀΔ {!!} -- νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
+   ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push a = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
    ⊖₁ (νᵇᵇ_ {a = • x} {u •} E⌣E′) with Delta′.blah (⊖₁ E⌣E′) | ⊖₁ E⌣E′
    ... | ᵇ∇ᵇ | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
-   ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u = {!!} ᵀΔ {!!} --νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
+   ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
    ⊖₁ (νᵇᵇ_ {a = • x} {• u} E⌣E′) with Delta′.blah (⊖₁ E⌣E′) | ⊖₁ E⌣E′
    ... | ᵇ∇ᵇ | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
-   ... | swap*E/E′ | swap*E′/E = {!!} ᵀΔ {!!} --νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
+   ... | swap*E/E′ | swap*E′/E = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
    ⊖₁ (νᵇᵇ_ {a = • x} {• u} E⌣E′) | ᵛ∇ᵛ | E′/E ᵀΔ E/E′ with (swap *ᶜ) E/E′ | (swap *ᶜ) E′/E
    ... | swap*E/E′ | swap*E′/E = {!!} ᵀΔ {!!} -- νᶜ swap*E′/E ᵀΔ νᶜ swap*E/E′
+   ⊖₁ (νᵛᵛ_ {x = x} {u} E⌣E′) = {!!}
    ⊖₁ (νᵇᶜ_ {a′ = a′} E⌣E′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ with (swap *ᶜ) E′/E
    ... | swap*E′/E rewrite swap∘push∘push a′ = νᶜ swap*E′/E ᵀΔ νᵇ E/E′
@@ -237,4 +238,3 @@ module Transition.Concur where
    ⊖ {a⌣a′ = ᵇ∇ᶜ} (inj₂ E′⌣E) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
    ⊖ {a⌣a′ = ᶜ∇ᵇ} (inj₂ E′⌣E) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
    ⊖ {a⌣a′ = ᶜ∇ᶜ} (inj₂ E′⌣E) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
--}
