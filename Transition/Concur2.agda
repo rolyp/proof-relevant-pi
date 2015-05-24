@@ -16,7 +16,7 @@ module Transition.Concur2 where
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
-   -- Some complexity here to abstract over two different action constructors.
+   -- Second component here abstracts over the two action constructors.
    ᴬΔ : ∀ {Γ} {a a′ : Action Γ} → a ᴬ⌣ a′ → Σ[ A ∈ Set ] (A → Action (Γ + inc a))
    ᴬΔ {Γ} ᵛ∇ᵛ = Actionᶜ (Γ + 1) , _ᶜ
    ᴬΔ {Γ} ᵇ∇ᵇ = Actionᵇ (Γ + 1) , _ᵇ
@@ -26,27 +26,24 @@ module Transition.Concur2 where
 
    -- The residual a′/a. Note that ᵇ∇ᵇ may also relate two bound outputs, but only if they represent
    -- extrusions of distinct binders.
-   ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → π₁ (ᴬΔ a⌣a′)
-   ᴬ⊖ (ᵛ∇ᵛ {u = u}) = • ᴺ.suc u 〈 zero 〉
-   ᴬ⊖ (ᵇ∇ᵇ {a′ = a′}) = (push *) a′
-   ᴬ⊖ (ᵇ∇ᶜ {a′ = a′}) = (push *) a′
-   ᴬ⊖ (ᶜ∇ᵇ {a′ = a′}) = a′
-   ᴬ⊖ (ᶜ∇ᶜ {a′ = a′}) = a′
+   ᴬ/ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → π₁ (ᴬΔ a⌣a′)
+   ᴬ/ (ᵛ∇ᵛ {u = u}) = • ᴺ.suc u 〈 zero 〉
+   ᴬ/ (ᵇ∇ᵇ {a′ = a′}) = (push *) a′
+   ᴬ/ (ᵇ∇ᶜ {a′ = a′}) = (push *) a′
+   ᴬ/ (ᶜ∇ᵇ {a′ = a′}) = a′
+   ᴬ/ (ᶜ∇ᶜ {a′ = a′}) = a′
 
-   -- The type of the symmetric residual of concurrent transitions E and E′. Because cofinality of action
-   -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
-   infixl 5 _∶_Δ_
-   record _Δ_ {Γ P} {a a′ : Action Γ} {R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) : Set where
-      constructor _∶_Δ_
-      field
-         a⌣a′ : a ᴬ⌣ a′
-      a′/a = π₂ (ᴬΔ a⌣a′) (ᴬ⊖ a⌣a′)
-      a/a′ = π₂ (ᴬΔ (ᴬ⌣-sym a⌣a′)) (ᴬ⊖ (ᴬ⌣-sym a⌣a′))
-      Γ′ = Γ + inc a + inc a′/a
-      field
-         {P₁ P₂} : Proc Γ′
-         E′/E : R —[ a′/a - _ ]→ P₁
-         E/E′ : R′ —[ a/a′ - _ ]→ {!!}
+   -- Symmetrise.
+   ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Action (Γ + inc a) × Action (Γ + inc a′)
+   ᴬ⊖ a⌣a′ = π₂ (ᴬΔ a⌣a′) (ᴬ/ a⌣a′) , π₂ (ᴬΔ (ᴬ⌣-sym a⌣a′)) (ᴬ/ (ᴬ⌣-sym a⌣a′))
+
+   -- Cofinality of action residuals amounts to agreement on target context.
+   ᴬ⊖-✓ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Γ + inc a + inc (π₁ (ᴬ⊖ a⌣a′)) ≡ Γ + inc a′ + inc (π₂ (ᴬ⊖ a⌣a′))
+   ᴬ⊖-✓ ᵛ∇ᵛ = refl
+   ᴬ⊖-✓ ᵇ∇ᵇ = refl
+   ᴬ⊖-✓ ᵇ∇ᶜ = refl
+   ᴬ⊖-✓ ᶜ∇ᵇ = refl
+   ᴬ⊖-✓ ᶜ∇ᶜ = refl
 
    -- Whether two coinitial evaluation contexts are concurrent. Only give the left rules, then symmetrise.
    -- Convenient to have this indexed by the kind of action residual. TODO: cases for •│ and ᵥ│.
@@ -124,3 +121,18 @@ module Transition.Concur2 where
            Sym (λ (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → E ⌣[ a⌣a′ ] E′) (λ E E′ → E ⌣[ ᴬ⌣-sym a⌣a′ ] E′)
    ⌣-sym (inj₁ E⌣E′) = inj₂ (subst (Concur₁ _ _) (sym (ᴬ⌣-sym-involutive _)) E⌣E′)
    ⌣-sym (inj₂ E⌣E′) = inj₁ E⌣E′
+
+   -- The type of the symmetric residual of concurrent transitions E and E′. Because cofinality of action
+   -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
+   infixl 5 _∶_Δ_
+   record _Δ_ {Γ P} {a a′ : Action Γ} {R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) : Set where
+      constructor _∶_Δ_
+      field
+         a⌣a′ : a ᴬ⌣ a′
+      a′/a = π₁ (ᴬ⊖ a⌣a′)
+      a/a′ = π₂ (ᴬ⊖ a⌣a′)
+      Γ′ = Γ + inc a + inc a′/a
+      field
+         {P₁ P₂} : Proc Γ′
+         E′/E : R —[ a′/a - _ ]→ P₁
+         E/E′ : R′ —[ a/a′ - _ ]→ subst Proc (ᴬ⊖-✓ a⌣a′) P₂
