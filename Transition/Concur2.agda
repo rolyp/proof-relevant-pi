@@ -136,3 +136,11 @@ module Transition.Concur2 where
          {P₁ P₂} : Proc Γ′
          E′/E : R —[ a′/a - _ ]→ P₁
          E/E′ : R′ —[ a/a′ - _ ]→ subst Proc (ᴬ⊖-✓ a⌣a′) P₂
+
+   open import Ren.Properties
+
+   -- The symmetric residual  (E′/E , E/E′). The paper defines the residual using E and E′, with E ⌣ E′
+   -- implicit, whereas we work directly with the proof of E ⌣ E′, with E and E′ implicit.
+   ⊖₁ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
+        E ⌣₁[ a⌣a′ ] E′ → E Δ E′
+   ⊖₁ E⌣E′ = ?
