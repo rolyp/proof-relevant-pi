@@ -127,10 +127,8 @@ module Transition.Concur where
 
    -- The type of the symmetric residual of concurrent transitions E and E′. Because cofinality of action
    -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
-   record _Δ_ {Γ P} {a a′ : Action Γ} {R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) : Set where
+   record Delta′ {Γ P} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) {R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) : Set where
       constructor Delta
-      field
-         a⌣a′ : a ᴬ⌣ a′
       a′/a = π₁ (ᴬ⊖ a⌣a′)
       a/a′ = π₂ (ᴬ⊖ a⌣a′)
       Γ′ = Γ + inc a + inc a′/a
@@ -140,14 +138,17 @@ module Transition.Concur where
          E/E′ : R′ —[ a/a′ - _ ]→ subst Proc (ᴬ⊖-✓ a⌣a′) S′
 
    infixl 5 Delta
-   syntax Delta a⌣a′ E E′ = E Δ[ a⌣a′ ] E′
+   syntax Delta′ a⌣a′ E E′ = E Δ′[ a⌣a′ ] E′
+   syntax Delta E E′ = E Δ E′
 
    open import Ren.Properties
 
    -- The symmetric residual  (E′/E , E/E′). The paper defines the residual using E and E′, with E ⌣ E′
    -- implicit; here we work directly with the proof of E ⌣ E′ and leave E and E′ implicit.
-   ⊖₁ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
-        E ⌣₁[ a⌣a′ ] E′ → E Δ E′
+   postulate
+      ⊖₁ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
+           E ⌣₁[ a⌣a′ ] E′ → E Δ′[ a⌣a′ ] E′
+{-
    ⊖₁ (E ᵇ│ᵇ F) = target E │ᵇ (push *ᵇ) F Δ[ ᵇ∇ᵇ ] (push *ᵇ) E ᵇ│ target F
    ⊖₁ (E ᵇ│ᶜ F) = target E │ᶜ (push *ᶜ) F Δ[ ᵇ∇ᶜ ] E ᵇ│ target F
    ⊖₁ (E ᶜ│ᵇ F) = target E │ᵇ F Δ[ ᶜ∇ᵇ ] (push *ᶜ) E ᶜ│ target F
@@ -230,14 +231,15 @@ module Transition.Concur where
    ... | E′/E Δ[ ᵇ∇ᶜ ] E/E′ = E′/E Δ[ ᵇ∇ᶜ ] E/E′
    ... | E′/E Δ[ ᶜ∇ᵇ ] E/E′ = E′/E Δ[ ᶜ∇ᵇ ] E/E′
    ... | E′/E Δ[ ᶜ∇ᶜ ] E/E′ = E′/E Δ[ ᶜ∇ᶜ ] E/E′
+-}
 
    -- Now symmetrise.
    ⊖ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
-       E ⌣[ a⌣a′ ] E′ → E Δ E′
+       E ⌣[ a⌣a′ ] E′ → E Δ′[ a⌣a′ ] E′
    ⊖ (inj₁ E⌣E′) = ⊖₁ E⌣E′
-   ⊖ (inj₂ E′⌣E) with ⊖₁ E′⌣E
-   ... | E/E′ Δ[ ᵛ∇ᵛ ] E′/E = E′/E Δ[ ᵛ∇ᵛ ] E/E′
-   ... | E/E′ Δ[ ᵇ∇ᵇ ] E′/E = E′/E Δ[ ᵇ∇ᵇ ] E/E′
-   ... | E/E′ Δ[ ᵇ∇ᶜ ] E′/E = E′/E Δ[ ᶜ∇ᵇ ] E/E′
-   ... | E/E′ Δ[ ᶜ∇ᵇ ] E′/E = E′/E Δ[ ᵇ∇ᶜ ] E/E′
-   ... | E/E′ Δ[ ᶜ∇ᶜ ] E′/E = E′/E Δ[ ᶜ∇ᶜ ] E/E′
+   ⊖ {a⌣a′ = a⌣a′} (inj₂ E′⌣E) with ⊖₁ E′⌣E
+   ⊖ {a⌣a′ = ᵛ∇ᵛ} (inj₂ E′⌣E) | E/E′ Δ E′/E = E′/E Δ E/E′
+   ⊖ {a⌣a′ = ᵇ∇ᵇ} (inj₂ E′⌣E) | E/E′ Δ E′/E = E′/E Δ E/E′
+   ⊖ {a⌣a′ = ᵇ∇ᶜ} (inj₂ E′⌣E) | E/E′ Δ E′/E = E′/E Δ E/E′
+   ⊖ {a⌣a′ = ᶜ∇ᵇ} (inj₂ E′⌣E) | E/E′ Δ E′/E = E′/E Δ E/E′
+   ⊖ {a⌣a′ = ᶜ∇ᶜ} (inj₂ E′⌣E) | E/E′ Δ E′/E = E′/E Δ E/E′
