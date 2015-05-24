@@ -181,16 +181,18 @@ module Transition.Concur where
    ... | F′/F ᵀΔ F/F′ = (push *ᵇ) E │ᵥ F′/F ᵀΔ νᵇ (target E │ᵇ F/F′)
    ⊖₁ (E ᶜ│ᵥ F⌣F′) with ⊖₁ F⌣F′
    ... | F′/F ᵀΔ F/F′ = E │ᵥ F′/F ᵀΔ νᶜ (target E │ᶜ F/F′)
-   ⊖₁ (P │ᵇᵇ F⌣F′) with Delta′.blah (⊖₁ F⌣F′) | ⊖₁ F⌣F′
-   ... | ᵛ∇ᵛ | F′/F ᵀΔ F/F′ = (push *) P │ᶜ F′/F ᵀΔ (push *) P │ᶜ F/F′
-   ... | ᵇ∇ᵇ | F′/F ᵀΔ F/F′ = (push *) P │ᵇ F′/F ᵀΔ (push *) P │ᵇ F/F′
+   ⊖₁ (_│ᵇᵇ_ {a⌣a′ = ᵛ∇ᵛ} P F⌣F′) with ⊖₁ F⌣F′
+   ... | F′/F ᵀΔ F/F′ = (push *) P │ᶜ F′/F ᵀΔ (push *) P │ᶜ F/F′
+   ⊖₁ (_│ᵇᵇ_ {a⌣a′ = ᵇ∇ᵇ} P F⌣F′) with ⊖₁ F⌣F′
+   ... | F′/F ᵀΔ F/F′ = (push *) P │ᵇ F′/F ᵀΔ (push *) P │ᵇ F/F′
    ⊖₁ (P │ᵇᶜ F⌣F′) with ⊖₁ F⌣F′
    ... | F′/F ᵀΔ F/F′ = (push *) P │ᶜ F′/F ᵀΔ P │ᵇ F/F′
    ⊖₁ (P │ᶜᶜ F⌣F′) with ⊖₁ F⌣F′
    ... | F′/F ᵀΔ F/F′ = P │ᶜ F′/F ᵀΔ P │ᶜ F/F′
-   ⊖₁ (E⌣E′ ᵇᵇ│ Q) with Delta′.blah (⊖₁ E⌣E′) | ⊖₁ E⌣E′
-   ... | ᵛ∇ᵛ | E′/E ᵀΔ E/E′ = E′/E ᶜ│ (push *) Q ᵀΔ E/E′ ᶜ│ (push *) Q
-   ... | ᵇ∇ᵇ | E′/E ᵀΔ E/E′ = E′/E ᵇ│ (push *) Q ᵀΔ E/E′ ᵇ│ (push *) Q
+   ⊖₁ (_ᵇᵇ│_ {a⌣a′ = ᵛ∇ᵛ} E⌣E′ Q) with ⊖₁ E⌣E′
+   ... | E′/E ᵀΔ E/E′ = E′/E ᶜ│ (push *) Q ᵀΔ E/E′ ᶜ│ (push *) Q
+   ⊖₁ (_ᵇᵇ│_ {a⌣a′ = ᵇ∇ᵇ} E⌣E′ Q) with ⊖₁ E⌣E′
+   ... | E′/E ᵀΔ E/E′ = E′/E ᵇ│ (push *) Q ᵀΔ E/E′ ᵇ│ (push *) Q
    ⊖₁ (E⌣E′ ᵇᶜ│ Q) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ = E′/E ᶜ│ (push *) Q ᵀΔ E/E′ ᵇ│ Q
    ⊖₁ (E⌣E′ ᶜᶜ│ Q) with ⊖₁ E⌣E′
@@ -203,9 +205,10 @@ module Transition.Concur where
    ⊖₁ (_│•ᵥ_ {u = u} {y} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
    ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ with (pop y *ᵇ) E′/E
    ... | pop-y*E′/E rewrite pop∘push u y = pop-y*E′/E │ᵥ F′/F ᵀΔ νᶜ (E/E′ │• F/F′)
-   ⊖₁ (_│ᵥ_ {x = x} {u} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | Delta′.blah (⊖₁ F⌣F′) | ⊖₁ F⌣F′
-   ... | E′/E ᵀΔ E/E′ | ᵛ∇ᵛ | F′/F ᵀΔ F/F′ = νᶜ (E′/E │• F′/F) ᵀΔ νᶜ (E/E′ │• F/F′)
-   ... | E′/E ᵀΔ E/E′ | ᵇ∇ᵇ | F′/F ᵀΔ F/F′ = νᶜ (E′/E │ᵥ F′/F) ᵀΔ νᶜ (E/E′ │ᵥ F/F′)
+   ⊖₁ (_│ᵥ_ {x = x} {u} {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
+   ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ = νᶜ (E′/E │• F′/F) ᵀΔ νᶜ (E/E′ │• F/F′)
+   ⊖₁ (_│ᵥ_ {x = x} {u} {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
+   ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ = νᶜ (E′/E │ᵥ F′/F) ᵀΔ νᶜ (E/E′ │ᵥ F/F′)
    ⊖₁ (ν• E⌣E′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ = E′/E ᵀΔ E/E′
    ⊖₁ (ν•ᵇ_ {x = x} {a = a} E⌣E′) with ⊖₁ E⌣E′
