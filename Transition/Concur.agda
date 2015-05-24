@@ -127,9 +127,10 @@ module Transition.Concur where
 
    -- The type of the symmetric residual of concurrent transitions E and E′. Because cofinality of action
    -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
-   record Delta′ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′}
-          (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) : Set where
+   record _Δ_ {Γ P} {a a′ : Action Γ} {R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) : Set where
       constructor Delta
+      field
+         a⌣a′ : a ᴬ⌣ a′
       a′/a = π₁ (ᴬ⊖ a⌣a′)
       a/a′ = π₂ (ᴬ⊖ a⌣a′)
       Γ′ = Γ + inc a + inc a′/a
@@ -139,35 +140,32 @@ module Transition.Concur where
          E/E′ : R′ —[ a/a′ - _ ]→ subst Proc (ᴬ⊖-✓ a⌣a′) S′
 
    infixl 5 Delta
-   syntax Delta E E′ = E Δ E′
-   syntax Delta′ E E′ E⌣E′ = E Δ′[ E⌣E′ ] E′
+   syntax Delta a⌣a′ E E′ = E Δ[ a⌣a′ ] E′
 
    open import Ren.Properties
 
    -- The symmetric residual  (E′/E , E/E′). The paper defines the residual using E and E′, with E ⌣ E′
    -- implicit; here we work directly with the proof of E ⌣ E′ and leave E and E′ implicit.
    ⊖₁ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
-        (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → E Δ′[ E⌣E′ ] E′
-   ⊖₁ (E ᵇ│ᵇ F) = target E │ᵇ (push *ᵇ) F Δ (push *ᵇ) E ᵇ│ target F
-   ⊖₁ (E ᵇ│ᶜ F) = target E │ᶜ (push *ᶜ) F Δ E ᵇ│ target F
-   ⊖₁ (E ᶜ│ᵇ F) = target E │ᵇ F Δ (push *ᶜ) E ᶜ│ target F
-   ⊖₁ (E ᶜ│ᶜ F) = target E │ᶜ F Δ E ᶜ│ target F
+        E ⌣₁[ a⌣a′ ] E′ → E Δ E′
+   ⊖₁ (E ᵇ│ᵇ F) = target E │ᵇ (push *ᵇ) F Δ[ ᵇ∇ᵇ ] (push *ᵇ) E ᵇ│ target F
+   ⊖₁ (E ᵇ│ᶜ F) = target E │ᶜ (push *ᶜ) F Δ[ ᵇ∇ᶜ ] E ᵇ│ target F
+   ⊖₁ (E ᶜ│ᵇ F) = target E │ᵇ F Δ[ ᶜ∇ᵇ ] (push *ᶜ) E ᶜ│ target F
+   ⊖₁ (E ᶜ│ᶜ F) = target E │ᶜ F Δ[ ᶜ∇ᶜ ] E ᶜ│ target F
    ⊖₁ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′
-   ... | E′/E Δ E/E′ with (pop y *ᵇ) E/E′
-   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E │• (push *ᶜ) F Δ pop-y*E/E′ ᵇ│ target F
+   ... | E′/E Δ[ ᵇ∇ᵇ ] E/E′ with (pop y *ᵇ) E/E′
+   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E │• (push *ᶜ) F Δ[ ᵇ∇ᶜ ] pop-y*E/E′ ᵇ│ target F
    ⊖₁ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′
-   ... | E′/E Δ E/E′ with (pop y *ᶜ) E/E′
-   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E │• F Δ pop-y*E/E′ ᶜ│ target F
+   ... | E′/E Δ[ ᶜ∇ᵇ ] E/E′ with (pop y *ᶜ) E/E′
+   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E │• F Δ[ ᶜ∇ᶜ ] pop-y*E/E′ ᶜ│ target F
    ⊖₁ (_ᵇ│•_ {y = y} E F⌣F′) with ⊖₁ F⌣F′
-   ... | F′/F Δ F/F′ = (push *ᵇ) E ᵀ.│• F′/F Δ (pop y *) (target E) │ᵇ F/F′
+   ... | F′/F Δ[ ᵇ∇ᶜ ] F/F′ = (push *ᵇ) E ᵀ.│• F′/F Δ[ ᵇ∇ᶜ ] (pop y *) (target E) │ᵇ F/F′
    ⊖₁ (_ᶜ│•_ {y = y} E F⌣F′) with ⊖₁ F⌣F′
-   ... | F′/F Δ F/F′ = E │• F′/F Δ (pop y *) (target E) │ᶜ F/F′
+   ... | F′/F Δ[ ᶜ∇ᶜ ] F/F′ = E │• F′/F Δ[ ᶜ∇ᶜ ] (pop y *) (target E) │ᶜ F/F′
    ⊖₁ (E⌣E′ │ᵥᵇ F) with ⊖₁ E⌣E′
-   ... | E′/E Δ E/E′ = E′/E │ᵥ (push *ᵇ) F Δ νᵇ (E/E′ ᵇ│ target F)
+   ... | E′/E Δ[ ᵇ∇ᵇ ] E/E′ = E′/E │ᵥ (push *ᵇ) F Δ[ ᵇ∇ᶜ ] νᵇ (E/E′ ᵇ│ target F)
    ⊖₁ (E⌣E′ │ᵥᶜ F) with ⊖₁ E⌣E′
-   ... | E′/E Δ E/E′ = E′/E │ᵥ F Δ νᶜ (E/E′ ᶜ│ target F)
-   ⊖₁ E⌣E′ = {!!}
-{-
+   ... | E′/E Δ[ ᶜ∇ᵇ ] E/E′ = E′/E │ᵥ F Δ[ ᶜ∇ᶜ ] νᶜ (E/E′ ᶜ│ target F)
    ⊖₁ (_ᵇ│ᵥ_ {x} E F⌣F′) with ⊖₁ F⌣F′
    ... | F′/F Δ[ ᵛ∇ᵛ ] F/F′ with (push *ᵇ) E
    ... | push*E = push*E │• F′/F Δ[ ᵇ∇ᶜ ] ν• (target E │ᶜ F/F′)
@@ -243,4 +241,3 @@ module Transition.Concur where
    ... | E/E′ Δ[ ᵇ∇ᶜ ] E′/E = E′/E Δ[ ᶜ∇ᵇ ] E/E′
    ... | E/E′ Δ[ ᶜ∇ᵇ ] E′/E = E′/E Δ[ ᵇ∇ᶜ ] E/E′
    ... | E/E′ Δ[ ᶜ∇ᶜ ] E′/E = E′/E Δ[ ᶜ∇ᶜ ] E/E′
--}
