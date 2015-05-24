@@ -15,7 +15,7 @@ module Transition.Concur.Properties where
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Concur
-      using (Concur₁; module Concur₁; Concur; _Δ_; _∶_Δ_; module _Δ_; ᴬ⊖; ᴬ⊖-✓; ⊖₁; ⊖); open Concur₁
+      using (Concur₁; module Concur₁; Concur; _Δ_; Delta; module _Δ_; ᴬ⊖; ᴬ⊖-✓; ⊖₁; ⊖); open Concur₁
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
@@ -29,8 +29,11 @@ module Transition.Concur.Properties where
    cofinal ᶜ∇ᶜ = _≈_
 
    -- Correctness of residuals, with respect to the above notion of cofinality.
-   ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open _Δ_ (⊖₁ E⌣E′) in cofinal a⌣a′ P₁ P₂
+   ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {blah : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
+          (E⌣E′ : E ⌣₁[ blah ] E′) → let open _Δ_ (⊖₁ E⌣E′) in cofinal a⌣a′ S S′
+   ⊖₁-✓ E⌣E′ = {!!}
+{-
+   ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) | swap∘push (target F) = ≈-refl
    ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) | swap∘push (target F) = ≈-refl
    ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-refl
    ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-refl
@@ -131,3 +134,4 @@ module Transition.Concur.Properties where
    ... | ᵇ∇ᶜ ∶ _ Δ _ | P′ = ≈-sym P′
    ... | ᶜ∇ᵇ ∶ _ Δ _ | P′ = ≈-sym P′
    ... | ᶜ∇ᶜ ∶ _ Δ _ | P′ = ≈-sym P′
+-}
