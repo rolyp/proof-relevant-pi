@@ -160,7 +160,7 @@ module Transition.Seq where
              ) (E/γ ᶜ∷ E⋆/γ/E)
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
 
-   -- Causal equivalence. TODO: fix [_∶⇋∶_]∷_ rule.
+   -- Causal equivalence.
    infix 4 _≃_
    -- infixr 9 _≃-∘_
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ a′⋆ R R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
