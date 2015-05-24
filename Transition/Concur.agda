@@ -198,8 +198,7 @@ module Transition.Concur where
    ... | pop-y*E′/E rewrite pop∘push u y = pop-y*E′/E │ᵥ F′/F ᵀΔ νᶜ (E/E′ │• F/F′)
    ⊖₁ (_│ᵥ_ {x = x} {u} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | Delta′.blah (⊖₁ F⌣F′) | ⊖₁ F⌣F′
    ... | E′/E ᵀΔ E/E′ | ᵛ∇ᵛ | F′/F ᵀΔ F/F′ = νᶜ (E′/E │• F′/F) ᵀΔ νᶜ (E/E′ │• F/F′)
-   ... | E′/E ᵀΔ E/E′ | ᵇ∇ᵇ | F′/F ᵀΔ F/F′ = νᶜ (E′/E │• {!!}) ᵀΔ νᶜ (E/E′ │• {!!}) -- νᶜ (E′/E │• F′/F) ᵀΔ νᶜ (E/E′ │• F/F′)
-   -- ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ = νᶜ (E′/E │ᵥ F′/F) ᵀΔ νᶜ (E/E′ │ᵥ F/F′)
+   ... | E′/E ᵀΔ E/E′ | ᵇ∇ᵇ | F′/F ᵀΔ F/F′ = νᶜ (E′/E │ᵥ F′/F) ᵀΔ νᶜ (E/E′ │ᵥ F/F′)
    ⊖₁ (ν• E⌣E′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ = E′/E ᵀΔ E/E′
    ⊖₁ (ν•ᵇ_ {x = x} {a = a} E⌣E′) with ⊖₁ E⌣E′
