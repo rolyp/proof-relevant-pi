@@ -57,13 +57,24 @@ module Transition.Concur.Properties where
       ν ((
          begin
             (suc id *) S
-         ≈⟨ {!!} ⟩
+         ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+            (id *) S
+         ≡⟨ *-preserves-id _ ⟩
             S
          ≡⟨ sym (swap-involutive _) ⟩
             (swap *) ((swap *) S)
          ≈⟨ swap*S′ ⟩
             (swap *) S′
-         ∎) │ {!!})
+         ∎) │ (
+         begin
+            (suc id *) ((suc push *) S₁)
+         ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+            (id *) ((suc push *) S₁)
+         ≡⟨ *-preserves-id _ ⟩
+            ((suc push *) S₁)
+         ≈⟨ {!!} ⟩
+            (swap *) ((push *) S₁)
+         ∎))
 -- rewrite swap∘push (target F) | *-preserves-≃ₑ suc-preserves-id (target E′/E) |
 --      swap-involutive (target E′/E) | *-preserves-id (target E′/E) |
 --      *-preserves-≃ₑ suc-preserves-id ((swap *) ((push *) (target F))) | *-preserves-id ((swap *) ((push *) (target F))) =
