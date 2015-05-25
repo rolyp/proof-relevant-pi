@@ -188,12 +188,33 @@ module Transition.Concur.Properties where
       ≈⟨ (pop y *⁼) ((suc (pop z) *⁼) swap*S≈S′) ⟩
          (pop y *) ((suc (pop z) *) S′)
       ∎) │ id*S₂≈S′₂
+   ⊖₁-✓ (_│•ᵥ_ {u = u} {y} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
+   ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ | swap*S₁≈S′₁ | id*S₂≈S′₂ =
+      let S₁ = target E′/E; S′₁ = target E/E′; S₂ = target F′/F; S′₂ = target F/F′ in
+      ν ((
+         begin
+            (suc id *) ((suc (pop y) *) S₁)
+         ≡⟨ suc-id-elim _ ⟩
+            ((suc (pop y) *) S₁)
+         ≡⟨ cong (suc (pop y) *) (sym (swap-involutive _ )) ⟩
+            ((suc (pop y) *) ((swap *) ((swap *) S₁)))
+         ≈⟨ (suc (pop y) *⁼) ((swap *⁼) swap*S₁≈S′₁) ⟩
+            ((suc (pop y) *) ((swap *) S′₁))
+         ≡⟨ suc-pop∘swap y _ ⟩
+            (pop ((push *) y) *) S′₁
+         ∎) │ (
+         begin
+            (suc id *) S₂
+         ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+            (id *) S₂
+         ≈⟨ id*S₂≈S′₂ ⟩
+            S′₂
+         ∎))
+-- with (pop y *ᵇ) E′/E
+--    ... | pop-y*E′/E rewrite pop∘push u y =
+--      ν (≈-trans ((suc (pop y) *⁼) swap*P′) (≈-reflexive (suc-pop∘swap y _)) │ Q′)
    ⊖₁-✓ E⌣E′ = {!!}
 {-
-   ⊖₁-✓ (_│•ᵥ_ {u = u} {y} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
-   ... | E′/E ᵀΔ _ | _ ᵀΔ _ | swap*P′ | Q′ with (pop y *ᵇ) E′/E
-   ... | pop-y*E′/E rewrite pop∘push u y =
-      ν (≈-trans ((suc (pop y) *⁼) swap*P′) (≈-reflexive (suc-pop∘swap y _)) │ Q′)
    ⊖₁-✓ (_│ᵥ_ {x = x} {u} {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | _ ᵀΔ _ | swap*P′ | Q′ = ν (≈-trans ((pop zero *⁼) swap*P′) (≈-reflexive (pop-swap _)) │ Q′)
    ⊖₁-✓ (_│ᵥ_ {x = x} {u} {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
