@@ -27,16 +27,17 @@ module Transition.Concur.Properties where
    braid (_ ᶜ) (_ ᵇ) = id
    braid (_ ᶜ) (_ ᶜ) = id
 
+   -- For historical reasons this relation is in the opposite direction to the one in the paper.
    ⋈[_,_,_,_] : ∀ Γ (a : Action Γ) (a′ : Action (Γ + inc a)) (m : Cxt) →
                 let Γ′ = Γ + inc a + inc a′ in Proc (Γ′ + m) → Proc (Γ′ + m) → Set
-   ⋈[ Γ , a , a′ , m ] P P′ = ((braid a a′ ᴿ+ m) *) P ≈ P′
+   ⋈[ Γ , a , a′ , m ] P P′ = P ≈ ((braid a a′ ᴿ+ m) *) P′
 
    -- Correctness of residuals, with respect to the above notion of cofinality.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
           (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in ⋈[ Γ , a , π₁ (ᴬ⊖ a⌣a′) , zero ] S S′
+   ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) | swap∘push (target F) = ≈-refl
    ⊖₁-✓ E⌣E′ = {!!}
 {-
-   ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) | swap∘push (target F) = ≈-refl
    ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-refl
    ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-refl
    ⊖₁-✓ (E ᶜ│ᶜ F) = ≈-refl
