@@ -4,7 +4,8 @@ module Transition.Concur.Properties where
 
    open import Data.Fin using (Fin; toℕ)
 
-   open import Action as ᴬ using (Action; inc; _ᴬ⌣_; module _ᴬ⌣_); open ᴬ.Action; open ᴬ.Actionᵇ; open _ᴬ⌣_
+   open import Action as ᴬ using (Action; inc; _ᴬ⌣_; module _ᴬ⌣_; ᴺinc-inc);
+      open ᴬ.Action; open ᴬ.Actionᵇ; open _ᴬ⌣_
    import Action.Ren
    open import Name as ᴺ using (Cxt; Name; fromℕ≤; _+_; zero)
    open import Proc using (Proc)
@@ -38,12 +39,12 @@ module Transition.Concur.Properties where
    cofinal ᶜ∇ᶜ = _≈_
 
    cofinal′ : ∀ {Γ} (a : Action Γ) (a′ : Action (Γ + inc a)) →
-             let Γ′ = Γ + toℕ (bibble a a′) in Proc Γ′ → Proc Γ′ → Set
-   cofinal′ {Γ} a a′ = ⋈[ Γ , bibble a a′ , zero ]
+             let Γ′ = Γ + toℕ (ᴺinc-inc a a′) in Proc Γ′ → Proc Γ′ → Set
+   cofinal′ {Γ} a a′ = ⋈[ Γ , ᴺinc-inc a a′ , zero ]
 
    -- Correctness of residuals, with respect to the above notion of cofinality.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in cofinal′ a (π₁ (ᴬ⊖ a⌣a′)) S S′
+          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in cofinal a⌣a′ S S′
    ⊖₁-✓ E⌣E′ = {!!}
 {-
    ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) | swap∘push (target F) = ≈-refl
