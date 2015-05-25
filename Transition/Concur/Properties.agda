@@ -26,31 +26,14 @@ module Transition.Concur.Properties where
    braid (_ ᵇ) (_ ᶜ) = id
    braid (_ ᶜ) (_ ᵇ) = id
    braid (_ ᶜ) (_ ᶜ) = id
-{-
-   braid zero = id
-   braid (ᴺ.suc zero) = id
-   braid (ᴺ.suc (ᴺ.suc zero)) = swap
-   braid (ᴺ.suc (ᴺ.suc (ᴺ.suc ())))
--}
-{-
-   ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
-   ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≈ P′
 
-   cofinal : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) →
-             let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ a⌣a′)) in Proc Γ′ → Proc Γ′ → Set
-   cofinal ᵛ∇ᵛ = _≈_
-   cofinal ᵇ∇ᵇ P₁ P₂ = P₁ ≈ (swap *) P₂
-   cofinal ᵇ∇ᶜ = _≈_
-   cofinal ᶜ∇ᵇ = _≈_
-   cofinal ᶜ∇ᶜ = _≈_
-
-   cofinal′ : ∀ {Γ} (a : Action Γ) (a′ : Action (Γ + inc a)) →
-             let Γ′ = Γ + toℕ (ᴺinc-inc a a′) in Proc Γ′ → Proc Γ′ → Set
-   cofinal′ {Γ} a a′ = ⋈[ Γ , ᴺinc-inc a a′ , zero ]
+   ⋈[_,_,_,_] : ∀ Γ (a : Action Γ) (a′ : Action (Γ + inc a)) (m : Cxt) →
+                let Γ′ = Γ + inc a + inc a′ in Proc (Γ′ + m) → Proc (Γ′ + m) → Set
+   ⋈[ Γ , a , a′ , m ] P P′ = ((braid a a′ ᴿ+ m) *) P ≈ P′
 
    -- Correctness of residuals, with respect to the above notion of cofinality.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in cofinal a⌣a′ S S′
+          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in ⋈[ Γ , a , π₁ (ᴬ⊖ a⌣a′) , zero ] S S′
    ⊖₁-✓ E⌣E′ = {!!}
 {-
    ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) | swap∘push (target F) = ≈-refl
@@ -147,5 +130,4 @@ module Transition.Concur.Properties where
    ⊖-✓ {a⌣a′ = ᵇ∇ᶜ} (inj₂ E′⌣E) | _ ᵀΔ _ | P′ = ≈-sym P′
    ⊖-✓ {a⌣a′ = ᶜ∇ᵇ} (inj₂ E′⌣E) | _ ᵀΔ _ | P′ = ≈-sym P′
    ⊖-✓ {a⌣a′ = ᶜ∇ᶜ} (inj₂ E′⌣E) | _ ᵀΔ _ | P′ = ≈-sym P′
--}
 -}
