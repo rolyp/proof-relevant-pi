@@ -28,8 +28,7 @@ module Transition.Concur.Properties where
    cofinal ᶜ∇ᵇ = _≈_
    cofinal ᶜ∇ᶜ = _≈_
 
-   -- Correctness of residuals, with respect to the above notion of cofinality. TODO: feels wrong to have
-   -- the a ᴬ⌣ a′ index on E ⌣ E′, but not to relate it to the one in E Δ E′.
+   -- Correctness of residuals, with respect to the above notion of cofinality.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
           (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in cofinal a⌣a′ S S′
    ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) | swap∘push (target F) = ≈-refl

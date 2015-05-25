@@ -1,4 +1,4 @@
--- WIP: transition sequences and causal equivalence.
+-- Traces and causal equivalence.
 module Transition.Seq where
 
    open import SharedModules hiding (_⇒_)
