@@ -90,7 +90,7 @@ module Transition.Concur.Properties where
          (push *) ((pop y *) R)
       ∎) │ id*S₁≈S′₁
    ⊖₁-✓ (E ᶜ│• F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | _ ᵀΔ _ | Q′ = ≈-reflexive (*-preserves-id _) │ Q′
+   ... | _ ᵀΔ _ | id*S₁≈S′₁ = ≈-reflexive (*-preserves-id _) │ id*S₁≈S′₁
    ⊖₁-✓ (E⌣E′ │ᵥᵇ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | E′/E ᵀΔ E/E′ | swap*S≈S′ =
       let S = target E′/E; S′ = target E/E′; S₁ = target F in
@@ -161,21 +161,21 @@ module Transition.Concur.Properties where
    ... | E′/E ᵀΔ E/E′ | id*S₁≈S′₁ =
       ≈-reflexive (*-preserves-id _) │ id*S₁≈S′₁
    ⊖₁-✓ (_│ᵇᵇ_ {a⌣a′ = ᵇ∇ᵇ} P F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | _ ᵀΔ _ | swap*Q′ rewrite swap∘push∘push P = ≈-refl │ swap*Q′
+   ... | _ ᵀΔ _ | swap*S₁≈S′₁ rewrite swap∘push∘push P = ≈-refl │ swap*S₁≈S′₁
    ⊖₁-✓ (P │ᵇᶜ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | id*S₁≈S′₁ = ≈-reflexive (*-preserves-id _) │ id*S₁≈S′₁
    ⊖₁-✓ (P │ᶜᶜ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | id*S₁≈S′₁ = ≈-reflexive (*-preserves-id _) │ id*S₁≈S′₁
-   ⊖₁-✓ (_ᵇᵇ│_ {a⌣a′ = ᵛ∇ᵛ} E⌣E′ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
+   ⊖₁-✓ (_ᵇᵇ│_ {a⌣a′ = ᵛ∇ᵛ} E⌣E′ _) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | id*S≈S′ = id*S≈S′ │ ≈-reflexive (*-preserves-id _)
    ⊖₁-✓ (_ᵇᵇ│_ {a⌣a′ = ᵇ∇ᵇ} E⌣E′ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ ᵀΔ _ | swap*P′ rewrite swap∘push∘push Q = swap*P′ │ ≈-refl
+   ... | _ ᵀΔ _ | swap*S≈S′ rewrite swap∘push∘push Q = swap*S≈S′ │ ≈-refl
    ⊖₁-✓ (E⌣E′ ᵇᶜ│ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | id*S≈S′ = id*S≈S′ │ ≈-reflexive (*-preserves-id _)
    ⊖₁-✓ (E⌣E′ ᶜᶜ│ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | id*S≈S′ = id*S≈S′ │ ≈-reflexive (*-preserves-id _)
    ⊖₁-✓ (E⌣E′ ➕₁ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ ᵀΔ _ | P′ = P′
+   ... | _ ᵀΔ _ | φ*S≈S′ = φ*S≈S′
    ⊖₁-✓ (_│•_ {x = x} {y} {u} {z} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
    ... | E′/E ᵀΔ E/E′ | _ ᵀΔ _ | swap*S≈S′ | id*S₂≈S′₂ =
       let S = target E′/E; S′ = target E/E′ in
@@ -230,12 +230,36 @@ module Transition.Concur.Properties where
          ≈⟨ id*S₂≈S′₂ ⟩
             S′₂
          ∎))
+   ⊖₁-✓ (_│ᵥ_ {x = x} {u} {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
+   ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ | swap*S₁≈S′₁ | swap*S₂≈S′₂ =
+      let S₁ = target E′/E; S′₁ = target E/E′; S₂ = target F′/F; S′₂ = target F/F′ in
+      ≈-trans (ν (ν ((
+         begin
+            (suc (suc id) *) S₁
+         ≡⟨ {!!} ⟩
+            (suc id *) S₁
+         ≡⟨ suc-id-elim _ ⟩
+            S₁
+         ≡⟨ sym (swap-involutive _) ⟩
+            (swap *) ((swap *) S₁)
+         ≈⟨ (swap *⁼) swap*S₁≈S′₁ ⟩
+            (swap *) S′₁
+         ∎) │ (
+         begin
+            (suc (suc id) *) S₂
+         ≡⟨ {!!} ⟩
+            (suc id *) S₂
+         ≡⟨ suc-id-elim _ ⟩
+            S₂
+         ≡⟨ sym (swap-involutive _) ⟩
+            (swap *) ((swap *) S₂)
+         ≈⟨ (swap *⁼) swap*S₂≈S′₂ ⟩
+            (swap *) S′₂
+         ∎)))) (νν-swapₗ _)
+   ⊖₁-✓ (ν• E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
+   ... | _ ᵀΔ _ | id*S≈S′ = id*S≈S′
    ⊖₁-✓ E⌣E′ = {!!}
 {-
-   ⊖₁-✓ (_│ᵥ_ {x = x} {u} {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
-   ... | _ ᵀΔ _ | _ ᵀΔ _ | swap*P′ | swap*Q′ = ≈-trans (ν (ν (swap*P′ │ swap*Q′))) (νν-swapₗ _)
-   ⊖₁-✓ (ν• E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ ᵀΔ _ | P′ = P′
    ⊖₁-✓ (ν•ᵇ_ {x = x} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ E/E′ | P′ with (swap *ᶜ) E/E′
    ... | swap*E/E′ rewrite swap-involutive (target E/E′) = P′
