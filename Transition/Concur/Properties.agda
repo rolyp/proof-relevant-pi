@@ -160,12 +160,12 @@ module Transition.Concur.Properties where
    ⊖₁-✓ (_│ᵇᵇ_ {a⌣a′ = ᵛ∇ᵛ} P F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | E′/E ᵀΔ E/E′ | id*S₁≈S′₁ =
       ≈-reflexive (*-preserves-id _) │ id*S₁≈S′₁
-   ⊖₁-✓ E⌣E′ = {!!}
-{-
    ⊖₁-✓ (_│ᵇᵇ_ {a⌣a′ = ᵇ∇ᵇ} P F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | swap*Q′ rewrite swap∘push∘push P = ≈-refl │ swap*Q′
    ⊖₁-✓ (P │ᵇᶜ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | _ ᵀΔ _ | Q′ = ≈-refl │ Q′
+   ... | _ ᵀΔ _ | id*S₁≈S′₁ = ≈-reflexive (*-preserves-id _) │ id*S₁≈S′₁
+   ⊖₁-✓ E⌣E′ = {!!}
+{-
    ⊖₁-✓ (P │ᶜᶜ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | Q′ = ≈-refl │ Q′
    ⊖₁-✓ (_ᵇᵇ│_ {a⌣a′ = ᵛ∇ᵛ} E⌣E′ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
