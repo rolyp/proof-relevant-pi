@@ -7,8 +7,8 @@ module Action.Ren where
 
    open import Action as ᴬ using (Actionᵇ; Actionᶜ; Action; _ᵇ; _ᶜ; inc; _ᴬ⌣_);
       open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ._ᴬ⌣_
-   open import Name using (_+_; toℕ)
-   open import Ren as ᴿ using (Ren; Renameable);
+   open import Name using (_+_; +-assoc; toℕ)
+   open import Ren as ᴿ using (Ren; Renameable; _ᴿ+_);
       open ᴿ.Renameable ⦃...⦄ renaming (
          _* to _*′; *-preserves-≃ₑ to *-preserves-≃ₑ′; *-preserves-∘ to *-preserves-∘′; *-preserves-id to *-preserves-id′
       )
@@ -95,3 +95,8 @@ module Action.Ren where
 
    ren-preserves-target : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → (_+_ Γ′) ∘ inc ≃ₑ (_+_ Γ′) ∘ inc ∘ ρ *′
    ren-preserves-target {Γ′ = Γ′} ρ = cong (_+_ Γ′) ∘ ren-preserves-inc ρ
+
+   ren-preserves-inc-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ Δ′ (a : Action (Γ + Δ′)) →
+                             Γ + (Δ′ + inc a) ≡ Γ + Δ′ + inc (((ρ ᴿ+ Δ′) *′) a)
+   ren-preserves-inc-assoc {Γ} ρ Δ′ a =
+      trans (sym (+-assoc Γ Δ′ (inc a))) (cong (_+_ (Γ + Δ′)) (ren-preserves-inc (ρ ᴿ+ Δ′) a))

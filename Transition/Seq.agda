@@ -9,9 +9,9 @@ module Transition.Seq where
 
    open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc; _ᴬ⌣_; module _ᴬ⌣_);
       open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ._ᴬ⌣_
-   open import Action.Ren using (ren-preserves-inc)
+   open import Action.Ren using (ren-preserves-inc-assoc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _ᵇ∷_; _ᶜ∷_)
-   open import Action.Seq.Ren using (ren-preserves-inc⋆)
+   open import Action.Seq.Ren using (ren-preserves-inc⋆-assoc)
    open import Name as ᴺ using (Cxt; Name; _+_; +-assoc; zero; toℕ; +-left-identity)
    open import Proc using (Proc)
    open import Ren as ᴿ using (Ren; push; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
@@ -25,6 +25,8 @@ module Transition.Seq where
    Proc↱ = subst Proc
    Proc↲ = ≡-subst-removable Proc
 
+   -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
+   -- structurally congruent, or structurally congruent with each other's swap image.
    braid : ∀ {Γ} (n : Name 3) → Ren (Γ + toℕ n) (Γ + toℕ n)
    braid zero = id
    braid (ᴺ.suc zero) = id
@@ -33,16 +35,6 @@ module Transition.Seq where
 
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
    ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≈ P′
-
-   ren-preserves-inc-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ Δ′ (a : Action (Γ + Δ′)) →
-                             Γ + (Δ′ + inc a) ≡ Γ + Δ′ + inc (((ρ ᴿ+ Δ′) *) a)
-   ren-preserves-inc-assoc {Γ} ρ Δ′ a =
-      trans (sym (+-assoc Γ Δ′ (inc a))) (cong (_+_ (Γ + Δ′)) (ren-preserves-inc (ρ ᴿ+ Δ′) a))
-
-   ren-preserves-inc⋆-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ Δ′ (a⋆ : Action⋆ (Γ + Δ′)) →
-                              Γ + (Δ′ + inc⋆ a⋆) ≡ Γ + Δ′ + inc⋆ (((ρ ᴿ+ Δ′) *) a⋆)
-   ren-preserves-inc⋆-assoc {Γ} ρ Δ′ a⋆ =
-      trans (sym (+-assoc Γ Δ′ (inc⋆ a⋆))) (cong (_+_ (Γ + Δ′)) (ren-preserves-inc⋆ (ρ ᴿ+ Δ′) a⋆))
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_

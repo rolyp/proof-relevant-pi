@@ -1,4 +1,4 @@
--- Obvious extension of residual of a renaming and an action to action sequences.
+-- Extend residual of a renaming and an action to action sequences.
 module Action.Seq.Ren where
 
    open import SharedModules
@@ -9,7 +9,7 @@ module Action.Seq.Ren where
    open import Action as ᴬ using (inc; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Ren using (ren-preserves-target)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆); open ᴬ⋆.Action⋆
-   open import Name using (_+_; toℕ)
+   open import Name using (_+_; +-assoc; toℕ)
    open import Ren as ᴿ using (Ren; Renameable; suc; suc-preserves-≃ₑ; suc-preserves-id; suc-preserves-∘; _ᴿ+_);
       open ᴿ.Renameable ⦃...⦄ renaming (
          _* to _*′; *-preserves-≃ₑ to *-preserves-≃ₑ′; *-preserves-∘ to *-preserves-∘′; *-preserves-id to *-preserves-id′
@@ -51,3 +51,8 @@ module Action.Seq.Ren where
    ren-preserves-inc⋆ ρ [] = refl
    ren-preserves-inc⋆ ρ (a ᵇ∷ a⋆) rewrite ren-preserves-inc⋆ (suc ρ) a⋆ = refl
    ren-preserves-inc⋆ ρ (a ᶜ∷ a⋆) rewrite ren-preserves-inc⋆ ρ a⋆ = refl
+
+   ren-preserves-inc⋆-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ Δ′ (a⋆ : Action⋆ (Γ + Δ′)) →
+                              Γ + (Δ′ + inc⋆ a⋆) ≡ Γ + Δ′ + inc⋆ (((ρ ᴿ+ Δ′) *′) a⋆)
+   ren-preserves-inc⋆-assoc {Γ} ρ Δ′ a⋆ =
+      trans (sym (+-assoc Γ Δ′ (inc⋆ a⋆))) (cong (_+_ (Γ + Δ′)) (ren-preserves-inc⋆ (ρ ᴿ+ Δ′) a⋆))

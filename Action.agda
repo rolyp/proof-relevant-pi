@@ -16,7 +16,7 @@ module Action where
       _ᵇ : Actionᵇ Γ → Action Γ
       _ᶜ : Actionᶜ Γ → Action Γ
 
-   -- Action bumps the context by either 0 variables or 1 variable.
+   -- An action optionally bumps the context by a variable.
    inc : ∀ {Γ} → Action Γ → Cxt
    inc (_ ᵇ) = ᴺ.suc zero
    inc (_ ᶜ) = zero
@@ -30,7 +30,7 @@ module Action where
       ᶜ∇ᵇ : {a : Actionᶜ Γ} {a′ : Actionᵇ Γ} → a ᶜ ᴬ⌣ a′ ᵇ
       ᶜ∇ᶜ : {a a′ : Actionᶜ Γ} → a ᶜ ᴬ⌣ a′ ᶜ
 
-   ᴬ⌣-sym : ∀ {Γ} {a a′ : Action Γ} → a ᴬ⌣ a′ → a′ ᴬ⌣ a
+   ᴬ⌣-sym : ∀ {Γ} → Symmetric (_ᴬ⌣_ {Γ})
    ᴬ⌣-sym ᵛ∇ᵛ = ᵛ∇ᵛ
    ᴬ⌣-sym ᵇ∇ᵇ = ᵇ∇ᵇ
    ᴬ⌣-sym ᵇ∇ᶜ = ᶜ∇ᵇ
