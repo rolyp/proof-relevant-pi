@@ -1,6 +1,7 @@
 module StructuralCong.Proc where
 
-   open import SharedModules hiding ([_]; trans) renaming (sym to ≡-sym)
+   open import SharedModules hiding ([_]; preorder) renaming (sym to ≡-sym; trans to ≡-trans)
+   import Relation.Binary.PreorderReasoning
 
    open import Ext
 
@@ -86,6 +87,22 @@ module StructuralCong.Proc where
    private
       open module IsEquivalence′ {Γ} = IsEquivalence (≈-equiv {Γ}) public
          hiding (sym; refl) renaming (trans to ≈-trans; reflexive to ≈-reflexive)
+
+   preorder : ∀ {Γ} → Preorder _ _ _
+   preorder {Γ} = record {
+            Carrier = Proc Γ;
+            _≈_ = _≡_;
+            _∼_ = _≈_ {Γ};
+            isPreorder = record {
+                  isEquivalence = {!!};
+                  reflexive = {!≡-reflexive!};
+                  trans = {!!}
+               }
+      }
+
+   module ≈-Reasoning where
+      module _ {a} {A : Set a} where
+         open Relation.Binary.PreorderReasoning preorder public renaming (_≈⟨_⟩_ to _a⟨_⟩_)
 
    -- Renaming commutes with ≈. This isn't a Renameable (i.e. functor from Ren), but rather
    -- the action of such a functor on a 2-cell.
