@@ -90,19 +90,19 @@ module StructuralCong.Proc where
 
    preorder : ∀ {Γ} → Preorder _ _ _
    preorder {Γ} = record {
-            Carrier = Proc Γ;
-            _≈_ = _≡_;
-            _∼_ = _≈_ {Γ};
-            isPreorder = record {
-                  isEquivalence = {!!};
-                  reflexive = {!≡-reflexive!};
-                  trans = {!!}
-               }
+         Carrier = Proc Γ;
+         _≈_ = _≡_;
+         _∼_ = _≈_ {Γ};
+         isPreorder = record {
+            isEquivalence = isEquivalence;
+            reflexive = λ { {i} {.i} refl → ≈-refl };
+            trans = ≈-trans
+         }
       }
 
-   module ≈-Reasoning where
+   module ≈-Reasoning {Γ} where
       module _ {a} {A : Set a} where
-         open Relation.Binary.PreorderReasoning preorder public renaming (_≈⟨_⟩_ to _a⟨_⟩_)
+         open Relation.Binary.PreorderReasoning (preorder {Γ}) public renaming (_≈⟨_⟩_ to _a⟨_⟩_)
 
    -- Renaming commutes with ≈. This isn't a Renameable (i.e. functor from Ren), but rather
    -- the action of such a functor on a 2-cell.
