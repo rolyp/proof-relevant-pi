@@ -21,12 +21,18 @@ module Transition.Concur.Properties where
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
    -- structurally congruent, or structurally congruent with each other's swap image.
-   braid : ∀ {Γ} (n : Name 3) → Ren (Γ + toℕ n) (Γ + toℕ n)
+   braid : ∀ {Γ} (a : Action Γ) (a′ : Action (Γ + inc a)) → let Γ′ = Γ + inc a + inc a′ in Ren Γ′ Γ′
+   braid (_ ᵇ) (_ ᵇ) = swap
+   braid (_ ᵇ) (_ ᶜ) = id
+   braid (_ ᶜ) (_ ᵇ) = id
+   braid (_ ᶜ) (_ ᶜ) = id
+{-
    braid zero = id
    braid (ᴺ.suc zero) = id
    braid (ᴺ.suc (ᴺ.suc zero)) = swap
    braid (ᴺ.suc (ᴺ.suc (ᴺ.suc ())))
-
+-}
+{-
    ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
    ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≈ P′
 
@@ -141,4 +147,5 @@ module Transition.Concur.Properties where
    ⊖-✓ {a⌣a′ = ᵇ∇ᶜ} (inj₂ E′⌣E) | _ ᵀΔ _ | P′ = ≈-sym P′
    ⊖-✓ {a⌣a′ = ᶜ∇ᵇ} (inj₂ E′⌣E) | _ ᵀΔ _ | P′ = ≈-sym P′
    ⊖-✓ {a⌣a′ = ᶜ∇ᶜ} (inj₂ E′⌣E) | _ ᵀΔ _ | P′ = ≈-sym P′
+-}
 -}
