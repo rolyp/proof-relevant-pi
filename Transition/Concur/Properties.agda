@@ -47,13 +47,15 @@ module Transition.Concur.Properties where
    bibble : ∀ {Γ} (a : Action Γ) (a′ : Action (Γ + inc a)) → Name 3
    bibble a a′ = fromℕ≤ (blah₂ a a′)
 
-   cofinal′ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) →
-             let n = bibble a (π₁ (ᴬ⊖ a⌣a′)) in Proc (Γ + toℕ n) → Proc (Γ + toℕ n) → Set
-   cofinal′ {Γ} {a} a⌣a′ = let n = bibble a (π₁ (ᴬ⊖ a⌣a′)) in ⋈[ Γ , n , zero ]
-{-
+   cofinal′ : ∀ {Γ} (a : Action Γ) (a′ : Action (Γ + inc a)) →
+             let Γ′ = Γ + toℕ (bibble a a′) in Proc Γ′ → Proc Γ′ → Set
+   cofinal′ {Γ} a a′ = ⋈[ Γ , bibble a a′ , zero ]
+
    -- Correctness of residuals, with respect to the above notion of cofinality.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
           (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in cofinal a⌣a′ S S′
+   ⊖₁-✓ E⌣E′ = {!!}
+{-
    ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) | swap∘push (target F) = ≈-refl
    ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-refl
    ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-refl
