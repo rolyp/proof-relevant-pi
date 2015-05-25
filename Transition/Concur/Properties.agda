@@ -37,16 +37,15 @@ module Transition.Concur.Properties where
    cofinal ᶜ∇ᵇ = _≈_
    cofinal ᶜ∇ᶜ = _≈_
 
-   -- Composed actions bump the context by at most two variables. TODO: generalise to remove a⌣a′.
-   blah : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → inc a + inc (π₁ (ᴬ⊖ a⌣a′)) < 3
-   blah ᵛ∇ᵛ = s≤s (s≤s z≤n)
-   blah ᵇ∇ᵇ = s≤s (s≤s (s≤s z≤n))
-   blah ᵇ∇ᶜ = s≤s (s≤s z≤n)
-   blah ᶜ∇ᵇ = s≤s (s≤s z≤n)
-   blah ᶜ∇ᶜ = s≤s z≤n
+   -- Composed actions bump the context by at most two variables.
+   blah₂ : ∀ {Γ} (a : Action Γ) (a′ : Action (Γ + inc a)) → inc a + inc a′ < 3
+   blah₂ (_ ᵇ) (_ ᵇ) = s≤s (s≤s (s≤s z≤n))
+   blah₂ (_ ᵇ) (_ ᶜ) = s≤s (s≤s z≤n)
+   blah₂ (_ ᶜ) (_ ᵇ) = s≤s (s≤s z≤n)
+   blah₂ (_ ᶜ) (_ ᶜ) = s≤s z≤n
 
-   bibble : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Name 3
-   bibble a⌣a′ = fromℕ≤ (blah a⌣a′)
+   bibble : ∀ {Γ} (a : Action Γ) (a′ : Action (Γ + inc a)) → Name 3
+   bibble a a′ = fromℕ≤ (blah₂ a a′)
 {-
    -- Correctness of residuals, with respect to the above notion of cofinality.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
