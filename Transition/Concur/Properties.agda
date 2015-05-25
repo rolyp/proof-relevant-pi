@@ -6,7 +6,7 @@ module Transition.Concur.Properties where
 
    open import Action as ᴬ using (Action; inc; _ᴬ⌣_; module _ᴬ⌣_); open ᴬ.Action; open ᴬ.Actionᵇ; open _ᴬ⌣_
    import Action.Ren
-   open import Name as ᴺ using (Cxt; Name; _+_; zero)
+   open import Name as ᴺ using (Cxt; Name; fromℕ≤; _+_; zero; _<_; module _≤_); open _≤_
    open import Proc using (Proc)
    import Proc.Ren
    open import StructuralCong.Proc using (_≈_; module _≈_; ≈-refl; ≈-reflexive; ≈-sym; _*⁼);
@@ -37,13 +37,17 @@ module Transition.Concur.Properties where
    cofinal ᶜ∇ᵇ = _≈_
    cofinal ᶜ∇ᶜ = _≈_
 
-   inc-blah : ∀ {Γ} (a : Action Γ) → Name 2
-   inc-blah (_ ᵇ) = ᴺ.suc zero
-   inc-blah (_ ᶜ) = zero
+   -- Composed actions bump the context by at most two variables. TODO: generalise to remove a⌣a′.
+   blah : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → inc a + inc (π₁ (ᴬ⊖ a⌣a′)) < 3
+   blah ᵛ∇ᵛ = s≤s (s≤s z≤n)
+   blah ᵇ∇ᵇ = s≤s (s≤s (s≤s z≤n))
+   blah ᵇ∇ᶜ = s≤s (s≤s z≤n)
+   blah ᶜ∇ᵇ = s≤s (s≤s z≤n)
+   blah ᶜ∇ᶜ = s≤s z≤n
 
---   blah : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Name 3
---   blah = {!!}
-
+   bibble : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Name 3
+   bibble a⌣a′ = fromℕ≤ (blah a⌣a′)
+{-
    -- Correctness of residuals, with respect to the above notion of cofinality.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
           (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in cofinal a⌣a′ S S′
@@ -141,3 +145,4 @@ module Transition.Concur.Properties where
    ⊖-✓ {a⌣a′ = ᵇ∇ᶜ} (inj₂ E′⌣E) | _ ᵀΔ _ | P′ = ≈-sym P′
    ⊖-✓ {a⌣a′ = ᶜ∇ᵇ} (inj₂ E′⌣E) | _ ᵀΔ _ | P′ = ≈-sym P′
    ⊖-✓ {a⌣a′ = ᶜ∇ᶜ} (inj₂ E′⌣E) | _ ᵀΔ _ | P′ = ≈-sym P′
+-}
