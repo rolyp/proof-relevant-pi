@@ -44,15 +44,34 @@ module Transition.Concur.Properties where
       *-preserves-id ((pop ((push *) y) *) (target E′/E)) =
       ≈-sym ((pop ((push *) y) *⁼) (≈-sym swap*S)) │ ≈-reflexive (*-preserves-id _)
    ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | E′/E ᵀΔ E/E′ | S with (pop y *ᶜ) E/E′
-   ... | pop-y*E/E′ rewrite pop∘push y a | *-preserves-id (target E′/E) | *-preserves-id ((pop y *) (target E′/E)) =
-      (pop y *⁼) S │ ≈-reflexive (*-preserves-id _)
+   ... | E′/E ᵀΔ E/E′ | id*S≈S′ with (pop y *ᶜ) E/E′
+   ... | pop-y*E/E′ rewrite pop∘push y a =
+      let S = target E′/E; S′ = target E/E′ in
+      (begin
+         (id *) ((pop y *) S)
+      ≡⟨ *-preserves-id _ ⟩
+         (pop y *) S
+      ≡⟨ cong (pop y *) (sym (*-preserves-id _)) ⟩
+         (pop y *) ((id *) S)
+      ≈⟨ (pop y *⁼) id*S≈S′ ⟩
+         (pop y *) S′
+      ∎) │ {!!}
+      where open ≈-Reasoning
    ⊖₁-✓ (_ᵇ│•_ {y = y} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | _ ᵀΔ _ | Q′ rewrite pop∘suc-push y (target E) = ≈-reflexive (*-preserves-id _) │ Q′
+   ... | _ ᵀΔ _ | Q′ = (
+      let R = target E in
+      begin
+         (id *) ((pop (ᴺ.suc y) *) ((suc push *) R))
+      ≡⟨ *-preserves-id _ ⟩
+         ((pop (ᴺ.suc y) *) ((suc push *) R))
+      ≡⟨ sym (pop∘suc-push y _) ⟩
+         (push *) ((pop y *) R)
+      ∎) │ Q′
+      where open ≈-Reasoning
    ⊖₁-✓ (E ᶜ│• F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | Q′ = ≈-reflexive (*-preserves-id _) │ Q′
-   ⊖₁-✓ (E⌣E′ │ᵥᵇ F) with ⊖₁ E⌣E′ | (swap *⁼) (⊖₁-✓ E⌣E′)
-   ... | E′/E ᵀΔ E/E′ | swap*S′ =
+   ⊖₁-✓ (E⌣E′ │ᵥᵇ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
+   ... | E′/E ᵀΔ E/E′ | swap*S =
       let S = target E′/E; S′ = target E/E′; S₁ = target F in
       ν ((
          begin
@@ -63,7 +82,7 @@ module Transition.Concur.Properties where
             S
          ≡⟨ sym (swap-involutive _) ⟩
             (swap *) ((swap *) S)
-         ≈⟨ swap*S′ ⟩
+         ≈⟨ (swap *⁼) swap*S ⟩
             (swap *) S′
          ∎) │ (
          begin
@@ -72,13 +91,9 @@ module Transition.Concur.Properties where
             (id *) ((suc push *) S₁)
          ≡⟨ *-preserves-id _ ⟩
             ((suc push *) S₁)
-         ≈⟨ {!!} ⟩
+         ≡⟨ swap∘push _ ⟩
             (swap *) ((push *) S₁)
          ∎))
--- rewrite swap∘push (target F) | *-preserves-≃ₑ suc-preserves-id (target E′/E) |
---      swap-involutive (target E′/E) | *-preserves-id (target E′/E) |
---      *-preserves-≃ₑ suc-preserves-id ((swap *) ((push *) (target F))) | *-preserves-id ((swap *) ((push *) (target F))) =
---      ν (swap*S′ │ ≈-refl)
       where open ≈-Reasoning
    ⊖₁-✓ E⌣E′ = {!!}
 {-
