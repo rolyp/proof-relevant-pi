@@ -19,22 +19,11 @@ module Transition.Seq where
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; source; target)
    open import Transition.Concur using (Concur; module Delta′; Delta; ⊖; ᴬ⊖; ᴬ⊖-✓)
-   open import Transition.Concur.Properties using (⊖-✓)
+   open import Transition.Concur.Properties using (braid; ⋈[_,_,_]; ⊖-✓)
    open import Transition.Ren using (_Δ_; _*′)
 
    Proc↱ = subst Proc
    Proc↲ = ≡-subst-removable Proc
-
-   -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
-   -- structurally congruent, or structurally congruent with each other's swap image.
-   braid : ∀ {Γ} (n : Name 3) → Ren (Γ + toℕ n) (Γ + toℕ n)
-   braid zero = id
-   braid (ᴺ.suc zero) = id
-   braid (ᴺ.suc (ᴺ.suc zero)) = swap
-   braid (ᴺ.suc (ᴺ.suc (ᴺ.suc ())))
-
-   ⋈[_,_,_] : ∀ Γ (n : Name 3) (m : Cxt) → Proc (Γ + toℕ n + m) → Proc (Γ + toℕ n + m) → Set
-   ⋈[ Γ , n , m ] P P′ = ((braid n ᴿ+ m) *) P ≈ P′
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
