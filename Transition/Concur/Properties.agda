@@ -97,7 +97,7 @@ module Transition.Concur.Properties where
       ν ((
          begin
             (suc id *) S
-         ≡⟨ {!suc-id-elim ?!} ⟩
+         ≡⟨ suc-id-elim _ ⟩
             S
          ≡⟨ sym (swap-involutive _) ⟩
             (swap *) ((swap *) S)
@@ -106,9 +106,7 @@ module Transition.Concur.Properties where
          ∎) │ (
          begin
             (suc id *) ((suc push *) S₁)
-         ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
-            (id *) ((suc push *) S₁)
-         ≡⟨ *-preserves-id _ ⟩
+         ≡⟨ suc-id-elim _ ⟩
             ((suc push *) S₁)
          ≡⟨ swap∘push _ ⟩
             (swap *) ((push *) S₁)
@@ -124,14 +122,7 @@ module Transition.Concur.Properties where
             (id *) S
          ≈⟨ id*S≈S′ ⟩
             S′
-         ∎) │ (
-         begin
-            (suc id *) S₁
-         ≡⟨ *-preserves-≃ₑ suc-preserves-id {!!} ⟩
-            (id *) S₁
-         ≡⟨ *-preserves-id _ ⟩
-            S₁
-         ∎))
+         ∎) │ ≈-reflexive (suc-id-elim _))
    ⊖₁-✓ (_ᵇ│ᵥ_ {x = x} {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | E′/E ᵀΔ E/E′ | id*S₁≈S′₁ =
       let R = target E; S₁ = target E′/E; S′₁ = target E/E′ in
@@ -145,19 +136,10 @@ module Transition.Concur.Properties where
    ⊖₁-✓ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | E′/E ᵀΔ E/E′ | swap*S₁≈S′₁ rewrite swap∘push (target E) =
       let R = target E; S₁ = target E′/E; S′₁ = target E/E′ in
-      ν ((
-         begin
-            (suc id *) ((swap *) ((push *) R))
-         ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
-            (id *) ((swap *) ((push *) R))
-         ≡⟨ *-preserves-id _ ⟩
-            (swap *) ((push *) R)
-         ∎) │
+      ν (≈-reflexive (suc-id-elim _) │
          (begin
             (suc id *) S₁
-         ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
-            (id *) S₁
-         ≡⟨ *-preserves-id _ ⟩
+         ≡⟨ suc-id-elim _ ⟩
             S₁
          ≡⟨ sym (swap-involutive _) ⟩
             (swap *) ((swap *) S₁)
@@ -167,12 +149,7 @@ module Transition.Concur.Properties where
    ⊖₁-✓ (E ᶜ│ᵥ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | E′/E ᵀΔ E/E′ | id*S₁≈S′₁ =
       let R = target E; S₁ = target E′/E; S′₁ = target E/E′ in
-      ν ((
-         begin
-            (suc id *) R
-         ≡⟨ {!!} ⟩
-            R
-         ∎) │ (
+      ν (≈-reflexive (suc-id-elim _) │ (
          begin
             (suc id *) S₁
          ≡⟨ {!!} ⟩
