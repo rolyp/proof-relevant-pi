@@ -176,12 +176,20 @@ module Transition.Concur.Properties where
    ... | _ ᵀΔ _ | id*S≈S′ = id*S≈S′ │ ≈-reflexive (*-preserves-id _)
    ⊖₁-✓ (E⌣E′ ➕₁ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | P′ = P′
+   ⊖₁-✓ (_│•_ {x = x} {y} {u} {z} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
+   ... | E′/E ᵀΔ E/E′ | _ ᵀΔ _ | swap*S≈S′ | id*S₂≈S′₂ =
+      let S = target E′/E; S′ = target E/E′ in
+      (begin
+         (id *) ((pop z *) ((suc (pop y) *) S))
+      ≡⟨ *-preserves-id _ ⟩
+         ((pop z *) ((suc (pop y) *) S))
+      ≡⟨ sym (pop-pop-swap y z _) ⟩
+         (pop y *) ((suc (pop z) *) ((swap *) S))
+      ≈⟨ (pop y *⁼) ((suc (pop z) *⁼) swap*S≈S′) ⟩
+         (pop y *) ((suc (pop z) *) S′)
+      ∎) │ id*S₂≈S′₂
    ⊖₁-✓ E⌣E′ = {!!}
 {-
-   ⊖₁-✓ (_│•_ {x = x} {y} {u} {z} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
-   ... | E′/E ᵀΔ E/E′ | _ ᵀΔ _ | swap*P′ | Q′ with (pop y *ᵇ) E′/E | (pop z *ᵇ) E/E′
-   ... | pop-y*E′/E | pop-z*E/E′ rewrite pop∘push u y | pop∘push x z | sym (pop-pop-swap z y (target E/E′)) =
-      (pop z *⁼ ∘ suc (pop y) *⁼) swap*P′ │ Q′
    ⊖₁-✓ (_│•ᵥ_ {u = u} {y} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
    ... | E′/E ᵀΔ _ | _ ᵀΔ _ | swap*P′ | Q′ with (pop y *ᵇ) E′/E
    ... | pop-y*E′/E rewrite pop∘push u y =
