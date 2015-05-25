@@ -35,18 +35,21 @@ module Transition.Concur.Properties where
    -- Correctness of residuals, with respect to the above notion of cofinality.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
           (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in ⋈[ Γ , a , π₁ (ᴬ⊖ a⌣a′) , zero ] S S′
-   ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target F) | swap∘push (target E) = ≈-refl
+   ⊖₁-✓ (E ᵇ│ᵇ F) = ≈-reflexive (sym (swap∘push _)) │ ≈-reflexive (sym (swap∘suc-push _))
+   ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-reflexive (*-preserves-id _) │ ≈-reflexive (*-preserves-id _)
+   ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-reflexive (*-preserves-id _) │ ≈-reflexive (*-preserves-id _)
+   ⊖₁-✓ (E ᶜ│ᶜ F) = ≈-reflexive (*-preserves-id _) │ ≈-reflexive (*-preserves-id _)
+   ⊖₁-✓ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′ | (swap *⁼) (⊖₁-✓ E⌣E′)
+   ... | E′/E ᵀΔ E/E′ | swap*S with (pop y *ᵇ) E/E′
+   ... | pop-y*E/E′ rewrite pop∘push y a | pop∘swap y (target E/E′) | swap-involutive (target E′/E) |
+      *-preserves-id ((pop ((push *) y) *) (target E′/E)) =
+      ≈-sym ((pop ((push *) y) *⁼) (≈-sym swap*S)) │ ≈-reflexive (*-preserves-id _)
+   ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
+   ... | E′/E ᵀΔ E/E′ | S with (pop y *ᶜ) E/E′
+   ... | pop-y*E/E′ rewrite pop∘push y a | *-preserves-id (target E′/E) | *-preserves-id ((pop y *) (target E′/E)) =
+      (pop y *⁼) S │ ≈-reflexive (*-preserves-id _)
    ⊖₁-✓ E⌣E′ = {!!}
 {-
-   ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-refl
-   ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-refl
-   ⊖₁-✓ (E ᶜ│ᶜ F) = ≈-refl
-   ⊖₁-✓ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ ᵀΔ E/E′ | swap*P′ with (pop y *ᵇ) E/E′
-   ... | pop-y*E/E′ rewrite pop∘push y a | pop∘swap y (target E/E′) = (pop ((push *) y) *⁼) swap*P′ │ ≈-refl
-   ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ ᵀΔ E/E′ | P′ with (pop y *ᶜ) E/E′
-   ... | pop-y*E/E′ rewrite pop∘push y a = (pop y *⁼) P′ │ ≈-refl
    ⊖₁-✓ (_ᵇ│•_ {y = y} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | Q′ rewrite pop∘suc-push y (target E) = ≈-refl │ Q′
    ⊖₁-✓ (E ᶜ│• F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
