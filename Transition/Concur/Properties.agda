@@ -53,11 +53,16 @@ module Transition.Concur.Properties where
    ... | _ ᵀΔ _ | Q′ = ≈-reflexive (*-preserves-id _) │ Q′
    ⊖₁-✓ (E⌣E′ │ᵥᵇ F) with ⊖₁ E⌣E′ | (swap *⁼) (⊖₁-✓ E⌣E′)
    ... | E′/E ᵀΔ E/E′ | swap*S′ =
+      let S = target E′/E; S′ = target E/E′; S₁ = target F in
       ν ((
          begin
-            (suc id *) (target E′/E)
+            (suc id *) S
          ≈⟨ {!!} ⟩
-            (swap *) (target E/E′)
+            S
+         ≡⟨ sym (swap-involutive _) ⟩
+            (swap *) ((swap *) S)
+         ≈⟨ swap*S′ ⟩
+            (swap *) S′
          ∎) │ {!!})
 -- rewrite swap∘push (target F) | *-preserves-≃ₑ suc-preserves-id (target E′/E) |
 --      swap-involutive (target E′/E) | *-preserves-id (target E′/E) |
