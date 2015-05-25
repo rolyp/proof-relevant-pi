@@ -10,10 +10,20 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    open import Ext
 
    open ᴺ using (Name; _+_; zero; shift)
-   open ᴿ using (module Renameable; suc; pop; push; _ᴿ+_; swap; ᴺren)
+   open ᴿ using (module Renameable; suc; pop; push; _ᴿ+_; swap; ᴺren; suc-preserves-id)
 
    module Renameable′ = Renameable {A = A}; open Renameable′ ⦃...⦄ -- fix A for all uses of *
    open Renameable ⦃...⦄ using () renaming (_* to _*′)
+
+   suc-id-elim : ∀ {Γ} → suc id * ≃ₑ id {A = A (Γ + 1)}
+   suc-id-elim a =
+      begin
+         (suc id *) a
+      ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+         (id *) a
+      ≡⟨ *-preserves-id _ ⟩
+         a
+      ∎ where open EqReasoning (setoid _)
 
    involutive : ∀ {Γ} {ρ : Ren Γ Γ} → ᴿ.Involutive ρ → ρ * ∘ ρ * ≃ₑ id
    involutive {ρ = ρ} ρ-involutive a = trans (∘-*₁ ρ-involutive a) (*-preserves-id a)
