@@ -36,9 +36,9 @@ module Transition.Concur.Properties where
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
           (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in ⋈[ Γ , a , π₁ (ᴬ⊖ a⌣a′) , zero ] S S′
    ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘suc-push (target E) | swap∘push (target F) = ≈-refl
+   ⊖₁-✓ {a = a ᵇ} (E ᵇ│ᶜ F) = {!≈-refl!} --≈-refl
    ⊖₁-✓ E⌣E′ = {!!}
 {-
-   ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-refl
    ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-refl
    ⊖₁-✓ (E ᶜ│ᶜ F) = ≈-refl
    ⊖₁-✓ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
