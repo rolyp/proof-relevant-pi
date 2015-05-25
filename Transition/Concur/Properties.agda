@@ -8,7 +8,7 @@ module Transition.Concur.Properties where
       open ᴬ.Action; open ᴬ.Actionᵇ; open _ᴬ⌣_
    import Action.Ren
    open import Name as ᴺ using (Cxt; Name; fromℕ≤; _+_; zero)
-   open import Proc using (Proc)
+   open import Proc using (Proc); open Proc
    import Proc.Ren
    open import StructuralCong.Proc using (_≈_; module _≈_; ≈-refl; ≈-reflexive; ≈-sym; _*⁼; module ≈-Reasoning);
       open _≈_ renaming (trans to ≈-trans)
@@ -52,12 +52,12 @@ module Transition.Concur.Properties where
    ⊖₁-✓ (E ᶜ│• F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | Q′ = ≈-reflexive (*-preserves-id _) │ Q′
    ⊖₁-✓ (E⌣E′ │ᵥᵇ F) with ⊖₁ E⌣E′ | (swap *⁼) (⊖₁-✓ E⌣E′)
-   ... | E′/E ᵀΔ _ | swap*S′ = {!!}
---      begin
---         ?
---      a⟨ ? ⟩
---         ?
---      ∎
+   ... | E′/E ᵀΔ E/E′ | swap*S′ =
+      begin
+         ν (((suc id) *) (target E′/E) │ (suc id *) ((suc push *) (target F)))
+      ≈⟨ ν {!!} ⟩
+         ν ((swap *) (target E/E′) │ (swap *) ((push *) (target F)))
+      ∎
 -- rewrite swap∘push (target F) | *-preserves-≃ₑ suc-preserves-id (target E′/E) |
 --      swap-involutive (target E′/E) | *-preserves-id (target E′/E) |
 --      *-preserves-≃ₑ suc-preserves-id ((swap *) ((push *) (target F))) | *-preserves-id ((swap *) ((push *) (target F))) =
