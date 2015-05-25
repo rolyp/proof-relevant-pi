@@ -218,9 +218,9 @@ module Transition.Concur.Properties where
             (suc id *) ((pop zero *) S₁)
          ≡⟨ suc-id-elim _ ⟩
             (pop zero *) S₁
-         ≡⟨ {!!} ⟩
+         ≡⟨ sym (pop-swap _) ⟩
             (pop zero *) ((swap *) S₁)
-         ≡⟨ {!!} ⟩
+         ≈⟨ (pop zero * *⁼) swap*S₁≈S′₁ ⟩
             (pop zero *) S′₁
          ∎) │ (
          begin
@@ -230,7 +230,6 @@ module Transition.Concur.Properties where
          ≈⟨ id*S₂≈S′₂ ⟩
             S′₂
          ∎))
--- ν (≈-trans ((pop zero *⁼) swap*P′) (≈-reflexive (pop-swap _)) │ Q′)
    ⊖₁-✓ E⌣E′ = {!!}
 {-
    ⊖₁-✓ (_│ᵥ_ {x = x} {u} {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
