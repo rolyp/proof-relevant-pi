@@ -331,7 +331,7 @@ module Transition.Concur.Properties where
          (id *) S
       ≈⟨ id*S≈S′ ⟩
          S′
-      ∎) --P′
+      ∎)
    ⊖₁-✓ (! E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | σ*S≈S′ = σ*S≈S′
 
@@ -353,7 +353,15 @@ module Transition.Concur.Properties where
    ⊖-✓ (inj₁ E⌣E′) = ⊖₁-✓ E⌣E′
    ⊖-✓ (inj₂ E′⌣E) with ⊖₁ E′⌣E | ⊖₁-✓ E′⌣E
    ⊖-✓ {a⌣a′ = ᵛ∇ᵛ} (inj₂ E′⌣E) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
-   ⊖-✓ {a⌣a′ = ᵇ∇ᵇ} (inj₂ E′⌣E) | _ ᵀΔ _ | P′ = {!!} -- ≈-sym (≈-trans ((swap *⁼) P′) (≈-reflexive (swap-involutive _)))
+   ⊖-✓ {a⌣a′ = ᵇ∇ᵇ} (inj₂ E′⌣E) | E′/E ᵀΔ E/E′ | swap*S≈S′ =
+      let S = target E′/E; S′ = target E/E′ in
+      begin
+         (swap *) S′
+      ≈⟨ (swap *⁼) (≈-sym swap*S≈S′) ⟩
+         (swap *) ((swap *) S)
+      ≡⟨ swap-involutive _ ⟩
+         S
+      ∎ -- ≈-sym (≈-trans ((swap *⁼) P′) (≈-reflexive (swap-involutive _)))
    ⊖-✓ {a⌣a′ = ᵇ∇ᶜ} (inj₂ E′⌣E) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
    ⊖-✓ {a⌣a′ = ᶜ∇ᵇ} (inj₂ E′⌣E) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
    ⊖-✓ {a⌣a′ = ᶜ∇ᶜ} (inj₂ E′⌣E) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
