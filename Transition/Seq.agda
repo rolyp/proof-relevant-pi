@@ -179,6 +179,9 @@ module Transition.Seq where
    ≃-refl (E ᵇ∷ E⋆) = E ᵇ∷ ≃-refl E⋆
    ≃-refl (E ᶜ∷ E⋆) = E ᶜ∷ ≃-refl E⋆
 
+   postulate
+      braid-involutive : ∀ {Γ} ӓ (a⋆ : Action⋆ (Γ + inc₂ ӓ + 0)) → ((braid ӓ ᴿ+ 0) *) (((braid ӓ ᴿ+ 0) *) a⋆) ≡ a⋆
+
    ≃-sym′ : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
    ≃-sym′ ([ E ᶜ∶⇋∶ᶜ E′ ] E⋆) = {!!}
    ≃-sym′ ([ E ᶜ∶⇋∶ᵇ E′ ] E⋆) = {!!}
@@ -189,7 +192,7 @@ module Transition.Seq where
    ≃-sym′ (E ᶜ∷ E⋆) = E ᶜ∷ ≃-sym′ E⋆
    ≃-sym′ (≃-trans T T′) = ≃-trans (≃-sym′ T′) (≃-sym′ T)
 
-   -- Existentially quantified version which allows me to state isEquivalence.
+   -- Existentially quantified version so we can state isEquivalence.
    TraceFrom : ∀ {Γ} (P : Proc Γ) → Set
    TraceFrom P = Σ[ a⋆ ∈ Action⋆ _ ] Σ[ R ∈ Proc _ ] P —[ a⋆ ]→⋆ R
 
