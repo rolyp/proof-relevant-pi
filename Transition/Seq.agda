@@ -68,13 +68,13 @@ module Transition.Seq where
          E⋆/γ : P′ —[ ((braid ӓ ᴿ+ m) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) m a⋆) R′
 
    -- Hetereogeneously equate braidings up to associativity of + on contexts.
-   braid-assoc : ∀ Γ Γ′ (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
+   braid-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
                  (((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
                  (Proc↱ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′) ≅
                  (((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*)
                  (Proc↱ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc↱ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈
                  Proc↱ (cong (_+_ Γ′) (+-assoc Δ₁ Δ₂ Δ₃)) S′)
-   braid-assoc Γ Γ′ ρ Δ₁ Δ₂ Δ₃ S S′ =
+   braid-assoc {Γ} {Γ′} ρ Δ₁ Δ₂ Δ₃ S S′ =
       ≅-cong₃ (λ Δ† P P′ → ((ρ ᴿ+ Δ†)*) P ≈ P′)
          (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃))
          (
@@ -93,15 +93,14 @@ module Transition.Seq where
          )
          (≅-sym (Proc↲ (cong (_+_ Γ′) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
 
-{-
-   ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
-             (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
+   ⊖⋆[_,_] : ∀ {Γ} (ӓ : Action₂ Γ) m {P P′ : Proc (Γ + inc₂ ӓ + m)} {a⋆ R}
+             (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , m ] P P′) → _Δ⋆_ {ӓ = ӓ} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = γ Δ []
-   ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ n , m ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | ren-preserves-inc-assoc (braid n) m (a ᵇ)
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (Γ + toℕ n) (braid {Γ} n) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′) =
-      let Γ′ = Γ + toℕ n
-          σ = braid {Γ} n
+   ⊖⋆[_,_] {Γ} ӓ m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
+   ... | γ/E Δ E/γ with ⊖⋆[ ӓ , m + 1 ] E⋆ γ/E | ren-preserves-inc-assoc (braid ӓ) m (a ᵇ)
+   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (braid ӓ) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′) =
+      let Γ′ = Γ + inc₂ ӓ
+          σ = braid ӓ
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᵇ∷ ((σ ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
@@ -120,11 +119,11 @@ module Transition.Seq where
                 ∎)
              ) (E/γ ᵇ∷ E⋆/γ/E)
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
-   ⊖⋆[_,_] {Γ} n m {a⋆ = a ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ n , m ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ n , m ] E⋆ γ/E | ren-preserves-inc-assoc (braid n) m (a ᶜ)
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (Γ + toℕ n) (braid {Γ} n) m 0 (inc⋆ a⋆) (target⋆ E⋆) S′) =
-      let Γ′ = Γ + toℕ n
-          σ = braid {Γ} n
+   ⊖⋆[_,_] {Γ} ӓ m {a⋆ = a ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
+   ... | γ/E Δ E/γ with ⊖⋆[ ӓ , m ] E⋆ γ/E | ren-preserves-inc-assoc (braid ӓ) m (a ᶜ)
+   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (braid ӓ) m 0 (inc⋆ a⋆) (target⋆ E⋆) S′) =
+      let Γ′ = Γ + inc₂ ӓ
+          σ = braid ӓ
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᶜ∷ ((σ ᴿ+ m) *) a⋆ ]→⋆ P) (≅-to-≡ (
@@ -143,7 +142,7 @@ module Transition.Seq where
                 ∎)
              ) (E/γ ᶜ∷ E⋆/γ/E)
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
-
+{-
    -- Causal equivalence.
    infix 4 _≃_
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ a′⋆ R R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
