@@ -95,50 +95,48 @@ module Transition.Seq where
 
    ⊖⋆[_,_] : ∀ {Γ} (ӓ : Action₂ Γ) m {P P′ : Proc (Γ + inc₂ ӓ + m)} {a⋆ R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , m ] P P′) → _Δ⋆_ {ӓ = ӓ} {m = m} E⋆ γ
-   ⊖⋆[ n , m ] [] γ = γ Δ []
-   ⊖⋆[_,_] {Γ} ӓ m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
+   ⊖⋆[ _ , _ ] [] γ = γ Δ []
+   ⊖⋆[ ӓ , m ] {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ӓ , m + 1 ] E⋆ γ/E | ren-preserves-inc-assoc (braid ӓ) m (a ᵇ)
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (braid ӓ) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′) =
-      let Γ′ = Γ + inc₂ ӓ
-          σ = braid ӓ
+      let σ = braid ӓ
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᵇ∷ ((σ ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
-                   Proc↱ (+-assoc (Γ′ + m) 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆)))
+                   Proc↱ (+-assoc _ 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆)))
                          (Proc↱ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′)
-                ≅⟨ Proc↲ (+-assoc (Γ′ + m) 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
+                ≅⟨ Proc↲ (+-assoc _ 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
                    Proc↱ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′
                 ≅⟨ Proc↲ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′ ⟩
                    S′
-                ≅⟨ ≅-sym (Proc↲ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
-                   Proc↱ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′
+                ≅⟨ ≅-sym (Proc↲ (cong (_+_ _) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
+                   Proc↱ (cong (_+_ _) (+-assoc m 1 (inc⋆ a⋆))) S′
                 ≅⟨ ≅-sym (Proc↲ (ren-preserves-inc⋆-assoc σ m (a ᵇ∷ a⋆)) _) ⟩
                    Proc↱ (ren-preserves-inc⋆-assoc σ m (a ᵇ∷ a⋆))
-                         (Proc↱ (cong (_+_ Γ′) (+-assoc m 1 (inc⋆ a⋆))) S′)
+                         (Proc↱ (cong (_+_ _) (+-assoc m 1 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᵇ∷ E⋆/γ/E)
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
-   ⊖⋆[_,_] {Γ} ӓ m {a⋆ = a ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
+   ⊖⋆[ ӓ , m ]  {a⋆ = a ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ӓ , m ] E⋆ γ/E | ren-preserves-inc-assoc (braid ӓ) m (a ᶜ)
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (braid ӓ) m 0 (inc⋆ a⋆) (target⋆ E⋆) S′) =
-      let Γ′ = Γ + inc₂ ӓ
-          σ = braid ӓ
+      let σ = braid ӓ
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᶜ∷ ((σ ᴿ+ m) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
-                   Proc↱ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m) *) a⋆)))
+                   Proc↱ (+-assoc _ 0 (inc⋆ (((σ ᴿ+ m) *) a⋆)))
                          (Proc↱ (ren-preserves-inc⋆-assoc σ m a⋆) S′)
-                ≅⟨ Proc↲ (+-assoc (Γ′ + m) 0 (inc⋆ (((σ ᴿ+ m) *) a⋆))) _ ⟩
+                ≅⟨ Proc↲ (+-assoc _ 0 (inc⋆ (((σ ᴿ+ m) *) a⋆))) _ ⟩
                    Proc↱ (ren-preserves-inc⋆-assoc σ m a⋆) S′
                 ≅⟨ Proc↲ (ren-preserves-inc⋆-assoc σ m a⋆) S′ ⟩
                    S′
-                ≅⟨ ≅-sym (Proc↲ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′) ⟩
-                   Proc↱ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′
+                ≅⟨ ≅-sym (Proc↲ (cong (_+_ _) (+-assoc m 0 (inc⋆ a⋆))) S′) ⟩
+                   Proc↱ (cong (_+_ _) (+-assoc m 0 (inc⋆ a⋆))) S′
                 ≅⟨ ≅-sym (Proc↲ (ren-preserves-inc⋆-assoc σ m (a ᶜ∷ a⋆)) _) ⟩
                    Proc↱ (ren-preserves-inc⋆-assoc σ m (a ᶜ∷ a⋆))
-                         (Proc↱ (cong (_+_ Γ′) (+-assoc m 0 (inc⋆ a⋆))) S′)
+                         (Proc↱ (cong (_+_ _) (+-assoc m 0 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᶜ∷ E⋆/γ/E)
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
