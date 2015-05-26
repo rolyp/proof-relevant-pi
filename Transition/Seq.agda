@@ -185,10 +185,10 @@ module Transition.Seq where
    EquivFrom _ (_ , _ , E⋆) (_ , _ , E′⋆) = E⋆ ≃ E′⋆
 
    ≃-sym : ∀ {Γ} {P : Proc Γ} → Symmetric (EquivFrom P)
-   ≃-sym ([_ᶜ∶⇋∶ᶜ_] E E′ T) = {!!}
-   ≃-sym ([_ᶜ∶⇋∶ᵇ_] E E′ T) = {!!}
-   ≃-sym ([_ᵇ∶⇋∶ᵇ_] E E′ T) = {!!}
-   ≃-sym ([_ᵛ∶⇋∶ᵛ_] E E′ T) = {!!}
+   ≃-sym ([ E ᶜ∶⇋∶ᶜ E′ ] E⋆) = {!!}
+   ≃-sym ([ E ᶜ∶⇋∶ᵇ E′ ] E⋆) = {!!}
+   ≃-sym ([ E ᵇ∶⇋∶ᵇ E′ ] E⋆) = {!!}
+   ≃-sym ([ E ᵛ∶⇋∶ᵛ E′ ] E⋆) = {!!}
    ≃-sym [] = []
    ≃-sym (E ᵇ∷ E⋆) = E ᵇ∷ ≃-sym E⋆
    ≃-sym (E ᶜ∷ E⋆) = E ᶜ∷ ≃-sym E⋆
