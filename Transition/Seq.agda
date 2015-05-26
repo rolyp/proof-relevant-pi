@@ -177,7 +177,10 @@ module Transition.Seq where
                 E⋆ ≃ F⋆ → F⋆ ≃ E′⋆ → E⋆ ≃ E′⋆
       ≃-sym : ∀ {a⋆ R a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
 
-   ≃-isEquivalence : ∀ {Γ} {P : Proc Γ} → IsEquivalence (λ { E⋆ E′⋆ → _≃_ {P = P} E⋆ E′⋆ })
+   TraceFrom : ∀ {Γ} (P : Proc Γ) → Set
+   TraceFrom P = Σ[ a⋆ ∈ Action⋆ _ ] Σ[ R ∈ Proc _ ] P —[ a⋆ ]→⋆ R
+
+   ≃-isEquivalence : ∀ {Γ} {P : Proc Γ} → IsEquivalence (_≃_ {P = P})
    ≃-isEquivalence = record {
          refl = {!!};
          sym = {!!};
