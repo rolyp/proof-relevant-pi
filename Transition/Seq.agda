@@ -18,8 +18,8 @@ module Transition.Seq where
    open import StructuralCong.Proc using (_≈_; ≈-sym; ≈-refl)
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; source; target)
-   open import Transition.Concur using (Concur; module Delta′; Delta; ⊖; ᴬ⊖; ᴬ⊖-✓)
-   open import Transition.Concur.Properties using (braid; ⋈[_,_,_,_]; ⊖-✓)
+   open import Transition.Concur using (Concur; module Delta′; Delta; ⊖; ᴬ⊖; ᴬ⊖-✓; Blah; inc₂)
+   open import Transition.Concur.Properties using (braid; ⋈[_,_,_]; ⊖-✓)
    open import Transition.Ren using (_Δ_; _*′)
 
    Proc↱ = subst Proc
@@ -27,13 +27,13 @@ module Transition.Seq where
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
-   record _Δ′_ {ι Γ} {a₀ : Action Γ} {a₀′ : Action (Γ + inc a₀)} m {P P′ : Proc (Γ + inc a₀ + inc a₀′ + m)} {a R}
-          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , a₀ , a₀′ , m ] P P′) : Set where
+   record _Δ′_ {ι Γ} {aa′ : Blah Γ} m {P P′ : Proc (Γ + inc₂ aa′ + m)} {a R}
+          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , aa′ , m ] P P′) : Set where
       constructor _Δ_
       field
          {R′} : _
-         γ/E : ⋈[ Γ , a₀ , a₀′ , m + inc a ] (Proc↱ (+-assoc _ m (inc a)) R) R′
-      σ = braid {Γ} a₀ a₀′
+         γ/E : ⋈[ Γ , aa′ , m + inc a ] (Proc↱ (+-assoc _ m (inc a)) R) R′
+      σ = braid {Γ} aa′
       field
          E/γ : P′ —[ ((σ ᴿ+ m) *) a - ι ]→ Proc↱ (ren-preserves-inc-assoc σ m a) R′
 {-
