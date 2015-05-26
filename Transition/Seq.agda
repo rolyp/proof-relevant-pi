@@ -67,13 +67,13 @@ module Transition.Seq where
          γ/E⋆ : ⋈[ Γ , ӓ , m + inc⋆ a⋆ ] (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) R′
          E⋆/γ : P′ —[ ((braid ӓ ᴿ+ m) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) m a⋆) R′
 
-   braid-assoc : ∀ Γ Γ′ (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
+   ren-+-assoc : ∀ Γ Γ′ (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
                  (((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
                  (Proc↱ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′) ≅
                  (((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*)
                  (Proc↱ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc↱ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈
                  Proc↱ (cong (_+_ Γ′) (+-assoc Δ₁ Δ₂ Δ₃)) S′)
-   braid-assoc Γ Γ′ ρ Δ₁ Δ₂ Δ₃ S S′ =
+   ren-+-assoc Γ Γ′ ρ Δ₁ Δ₂ Δ₃ S S′ =
       ≅-cong₃ (λ Δ† P P′ → ((ρ ᴿ+ Δ†)*) P ≈ P′)
          (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃))
          (
@@ -91,6 +91,7 @@ module Transition.Seq where
             ∎
          )
          (≅-sym (Proc↲ (cong (_+_ Γ′) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
+
 {-
    ⊖⋆[_,_] : ∀ {Γ} n m {a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
