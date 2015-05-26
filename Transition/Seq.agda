@@ -175,27 +175,3 @@ module Transition.Seq where
       -- Transitivity and symmetry.
       ≃-trans : ∀ {a⋆ R a″⋆ S a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {F⋆ : P —[ a″⋆ ]→⋆ S} {E′⋆ : P —[ a′⋆ ]→⋆ R′} →
                 E⋆ ≃ F⋆ → F⋆ ≃ E′⋆ → E⋆ ≃ E′⋆
-
-   -- Existentially quantified version, over which causal equivalence is defined.
-   TraceFrom : ∀ {Γ} (P : Proc Γ) → Set
-   TraceFrom P = Σ[ a⋆ ∈ Action⋆ _ ] Σ[ R ∈ Proc _ ] P —[ a⋆ ]→⋆ R
-
-   EquivFrom : ∀ {Γ} (P : Proc Γ) → TraceFrom P → TraceFrom P → Set
-   EquivFrom _ (_ , _ , E⋆) (_ , _ , E′⋆) = E⋆ ≃ E′⋆
-
-   ≃-sym : ∀ {Γ} {P : Proc Γ} → Symmetric (EquivFrom P)
-   ≃-sym ([_ᶜ∶⇋∶ᶜ_] E E′ T) = {!!}
-   ≃-sym ([_ᶜ∶⇋∶ᵇ_] E E′ T) = {!!}
-   ≃-sym ([_ᵇ∶⇋∶ᵇ_] E E′ T) = {!!}
-   ≃-sym ([_ᵛ∶⇋∶ᵛ_] E E′ T) = {!!}
-   ≃-sym [] = {!!}
-   ≃-sym (E ᵇ∷ T) = {!!}
-   ≃-sym (E ᶜ∷ T) = {!!}
-   ≃-sym (≃-trans T T₁) = {!!}
-
-   ≃-isEquivalence : ∀ {Γ} {P : Proc Γ} → IsEquivalence (EquivFrom P)
-   ≃-isEquivalence = record {
-         refl = {!!};
-         sym = ≃-sym;
-         trans = {!!}
-      }
