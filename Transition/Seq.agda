@@ -8,7 +8,7 @@ module Transition.Seq where
    open import Ext
 
    open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc; _ᴬ⌣_; module _ᴬ⌣_);
-      open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ._ᴬ⌣_
+      open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ._ᴬ⌣_
    open import Action.Ren using (ren-preserves-inc-assoc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _ᵇ∷_; _ᶜ∷_)
    open import Action.Seq.Ren using (ren-preserves-inc⋆-assoc)
@@ -27,7 +27,7 @@ module Transition.Seq where
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
-   record _Δ′_ {ι Γ} {aa′ : Blah Γ} m {P P′ : Proc (Γ + inc₂ aa′ + m)} {a R}
+   record _Δ′_ {ι Γ} {aa′ : Blah Γ} {m} {P P′ : Proc (Γ + inc₂ aa′ + m)} {a R}
           (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , aa′ , m ] P P′) : Set where
       constructor _Δ_
       field
@@ -36,14 +36,14 @@ module Transition.Seq where
       σ = braid {Γ} aa′
       field
          E/γ : P′ —[ ((σ ᴿ+ m) *) a - ι ]→ Proc↱ (ren-preserves-inc-assoc σ m a) R′
-{-
-   ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
-         (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
-   ⊖′[ n , m ] {(_ ᴬ.•) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ n , m ] {(ᴬ.• _) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ n , m ] {ᴬ.• _ 〈 _ 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ n , m ] {ᴬ.τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
 
+   ⊖′[_,_] : ∀ {ι Γ} (aa′ : Blah Γ) m {P P′ : Proc (Γ + inc₂ aa′ + m)} {a R}
+         (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , aa′ , m ] P P′) → _Δ′_ {aa′ = aa′} {m = m} E γ
+   ⊖′[ aa′ , m ] {a = (_ •) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid aa′ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ aa′ , m ] {a = (• _) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid aa′ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ aa′ , m ] {a = • _ 〈 _ 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid aa′ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ aa′ , m ] {a = τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid aa′ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+{-
    -- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
    -- composition is probably what we eventually want.
    infixr 5 _ᵇ∷_ _ᶜ∷_
