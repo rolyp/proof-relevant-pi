@@ -164,7 +164,8 @@ module Transition.Seq where
       [_ᵛ∶⇋∶ᵛ_] : ∀ {x u} {R R′} (E : P —[ (• x) ᵇ - _ ]→ R) (E′ : P —[ (• u) ᵇ - _ ]→ R′) →
                  ⦃ E⌣E′ : E ⌣[ ᵛ∇ᵛ ] E′ ⦄ → let open Delta′ (⊖ E⌣E′); Q = target E′/E  in
                  ∀ {a⋆ a′⋆ S S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
-                 E ᵇ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᶜ∷ []
+                 let _ Δ E⋆/γ = ⊖⋆[ ((• x) ᵇ , • ᴺ.suc u 〈 zero 〉 ᶜ) , 0 ] E⋆ (⊖-✓ E⌣E′) in
+                 E ᵇ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᶜ∷ E⋆/γ
       -- Close under trace constructors.
       [] : [] ≃ []
       _ᵇ∷_ : ∀ {a a⋆ a′⋆ R S S′} (E : P —[ a ᵇ - _ ]→ R) {E⋆ : R —[ a⋆ ]→⋆ S} {E′⋆ : R —[ a′⋆ ]→⋆ S′} →
