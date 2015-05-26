@@ -27,23 +27,23 @@ module Transition.Seq where
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
-   record _Δ′_ {ι Γ} {aa′ : Blah Γ} {m} {P P′ : Proc (Γ + inc₂ aa′ + m)} {a R}
-          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , aa′ , m ] P P′) : Set where
+   record _Δ′_ {ι Γ} {ӓ : Action₂ Γ} {m} {P P′ : Proc (Γ + inc₂ ӓ + m)} {a R}
+          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , ӓ , m ] P P′) : Set where
       constructor _Δ_
       field
          {R′} : _
-         γ/E : ⋈[ Γ , aa′ , m + inc a ] (Proc↱ (+-assoc _ m (inc a)) R) R′
-      σ = braid {Γ} aa′
+         γ/E : ⋈[ Γ , ӓ , m + inc a ] (Proc↱ (+-assoc _ m (inc a)) R) R′
+      σ = braid {Γ} ӓ
       field
          E/γ : P′ —[ ((σ ᴿ+ m) *) a - ι ]→ Proc↱ (ren-preserves-inc-assoc σ m a) R′
 
-   ⊖′[_,_] : ∀ {ι Γ} (aa′ : Blah Γ) m {P P′ : Proc (Γ + inc₂ aa′ + m)} {a R}
-         (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , aa′ , m ] P P′) → _Δ′_ {aa′ = aa′} {m = m} E γ
-   ⊖′[ aa′ , m ] {a = (_ •) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid aa′ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ aa′ , m ] {a = (• _) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid aa′ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ aa′ , m ] {a = • _ 〈 _ 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid aa′ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ aa′ , m ] {a = τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid aa′ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-{-
+   ⊖′[_,_] : ∀ {ι Γ} (ӓ : Action₂ Γ) m {P P′ : Proc (Γ + inc₂ ӓ + m)} {a R}
+         (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , ӓ , m ] P P′) → _Δ′_ {ӓ = ӓ} {m = m} E γ
+   ⊖′[ ӓ , m ] {a = (_ •) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ ӓ , m ] {a = (• _) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ ӓ , m ] {a = • _ 〈 _ 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ ӓ , m ] {a = τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+
    -- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
    -- composition is probably what we eventually want.
    infixr 5 _ᵇ∷_ _ᶜ∷_
@@ -59,14 +59,14 @@ module Transition.Seq where
 
    -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. Cofinal by construction.
    infixl 5 _Δ⋆_
-   record _Δ⋆_ {Γ n m a⋆} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
-          (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) : Set where
+   record _Δ⋆_ {Γ} {ӓ : Action₂ Γ} {m a⋆} {P P′ : Proc (Γ + inc₂ ӓ + m)} {R}
+          (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , m ] P P′) : Set where
       constructor _Δ_
       field
          {R′} : _
-         γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid n) m a⋆) R′
-
+         γ/E⋆ : ⋈[ Γ , ӓ , m + inc⋆ a⋆ ] (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) R′
+         E⋆/γ : P′ —[ ((braid ӓ ᴿ+ m) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) m a⋆) R′
+{-
    braid-assoc : ∀ Γ (ρ : Ren Γ Γ) Δ₁ Δ₂ Δ₃ S S′ →
                  (((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
                  (Proc↱ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′) ≅
