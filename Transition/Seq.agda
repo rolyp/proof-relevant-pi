@@ -13,7 +13,7 @@ module Transition.Seq where
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _ᵇ∷_; _ᶜ∷_)
    open import Action.Seq.Ren using (ren-preserves-inc⋆-assoc)
    open import Name as ᴺ using (Cxt; Name; _+_; +-assoc; zero; toℕ; +-left-identity)
-   open import Proc using (Proc)
+   open import Proc using (Proc; Proc↱; Proc↲)
    open import Ren as ᴿ using (Ren; push; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import StructuralCong.Proc using (_≈_; ≈-sym; ≈-refl)
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
@@ -21,9 +21,6 @@ module Transition.Seq where
    open import Transition.Concur using (Concur; module Delta′; Delta; ⊖; ᴬ⊖; ᴬ⊖-✓; Action₂; inc₂)
    open import Transition.Concur.Properties using (braid; ⋈[_,_,_]; ⊖-✓)
    open import Transition.Ren using (_Δ_; _*′)
-
-   Proc↱ = subst Proc
-   Proc↲ = ≡-subst-removable Proc
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
@@ -184,6 +181,11 @@ module Transition.Seq where
    EquivFrom : ∀ {Γ} (P : Proc Γ) → TraceFrom P → TraceFrom P → Set
    EquivFrom _ (_ , _ , E⋆) (_ , _ , E′⋆) = E⋆ ≃ E′⋆
 
+   ≃-refl : ∀ {Γ} {P : Proc Γ} → Reflexive (EquivFrom P)
+   ≃-refl {x = .[] , ._ , []} = []
+   ≃-refl {x = ._ , ._ , E ᵇ∷ E⋆} = E ᵇ∷ ≃-refl
+   ≃-refl {x = ._ , ._ , E ᶜ∷ E⋆} = E ᶜ∷ ≃-refl
+
    ≃-sym : ∀ {Γ} {P : Proc Γ} → Symmetric (EquivFrom P)
    ≃-sym ([ E ᶜ∶⇋∶ᶜ E′ ] E⋆) = {!!}
    ≃-sym ([ E ᶜ∶⇋∶ᵇ E′ ] E⋆) = {!!}
@@ -192,11 +194,11 @@ module Transition.Seq where
    ≃-sym [] = []
    ≃-sym (E ᵇ∷ E⋆) = E ᵇ∷ ≃-sym E⋆
    ≃-sym (E ᶜ∷ E⋆) = E ᶜ∷ ≃-sym E⋆
-   ≃-sym (≃-trans T T′) = {!!}
+   ≃-sym (≃-trans T T′) = ≃-trans (≃-sym T′) (≃-sym T)
 
    ≃-isEquivalence : ∀ {Γ} {P : Proc Γ} → IsEquivalence (EquivFrom P)
    ≃-isEquivalence = record {
          refl = {!!};
          sym = ≃-sym;
-         trans = {!!}
+         trans = ≃-trans
       }
