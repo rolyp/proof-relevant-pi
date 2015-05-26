@@ -177,4 +177,9 @@ module Transition.Seq where
                 E⋆ ≃ F⋆ → F⋆ ≃ E′⋆ → E⋆ ≃ E′⋆
       ≃-sym : ∀ {a⋆ R a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
 
-   -- TODO: IsEquivalence instance.
+   ≃-isEquivalence : ∀ {Γ} {P : Proc Γ} → IsEquivalence (λ { E⋆ E′⋆ → _≃_ {P = P} E⋆ E′⋆ })
+   ≃-isEquivalence = record {
+         refl = {!!};
+         sym = {!!};
+         trans = {!!}
+      }
