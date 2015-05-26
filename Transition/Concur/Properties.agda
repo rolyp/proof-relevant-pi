@@ -287,15 +287,18 @@ module Transition.Concur.Properties where
       ≈⟨ (swap *⁼) ((suc swap *⁼) swap*S≈S′) ⟩
          (swap *) ((suc swap *) S′)
       ∎)
--- with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
---    ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u =
---      ν ≈-trans ((swap *⁼ ∘ suc swap *⁼) swap*P′) (≈-reflexive (swap∘suc-swap∘swap (target E/E′)))
+   ⊖₁-✓ (νᵇᵇ_ {a = • x} {• u} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
+   ... | E′/E ᵀΔ E/E′ | swap*S≈S′ =
+      let S = target E′/E; S′ = target E/E′ in
+      ν (begin
+         (suc swap *) ((swap *) ((suc swap *) S))
+      ≡⟨ sym (swap∘suc-swap∘swap _) ⟩
+         (swap *) ((suc swap *) ((swap *) S))
+      ≈⟨ (swap *⁼) ((suc swap *⁼) swap*S≈S′) ⟩
+         (swap *) ((suc swap *) S′)
+      ∎)
    ⊖₁-✓ E⌣E′ = {!!}
 {-
-   ⊖₁-✓ (νᵇᵇ_ {a = • x} {• u} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | E′/E ᵀΔ E/E′ | swap*P′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
-   ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u | sym (swap∘suc-swap∘swap (target E/E′)) =
-      ν (swap *⁼ ∘ suc swap *⁼) swap*P′
    ⊖₁-✓ (νᵛᵛ_ {x = x} {u} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | E′/E ᵀΔ E/E′ | P′ = ν (swap *⁼) P′
    ⊖₁-✓ (νᵇᶜ_ {a′ = a′} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
