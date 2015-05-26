@@ -175,7 +175,7 @@ module Transition.Concur.Properties where
    ⊖₁-✓ (E⌣E′ ᶜᶜ│ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | id*S≈S′ = id*S≈S′ │ ≈-reflexive (*-preserves-id _)
    ⊖₁-✓ (E⌣E′ ➕₁ Q) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ ᵀΔ _ | φ*S≈S′ = φ*S≈S′
+   ... | _ ᵀΔ _ | σ*S≈S′ = σ*S≈S′
    ⊖₁-✓ (_│•_ {x = x} {y} {u} {z} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
    ... | E′/E ᵀΔ E/E′ | _ ᵀΔ _ | swap*S≈S′ | id*S₂≈S′₂ =
       let S = target E′/E; S′ = target E/E′ in
@@ -323,9 +323,17 @@ module Transition.Concur.Properties where
          (swap *) S′
       ∎)
    ⊖₁-✓ (νᶜᶜ E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ ᵀΔ _ | P′ = ν ? --P′
+   ... | E′/E ᵀΔ E/E′ | id*S≈S′ =
+      let S = target E′/E; S′ = target E/E′ in
+      ν (begin
+         (suc id *) S
+      ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+         (id *) S
+      ≈⟨ id*S≈S′ ⟩
+         S′
+      ∎) --P′
    ⊖₁-✓ (! E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ ᵀΔ _ | P′ = P′
+   ... | _ ᵀΔ _ | σ*S≈S′ = σ*S≈S′
 {-
 
    -- Now symmetrise.
