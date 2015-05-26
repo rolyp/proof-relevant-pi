@@ -174,31 +174,31 @@ module Transition.Seq where
       ≃-trans : ∀ {a⋆ R a″⋆ S a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {F⋆ : P —[ a″⋆ ]→⋆ S} {E′⋆ : P —[ a′⋆ ]→⋆ R′} →
                 E⋆ ≃ F⋆ → F⋆ ≃ E′⋆ → E⋆ ≃ E′⋆
 
-   -- Existentially quantified version, over which causal equivalence is defined.
+   ≃-refl : ∀ {Γ} {P : Proc Γ} {a⋆ R} (E⋆ : P —[ a⋆ ]→⋆ R) → E⋆ ≃ E⋆
+   ≃-refl [] = []
+   ≃-refl (E ᵇ∷ E⋆) = E ᵇ∷ ≃-refl E⋆
+   ≃-refl (E ᶜ∷ E⋆) = E ᶜ∷ ≃-refl E⋆
+
+   ≃-sym′ : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
+   ≃-sym′ ([ E ᶜ∶⇋∶ᶜ E′ ] E⋆) = {!!}
+   ≃-sym′ ([ E ᶜ∶⇋∶ᵇ E′ ] E⋆) = {!!}
+   ≃-sym′ ([ E ᵇ∶⇋∶ᵇ E′ ] E⋆) = {!!}
+   ≃-sym′ ([ E ᵛ∶⇋∶ᵛ E′ ] E⋆) = {!!}
+   ≃-sym′ [] = []
+   ≃-sym′ (E ᵇ∷ E⋆) = E ᵇ∷ ≃-sym′ E⋆
+   ≃-sym′ (E ᶜ∷ E⋆) = E ᶜ∷ ≃-sym′ E⋆
+   ≃-sym′ (≃-trans T T′) = ≃-trans (≃-sym′ T′) (≃-sym′ T)
+
+   -- Existentially quantified version which allows me to state isEquivalence.
    TraceFrom : ∀ {Γ} (P : Proc Γ) → Set
    TraceFrom P = Σ[ a⋆ ∈ Action⋆ _ ] Σ[ R ∈ Proc _ ] P —[ a⋆ ]→⋆ R
 
    EquivFrom : ∀ {Γ} (P : Proc Γ) → TraceFrom P → TraceFrom P → Set
    EquivFrom _ (_ , _ , E⋆) (_ , _ , E′⋆) = E⋆ ≃ E′⋆
 
-   ≃-refl : ∀ {Γ} {P : Proc Γ} → Reflexive (EquivFrom P)
-   ≃-refl {x = .[] , ._ , []} = []
-   ≃-refl {x = ._ , ._ , E ᵇ∷ E⋆} = E ᵇ∷ ≃-refl
-   ≃-refl {x = ._ , ._ , E ᶜ∷ E⋆} = E ᶜ∷ ≃-refl
-
-   ≃-sym : ∀ {Γ} {P : Proc Γ} → Symmetric (EquivFrom P)
-   ≃-sym ([ E ᶜ∶⇋∶ᶜ E′ ] E⋆) = {!!}
-   ≃-sym ([ E ᶜ∶⇋∶ᵇ E′ ] E⋆) = {!!}
-   ≃-sym ([ E ᵇ∶⇋∶ᵇ E′ ] E⋆) = {!!}
-   ≃-sym ([ E ᵛ∶⇋∶ᵛ E′ ] E⋆) = {!!}
-   ≃-sym [] = []
-   ≃-sym (E ᵇ∷ E⋆) = E ᵇ∷ ≃-sym E⋆
-   ≃-sym (E ᶜ∷ E⋆) = E ᶜ∷ ≃-sym E⋆
-   ≃-sym (≃-trans T T′) = ≃-trans (≃-sym T′) (≃-sym T)
-
    ≃-isEquivalence : ∀ {Γ} {P : Proc Γ} → IsEquivalence (EquivFrom P)
    ≃-isEquivalence = record {
-         refl = {!!};
-         sym = ≃-sym;
+         refl = λ { {x = _ , _ , E⋆} → ≃-refl E⋆ };
+         sym = ≃-sym′;
          trans = ≃-trans
       }
