@@ -322,12 +322,11 @@ module Transition.Concur.Properties where
       ≈⟨ (swap *⁼) id*S≈S′ ⟩
          (swap *) S′
       ∎)
-   ⊖₁-✓ E⌣E′ = {!!}
-{-
    ⊖₁-✓ (νᶜᶜ E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ ᵀΔ _ | P′ = ν P′
+   ... | _ ᵀΔ _ | P′ = ν ? --P′
    ⊖₁-✓ (! E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | P′ = P′
+{-
 
    -- Now symmetrise.
    ⊖-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
