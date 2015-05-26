@@ -37,6 +37,19 @@ module Transition.Concur where
    ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Action (Γ + inc a) × Action (Γ + inc a′)
    ᴬ⊖ a⌣a′ = π₂ (ᴬΔ a⌣a′) (ᴬ/ a⌣a′) , π₂ (ᴬΔ (ᴬ⌣-sym a⌣a′)) (ᴬ/ (ᴬ⌣-sym a⌣a′))
 
+   Blah : Cxt → Set
+   Blah Γ = Σ[ a ∈ Action Γ ] Action (Γ + inc a)
+
+   inc₂ : ∀ {Γ} → Blah Γ → Cxt
+   inc₂ (a , a′) = inc a + inc a′
+
+   quibble : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Γ + inc₂ (a , π₁ (ᴬ⊖ a⌣a′)) ≡ Γ + inc a + inc (π₁ (ᴬ⊖ a⌣a′))
+   quibble ᵛ∇ᵛ = refl
+   quibble ᵇ∇ᵇ = refl
+   quibble ᵇ∇ᶜ = refl
+   quibble ᶜ∇ᵇ = refl
+   quibble ᶜ∇ᶜ = refl
+
    -- Cofinality of action residuals amounts to agreement on target context.
    ᴬ⊖-✓ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Γ + inc a + inc (π₁ (ᴬ⊖ a⌣a′)) ≡ Γ + inc a′ + inc (π₂ (ᴬ⊖ a⌣a′))
    ᴬ⊖-✓ ᵛ∇ᵛ = refl
@@ -134,11 +147,11 @@ module Transition.Concur where
       constructor Delta
       a′/a = π₁ (ᴬ⊖ a⌣a′)
       a/a′ = π₂ (ᴬ⊖ a⌣a′)
-      Γ′ = Γ + inc a + inc a′/a
+      Γ′ = Γ + inc₂ (a , a′/a)
       field
          {S S′} : Proc Γ′
-         E′/E : R —[ a′/a - _ ]→ S
-         E/E′ : R′ —[ a/a′ - _ ]→ subst Proc (ᴬ⊖-✓ a⌣a′) S′
+         E′/E : R —[ a′/a - _ ]→ subst Proc (quibble a⌣a′) S
+         E/E′ : R′ —[ a/a′ - _ ]→ subst Proc (trans (quibble a⌣a′) (ᴬ⊖-✓ a⌣a′)) S′
 
    infixl 5 Delta
    syntax Delta E E′ = E ᵀΔ E′

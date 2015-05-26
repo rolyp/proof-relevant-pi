@@ -16,26 +16,26 @@ module Transition.Concur.Properties where
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Concur
-      using (Concur₁; module Concur₁; Concur; Delta′; Delta; module Delta′; ᴬ⊖; ᴬ⊖-✓; ⊖₁; ⊖); open Concur₁
+      using (Concur₁; module Concur₁; Concur; Delta′; Delta; module Delta′; ᴬ⊖; ᴬ⊖-✓; ⊖₁; ⊖; Blah; inc₂);
+      open Concur₁
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
    -- structurally congruent, or structurally congruent with each other's swap image.
-   braid : ∀ {Γ} (a : Action Γ) (a′ : Action (Γ + inc a)) → let Γ′ = Γ + inc a + inc a′ in Ren Γ′ Γ′
-   braid (_ ᵇ) (_ ᵇ) = swap
-   braid (_ ᵇ) (_ ᶜ) = id
-   braid (_ ᶜ) (_ ᵇ) = id
-   braid (_ ᶜ) (_ ᶜ) = id
+   braid : ∀ {Γ} (aa′ : Blah Γ) → let Γ′ = Γ + inc₂ aa′ in Ren Γ′ Γ′
+   braid (_ ᵇ , _ ᵇ) = swap
+   braid (_ ᵇ , _ ᶜ) = id
+   braid (_ ᶜ , _ ᵇ) = id
+   braid (_ ᶜ , _ ᶜ) = id
 
-   ⋈[_,_,_,_] : ∀ Γ (a : Action Γ) (a′ : Action (Γ + inc a)) (m : Cxt) →
-                let Γ′ = Γ + inc a + inc a′ in Proc (Γ′ + m) → Proc (Γ′ + m) → Set
-   ⋈[ Γ , a , a′ , m ] P P′ = ((braid a a′ ᴿ+ m) *) P ≈ P′
+   ⋈[_,_,_] : ∀ Γ (aa′ : Blah Γ) (m : Cxt) → let Γ′ = Γ + inc₂ aa′ in Proc (Γ′ + m) → Proc (Γ′ + m) → Set
+   ⋈[ Γ , aa′ , m ] P P′ = ((braid aa′ ᴿ+ m) *) P ≈ P′
 
    open ≈-Reasoning
 
    -- Correctness of residuals, with respect to the above notion of cofinality. Use ≈-Reasoning for maximum clarity.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in ⋈[ Γ , a , π₁ (ᴬ⊖ a⌣a′) , zero ] S S′
+          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in ⋈[ Γ , (a , π₁ (ᴬ⊖ a⌣a′)) , zero ] S S′
    ⊖₁-✓ (E ᵇ│ᵇ F) =
       let R = target E; S = target F in
       (begin
@@ -349,7 +349,7 @@ module Transition.Concur.Properties where
 
    -- Now symmetrise.
    ⊖-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-         (E⌣E′ : E ⌣[ a⌣a′ ] E′) → let open Delta′ (⊖ E⌣E′) in ⋈[ Γ , a , π₁ (ᴬ⊖ a⌣a′) , zero ] S S′
+         (E⌣E′ : E ⌣[ a⌣a′ ] E′) → let open Delta′ (⊖ E⌣E′) in ⋈[ Γ , (a , π₁ (ᴬ⊖ a⌣a′)) , zero ] S S′
    ⊖-✓ (inj₁ E⌣E′) = ⊖₁-✓ E⌣E′
    ⊖-✓ (inj₂ E′⌣E) with ⊖₁ E′⌣E | ⊖₁-✓ E′⌣E
    ⊖-✓ {a⌣a′ = ᵛ∇ᵛ} (inj₂ E′⌣E) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
