@@ -264,12 +264,10 @@ module Transition.Concur.Properties where
       ≈⟨ (swap *⁼) id*S≈S′ ⟩
          (swap *) S′
       ∎
--- with (swap *ᶜ) E/E′
---   ... | swap*E/E′ rewrite swap-involutive (target E/E′) = {!!}
-   ⊖₁-✓ E⌣E′ = {!!}
-{-
    ⊖₁-✓ (ν•ᶜ E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | P′ = P′
+   ⊖₁-✓ E⌣E′ = {!!}
+{-
    ⊖₁-✓ (νᵇᵇ_ {a = x •} {a} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | E′/E ᵀΔ E/E′ | swap*P′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
    ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push a | sym (swap∘suc-swap∘swap (target E/E′)) =
