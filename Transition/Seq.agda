@@ -67,13 +67,14 @@ module Transition.Seq where
          γ/E⋆ : ⋈[ Γ , ӓ , m + inc⋆ a⋆ ] (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) R′
          E⋆/γ : P′ —[ ((braid ӓ ᴿ+ m) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) m a⋆) R′
 
-   ren-+-assoc : ∀ Γ Γ′ (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
+   -- Hetereogeneously equate braidings up to associativity of + on contexts.
+   braid-assoc : ∀ Γ Γ′ (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
                  (((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
                  (Proc↱ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′) ≅
                  (((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*)
                  (Proc↱ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc↱ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈
                  Proc↱ (cong (_+_ Γ′) (+-assoc Δ₁ Δ₂ Δ₃)) S′)
-   ren-+-assoc Γ Γ′ ρ Δ₁ Δ₂ Δ₃ S S′ =
+   braid-assoc Γ Γ′ ρ Δ₁ Δ₂ Δ₃ S S′ =
       ≅-cong₃ (λ Δ† P P′ → ((ρ ᴿ+ Δ†)*) P ≈ P′)
          (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃))
          (
