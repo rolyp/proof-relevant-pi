@@ -19,7 +19,7 @@ module Transition.Seq where
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; source; target)
    open import Transition.Concur using (Concur; module Delta′; Delta; ⊖; ᴬ⊖; ᴬ⊖-✓)
-   open import Transition.Concur.Properties using (braid; ⋈[_,_,_]; ⊖-✓)
+   open import Transition.Concur.Properties using (braiding; ⋈[_,_,_,_]; ⊖-✓)
    open import Transition.Ren using (_Δ_; _*′)
 
    Proc↱ = subst Proc
@@ -27,22 +27,22 @@ module Transition.Seq where
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
-   record _Δ′_ {ι Γ n m a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
-          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) : Set where
+   record _Δ′_ {ι Γ} {a₀ : Action Γ} {a₀′ : Action (Γ + inc a₀)} m {P P′ : Proc (Γ + inc a₀ + inc a₀′ + m)} {a R}
+          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , a₀ , a₀′ , m ] P P′) : Set where
       constructor _Δ_
       field
          {R′} : _
-         γ/E : ⋈[ Γ , n , m + inc a ] (Proc↱ (+-assoc _ m (inc a)) R) R′
-      σ = braid {Γ} n
+         γ/E : ⋈[ Γ , a₀ , a₀′ , m + inc a ] (Proc↱ (+-assoc _ m (inc a)) R) R′
+      σ = braiding {Γ} a₀ a₀′
       field
          E/γ : P′ —[ ((σ ᴿ+ m) *) a - ι ]→ Proc↱ (ren-preserves-inc-assoc σ m a) R′
-
+{-
    ⊖′[_,_] : ∀ {ι Γ} n m {a} {P P′ : Proc ((Γ + toℕ n) + m)} {R}
          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ′_ {n = n} {m = m} E γ
-   ⊖′[ n , m ] {(_ ᴬ.•) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ n , m ] {(ᴬ.• _) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ n , m ] {ᴬ.• _ 〈 _ 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ n , m ] {ᴬ.τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ n , m ] {(_ ᴬ.•) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braiding n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ n , m ] {(ᴬ.• _) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braiding n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ n , m ] {ᴬ.• _ 〈 _ 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braiding n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ n , m ] {ᴬ.τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braiding n ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
 
    -- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
    -- composition is probably what we eventually want.
@@ -65,15 +65,15 @@ module Transition.Seq where
       field
          {R′} : _
          γ/E⋆ : ⋈[ Γ , n , m + inc⋆ a⋆ ] (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ ((braid n ᴿ+ m) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid n) m a⋆) R′
+         E⋆/γ : P′ —[ ((braiding n ᴿ+ m) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braiding n) m a⋆) R′
 
-   braid-assoc : ∀ Γ (ρ : Ren Γ Γ) Δ₁ Δ₂ Δ₃ S S′ →
+   braiding-assoc : ∀ Γ (ρ : Ren Γ Γ) Δ₁ Δ₂ Δ₃ S S′ →
                  (((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
                  (Proc↱ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′) ≅
                  (((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*)
                  (Proc↱ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc↱ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈
                  Proc↱ (cong (_+_ Γ) (+-assoc Δ₁ Δ₂ Δ₃)) S′)
-   braid-assoc Γ ρ Δ₁ Δ₂ Δ₃ S S′ =
+   braiding-assoc Γ ρ Δ₁ Δ₂ Δ₃ S S′ =
       ≅-cong₃ (λ Δ† P P′ → ((ρ ᴿ+ Δ†)*) P ≈ P′)
          (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃))
          (
@@ -96,10 +96,10 @@ module Transition.Seq where
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , n , m ] P P′) → _Δ⋆_ {n = n} {m = m} E⋆ γ
    ⊖⋆[ n , m ] [] γ = γ Δ []
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ n , m ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | ren-preserves-inc-assoc (braid n) m (a ᵇ)
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (Γ + toℕ n) (braid {Γ} n) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′) =
+   ... | γ/E Δ E/γ with ⊖⋆[ n , m + 1 ] E⋆ γ/E | ren-preserves-inc-assoc (braiding n) m (a ᵇ)
+   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braiding-assoc (Γ + toℕ n) (braiding {Γ} n) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′) =
       let Γ′ = Γ + toℕ n
-          σ = braid {Γ} n
+          σ = braiding {Γ} n
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᵇ∷ ((σ ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
@@ -119,10 +119,10 @@ module Transition.Seq where
              ) (E/γ ᵇ∷ E⋆/γ/E)
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
    ⊖⋆[_,_] {Γ} n m {a⋆ = a ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ n , m ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ n , m ] E⋆ γ/E | ren-preserves-inc-assoc (braid n) m (a ᶜ)
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (Γ + toℕ n) (braid {Γ} n) m 0 (inc⋆ a⋆) (target⋆ E⋆) S′) =
+   ... | γ/E Δ E/γ with ⊖⋆[ n , m ] E⋆ γ/E | ren-preserves-inc-assoc (braiding n) m (a ᶜ)
+   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braiding-assoc (Γ + toℕ n) (braiding {Γ} n) m 0 (inc⋆ a⋆) (target⋆ E⋆) S′) =
       let Γ′ = Γ + toℕ n
-          σ = braid {Γ} n
+          σ = braiding {Γ} n
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
              subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᶜ∷ ((σ ᴿ+ m) *) a⋆ ]→⋆ P) (≅-to-≡ (
@@ -169,3 +169,4 @@ module Transition.Seq where
       ≃-sym : ∀ {a⋆ R a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
 
    -- TODO: IsEquivalence instance.
+-}
