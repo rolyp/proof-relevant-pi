@@ -10,16 +10,16 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    open import Ext
 
    open ᴺ using (Name; _+_; zero; shift)
-   open ᴿ using (module Renameable; suc; pop; push; _ᴿ+_; swap; ᴺren; suc-preserves-id)
+   open ᴿ using (module Renameable; suc; pop; push; _ᴿ+_; swap; ᴺren; suc-preserves-id; +-preserves-id)
 
    module Renameable′ = Renameable {A = A}; open Renameable′ ⦃...⦄ -- fix A for all uses of *
    open Renameable ⦃...⦄ using () renaming (_* to _*′)
 
-   suc-id-elim : ∀ {Γ} → suc id * ≃ₑ id {A = A (Γ + 1)}
-   suc-id-elim a =
+   +-id-elim : ∀ {Γ} n → (id ᴿ+ n) * ≃ₑ id {A = A (Γ + n)}
+   +-id-elim n a =
       begin
-         (suc id *) a
-      ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+         ((id ᴿ+ n) *) a
+      ≡⟨ *-preserves-≃ₑ (+-preserves-id n) _ ⟩
          (id *) a
       ≡⟨ *-preserves-id _ ⟩
          a

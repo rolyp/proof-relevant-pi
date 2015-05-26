@@ -39,6 +39,12 @@ module Ren where
    ρ ᴿ+ zero = ρ
    ρ ᴿ+ (ᴺ.suc n) = suc (ρ ᴿ+ n)
 
+   -- Generalise suc-preserves-id to arbitrary n.
+   +-preserves-id : ∀ {Γ} n → (id {A = Name Γ} ᴿ+ n) ≃ₑ id
+   +-preserves-id zero x = refl
+   +-preserves-id (ᴺ.suc _) zero = refl
+   +-preserves-id (ᴺ.suc n) (ᴺ.suc x) = cong ᴺ.suc (+-preserves-id n x)
+
    -- shift n is a natural transformation between the identity functor and (· ᴿ+ n).
    ᴿ+-comm : ∀ {Γ Γ′} n (ρ : Ren Γ Γ′) → (ρ ᴿ+ n) ∘ shift {Γ} n ≃ₑ shift {Γ′} n ∘ ρ
    ᴿ+-comm zero _ _ = refl

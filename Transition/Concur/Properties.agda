@@ -97,7 +97,7 @@ module Transition.Concur.Properties where
       ν ((
          begin
             (suc id *) S
-         ≡⟨ suc-id-elim _ ⟩
+         ≡⟨ +-id-elim 1 _ ⟩
             S
          ≡⟨ sym (swap-involutive _) ⟩
             (swap *) ((swap *) S)
@@ -106,7 +106,7 @@ module Transition.Concur.Properties where
          ∎) │ (
          begin
             (suc id *) ((suc push *) S₁)
-         ≡⟨ suc-id-elim _ ⟩
+         ≡⟨ +-id-elim 1 _ ⟩
             ((suc push *) S₁)
          ≡⟨ swap∘push _ ⟩
             (swap *) ((push *) S₁)
@@ -122,7 +122,7 @@ module Transition.Concur.Properties where
             (id *) S
          ≈⟨ id*S≈S′ ⟩
             S′
-         ∎) │ ≈-reflexive (suc-id-elim _))
+         ∎) │ ≈-reflexive (+-id-elim 1 _))
    ⊖₁-✓ (_ᵇ│ᵥ_ {x = x} {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | id*S₁≈S′₁ =
       let R = target E in
@@ -136,10 +136,10 @@ module Transition.Concur.Properties where
    ⊖₁-✓ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | E′/E ᵀΔ E/E′ | swap*S₁≈S′₁ rewrite swap∘push (target E) =
       let S₁ = target E′/E; S′₁ = target E/E′ in
-      ν (≈-reflexive (suc-id-elim _) │
+      ν (≈-reflexive (+-id-elim 1 _) │
          (begin
             (suc id *) S₁
-         ≡⟨ suc-id-elim _ ⟩
+         ≡⟨ +-id-elim 1 _ ⟩
             S₁
          ≡⟨ sym (swap-involutive _) ⟩
             (swap *) ((swap *) S₁)
@@ -149,7 +149,7 @@ module Transition.Concur.Properties where
    ⊖₁-✓ (E ᶜ│ᵥ F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | E′/E ᵀΔ E/E′ | id*S₁≈S′₁ =
       let S₁ = target E′/E; S′₁ = target E/E′ in
-      ν (≈-reflexive (suc-id-elim _) │ (
+      ν (≈-reflexive (+-id-elim 1 _) │ (
          begin
             (suc id *) S₁
          ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
@@ -194,7 +194,7 @@ module Transition.Concur.Properties where
       ν ((
          begin
             (suc id *) ((suc (pop y) *) S₁)
-         ≡⟨ suc-id-elim _ ⟩
+         ≡⟨ +-id-elim 1 _ ⟩
             (suc (pop y) *) S₁
          ≡⟨ cong (suc (pop y) *) (sym (swap-involutive _ )) ⟩
             (suc (pop y) *) ((swap *) ((swap *) S₁))
@@ -216,7 +216,7 @@ module Transition.Concur.Properties where
       ν ((
          begin
             (suc id *) ((pop zero *) S₁)
-         ≡⟨ suc-id-elim _ ⟩
+         ≡⟨ +-id-elim 1 _ ⟩
             (pop zero *) S₁
          ≡⟨ sym (pop-swap _) ⟩
             (pop zero *) ((swap *) S₁)
@@ -236,9 +236,7 @@ module Transition.Concur.Properties where
       ≈-trans (ν (ν ((
          begin
             (suc (suc id) *) S₁
-         ≡⟨ {!!} ⟩
-            (suc id *) S₁
-         ≡⟨ suc-id-elim _ ⟩
+         ≡⟨ +-id-elim 2 _ ⟩
             S₁
          ≡⟨ sym (swap-involutive _) ⟩
             (swap *) ((swap *) S₁)
@@ -247,9 +245,7 @@ module Transition.Concur.Properties where
          ∎) │ (
          begin
             (suc (suc id) *) S₂
-         ≡⟨ {!!} ⟩
-            (suc id *) S₂
-         ≡⟨ suc-id-elim _ ⟩
+         ≡⟨ +-id-elim 2 _ ⟩
             S₂
          ≡⟨ sym (swap-involutive _) ⟩
             (swap *) ((swap *) S₂)
