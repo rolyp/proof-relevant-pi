@@ -93,6 +93,7 @@ module Transition.Seq where
          )
          (≅-sym (Proc↲ (cong (_+_ Γ′) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
 
+   -- Mostly an exercise in heterogenous equality.
    ⊖⋆[_,_] : ∀ {Γ} (ӓ : Action₂ Γ) m {P P′ : Proc (Γ + inc₂ ӓ + m)} {a⋆ R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , m ] P P′) → _Δ⋆_ {ӓ = ӓ} {m = m} E⋆ γ
    ⊖⋆[ _ , _ ] [] γ = γ Δ []
@@ -189,8 +190,8 @@ module Transition.Seq where
    ≃-sym ([_ᵇ∶⇋∶ᵇ_] E E′ T) = {!!}
    ≃-sym ([_ᵛ∶⇋∶ᵛ_] E E′ T) = {!!}
    ≃-sym [] = []
-   ≃-sym (E ᵇ∷ T) = {!!}
-   ≃-sym (E ᶜ∷ T) = {!!}
+   ≃-sym (E ᵇ∷ E⋆) = E ᵇ∷ ≃-sym E⋆
+   ≃-sym (E ᶜ∷ E⋆) = E ᶜ∷ ≃-sym E⋆
    ≃-sym (≃-trans T T′) = {!!}
 
    ≃-isEquivalence : ∀ {Γ} {P : Proc Γ} → IsEquivalence (EquivFrom P)
