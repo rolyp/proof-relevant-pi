@@ -254,11 +254,20 @@ module Transition.Concur.Properties where
          ∎)))) (νν-swapₗ _)
    ⊖₁-✓ (ν• E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | id*S≈S′ = id*S≈S′
+   ⊖₁-✓ (ν•ᵇ_ {x = x} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
+   ... | E′/E ᵀΔ E/E′ | id*S≈S′ =
+      let S = target E′/E; S′ = target E/E′ in
+      begin
+         (swap *) S
+      ≡⟨ cong (swap *) (sym (*-preserves-id _)) ⟩
+         (swap *) ((id *) S)
+      ≈⟨ (swap *⁼) id*S≈S′ ⟩
+         (swap *) S′
+      ∎
+-- with (swap *ᶜ) E/E′
+--   ... | swap*E/E′ rewrite swap-involutive (target E/E′) = {!!}
    ⊖₁-✓ E⌣E′ = {!!}
 {-
-   ⊖₁-✓ (ν•ᵇ_ {x = x} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | _ ᵀΔ E/E′ | P′ with (swap *ᶜ) E/E′
-   ... | swap*E/E′ rewrite swap-involutive (target E/E′) = P′
    ⊖₁-✓ (ν•ᶜ E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | P′ = P′
    ⊖₁-✓ (νᵇᵇ_ {a = x •} {a} E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
