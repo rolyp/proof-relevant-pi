@@ -140,7 +140,7 @@ module Transition.Seq where
                 ∎)
              ) (E/γ ᶜ∷ E⋆/γ/E)
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
-{-
+
    -- Causal equivalence.
    infix 4 _≃_
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ a′⋆ R R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
@@ -168,4 +168,3 @@ module Transition.Seq where
       ≃-sym : ∀ {a⋆ R a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
 
    -- TODO: IsEquivalence instance.
--}
