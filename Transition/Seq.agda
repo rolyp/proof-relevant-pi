@@ -18,7 +18,7 @@ module Transition.Seq where
    open import StructuralCong.Proc using (_≈_; ≈-sym; ≈-refl)
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; source; target)
-   open import Transition.Concur using (Concur; module Delta′; Delta; ⊖; ᴬ⊖; ᴬ⊖-✓; Action₂; inc₂)
+   open import Transition.Concur using (Concur; ⌣-sym; module Delta′; Delta; ⊖; ᴬ⊖; ᴬ⊖-✓; Action₂; inc₂)
    open import Transition.Concur.Properties using (braid; ⋈[_,_,_]; ⊖-✓)
    open import Transition.Ren using (_Δ_; _*′)
 
@@ -144,11 +144,11 @@ module Transition.Seq where
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ a′⋆ R R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
       -- Transposition cases. Each specifies a way of extending an existing equivalence; would be
       -- cleaner to define these as axiomatic cases.
-      [_ᶜ∶⇋∶ᶜ_] : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᶜ - _ ]→ R′) →
-                 ⦃ E⌣E′ : E ⌣[ ᶜ∇ᶜ ] E′ ⦄ → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                 ∀ {a⋆ a′⋆ S S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
-                 let _ Δ E⋆/γ = ⊖⋆[ (a ᶜ , a′ ᶜ) , 0 ] E⋆ (⊖-✓ E⌣E′) in
-                 E ᶜ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᶜ∷ E/E′ ᶜ∷ E⋆/γ
+      _ᶜ∶⇋∶ᵇ_[_]∷_ : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᶜ - _ ]→ R′) →
+                     (E⌣E′ : E ⌣[ ᶜ∇ᶜ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
+                     ∀ {a⋆ a′⋆ S S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
+                     let _ Δ E⋆/γ = ⊖⋆[ (a ᶜ , a′ ᶜ) , 0 ] E⋆ (⊖-✓ E⌣E′) in
+                     E ᶜ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᶜ∷ E/E′ ᶜ∷ E⋆/γ
       [_ᶜ∶⇋∶ᵇ_] : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
                  ⦃ E⌣E′ : E ⌣[ ᶜ∇ᵇ ] E′ ⦄ → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
                  ∀ {a⋆ a′⋆ S S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
@@ -183,7 +183,7 @@ module Transition.Seq where
       braid-involutive : ∀ {Γ} ӓ (a⋆ : Action⋆ (Γ + inc₂ ӓ + 0)) → ((braid ӓ ᴿ+ 0) *) (((braid ӓ ᴿ+ 0) *) a⋆) ≡ a⋆
 
    ≃-sym′ : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
-   ≃-sym′ ([ E ᶜ∶⇋∶ᶜ E′ ] E⋆) = {!!}
+   ≃-sym′ (E ᶜ∶⇋∶ᵇ E′ [ E⌣E′ ]∷ E⋆) = let blah = E′ ᶜ∶⇋∶ᵇ E [ ⌣-sym {!E⌣E′!} ]∷ E⋆ in {!!}
    ≃-sym′ ([ E ᶜ∶⇋∶ᵇ E′ ] E⋆) = {!!}
    ≃-sym′ ([ E ᵇ∶⇋∶ᵇ E′ ] E⋆) = {!!}
    ≃-sym′ ([ E ᵛ∶⇋∶ᵛ E′ ] E⋆) = {!!}
