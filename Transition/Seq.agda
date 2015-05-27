@@ -144,7 +144,7 @@ module Transition.Seq where
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ a′⋆ R R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
       -- Transposition cases. Each specifies a way of extending an existing equivalence; would be
       -- cleaner to define these as axiomatic cases.
-      _ᶜ∶⇋∶ᵇ_[_]∷_ : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᶜ - _ ]→ R′) →
+      _ᶜ∶⇋∶ᶜ_[_]∷_ : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᶜ - _ ]→ R′) →
                      (E⌣E′ : E ⌣[ ᶜ∇ᶜ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
                      ∀ {a⋆ a′⋆ S S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
                      let _ Δ E⋆/γ = ⊖⋆[ (a ᶜ , a′ ᶜ) , 0 ] E⋆ (⊖-✓ E⌣E′) in
@@ -174,6 +174,13 @@ module Transition.Seq where
       ≃-trans : ∀ {a⋆ R a″⋆ S a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {F⋆ : P —[ a″⋆ ]→⋆ S} {E′⋆ : P —[ a′⋆ ]→⋆ R′} →
                 E⋆ ≃ F⋆ → F⋆ ≃ E′⋆ → E⋆ ≃ E′⋆
 
+   -- Need a typeclass for edges/morphisms, defining domain and codomain.
+   target′ : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E : P —[ a⋆ ]→⋆ R} {E′ : P —[ a′⋆ ]→⋆ R′} → E ≃ E′ → P —[ a′⋆ ]→⋆ R′
+   target′ {E′ = E′} _ = E′
+
+   source′ : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E : P —[ a⋆ ]→⋆ R} {E′ : P —[ a′⋆ ]→⋆ R′} → E ≃ E′ → P —[ a⋆ ]→⋆ R
+   source′ {E = E} _ = E
+
    ≃-refl : ∀ {Γ} {P : Proc Γ} {a⋆ R} (E⋆ : P —[ a⋆ ]→⋆ R) → E⋆ ≃ E⋆
    ≃-refl [] = []
    ≃-refl (E ᵇ∷ E⋆) = E ᵇ∷ ≃-refl E⋆
@@ -182,15 +189,17 @@ module Transition.Seq where
    postulate
       braid-involutive : ∀ {Γ} ӓ (a⋆ : Action⋆ (Γ + inc₂ ӓ + 0)) → ((braid ӓ ᴿ+ 0) *) (((braid ӓ ᴿ+ 0) *) a⋆) ≡ a⋆
 
-   ≃-sym′ : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
-   ≃-sym′ (E ᶜ∶⇋∶ᵇ E′ [ E⌣E′ ]∷ E⋆) = let blah = E′ ᶜ∶⇋∶ᵇ E [ ⌣-sym {!E⌣E′!} ]∷ E⋆ in {!!}
-   ≃-sym′ ([ E ᶜ∶⇋∶ᵇ E′ ] E⋆) = {!!}
-   ≃-sym′ ([ E ᵇ∶⇋∶ᵇ E′ ] E⋆) = {!!}
-   ≃-sym′ ([ E ᵛ∶⇋∶ᵛ E′ ] E⋆) = {!!}
-   ≃-sym′ [] = []
-   ≃-sym′ (E ᵇ∷ E⋆) = E ᵇ∷ ≃-sym′ E⋆
-   ≃-sym′ (E ᶜ∷ E⋆) = E ᶜ∷ ≃-sym′ E⋆
-   ≃-sym′ (≃-trans T T′) = ≃-trans (≃-sym′ T′) (≃-sym′ T)
+   ≃-sym : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
+   ≃-sym (E ᶜ∶⇋∶ᶜ E′ [ E⌣E′ ]∷ E⋆≃E′⋆) =
+      let
+           blah = E′ ᶜ∶⇋∶ᶜ E [ ⌣-sym E⌣E′ ]∷ {!!} in {!!}
+   ≃-sym ([ E ᶜ∶⇋∶ᵇ E′ ] E⋆) = {!!}
+   ≃-sym ([ E ᵇ∶⇋∶ᵇ E′ ] E⋆) = {!!}
+   ≃-sym ([ E ᵛ∶⇋∶ᵛ E′ ] E⋆) = {!!}
+   ≃-sym [] = []
+   ≃-sym (E ᵇ∷ E⋆) = E ᵇ∷ ≃-sym E⋆
+   ≃-sym (E ᶜ∷ E⋆) = E ᶜ∷ ≃-sym E⋆
+   ≃-sym (≃-trans T T′) = ≃-trans (≃-sym T′) (≃-sym T)
 
    -- Existentially quantified version so we can state isEquivalence.
    TraceFrom : ∀ {Γ} (P : Proc Γ) → Set
@@ -202,6 +211,6 @@ module Transition.Seq where
    ≃-isEquivalence : ∀ {Γ} {P : Proc Γ} → IsEquivalence (EquivFrom P)
    ≃-isEquivalence = record {
          refl = λ { {x = _ , _ , E⋆} → ≃-refl E⋆ };
-         sym = ≃-sym′;
+         sym = ≃-sym;
          trans = ≃-trans
       }

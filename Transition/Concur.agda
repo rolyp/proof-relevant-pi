@@ -137,7 +137,7 @@ module Transition.Concur where
    Concur E E′ a⌣a′ = E ⌣₁[ a⌣a′ ] E′ ⊎ E′ ⌣₁[ ᴬ⌣-sym a⌣a′ ] E
 
    ⌣-sym : ∀ {Γ} {P : Proc Γ} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} →
-           Sym (λ (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → E ⌣[ a⌣a′ ] E′) (λ E E′ → E ⌣[ ᴬ⌣-sym a⌣a′ ] E′)
+           {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} → E ⌣[ a⌣a′ ] E′ → E′ ⌣[ ᴬ⌣-sym a⌣a′ ] E
    ⌣-sym (inj₁ E⌣E′) = inj₂ (subst (Concur₁ _ _) (sym (ᴬ⌣-sym-involutive _)) E⌣E′)
    ⌣-sym (inj₂ E⌣E′) = inj₁ E⌣E′
 
