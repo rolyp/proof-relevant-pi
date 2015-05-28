@@ -2,8 +2,6 @@ module SharedModules where
 
    open import Algebra.FunctionProperties public
    open import Algebra.Structures public
-   open import Category.Functor public
-   open Category.Functor.RawFunctor public
    open import Data.Bool public hiding (_≟_; decSetoid)
    open import Data.Empty public
    open import Data.Product public renaming (proj₁ to π₁; proj₂ to π₂; swap to ×-swap)
