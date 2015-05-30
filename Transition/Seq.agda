@@ -174,12 +174,11 @@ module Transition.Seq where
       ≃-trans : ∀ {a⋆ R a″⋆ S a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {F⋆ : P —[ a″⋆ ]→⋆ S} {E′⋆ : P —[ a′⋆ ]→⋆ R′} →
                 E⋆ ≃ F⋆ → F⋆ ≃ E′⋆ → E⋆ ≃ E′⋆
 
-   -- Need a typeclass for edges/morphisms, defining domain and codomain.
-   target′ : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E : P —[ a⋆ ]→⋆ R} {E′ : P —[ a′⋆ ]→⋆ R′} → E ≃ E′ → P —[ a′⋆ ]→⋆ R′
-   target′ {E′ = E′} _ = E′
+   ≃-target : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E : P —[ a⋆ ]→⋆ R} {E′ : P —[ a′⋆ ]→⋆ R′} → E ≃ E′ → P —[ a′⋆ ]→⋆ R′
+   ≃-target {E′ = E′} _ = E′
 
-   source′ : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E : P —[ a⋆ ]→⋆ R} {E′ : P —[ a′⋆ ]→⋆ R′} → E ≃ E′ → P —[ a⋆ ]→⋆ R
-   source′ {E = E} _ = E
+   ≃-source : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E : P —[ a⋆ ]→⋆ R} {E′ : P —[ a′⋆ ]→⋆ R′} → E ≃ E′ → P —[ a⋆ ]→⋆ R
+   ≃-source {E = E} _ = E
 
    ≃-refl : ∀ {Γ} {P : Proc Γ} {a⋆ R} (E⋆ : P —[ a⋆ ]→⋆ R) → E⋆ ≃ E⋆
    ≃-refl [] = []
@@ -190,9 +189,7 @@ module Transition.Seq where
       braid-involutive : ∀ {Γ} ӓ (a⋆ : Action⋆ (Γ + inc₂ ӓ + 0)) → ((braid ӓ ᴿ+ 0) *) (((braid ӓ ᴿ+ 0) *) a⋆) ≡ a⋆
 
    ≃-sym : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
-   ≃-sym (E ᶜ∶⇋∶ᶜ E′ [ E⌣E′ ]∷ E⋆≃E′⋆) =
-      let
-           blah = E′ ᶜ∶⇋∶ᶜ E [ ⌣-sym E⌣E′ ]∷ {!!} in {!!}
+   ≃-sym (E ᶜ∶⇋∶ᶜ E′ [ E⌣E′ ]∷ E⋆≃E′⋆) = {!!}
    ≃-sym ([ E ᶜ∶⇋∶ᵇ E′ ] E⋆) = {!!}
    ≃-sym ([ E ᵇ∶⇋∶ᵇ E′ ] E⋆) = {!!}
    ≃-sym ([ E ᵛ∶⇋∶ᵛ E′ ] E⋆) = {!!}
