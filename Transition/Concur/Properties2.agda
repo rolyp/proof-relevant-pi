@@ -110,8 +110,8 @@ module Transition.Concur.Properties2 where
    blah {E = P │ᶜ E} () (E′⌣E″ │•ᵇ F) E⌣E″
    blah {E = P │ᶜ E} () (E′⌣E″ │•ᶜ F) E⌣E″
    blah {E = P │ᶜ E} () (E₁ ᵇ│• E′⌣E″) E⌣E″
-   blah {E = .P │ᶜ F} (P │ᶜᶜ F⌣F′) (E ᶜ│• F′⌣F″) (.E ᶜ│• F⌣F″) with ⊖₁ F⌣F′ | ⊖₁ F⌣F″
-   ... | F′/F ᵀΔ _ | F″/F ᵀΔ _ = let x = blah F⌣F′ F′⌣F″ F⌣F″ in _ ᶜ│• {!!}
+   blah (P │ᶜᶜ F⌣F′) (E ᶜ│• F′⌣F″) (.E ᶜ│• F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = _ ᶜ│• F′/F⌣F″/F
    blah {E = P │ᶜ E} E⌣E′ (E′⌣E″ │ᵥᵇ F) E⌣E″ = {!!}
    blah {E = P │ᶜ E} E⌣E′ (E′⌣E″ │ᵥᶜ F) E⌣E″ = {!!}
    blah {E = P │ᶜ E} E⌣E′ (E₁ ᵇ│ᵥ E′⌣E″) E⌣E″ = {!!}
