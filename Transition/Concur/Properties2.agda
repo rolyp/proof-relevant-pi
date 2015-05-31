@@ -59,9 +59,10 @@ module Transition.Concur.Properties2 where
    blah (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │ᵥᵇ F) (E⌣E″ │ᵥᵇ .F) = {!!}
    blah (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᵇ .F) = {!!}
    blah (E ᵇ│ᵇ F) (E₁ ᵇ│ᵥ E′⌣E″) (E⌣E″ │ᵥᵇ F′) = {!!}
-   blah (E ᵇ│ᶜ F) (E₁ ᶜ│ᵥ E′⌣E″) (E⌣E″ │ᵥᵇ F′) = {!!}
-   blah (E ᵇ│ᵇ F) (P │ᵇᵇ E′⌣E″) (.E ᵇ│ᵇ F′) = {!!}
-   blah (E ᵇ│ᵇ F) (P │ᵇᶜ E′⌣E″) (.E ᵇ│ᶜ F′) = {!!}
+   blah (E ᵇ│ᶜ F) (E′ ᶜ│ᵥ E′⌣E″) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E″
+   ... | E″/E ᵀΔ _ = E″/E ᶜ│ᵥ {!!}
+   blah (E ᵇ│ᵇ F) (P │ᵇᵇ E′⌣E″) (.E ᵇ│ᵇ F′) = _ │ᵇᵇ {!!}
+   blah (E ᵇ│ᵇ F) (P │ᵇᶜ E′⌣E″) (.E ᵇ│ᶜ F′) = _ │ᵇᶜ {!!}
    blah (E ᵇ│ᶜ F) (P │ᶜᶜ E′⌣E″) (.E ᵇ│ᶜ F′) = _ │ᶜᶜ {!!}
    blah (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) with blah E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
