@@ -195,4 +195,4 @@ module Transition.Concur.Properties2 where
    blah (νᶜᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᶜᶜ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = νᶜᶜ E′/E⌣E″/E
    blah (! E⌣E′) (! E′⌣E″) (! E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = {!!}
+   ... | E′/E⌣E″/E = E′/E⌣E″/E
