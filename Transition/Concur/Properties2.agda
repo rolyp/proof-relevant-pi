@@ -44,7 +44,8 @@ module Transition.Concur.Properties2 where
    ... | E′/E⌣E″/E = {!!}
    blah (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᵇ F) (E′ ᵇ│ᵇ .F) = {!!}
    blah (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᶜ F) (E′ ᵇ│ᶜ .F) = {!!}
-   blah (E⌣E′ ᵇᶜ│ Q) (E ᶜ│ᵇ F) (E₁ ᵇ│ᵇ .F) = {!!}
+   blah (E⌣E′ ᵇᶜ│ Q) (E ᶜ│ᵇ F) (E′ ᵇ│ᵇ .F) with ⊖₁ E⌣E′
+   ... | E′/E ᵀΔ _ = E′/E ᶜ│ᵇ (push *ᵇ) F
    blah (E⌣E′ ᶜᶜ│ Q) (E ᶜ│ᵇ F) (E′ ᶜ│ᵇ .F) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ _ = E′/E ᶜ│ᵇ F
    blah (E⌣E′ ᵇᶜ│ Q) (E ᶜ│ᶜ F) (E′ ᵇ│ᶜ .F) with ⊖₁ E⌣E′
