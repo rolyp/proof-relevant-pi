@@ -151,8 +151,10 @@ module Transition.Concur.Properties2 where
    ... | F′/F⌣F″/F = P │ᶜᶜ F′/F⌣F″/F
    blah (E ᶜ│• F⌣F′) (E′⌣E″ │• F′⌣F″) (E′ ᶜ│• F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = E′⌣E″ │• F′/F⌣F″/F
-   blah {E = P │ᶜ F} (E ᶜ│• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E′ ᶜ│ᵥ F⌣F″) = {!!}
-   blah {E = P │ᶜ F} (E ᶜ│ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E′ ᶜ│ᵥ F⌣F″) = {!!}
+   blah (E ᶜ│• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E′ ᶜ│ᵥ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = E′⌣E″ │•ᵥ F′/F⌣F″/F
+   blah (E ᶜ│ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E′ ᶜ│ᵥ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = {!!}
    blah (E⌣E′ │• F⌣F′) (E′⌣E″ │• F′⌣F″) (E⌣E″ │• F⌣F″) with blah E⌣E′ E′⌣E″ E⌣E″ | blah F⌣F′ F′⌣F″ F⌣F″
    ... | E′/E⌣E″/E | F′/F⌣F″/F = {!!} │• F′/F⌣F″/F
    blah {E = E │• F} (E⌣E′ │• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │•ᵥ F⌣F″) = {!!}
