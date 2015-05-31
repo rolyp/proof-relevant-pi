@@ -170,16 +170,29 @@ module Transition.Concur.Properties2 where
    blah (ν•ᵇ E⌣E′) (νᵛᵛ E′⌣E″) (ν•ᵇ E⌣E″) = blah E⌣E′ E′⌣E″ E⌣E″
    blah (ν•ᵇ E⌣E′) (νᵇᶜ E′⌣E″) (ν•ᶜ E⌣E″) = blah E⌣E′ E′⌣E″ E⌣E″
    blah (ν•ᶜ E⌣E′) (νᶜᶜ E′⌣E″) (ν•ᶜ E⌣E″) = blah E⌣E′ E′⌣E″ E⌣E″
-   blah (νᵇᵇ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ E⌣E″) = blah E⌣E′ E′⌣E″ E⌣E″
-   blah (νᵇᵇ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) = blah E⌣E′ E′⌣E″ E⌣E″
-   blah (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ E⌣E″) = {!!}
-   blah (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) = {!!}
-   blah (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) = {!!}
-   blah (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) = {!!}
-   blah (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) = {!!}
-   blah (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) = {!!}
-   blah (νᵇᵇ E⌣E′) (νᵇᶜ E′⌣E″) (νᵇᶜ E⌣E″) = {!!}
-   blah (νᵛᵛ E⌣E′) (νᵇᶜ E′⌣E″) (νᵇᶜ E⌣E″) = {!!}
-   blah (νᵇᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᵇᶜ E⌣E″) = {!!}
-   blah (νᶜᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᶜᶜ E⌣E″) = {!!}
-   blah (! E⌣E′) (! E′⌣E″) (! E⌣E″) = {!!}
+   blah (νᵇᵇ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = {!!}
+   blah (νᵇᵇ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = {!!}
+   blah (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = {!!}
+   blah (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = {!!}
+   blah (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = {!!}
+   blah (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = {!!}
+   blah (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = {!!}
+   blah (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = {!!}
+   blah (νᵇᵇ E⌣E′) (νᵇᶜ E′⌣E″) (νᵇᶜ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = {!!}
+   blah (νᵛᵛ E⌣E′) (νᵇᶜ E′⌣E″) (νᵇᶜ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = {!!}
+   blah (νᵇᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᵇᶜ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = {!!}
+   blah (νᶜᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᶜᶜ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = νᶜᶜ E′/E⌣E″/E
+   blah (! E⌣E′) (! E′⌣E″) (! E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = {!!}
