@@ -52,10 +52,14 @@ module Transition.Concur.Properties2 where
    ... | E′/E ᵀΔ _ = E′/E ᶜ│ᶜ (push *ᶜ) F
    blah (E⌣E′ ᶜᶜ│ Q) (E ᶜ│ᶜ F) (E′ ᶜ│ᶜ .F) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ _ = E′/E ᶜ│ᶜ F
-   blah (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │•ᵇ F) (E⌣E″ │•ᵇ .F) = {!!}
-   blah (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ │•ᶜ F) (E⌣E″ │•ᵇ .F) = {!!}
-   blah (E ᵇ│ᵇ F) (E₁ ᵇ│• E′⌣E″) (E⌣E″ │•ᵇ F′) = {!!}
-   blah (E ᵇ│ᶜ F) (E₁ ᶜ│• E′⌣E″) (E⌣E″ │•ᵇ F′) = {!!}
+   blah (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │•ᵇ F) (E⌣E″ │•ᵇ .F) with ⊖₁ E⌣E″ | blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E″/E ᵀΔ _ | E′/E⌣E″/E = {!!}
+   blah (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ │•ᶜ F) (E⌣E″ │•ᵇ .F) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
+   ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
+   blah (E ᵇ│ᵇ F) (E′ ᵇ│• F′⌣F″) (E⌣E″ │•ᵇ F′) with ⊖₁ E⌣E″
+   ... | E″/E ᵀΔ _ = {!!}
+   blah (E ᵇ│ᶜ F) (E′ ᶜ│• F′⌣F″) (E⌣E″ │•ᵇ F′) with ⊖₁ E⌣E″
+   ... | E″/E ᵀΔ _ = {!!}
    blah (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │ᵥᵇ F) (E⌣E″ │ᵥᵇ .F) with blah E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
    blah (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᵇ .F) with blah E⌣E′ E′⌣E″ E⌣E″
@@ -73,14 +77,14 @@ module Transition.Concur.Properties2 where
    ... | E′/E⌣E″/E = {!!}
    blah (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ ᶜᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) with blah E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᶜ│ (push *) Q
-   blah {E = E ᵇ│ Q} E⌣E′ (E′⌣E″ │• E′⌣E″₁) E⌣E″ = {!!}
-   blah {E = E ᵇ│ Q} E⌣E′ (E′⌣E″ │•ᵥ E′⌣E″₁) E⌣E″ = {!!}
-   blah {E = E ᵇ│ Q} E⌣E′ (E′⌣E″ │ᵥ E′⌣E″₁) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (E′⌣E″ │•ᶜ F) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᵇ│• E′⌣E″) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᶜ│• E′⌣E″) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (E′⌣E″ │ᵥᶜ F) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᵇ│ᵥ E′⌣E″) E⌣E″ = {!!}
+   blah (E⌣E′ │•ᵇ F) (E′⌣E″ │• F′⌣F″) (E⌣E″ │•ᵇ F′) = {!!}
+   blah (E⌣E′ │•ᵇ F) (E′⌣E″ │•ᵥ E′⌣E″₁) (E⌣E″ │ᵥᵇ F′) = {!!}
+   blah (E⌣E′ │ᵥᵇ F) (E′⌣E″ │ᵥ E′⌣E″₁) (E⌣E″ │ᵥᵇ F′) = {!!}
+   blah (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │•ᶜ F) (E⌣E″ │•ᶜ .F) = {!!}
+   blah (E ᶜ│ᵇ F) (E₁ ᵇ│• E′⌣E″) (E⌣E″ │•ᶜ F′) = {!!}
+   blah (E ᶜ│ᶜ F) (E₁ ᶜ│• E′⌣E″) (E⌣E″ │•ᶜ F′) = {!!}
+   blah (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᶜ .F) = {!!}
+   blah (E ᶜ│ᵇ F) (E₁ ᵇ│ᵥ E′⌣E″) (E⌣E″ │ᵥᶜ F′) = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᶜ│ᵥ E′⌣E″) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (P │ᵇᵇ E′⌣E″) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (P │ᵇᶜ E′⌣E″) E⌣E″ = {!!}
