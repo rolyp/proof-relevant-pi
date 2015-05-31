@@ -93,24 +93,26 @@ module Transition.Concur.Properties2 where
    ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥᶜ F
    blah (E ᶜ│ᵇ F) (E′ ᵇ│ᵥ F′⌣F″) (E⌣E″ │ᵥᶜ F′) with ⊖₁ E⌣E″
    ... | E″/E ᵀΔ _ = E″/E ᵇ│ᵥ F′⌣F″
-   blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᶜ│ᵥ E′⌣E″) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (P │ᵇᵇ E′⌣E″) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (P │ᵇᶜ E′⌣E″) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (P │ᶜᶜ E′⌣E″) E⌣E″ = {!!}
-   blah {E = E ᶜ│ .Q} E⌣E′ (E′⌣E″ ᶜᶜ│ Q) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (E′⌣E″ │• E′⌣E″₁) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (E′⌣E″ │•ᵥ E′⌣E″₁) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (E′⌣E″ │ᵥ E′⌣E″₁) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E₁ ᵇ│• E′⌣E″) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E₁ ᶜ│• E′⌣E″) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E₁ ᵇ│ᵥ E′⌣E″) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E₁ ᶜ│ᵥ E′⌣E″) E⌣E″ = {!!}
-   blah {E = .P │ᵇ E} E⌣E′ (P │ᵇᵇ E′⌣E″) E⌣E″ = {!!}
-   blah {E = .P │ᵇ E} E⌣E′ (P │ᵇᶜ E′⌣E″) E⌣E″ = {!!}
-   blah {E = .P │ᵇ E} E⌣E′ (P │ᶜᶜ E′⌣E″) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E′⌣E″ │• E′⌣E″₁) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E′⌣E″ │•ᵥ E′⌣E″₁) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E′⌣E″ │ᵥ E′⌣E″₁) E⌣E″ = {!!}
+   blah (E ᶜ│ᶜ F) (E′ ᶜ│ᵥ F⌣F′) (E⌣E″ │ᵥᶜ F′) with ⊖₁ E⌣E″
+   ... | E″/E ᵀΔ _ = E″/E ᶜ│ᵥ F⌣F′
+   blah {a′⌣a″ = ᵛ∇ᵛ} (E ᶜ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᵇᵇ F⌣F′
+   blah {a′⌣a″ = ᵇ∇ᵇ} (E ᶜ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᵇᵇ F⌣F′
+   blah (E ᶜ│ᵇ F) (P │ᵇᶜ F′⌣F″) (.E ᶜ│ᶜ F′) = {!!}
+   blah (E ᶜ│ᶜ F) (P │ᶜᶜ F′⌣F″) (.E ᶜ│ᶜ F′) = {!!}
+   blah (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ ᶜᶜ│ .Q) (E⌣E″ ᶜᶜ│ .Q) = {!!}
+   blah (E⌣E′ │•ᶜ F) (E′⌣E″ │• F′⌣F″) (E⌣E″ │•ᶜ F′) = {!!}
+   blah (E⌣E′ │•ᶜ F) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │ᵥᶜ F′) = {!!}
+   blah (E⌣E′ │ᵥᶜ F) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │ᵥᶜ F′) = {!!}
+   blah (P │ᵇᵇ F⌣F′) (E ᵇ│• F′⌣F″) (.E ᵇ│• F⌣F″) = {!!}
+   blah (P │ᵇᶜ F⌣F′) (E ᶜ│• F′⌣F″) (.E ᵇ│• F⌣F″) = {!!}
+   blah (P │ᵇᵇ F⌣F′) (E ᵇ│ᵥ F′⌣F″) (.E ᵇ│ᵥ F⌣F″) = {!!}
+   blah (P │ᵇᶜ F⌣F′) (E ᶜ│ᵥ F′⌣F″) (.E ᵇ│ᵥ F⌣F″) = {!!}
+   blah (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) = {!!}
+   blah (P │ᵇᵇ F⌣F′) (.P │ᵇᶜ F′⌣F″) (.P │ᵇᶜ F⌣F″) = {!!}
+   blah (P │ᵇᶜ F⌣F′) (.P │ᶜᶜ F′⌣F″) (.P │ᵇᶜ F⌣F″) = {!!}
+   blah (E ᵇ│• F⌣F′) (E′⌣E″ │• F′⌣F″) (E′ ᵇ│• F⌣F″) = {!!}
+   blah (E ᵇ│• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E′ ᵇ│ᵥ F⌣F″) = {!!}
+   blah (E ᵇ│ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E′ ᵇ│ᵥ F⌣F″) = {!!}
    blah (P │ᶜᶜ F⌣F′) (E ᶜ│• F′⌣F″) (.E ᶜ│• F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = _ ᶜ│• F′/F⌣F″/F
    blah {E = P │ᶜ F} E⌣E′ (E ᶜ│ᵥ F′⌣F″) E⌣E″ = {!!}
