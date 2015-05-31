@@ -39,7 +39,8 @@ module Transition.Concur.Properties2 where
           Delta′.E′/E (⊖₁ E⌣E′) ⌣₁[ bib a⌣a′ a′⌣a″ a⌣a″ ] Delta′.E′/E (⊖₁ E⌣E″)
    blah {E = x •∙ ._} E⌣E′ () E⌣E″
    blah {E = • x 〈 y 〉∙ ._} E⌣E′ () E⌣E″
-   blah {E = E ➕₁ .Q} (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) = {!!}
+   blah (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = {!!}
    blah {E = E ᵇ│ Q} E⌣E′ (E₁ ᵇ│ᵇ F) E⌣E″ = {!!}
    blah {E = E ᵇ│ Q} E⌣E′ (E₁ ᵇ│ᶜ F) E⌣E″ = {!!}
    blah {E = E ᵇ│ Q} E⌣E′ (E₁ ᶜ│ᵇ F) E⌣E″ = {!!}
@@ -61,73 +62,42 @@ module Transition.Concur.Properties2 where
    blah {E = E ᵇ│ Q} E⌣E′ (E′⌣E″ │• E′⌣E″₁) E⌣E″ = {!!}
    blah {E = E ᵇ│ Q} E⌣E′ (E′⌣E″ │•ᵥ E′⌣E″₁) E⌣E″ = {!!}
    blah {E = E ᵇ│ Q} E⌣E′ (E′⌣E″ │ᵥ E′⌣E″₁) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᵇ│ᵇ F) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᵇ│ᶜ F) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᶜ│ᵇ F) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᶜ│ᶜ F) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (E′⌣E″ │•ᵇ F) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (E′⌣E″ │•ᶜ F) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᵇ│• E′⌣E″) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᶜ│• E′⌣E″) E⌣E″ = {!!}
-   blah {E = E ᶜ│ Q} E⌣E′ (E′⌣E″ │ᵥᵇ F) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (E′⌣E″ │ᵥᶜ F) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᵇ│ᵥ E′⌣E″) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᶜ│ᵥ E′⌣E″) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (P │ᵇᵇ E′⌣E″) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (P │ᵇᶜ E′⌣E″) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (P │ᶜᶜ E′⌣E″) E⌣E″ = {!!}
-   blah {E = E ᶜ│ .Q} E⌣E′ (E′⌣E″ ᵇᵇ│ Q) E⌣E″ = {!!}
-   blah {E = E ᶜ│ .Q} E⌣E′ (E′⌣E″ ᵇᶜ│ Q) E⌣E″ = {!!}
+
    blah {E = E ᶜ│ .Q} E⌣E′ (E′⌣E″ ᶜᶜ│ Q) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (E′⌣E″ │• E′⌣E″₁) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (E′⌣E″ │•ᵥ E′⌣E″₁) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (E′⌣E″ │ᵥ E′⌣E″₁) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E₁ ᵇ│ᵇ F) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E₁ ᵇ│ᶜ F) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E₁ ᶜ│ᵇ F) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E₁ ᶜ│ᶜ F) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E′⌣E″ │•ᵇ F) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E′⌣E″ │•ᶜ F) E⌣E″ = {!!}
    blah {E = P │ᵇ E} E⌣E′ (E₁ ᵇ│• E′⌣E″) E⌣E″ = {!!}
    blah {E = P │ᵇ E} E⌣E′ (E₁ ᶜ│• E′⌣E″) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E′⌣E″ │ᵥᵇ F) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E′⌣E″ │ᵥᶜ F) E⌣E″ = {!!}
    blah {E = P │ᵇ E} E⌣E′ (E₁ ᵇ│ᵥ E′⌣E″) E⌣E″ = {!!}
    blah {E = P │ᵇ E} E⌣E′ (E₁ ᶜ│ᵥ E′⌣E″) E⌣E″ = {!!}
    blah {E = .P │ᵇ E} E⌣E′ (P │ᵇᵇ E′⌣E″) E⌣E″ = {!!}
    blah {E = .P │ᵇ E} E⌣E′ (P │ᵇᶜ E′⌣E″) E⌣E″ = {!!}
    blah {E = .P │ᵇ E} E⌣E′ (P │ᶜᶜ E′⌣E″) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E′⌣E″ ᵇᵇ│ Q) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E′⌣E″ ᵇᶜ│ Q) E⌣E″ = {!!}
-   blah {E = P │ᵇ E} E⌣E′ (E′⌣E″ ᶜᶜ│ Q) E⌣E″ = {!!}
    blah {E = P │ᵇ E} E⌣E′ (E′⌣E″ │• E′⌣E″₁) E⌣E″ = {!!}
    blah {E = P │ᵇ E} E⌣E′ (E′⌣E″ │•ᵥ E′⌣E″₁) E⌣E″ = {!!}
    blah {E = P │ᵇ E} E⌣E′ (E′⌣E″ │ᵥ E′⌣E″₁) E⌣E″ = {!!}
-   blah {E = P │ᶜ E} E⌣E′ (E₁ ᵇ│ᵇ F) E⌣E″ = {!!}
-   blah {E = P │ᶜ E} E⌣E′ (E₁ ᵇ│ᶜ F) E⌣E″ = {!!}
-   blah {E = P │ᶜ E} E⌣E′ (E₁ ᶜ│ᵇ F) E⌣E″ = {!!}
-   blah {E = P │ᶜ E} () (E₁ ᶜ│ᶜ F) E⌣E″
-   blah {E = P │ᶜ E} () (E′⌣E″ │•ᵇ F) E⌣E″
-   blah {E = P │ᶜ E} () (E′⌣E″ │•ᶜ F) E⌣E″
-   blah {E = P │ᶜ E} () (E₁ ᵇ│• E′⌣E″) E⌣E″
    blah (P │ᶜᶜ F⌣F′) (E ᶜ│• F′⌣F″) (.E ᶜ│• F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = _ ᶜ│• F′/F⌣F″/F
-   blah {E = P │ᶜ E} E⌣E′ (E′⌣E″ │ᵥᵇ F) E⌣E″ = {!!}
-   blah {E = P │ᶜ E} E⌣E′ (E′⌣E″ │ᵥᶜ F) E⌣E″ = {!!}
-   blah {E = P │ᶜ E} E⌣E′ (E₁ ᵇ│ᵥ E′⌣E″) E⌣E″ = {!!}
-   blah {E = P │ᶜ E} E⌣E′ (E₁ ᶜ│ᵥ E′⌣E″) E⌣E″ = {!!}
-   blah {E = ._ │ᶜ _} () (_ │ᵇᵇ _) _
-   blah {E = ._ │ᶜ _} () (_ │ᵇᶜ _) _
+   blah {E = P │ᶜ F} E⌣E′ (E ᶜ│ᵥ F′⌣F″) E⌣E″ = {!!}
    blah (P │ᶜᶜ F⌣F′) (.P │ᶜᶜ F′⌣F″) (.P │ᶜᶜ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = P │ᶜᶜ F′/F⌣F″/F
-   blah {E = P │ᶜ E} E⌣E′ (E′⌣E″ ᵇᵇ│ Q) E⌣E″ = {!!}
-   blah {E = P │ᶜ E} E⌣E′ (E′⌣E″ ᵇᶜ│ Q) E⌣E″ = {!!}
-   blah {E = _ │ᶜ _} () (_ ᶜᶜ│ _) _
-   blah {E = P │ᶜ F} (E ᶜ│• F⌣F′) (E′⌣E″ │• F′⌣F″) (E′ ᶜ│• F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   blah (E ᶜ│• F⌣F′) (E′⌣E″ │• F′⌣F″) (E′ ᶜ│• F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = E′⌣E″ │• F′/F⌣F″/F
    blah {E = P │ᶜ F} (E ᶜ│• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E′ ᶜ│ᵥ F⌣F″) = {!!}
    blah {E = P │ᶜ F} (E ᶜ│ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E′ ᶜ│ᵥ F⌣F″) = {!!}
-   blah {E = E │• F} (E⌣E′ │• F⌣F′) (E′⌣E″ │• F′⌣F″) (E⌣E″ │• F⌣F″) with blah E⌣E′ E′⌣E″ E⌣E″ | blah F⌣F′ F′⌣F″ F⌣F″
+   blah (E⌣E′ │• F⌣F′) (E′⌣E″ │• F′⌣F″) (E⌣E″ │• F⌣F″) with blah E⌣E′ E′⌣E″ E⌣E″ | blah F⌣F′ F′⌣F″ F⌣F″
    ... | E′/E⌣E″/E | F′/F⌣F″/F = {!!} │• F′/F⌣F″/F
    blah {E = E │• F} (E⌣E′ │• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │•ᵥ F⌣F″) = {!!}
    blah {E = E │• F} (E⌣E′ │•ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │•ᵥ F⌣F″) = {!!}
