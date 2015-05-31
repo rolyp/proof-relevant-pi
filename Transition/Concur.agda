@@ -213,9 +213,9 @@ module Transition.Concur where
    ⊖₁ (_│•ᵥ_ {u = u} {y} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
    ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ with (pop y *ᵇ) E′/E
    ... | pop-y*E′/E rewrite pop∘push u y = pop-y*E′/E │ᵥ F′/F ᵀΔ νᶜ (E/E′ │• F/F′)
-   ⊖₁ (_│ᵥ_ {x = x} {u} {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
+   ⊖₁ (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
    ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ = νᶜ (E′/E │• F′/F) ᵀΔ νᶜ (E/E′ │• F/F′)
-   ⊖₁ (_│ᵥ_ {x = x} {u} {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
+   ⊖₁ (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
    ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ = νᶜ (E′/E │ᵥ F′/F) ᵀΔ νᶜ (E/E′ │ᵥ F/F′)
    ⊖₁ (ν• E⌣E′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ = E′/E ᵀΔ E/E′
