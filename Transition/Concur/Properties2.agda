@@ -5,7 +5,7 @@ module Transition.Concur.Properties2 where
    open import Action as ᴬ using (Action; inc; _ᴬ⌣_); open ᴬ.Action; open ᴬ._ᴬ⌣_
    open import Name using (zero; _+_)
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
-   open import Ren as ᴿ using (Ren; push); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; push; pop); open ᴿ.Renameable ⦃...⦄
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
    open import Transition.Ren
    open import Transition.Concur using (ᴬ⊖; Concur₁; module Concur₁; Delta′; Delta; ⊖₁; ⌣-sym); open Concur₁
@@ -176,11 +176,11 @@ module Transition.Concur.Properties2 where
    ... | F′/F⌣F″/F = (push *) P │ᶜᶜ F′/F⌣F″/F
    /-preserves-⌣ (P │ᵇᶜ F⌣F′) (.P │ᶜᶜ F′⌣F″) (.P │ᵇᶜ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = (push *) P │ᶜᶜ F′/F⌣F″/F
-   /-preserves-⌣ (E ᵇ│• F⌣F′) (E′⌣E″ │• F′⌣F″) (E′ ᵇ│• F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   ... | F′/F⌣F″/F = {!!} │• F′/F⌣F″/F
-   /-preserves-⌣ (E ᵇ│• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E′ ᵇ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (E ᵇ│• F⌣F′) (E⌣E′ │• F′⌣F″) (E′ ᵇ│• F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = (push *ᵇᵇ⌣) E⌣E′ │• F′/F⌣F″/F
+   /-preserves-⌣ (E ᵇ│• F⌣F′) (E⌣E′ │•ᵥ F′⌣F″) (E′ ᵇ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = {!!}
-   /-preserves-⌣ (E ᵇ│ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E′ ᵇ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (E ᵇ│ᵥ F⌣F′) (E⌣E′ │ᵥ F′⌣F″) (E′ ᵇ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = {!!}
    /-preserves-⌣ (P │ᶜᶜ F⌣F′) (E ᶜ│• F′⌣F″) (.E ᶜ│• F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = _ ᶜ│• F′/F⌣F″/F
@@ -196,7 +196,7 @@ module Transition.Concur.Properties2 where
    ... | F′/F⌣F″/F = E′⌣E″ │ᵥ F′/F⌣F″/F
    /-preserves-⌣ (E⌣E′ │• F⌣F′) (E′⌣E″ │• F′⌣F″) (E⌣E″ │• F⌣F″)
       with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ | /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   ... | E′/E⌣E″/E | F′/F⌣F″/F = {!!} │• F′/F⌣F″/F
+   ... | E′/E⌣E″/E | F′/F⌣F″/F = (pop _ *ᵇᵇ⌣) E′/E⌣E″/E │• F′/F⌣F″/F
    /-preserves-⌣ (E⌣E′ │• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │•ᵥ F⌣F″)
       with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ | /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | E′/E⌣E″/E | F′/F⌣F″/F = {!!} │•ᵥ F′/F⌣F″/F
