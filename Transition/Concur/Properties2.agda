@@ -190,7 +190,9 @@ module Transition.Concur.Properties2 where
    ... | F′/F⌣F″/F = (push *) P │ᶜᶜ F′/F⌣F″/F
    /-preserves-⌣ (E ᵇ│• F⌣F′) (E⌣E′ │• F′⌣F″) (E′ ᵇ│• F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = (push *ᵇᵇ⌣) E⌣E′ │• F′/F⌣F″/F
-   /-preserves-⌣ (E ᵇ│• F⌣F′) (E⌣E′ │•ᵥ F′⌣F″) (E′ ᵇ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (E ᵇ│• F⌣F′) (E⌣E′ │•ᵥ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E′ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = (push *ᵇᵇ⌣) E⌣E′ │•ᵥ F′/F⌣F″/F
+   /-preserves-⌣ (E ᵇ│• F⌣F′) (E⌣E′ │•ᵥ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E′ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = {!!}
    /-preserves-⌣ (E ᵇ│ᵥ F⌣F′) (E⌣E′ │ᵥ F′⌣F″) (E′ ᵇ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = {!!}

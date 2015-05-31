@@ -182,7 +182,7 @@ module Transition.Concur where
    ... | E′/E ᵀΔ E/E′ = E′/E │ᵥ (push *ᵇ) F ᵀΔ νᵇ (E/E′ ᵇ│ target F)
    ⊖₁ (E⌣E′ │ᵥᶜ F) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ = E′/E │ᵥ F ᵀΔ νᶜ (E/E′ ᶜ│ target F)
-   ⊖₁ (_ᵇ│ᵥ_ {x} {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) with ⊖₁ F⌣F′
+   ⊖₁ (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) with ⊖₁ F⌣F′
    ... | F′/F ᵀΔ F/F′ with (push *ᵇ) E
    ... | push*E = push*E │• F′/F ᵀΔ ν• (target E │ᶜ F/F′)
    ⊖₁ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) with ⊖₁ F⌣F′
