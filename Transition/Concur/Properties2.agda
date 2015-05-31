@@ -112,7 +112,7 @@ module Transition.Concur.Properties2 where
    /-preserves-⌣ (E⌣E′ │•ᵇ F) (E′⌣E″ │•ᵥ F⌣F′) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
    ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
    /-preserves-⌣ (E⌣E′ │ᵥᵇ F) (E′⌣E″ │ᵥ F⌣F′) (E⌣E″ │ᵥᵇ F′) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥ (push *ᵇᵇ⌣) {!!}
+   ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥ (push *ᵇᵇ⌣) F⌣F′
    /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │•ᶜ F) (E⌣E″ │•ᶜ .F) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
    ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
    /-preserves-⌣ (E ᶜ│ᵇ F) (E′ ᵇ│• F′⌣F″) (E⌣E″ │•ᶜ F′) with ⊖₁ E⌣E″
