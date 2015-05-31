@@ -2,7 +2,7 @@ module Transition.Concur.Properties2 where
 
    open import SharedModules
 
-   open import Action as ᴬ using (Action; inc; _ᴬ⌣_); open ᴬ._ᴬ⌣_
+   open import Action as ᴬ using (Action; inc; _ᴬ⌣_); open ᴬ.Action; open ᴬ._ᴬ⌣_
    open import Name using (zero; _+_)
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Ren as ᴿ using (Ren; push); open ᴿ.Renameable ⦃...⦄
@@ -33,8 +33,9 @@ module Transition.Concur.Properties2 where
    bib ᶜ∇ᶜ ᶜ∇ᵇ ᶜ∇ᵇ = ᶜ∇ᵇ
    bib ᶜ∇ᶜ ᶜ∇ᶜ ᶜ∇ᶜ = ᶜ∇ᶜ
 
-   ren-preserves-⌣ : ∀ {Γ Γ′} {P : Proc Γ} {a a′ R R′} {a⌣a′ : a ᴬ⌣ a′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
-                     (ρ : Ren Γ Γ′) → E ⌣₁[ a⌣a′ ] E′ → (ρ *′) E ⌣₁[ {!!} ] (ρ *′) E′
+   ren-preserves-⌣ : ∀ {Γ Γ′} {P : Proc Γ} {a a′ R R′} {a⌣a′ : a ᵇ ᴬ⌣ a′ ᵇ}
+                     {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᵇ - _ ]→ R′} →
+                     (ρ : Ren Γ Γ′) → E ⌣₁[ a⌣a′ ] E′ → (ρ *ᵇ) E ⌣₁[ {!!} ] (ρ *ᵇ) E′
    ren-preserves-⌣ = {!!}
 
    -- Residuation preserves concurrency.
@@ -73,8 +74,8 @@ module Transition.Concur.Properties2 where
    ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥᶜ (push *ᵇ) F
    /-preserves-⌣ (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᵇ .F) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥᶜ (push *ᵇ) F
-   /-preserves-⌣ (E ᵇ│ᵇ F) (E′ ᵇ│ᵥ E′⌣E″) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E″
-   ... | E″/E ᵀΔ _ = E″/E ᵇ│ᵥ {!!}
+   /-preserves-⌣ (E ᵇ│ᵇ F) (E′ ᵇ│ᵥ F⌣F′) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E″
+   ... | E″/E ᵀΔ _ = E″/E ᵇ│ᵥ ren-preserves-⌣ push F⌣F′
    /-preserves-⌣ (E ᵇ│ᶜ F) (E′ ᶜ│ᵥ E′⌣E″) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E″
    ... | E″/E ᵀΔ _ = E″/E ᶜ│ᵥ {!!}
    /-preserves-⌣ (E ᵇ│ᵇ F) (P │ᵇᵇ E′⌣E″) (.E ᵇ│ᵇ F′) = _ │ᵇᵇ {!!}
