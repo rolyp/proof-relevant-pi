@@ -39,7 +39,7 @@ module Transition.Concur.Properties2 where
           Delta′.E′/E (⊖₁ E⌣E′) ⌣₁[ bib a⌣a′ a′⌣a″ a⌣a″ ] Delta′.E′/E (⊖₁ E⌣E″)
    blah {E = x •∙ ._} E⌣E′ () E⌣E″
    blah {E = • x 〈 y 〉∙ ._} E⌣E′ () E⌣E″
-   blah {E = E ➕₁ .Q} E⌣E′ (E′⌣E″ ➕₁ Q) E⌣E″ = {!!}
+   blah {E = E ➕₁ .Q} (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) = {!!}
    blah {E = E ᵇ│ Q} E⌣E′ (E₁ ᵇ│ᵇ F) E⌣E″ = {!!}
    blah {E = E ᵇ│ Q} E⌣E′ (E₁ ᵇ│ᶜ F) E⌣E″ = {!!}
    blah {E = E ᵇ│ Q} E⌣E′ (E₁ ᶜ│ᵇ F) E⌣E″ = {!!}
@@ -118,7 +118,8 @@ module Transition.Concur.Properties2 where
    blah {E = P │ᶜ E} E⌣E′ (E₁ ᶜ│ᵥ E′⌣E″) E⌣E″ = {!!}
    blah {E = .P │ᶜ E} E⌣E′ (P │ᵇᵇ E′⌣E″) E⌣E″ = {!!}
    blah {E = .P │ᶜ E} E⌣E′ (P │ᵇᶜ E′⌣E″) E⌣E″ = {!!}
-   blah {E = .P │ᶜ E} E⌣E′ (P │ᶜᶜ E′⌣E″) E⌣E″ = {!!}
+   blah {E = .P │ᶜ F} (P │ᶜᶜ F⌣F′) (.P │ᶜᶜ F′⌣F″) (.P │ᶜᶜ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = P │ᶜᶜ F′/F⌣F″/F
    blah {E = P │ᶜ E} E⌣E′ (E′⌣E″ ᵇᵇ│ Q) E⌣E″ = {!!}
    blah {E = P │ᶜ E} E⌣E′ (E′⌣E″ ᵇᶜ│ Q) E⌣E″ = {!!}
    blah {E = P │ᶜ E} E⌣E′ (E′⌣E″ ᶜᶜ│ Q) E⌣E″ = {!!}
