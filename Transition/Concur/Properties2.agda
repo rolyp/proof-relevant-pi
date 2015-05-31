@@ -64,7 +64,7 @@ module Transition.Concur.Properties2 where
    _*ᶜᶜ⌣ : ∀ {Γ Γ′} {P : Proc Γ} {a a′ R R′} {a⌣a′ : a ᶜ ᴬ⌣ a′ ᶜ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′}
           (ρ : Ren Γ Γ′) → E ⌣₁[ a⌣a′ ] E′ → (ρ *ᶜ) E ⌣₁[ (ρ *ᴬ⌣) a⌣a′ ] (ρ *ᶜ) E′
    _*ᶜᶜ⌣ = {!!}
-{-
+
    -- Residuation preserves concurrency.
    /-preserves-⌣ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a⌣a′ : a ᴬ⌣ a′} {a′⌣a″ : a′ ᴬ⌣ a″} {a⌣a″ : a ᴬ⌣ a″}
           {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
@@ -279,4 +279,3 @@ module Transition.Concur.Properties2 where
    ... | E′/E⌣E″/E = νᶜᶜ E′/E⌣E″/E
    /-preserves-⌣ (! E⌣E′) (! E′⌣E″) (! E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E
--}
