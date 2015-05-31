@@ -107,24 +107,24 @@ module Transition.Concur.Properties2 where
    ... | E′/E⌣E″/E = {!!}
    /-preserves-⌣ (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ ᶜᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᶜ│ (push *) Q
-   /-preserves-⌣ (E⌣E′ │•ᵇ F) (E′⌣E″ │• F′⌣F″) (E⌣E″ │•ᵇ F′) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
+   /-preserves-⌣ (E⌣E′ │•ᵇ F) (E′⌣E″ │• F⌣F′) (E⌣E″ │•ᵇ F′) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
    ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
-   /-preserves-⌣ (E⌣E′ │•ᵇ F) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
+   /-preserves-⌣ (E⌣E′ │•ᵇ F) (E′⌣E″ │•ᵥ F⌣F′) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
    ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
-   /-preserves-⌣ (E⌣E′ │ᵥᵇ F) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │ᵥᵇ F′) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥ {!!}
+   /-preserves-⌣ (E⌣E′ │ᵥᵇ F) (E′⌣E″ │ᵥ F⌣F′) (E⌣E″ │ᵥᵇ F′) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥ (push *ᵇᵇ⌣) {!!}
    /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │•ᶜ F) (E⌣E″ │•ᶜ .F) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
    ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
    /-preserves-⌣ (E ᶜ│ᵇ F) (E′ ᵇ│• F′⌣F″) (E⌣E″ │•ᶜ F′) with ⊖₁ E⌣E″
    ... | E″/E ᵀΔ _ = {!!}
-   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│• F′⌣F″) (E⌣E″ │•ᶜ F′) with ⊖₁ E⌣E″
+   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│• F⌣F′) (E⌣E″ │•ᶜ F′) with ⊖₁ E⌣E″
    ... | E″/E ᵀΔ _ = {!!}
    /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᶜ .F) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥᶜ F
-   /-preserves-⌣ (E ᶜ│ᵇ F) (E′ ᵇ│ᵥ F′⌣F″) (E⌣E″ │ᵥᶜ F′) with ⊖₁ E⌣E″
-   ... | E″/E ᵀΔ _ = E″/E ᵇ│ᵥ F′⌣F″
-   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│ᵥ F⌣F′) (E⌣E″ │ᵥᶜ F′) with ⊖₁ E⌣E″
-   ... | E″/E ᵀΔ _ = E″/E ᶜ│ᵥ F⌣F′
+   /-preserves-⌣ (E ᶜ│ᵇ F) (E′ ᵇ│ᵥ F⌣F′) (E⌣E′ │ᵥᶜ F′) with ⊖₁ E⌣E′
+   ... | E′/E ᵀΔ _ = E′/E ᵇ│ᵥ F⌣F′
+   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│ᵥ F⌣F′) (E⌣E′ │ᵥᶜ F′) with ⊖₁ E⌣E′
+   ... | E′/E ᵀΔ _ = E′/E ᶜ│ᵥ F⌣F′
    /-preserves-⌣ {a′⌣a″ = ᵛ∇ᵛ} (E ᶜ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᵇᵇ F⌣F′
    /-preserves-⌣ {a′⌣a″ = ᵇ∇ᵇ} (E ᶜ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᵇᵇ F⌣F′
    /-preserves-⌣ (E ᶜ│ᵇ F) (P │ᵇᶜ F′⌣F″) (.E ᶜ│ᶜ F′) = _ │ᵇᶜ F′⌣F″
