@@ -107,11 +107,25 @@ module Transition.Concur.Properties2 where
    ... | E′/E⌣E″/E = {!!}
    blah (E⌣E′ │ᵥᶜ F) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │ᵥᶜ F′) with blah E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥ F′⌣F″
-   blah (P │ᵇᵇ F⌣F′) (E ᵇ│• F′⌣F″) (.E ᵇ│• F⌣F″) = {!!}
-   blah (P │ᵇᶜ F⌣F′) (E ᶜ│• F′⌣F″) (.E ᵇ│• F⌣F″) = {!!}
-   blah (P │ᵇᵇ F⌣F′) (E ᵇ│ᵥ F′⌣F″) (.E ᵇ│ᵥ F⌣F″) = {!!}
-   blah (P │ᵇᶜ F⌣F′) (E ᶜ│ᵥ F′⌣F″) (.E ᵇ│ᵥ F⌣F″) = {!!}
-   blah (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) = {!!}
+   blah (P │ᵇᵇ F⌣F′) (E ᵇ│• F′⌣F″) (.E ᵇ│• F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = {!!}
+   blah (P │ᵇᶜ F⌣F′) (E ᶜ│• F′⌣F″) (.E ᵇ│• F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = (push *ᵇ) E ᶜ│• F′/F⌣F″/F
+   blah {a⌣a′ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (E ᵇ│ᵥ F′⌣F″) (.E ᵇ│ᵥ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = {!!}
+   blah {a⌣a′ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (E ᵇ│ᵥ F′⌣F″) (.E ᵇ│ᵥ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = {!!}
+   blah (P │ᵇᶜ F⌣F′) (E ᶜ│ᵥ F′⌣F″) (.E ᵇ│ᵥ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = {!!}
+   blah {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = (push *) P │ᵇᵇ F′/F⌣F″/F
+   blah {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = (push *) P │ᵇᶜ F′/F⌣F″/F
+   blah {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = (push *) P │ᵇᵇ F′/F⌣F″/F
+   blah {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F⌣F″/F = (push *) P │ᵇᶜ F′/F⌣F″/F
+   blah {a⌣a′ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) = {!!}
    blah (P │ᵇᵇ F⌣F′) (.P │ᵇᶜ F′⌣F″) (.P │ᵇᶜ F⌣F″) = {!!}
    blah (P │ᵇᶜ F⌣F′) (.P │ᶜᶜ F′⌣F″) (.P │ᵇᶜ F⌣F″) = {!!}
    blah (E ᵇ│• F⌣F′) (E′⌣E″ │• F′⌣F″) (E′ ᵇ│• F⌣F″) = {!!}
