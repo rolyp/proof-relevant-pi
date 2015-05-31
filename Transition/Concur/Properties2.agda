@@ -161,17 +161,25 @@ module Transition.Concur.Properties2 where
    ... | E′/E⌣E″/E | F′/F⌣F″/F = {!!} │•ᵥ F′/F⌣F″/F
    blah (E⌣E′ │•ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │•ᵥ F⌣F″) with blah E⌣E′ E′⌣E″ E⌣E″ | blah F⌣F′ F′⌣F″ F⌣F″
    ... | E′/E⌣E″/E | F′/F⌣F″/F = {!!} │ᵥ F′/F⌣F″/F
-   blah {E = E │ᵥ F} (E⌣E′ │ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │ᵥ F⌣F″) = {!!}
-   blah {E = ν• E} E⌣E′ (ν• E′⌣E″) E⌣E″ = {!!}
-   blah {E = ν• E} E⌣E′ (ν•ᵇ E′⌣E″) E⌣E″ = {!!}
-   blah {E = ν• E} E⌣E′ (ν•ᶜ E′⌣E″) E⌣E″ = {!!}
-   blah {E = ν• E} E⌣E′ (νᵇᵇ E′⌣E″) E⌣E″ = {!!}
-   blah {E = ν• E} E⌣E′ (νᵛᵛ E′⌣E″) E⌣E″ = {!!}
-   blah {E = ν• E} E⌣E′ (νᵇᶜ E′⌣E″) E⌣E″ = {!!}
-   blah {E = ν• E} E⌣E′ (νᶜᶜ E′⌣E″) E⌣E″ = {!!}
-   blah {E = νᵇ E} E⌣E′ (νᵇᵇ E′⌣E″) E⌣E″ = {!!}
-   blah {E = νᵇ E} E⌣E′ (νᵛᵛ E′⌣E″) E⌣E″ = {!!}
-   blah {E = νᵇ E} E⌣E′ (νᵇᶜ E′⌣E″) E⌣E″ = {!!}
-   blah {E = νᵇ E} E⌣E′ (νᶜᶜ E′⌣E″) E⌣E″ = {!!}
-   blah {E = νᶜ E} E⌣E′ (νᶜᶜ E′⌣E″) E⌣E″ = {!!}
-   blah {E = ! E} E⌣E′ (! E′⌣E″) E⌣E″ = {!!}
+   blah (E⌣E′ │ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │ᵥ F⌣F″) with blah E⌣E′ E′⌣E″ E⌣E″ | blah F⌣F′ F′⌣F″ F⌣F″
+   ... | E′/E⌣E″/E | F′/F⌣F″/F = {!!}
+   blah (ν• E⌣E′) (ν• E′⌣E″) (ν• E⌣E″) = {!!}
+   blah (ν• E⌣E′) (ν•ᵇ E′⌣E″) (ν•ᵇ E⌣E″) = {!!}
+   blah (ν• E⌣E′) (ν•ᶜ E′⌣E″) (ν•ᶜ E⌣E″) = {!!}
+   blah (ν•ᵇ E⌣E′) (νᵇᵇ E′⌣E″) (ν•ᵇ E⌣E″) = {!!}
+   blah (ν•ᵇ E⌣E′) (νᵛᵛ E′⌣E″) (ν•ᵇ E⌣E″) = {!!}
+   blah (ν•ᵇ E⌣E′) (νᵇᶜ E′⌣E″) (ν•ᶜ E⌣E″) = {!!}
+   blah (ν•ᶜ E⌣E′) (νᶜᶜ E′⌣E″) (ν•ᶜ E⌣E″) = {!!}
+   blah (νᵇᵇ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ E⌣E″) = {!!}
+   blah (νᵇᵇ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) = {!!}
+   blah (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ E⌣E″) = {!!}
+   blah (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) = {!!}
+   blah (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) = {!!}
+   blah (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) = {!!}
+   blah (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) = {!!}
+   blah (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) = {!!}
+   blah (νᵇᵇ E⌣E′) (νᵇᶜ E′⌣E″) (νᵇᶜ E⌣E″) = {!!}
+   blah (νᵛᵛ E⌣E′) (νᵇᶜ E′⌣E″) (νᵇᶜ E⌣E″) = {!!}
+   blah (νᵇᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᵇᶜ E⌣E″) = {!!}
+   blah (νᶜᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᶜᶜ E⌣E″) = {!!}
+   blah (! E⌣E′) (! E′⌣E″) (! E⌣E″) = {!!}
