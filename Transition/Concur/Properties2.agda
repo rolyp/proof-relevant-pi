@@ -7,6 +7,7 @@ module Transition.Concur.Properties2 where
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Ren as ᴿ using (push); open ᴿ.Renameable ⦃...⦄
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
+   open import Transition.Ren
    open import Transition.Concur using (ᴬ⊖; Concur₁; module Concur₁; Delta′; Delta; ⊖₁; ⌣-sym); open Concur₁
 
    -- Only in the two ᵛ∇ᵛ cases is the outcome not uniquely determined by the types; in each case
@@ -44,8 +45,10 @@ module Transition.Concur.Properties2 where
    blah (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᵇ F) (E′ ᵇ│ᵇ .F) = {!!}
    blah (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᶜ F) (E′ ᵇ│ᶜ .F) = {!!}
    blah (E⌣E′ ᵇᶜ│ Q) (E ᶜ│ᵇ F) (E₁ ᵇ│ᵇ .F) = {!!}
-   blah (E⌣E′ ᶜᶜ│ Q) (E ᶜ│ᵇ F) (E₁ ᶜ│ᵇ .F) = {!!}
-   blah (E⌣E′ ᵇᶜ│ Q) (E ᶜ│ᶜ F) (E₁ ᵇ│ᶜ .F) = {!!}
+   blah (E⌣E′ ᶜᶜ│ Q) (E ᶜ│ᵇ F) (E′ ᶜ│ᵇ .F) with ⊖₁ E⌣E′
+   ... | E′/E ᵀΔ _ = E′/E ᶜ│ᵇ F
+   blah (E⌣E′ ᵇᶜ│ Q) (E ᶜ│ᶜ F) (E′ ᵇ│ᶜ .F) with ⊖₁ E⌣E′
+   ... | E′/E ᵀΔ _ = E′/E ᶜ│ᶜ (push *ᶜ) F
    blah (E⌣E′ ᶜᶜ│ Q) (E ᶜ│ᶜ F) (E′ ᶜ│ᶜ .F) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ _ = E′/E ᶜ│ᶜ F
    blah {E = E ᵇ│ Q} E⌣E′ (E′⌣E″ │•ᵇ F) E⌣E″ = {!!}

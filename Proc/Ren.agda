@@ -56,7 +56,8 @@ module Proc.Ren where
 
             *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = Proc Γ}
             *-preserves-id Ο = refl
-            *-preserves-id (x •∙ P) = *-preserves-id′ x ⟨ cong₂ _•∙_ ⟩ trans (*-preserves-≃ₑ suc-preserves-id P) (*-preserves-id P)
+            *-preserves-id (x •∙ P) =
+               *-preserves-id′ x ⟨ cong₂ _•∙_ ⟩ trans (*-preserves-≃ₑ suc-preserves-id P) (*-preserves-id P)
             *-preserves-id (• x 〈 y 〉∙ P) = cong₃ •_〈_〉∙_ (*-preserves-id′ x) (*-preserves-id′ y) (*-preserves-id P)
             *-preserves-id (P ➕ Q) = *-preserves-id P ⟨ cong₂ _➕_ ⟩ *-preserves-id Q
             *-preserves-id (P │ Q) = *-preserves-id P ⟨ cong₂ _│_ ⟩ *-preserves-id Q
