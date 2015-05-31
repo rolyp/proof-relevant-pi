@@ -2,21 +2,51 @@ module Transition.Concur.Properties2 where
 
    open import SharedModules
 
-   open import Action as ᴬ using (_ᴬ⌣_); open ᴬ._ᴬ⌣_
-   open import Name using (zero)
-   open import Proc using (Proc)
+   open import Action as ᴬ using (Action; inc; _ᴬ⌣_); open ᴬ._ᴬ⌣_
+   open import Name using (zero; _+_)
+   open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Ren as ᴿ using (push); open ᴿ.Renameable ⦃...⦄
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
-   open import Transition.Concur using (Concur₁; module Concur₁; Delta′; Delta; ⊖₁; ⌣-sym); open Concur₁
+   open import Transition.Concur using (ᴬ⊖; Concur₁; module Concur₁; Delta′; Delta; ⊖₁; ⌣-sym); open Concur₁
+
+   -- Only in the two ᵛ∇ᵛ cases is the outcome not uniquely determined by the types; in each case
+   -- extrusions of the same binder are preserved.
+   bib : ∀ {Γ} {a a′ a″ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) (a′⌣a″ : a′ ᴬ⌣ a″) (a⌣a″ : a ᴬ⌣ a″) →
+         π₁ (ᴬ⊖ a⌣a′) ᴬ⌣ π₁ (ᴬ⊖ a⌣a″)
+   bib ᵛ∇ᵛ ᵛ∇ᵛ ᵛ∇ᵛ = ᶜ∇ᶜ
+   bib ᵛ∇ᵛ ᵛ∇ᵛ ᵇ∇ᵇ = ᶜ∇ᵇ
+   bib ᵛ∇ᵛ ᵇ∇ᵇ ᵛ∇ᵛ = ᶜ∇ᶜ
+   bib ᵛ∇ᵛ ᵇ∇ᵇ ᵇ∇ᵇ = ᶜ∇ᵇ
+   bib ᵛ∇ᵛ ᵇ∇ᶜ ᵇ∇ᶜ = ᶜ∇ᶜ
+   bib ᵇ∇ᵇ ᵛ∇ᵛ ᵛ∇ᵛ = ᵇ∇ᶜ
+   bib ᵇ∇ᵇ ᵛ∇ᵛ ᵇ∇ᵇ = ᵛ∇ᵛ
+   bib ᵇ∇ᵇ ᵇ∇ᵇ ᵛ∇ᵛ = ᵇ∇ᶜ
+   bib ᵇ∇ᵇ ᵇ∇ᵇ ᵇ∇ᵇ = ᵇ∇ᵇ
+   bib ᵇ∇ᵇ ᵇ∇ᶜ ᵇ∇ᶜ = ᵇ∇ᶜ
+   bib ᵇ∇ᶜ ᶜ∇ᵇ ᵛ∇ᵛ = ᶜ∇ᶜ
+   bib ᵇ∇ᶜ ᶜ∇ᵇ ᵇ∇ᵇ = ᶜ∇ᵇ
+   bib ᵇ∇ᶜ ᶜ∇ᶜ ᵇ∇ᶜ = ᶜ∇ᶜ
+   bib ᶜ∇ᵇ ᵛ∇ᵛ ᶜ∇ᵇ = ᵛ∇ᵛ
+   bib ᶜ∇ᵇ ᵇ∇ᵇ ᶜ∇ᵇ = ᵇ∇ᵇ
+   bib ᶜ∇ᵇ ᵇ∇ᶜ ᶜ∇ᶜ = ᵇ∇ᶜ
+   bib ᶜ∇ᶜ ᶜ∇ᵇ ᶜ∇ᵇ = ᶜ∇ᵇ
+   bib ᶜ∇ᶜ ᶜ∇ᶜ ᶜ∇ᶜ = ᶜ∇ᶜ
 
    -- Residuation preserves concurrency.
    blah : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a⌣a′ : a ᴬ⌣ a′} {a′⌣a″ : a′ ᴬ⌣ a″} {a⌣a″ : a ᴬ⌣ a″}
           {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
           (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → E′ ⌣₁[ a′⌣a″ ] E″ → (E⌣E″ : E ⌣₁[ a⌣a″ ] E″) →
-          Delta′.E′/E (⊖₁ E⌣E′) ⌣₁[ {!!} ] Delta′.E′/E (⊖₁ E⌣E″)
---   blah E⌣E′ E′⌣E″ E⌣E″ with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
-   blah {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} E⌣E′ E′⌣E″ E⌣E″ with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
-   blah {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) | Delta (• ._ 〈 .zero 〉∙ S) E/E′ | Delta (• ._ 〈 .zero 〉∙ .S) E/E′₁ = {!!}
+          Delta′.E′/E (⊖₁ E⌣E′) ⌣₁[ bib a⌣a′ a′⌣a″ a⌣a″ ] Delta′.E′/E (⊖₁ E⌣E″)
+   blah {P = Ο} () _ _
+   blah {P = _ •∙ _} () _ _
+   blah {P = • _ 〈 _ 〉∙ _} () _ _
+   blah {P = P ➕ Q} {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} E⌣E′ E′⌣E″ E⌣E″ = {!!}
+   blah {P = P │ Q} {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} E⌣E′ E′⌣E″ E⌣E″ = {!!}
+   blah {P = ν P} {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} E⌣E′ E′⌣E″ E⌣E″ = {!!}
+   blah {P = ! P} {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} E⌣E′ E′⌣E″ E⌣E″ = {!!} --
+{-
+   blah {P = P ➕ .Q} {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) |
+        (• ._ 〈 .zero 〉∙ S) ᵀΔ _ | (• ._ 〈 .zero 〉∙ .S) ᵀΔ _ = {!!}
    blah {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) | E′/E ➕₁ Q₁ ᵀΔ _ | E′/E₁ ➕₁ .Q₁ ᵀΔ _ = {!!}
    blah {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) | E′/E ᶜ│ Q₁ ᵀΔ E/E′ | E′/E₁ ᶜ│ .Q₁ ᵀΔ E/E′₁ = {!!}
    blah {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) | P₁ │ᶜ E′/E ᵀΔ  E/E′ | E′/E₁ ᶜ│ Q₁ ᵀΔ E/E′₁ = {!!}
@@ -47,7 +77,8 @@ module Transition.Concur.Properties2 where
    blah {a⌣a′ = ᶜ∇ᶜ} {ᶜ∇ᵇ} {ᶜ∇ᵇ} E⌣E′ E′⌣E″ E⌣E″ = {!!}
    blah {a⌣a′ = ᶜ∇ᶜ} {ᶜ∇ᶜ} {ᶜ∇ᶜ} E⌣E′ E′⌣E″ E⌣E″ = {!!}
 --(E⌣E′ ᵇᵇ│ Q) (E′ ᵇ│ᵇ F) (E ᵇ│ᵇ .F) | E′/E ᵀΔ E/E′ | (E″/E ᵇ│ .((push *) Q)) ᵀΔ E/E″ = {!a′⌣a″!}
---   blah E⌣E′ E′⌣E″ E⌣E″ | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
+-}
+   blah E⌣E′ E′⌣E″ E⌣E″ = {!!}
 {-
    blah _ (E ᵇ│ᶜ F) _ | Delta E′/E E/E′ | Delta E″/E E/E′₁ = {!!}
    blah _ (E ᶜ│ᵇ F) _ | Delta E′/E E/E′ | Delta E″/E E/E′₁ = {!!}
