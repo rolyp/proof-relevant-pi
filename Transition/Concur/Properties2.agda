@@ -5,7 +5,7 @@ module Transition.Concur.Properties2 where
    open import Action as ᴬ using (Action; inc; _ᴬ⌣_); open ᴬ._ᴬ⌣_
    open import Name using (zero; _+_)
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
-   open import Ren as ᴿ using (push); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; push); open ᴿ.Renameable ⦃...⦄
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
    open import Transition.Ren
    open import Transition.Concur using (ᴬ⊖; Concur₁; module Concur₁; Delta′; Delta; ⊖₁; ⌣-sym); open Concur₁
@@ -33,6 +33,10 @@ module Transition.Concur.Properties2 where
    bib ᶜ∇ᶜ ᶜ∇ᵇ ᶜ∇ᵇ = ᶜ∇ᵇ
    bib ᶜ∇ᶜ ᶜ∇ᶜ ᶜ∇ᶜ = ᶜ∇ᶜ
 
+   ren-preserves-⌣ : ∀ {Γ Γ′} {P : Proc Γ} {a a′ R R′} {a⌣a′ : a ᴬ⌣ a′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
+                     (ρ : Ren Γ Γ′) → E ⌣₁[ a⌣a′ ] E′ → (ρ *′) E ⌣₁[ {!!} ] (ρ *′) E′
+   ren-preserves-⌣ = {!!}
+
    -- Residuation preserves concurrency.
    blah : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a⌣a′ : a ᴬ⌣ a′} {a′⌣a″ : a′ ᴬ⌣ a″} {a⌣a″ : a ᴬ⌣ a″}
           {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
@@ -40,8 +44,7 @@ module Transition.Concur.Properties2 where
           Delta′.E′/E (⊖₁ E⌣E′) ⌣₁[ bib a⌣a′ a′⌣a″ a⌣a″ ] Delta′.E′/E (⊖₁ E⌣E″)
    blah {E = x •∙ ._} E⌣E′ () E⌣E″
    blah {E = • x 〈 y 〉∙ ._} E⌣E′ () E⌣E″
-   blah (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) with blah E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = {!!}
+   blah (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) = blah E⌣E′ E′⌣E″ E⌣E″
    blah (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᵇ F) (E′ ᵇ│ᵇ .F) = {!!}
    blah (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᶜ F) (E′ ᵇ│ᶜ .F) = {!!}
    blah (E⌣E′ ᵇᶜ│ Q) (E ᶜ│ᵇ F) (E′ ᵇ│ᵇ .F) with ⊖₁ E⌣E′
