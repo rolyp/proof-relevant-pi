@@ -5,7 +5,7 @@ module Transition.Concur.Properties2 where
    open import Action as ᴬ using (Action; inc; _ᴬ⌣_); open ᴬ.Action; open ᴬ._ᴬ⌣_
    open import Name using (zero; _+_)
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
-   open import Ren as ᴿ using (Ren; push; pop); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; push; pop; swap); open ᴿ.Renameable ⦃...⦄
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
    open import Transition.Ren
    open import Transition.Concur using (ᴬ⊖; Concur₁; module Concur₁; Delta′; Delta; ⊖₁; ⌣-sym); open Concur₁
@@ -220,7 +220,7 @@ module Transition.Concur.Properties2 where
    /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
    /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = {!!}
+   ... | E′/E⌣E″/E = νᶜᶜ (swap *ᶜᶜ⌣) E′/E⌣E″/E
    /-preserves-⌣ (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
    /-preserves-⌣ (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
