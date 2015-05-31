@@ -77,14 +77,22 @@ module Transition.Concur.Properties2 where
    ... | E′/E⌣E″/E = {!!}
    blah (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ ᶜᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) with blah E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᶜ│ (push *) Q
-   blah (E⌣E′ │•ᵇ F) (E′⌣E″ │• F′⌣F″) (E⌣E″ │•ᵇ F′) = {!!}
-   blah (E⌣E′ │•ᵇ F) (E′⌣E″ │•ᵥ E′⌣E″₁) (E⌣E″ │ᵥᵇ F′) = {!!}
-   blah (E⌣E′ │ᵥᵇ F) (E′⌣E″ │ᵥ E′⌣E″₁) (E⌣E″ │ᵥᵇ F′) = {!!}
-   blah (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │•ᶜ F) (E⌣E″ │•ᶜ .F) = {!!}
-   blah (E ᶜ│ᵇ F) (E₁ ᵇ│• E′⌣E″) (E⌣E″ │•ᶜ F′) = {!!}
-   blah (E ᶜ│ᶜ F) (E₁ ᶜ│• E′⌣E″) (E⌣E″ │•ᶜ F′) = {!!}
-   blah (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᶜ .F) = {!!}
-   blah (E ᶜ│ᵇ F) (E₁ ᵇ│ᵥ E′⌣E″) (E⌣E″ │ᵥᶜ F′) = {!!}
+   blah (E⌣E′ │•ᵇ F) (E′⌣E″ │• F′⌣F″) (E⌣E″ │•ᵇ F′) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
+   ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
+   blah (E⌣E′ │•ᵇ F) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
+   ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
+   blah (E⌣E′ │ᵥᵇ F) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │ᵥᵇ F′) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥ {!!}
+   blah (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │•ᶜ F) (E⌣E″ │•ᶜ .F) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
+   ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
+   blah (E ᶜ│ᵇ F) (E′ ᵇ│• F′⌣F″) (E⌣E″ │•ᶜ F′) with ⊖₁ E⌣E″
+   ... | E″/E ᵀΔ _ = {!!}
+   blah (E ᶜ│ᶜ F) (E′ ᶜ│• F′⌣F″) (E⌣E″ │•ᶜ F′) with ⊖₁ E⌣E″
+   ... | E″/E ᵀΔ _ = {!!}
+   blah (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᶜ .F) with blah E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥᶜ F
+   blah (E ᶜ│ᵇ F) (E′ ᵇ│ᵥ F′⌣F″) (E⌣E″ │ᵥᶜ F′) with ⊖₁ E⌣E″
+   ... | E″/E ᵀΔ _ = E″/E ᵇ│ᵥ F′⌣F″
    blah {E = E ᶜ│ Q} E⌣E′ (E₁ ᶜ│ᵥ E′⌣E″) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (P │ᵇᵇ E′⌣E″) E⌣E″ = {!!}
    blah {E = E ᶜ│ Q} E⌣E′ (P │ᵇᶜ E′⌣E″) E⌣E″ = {!!}
