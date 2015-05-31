@@ -38,166 +38,181 @@ module Transition.Concur.Properties2 where
    ren-preserves-⌣ = {!!}
 
    -- Residuation preserves concurrency.
-   blah : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a⌣a′ : a ᴬ⌣ a′} {a′⌣a″ : a′ ᴬ⌣ a″} {a⌣a″ : a ᴬ⌣ a″}
+   /-preserves-⌣ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a⌣a′ : a ᴬ⌣ a′} {a′⌣a″ : a′ ᴬ⌣ a″} {a⌣a″ : a ᴬ⌣ a″}
           {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
           (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → E′ ⌣₁[ a′⌣a″ ] E″ → (E⌣E″ : E ⌣₁[ a⌣a″ ] E″) →
           Delta′.E′/E (⊖₁ E⌣E′) ⌣₁[ bib a⌣a′ a′⌣a″ a⌣a″ ] Delta′.E′/E (⊖₁ E⌣E″)
-   blah {E = x •∙ ._} E⌣E′ () E⌣E″
-   blah {E = • x 〈 y 〉∙ ._} E⌣E′ () E⌣E″
-   blah (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) = blah E⌣E′ E′⌣E″ E⌣E″
-   blah {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᵇ F) (E′ ᵇ│ᵇ .F) = _ ᵇ│ᵇ (push *ᵇ) F
-   blah {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᵇ F) (E′ ᵇ│ᵇ .F) = _ ᶜ│ᵇ (push *ᵇ) F
-   blah {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᶜ F) (E′ ᵇ│ᶜ .F) = _ ᵇ│ᶜ (push *ᶜ) F
-   blah {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᶜ F) (E′ ᵇ│ᶜ .F) = _ ᶜ│ᶜ (push *ᶜ) F
-   blah (E⌣E′ ᵇᶜ│ Q) (E ᶜ│ᵇ F) (E′ ᵇ│ᵇ .F) with ⊖₁ E⌣E′
+   /-preserves-⌣ {E = x •∙ ._} E⌣E′ () E⌣E″
+   /-preserves-⌣ {E = • x 〈 y 〉∙ ._} E⌣E′ () E⌣E″
+   /-preserves-⌣ (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᵇ F) (E′ ᵇ│ᵇ .F) = _ ᵇ│ᵇ (push *ᵇ) F
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᵇ F) (E′ ᵇ│ᵇ .F) = _ ᶜ│ᵇ (push *ᵇ) F
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᶜ F) (E′ ᵇ│ᶜ .F) = _ ᵇ│ᶜ (push *ᶜ) F
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᶜ F) (E′ ᵇ│ᶜ .F) = _ ᶜ│ᶜ (push *ᶜ) F
+   /-preserves-⌣ (E⌣E′ ᵇᶜ│ Q) (E ᶜ│ᵇ F) (E′ ᵇ│ᵇ .F) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ _ = E′/E ᶜ│ᵇ (push *ᵇ) F
-   blah (E⌣E′ ᶜᶜ│ Q) (E ᶜ│ᵇ F) (E′ ᶜ│ᵇ .F) with ⊖₁ E⌣E′
+   /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E ᶜ│ᵇ F) (E′ ᶜ│ᵇ .F) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ _ = E′/E ᶜ│ᵇ F
-   blah (E⌣E′ ᵇᶜ│ Q) (E ᶜ│ᶜ F) (E′ ᵇ│ᶜ .F) with ⊖₁ E⌣E′
+   /-preserves-⌣ (E⌣E′ ᵇᶜ│ Q) (E ᶜ│ᶜ F) (E′ ᵇ│ᶜ .F) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ _ = E′/E ᶜ│ᶜ (push *ᶜ) F
-   blah (E⌣E′ ᶜᶜ│ Q) (E ᶜ│ᶜ F) (E′ ᶜ│ᶜ .F) with ⊖₁ E⌣E′
+   /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E ᶜ│ᶜ F) (E′ ᶜ│ᶜ .F) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ _ = E′/E ᶜ│ᶜ F
-   blah (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │•ᵇ F) (E⌣E″ │•ᵇ .F) with ⊖₁ E⌣E″ | blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │•ᵇ F) (E⌣E″ │•ᵇ .F) with ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E″/E ᵀΔ _ | E′/E⌣E″/E = {!!}
-   blah (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ │•ᶜ F) (E⌣E″ │•ᵇ .F) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │•ᵇ F) (E⌣E″ │•ᵇ .F) with ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   ... | E″/E ᵀΔ _ | E′/E⌣E″/E = E′/E⌣E″/E │•ᶜ (push *ᶜ) F
+   /-preserves-⌣ (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ │•ᶜ F) (E⌣E″ │•ᵇ .F) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
    ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
-   blah (E ᵇ│ᵇ F) (E′ ᵇ│• F′⌣F″) (E⌣E″ │•ᵇ F′) with ⊖₁ E⌣E″
+   /-preserves-⌣ (E ᵇ│ᵇ F) (E′ ᵇ│• F′⌣F″) (E⌣E″ │•ᵇ F′) with ⊖₁ E⌣E″
    ... | E″/E ᵀΔ _ = {!!}
-   blah (E ᵇ│ᶜ F) (E′ ᶜ│• F′⌣F″) (E⌣E″ │•ᵇ F′) with ⊖₁ E⌣E″
+   /-preserves-⌣ (E ᵇ│ᶜ F) (E′ ᶜ│• F′⌣F″) (E⌣E″ │•ᵇ F′) with ⊖₁ E⌣E″
    ... | E″/E ᵀΔ _ = {!!}
-   blah (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │ᵥᵇ F) (E⌣E″ │ᵥᵇ .F) with blah E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = {!!}
-   blah (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᵇ .F) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │ᵥᵇ F) (E⌣E″ │ᵥᵇ .F) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥᵇ (push *ᵇ) F
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │ᵥᵇ F) (E⌣E″ │ᵥᵇ .F) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥᶜ (push *ᵇ) F
-   blah (E ᵇ│ᵇ F) (E′ ᵇ│ᵥ E′⌣E″) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E″
-   ... | E″/E ᵀΔ _ = {!!}
-   blah (E ᵇ│ᶜ F) (E′ ᶜ│ᵥ E′⌣E″) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E″
+   /-preserves-⌣ (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᵇ .F) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥᶜ (push *ᵇ) F
+   /-preserves-⌣ (E ᵇ│ᵇ F) (E′ ᵇ│ᵥ E′⌣E″) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E″
+   ... | E″/E ᵀΔ _ = E″/E ᵇ│ᵥ {!!}
+   /-preserves-⌣ (E ᵇ│ᶜ F) (E′ ᶜ│ᵥ E′⌣E″) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E″
    ... | E″/E ᵀΔ _ = E″/E ᶜ│ᵥ {!!}
-   blah (E ᵇ│ᵇ F) (P │ᵇᵇ E′⌣E″) (.E ᵇ│ᵇ F′) = _ │ᵇᵇ {!!}
-   blah (E ᵇ│ᵇ F) (P │ᵇᶜ E′⌣E″) (.E ᵇ│ᶜ F′) = _ │ᵇᶜ {!!}
-   blah (E ᵇ│ᶜ F) (P │ᶜᶜ E′⌣E″) (.E ᵇ│ᶜ F′) = _ │ᶜᶜ {!!}
-   blah (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (E ᵇ│ᵇ F) (P │ᵇᵇ E′⌣E″) (.E ᵇ│ᵇ F′) = _ │ᵇᵇ {!!}
+   /-preserves-⌣ (E ᵇ│ᵇ F) (P │ᵇᶜ E′⌣E″) (.E ᵇ│ᶜ F′) = _ │ᵇᶜ {!!}
+   /-preserves-⌣ (E ᵇ│ᶜ F) (P │ᶜᶜ E′⌣E″) (.E ᵇ│ᶜ F′) = _ │ᶜᶜ {!!}
+   /-preserves-⌣ (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ ᶜᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ ᶜᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᶜ│ (push *) Q
-   blah (E⌣E′ │•ᵇ F) (E′⌣E″ │• F′⌣F″) (E⌣E″ │•ᵇ F′) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
+   /-preserves-⌣ (E⌣E′ │•ᵇ F) (E′⌣E″ │• F′⌣F″) (E⌣E″ │•ᵇ F′) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
    ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
-   blah (E⌣E′ │•ᵇ F) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
+   /-preserves-⌣ (E⌣E′ │•ᵇ F) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │ᵥᵇ F′) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
    ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
-   blah (E⌣E′ │ᵥᵇ F) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │ᵥᵇ F′) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (E⌣E′ │ᵥᵇ F) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │ᵥᵇ F′) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥ {!!}
-   blah (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │•ᶜ F) (E⌣E″ │•ᶜ .F) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
+   /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │•ᶜ F) (E⌣E″ │•ᶜ .F) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″
    ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ = {!!}
-   blah (E ᶜ│ᵇ F) (E′ ᵇ│• F′⌣F″) (E⌣E″ │•ᶜ F′) with ⊖₁ E⌣E″
+   /-preserves-⌣ (E ᶜ│ᵇ F) (E′ ᵇ│• F′⌣F″) (E⌣E″ │•ᶜ F′) with ⊖₁ E⌣E″
    ... | E″/E ᵀΔ _ = {!!}
-   blah (E ᶜ│ᶜ F) (E′ ᶜ│• F′⌣F″) (E⌣E″ │•ᶜ F′) with ⊖₁ E⌣E″
+   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│• F′⌣F″) (E⌣E″ │•ᶜ F′) with ⊖₁ E⌣E″
    ... | E″/E ᵀΔ _ = {!!}
-   blah (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᶜ .F) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᶜ .F) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥᶜ F
-   blah (E ᶜ│ᵇ F) (E′ ᵇ│ᵥ F′⌣F″) (E⌣E″ │ᵥᶜ F′) with ⊖₁ E⌣E″
+   /-preserves-⌣ (E ᶜ│ᵇ F) (E′ ᵇ│ᵥ F′⌣F″) (E⌣E″ │ᵥᶜ F′) with ⊖₁ E⌣E″
    ... | E″/E ᵀΔ _ = E″/E ᵇ│ᵥ F′⌣F″
-   blah (E ᶜ│ᶜ F) (E′ ᶜ│ᵥ F⌣F′) (E⌣E″ │ᵥᶜ F′) with ⊖₁ E⌣E″
+   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│ᵥ F⌣F′) (E⌣E″ │ᵥᶜ F′) with ⊖₁ E⌣E″
    ... | E″/E ᵀΔ _ = E″/E ᶜ│ᵥ F⌣F′
-   blah {a′⌣a″ = ᵛ∇ᵛ} (E ᶜ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᵇᵇ F⌣F′
-   blah {a′⌣a″ = ᵇ∇ᵇ} (E ᶜ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᵇᵇ F⌣F′
-   blah (E ᶜ│ᵇ F) (P │ᵇᶜ F′⌣F″) (.E ᶜ│ᶜ F′) = _ │ᵇᶜ F′⌣F″
-   blah (E ᶜ│ᶜ F) (P │ᶜᶜ F′⌣F″) (.E ᶜ│ᶜ F′) = _ │ᶜᶜ F′⌣F″
-   blah (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ ᶜᶜ│ .Q) (E⌣E″ ᶜᶜ│ .Q) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ {a′⌣a″ = ᵛ∇ᵛ} (E ᶜ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᵇᵇ F⌣F′
+   /-preserves-⌣ {a′⌣a″ = ᵇ∇ᵇ} (E ᶜ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᵇᵇ F⌣F′
+   /-preserves-⌣ (E ᶜ│ᵇ F) (P │ᵇᶜ F′⌣F″) (.E ᶜ│ᶜ F′) = _ │ᵇᶜ F′⌣F″
+   /-preserves-⌣ (E ᶜ│ᶜ F) (P │ᶜᶜ F′⌣F″) (.E ᶜ│ᶜ F′) = _ │ᶜᶜ F′⌣F″
+   /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ ᶜᶜ│ .Q) (E⌣E″ ᶜᶜ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᶜ│ Q
-   blah (E⌣E′ │•ᶜ F) (E′⌣E″ │• F′⌣F″) (E⌣E″ │•ᶜ F′) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (E⌣E′ │•ᶜ F) (E′⌣E″ │• F′⌣F″) (E⌣E″ │•ᶜ F′) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (E⌣E′ │•ᶜ F) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │ᵥᶜ F′) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (E⌣E′ │•ᶜ F) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │ᵥᶜ F′) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (E⌣E′ │ᵥᶜ F) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │ᵥᶜ F′) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (E⌣E′ │ᵥᶜ F) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │ᵥᶜ F′) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥ F′⌣F″
-   blah (P │ᵇᵇ F⌣F′) (E ᵇ│• F′⌣F″) (.E ᵇ│• F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (P │ᵇᵇ F⌣F′) (E ᵇ│• F′⌣F″) (.E ᵇ│• F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = {!!}
-   blah (P │ᵇᶜ F⌣F′) (E ᶜ│• F′⌣F″) (.E ᵇ│• F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (P │ᵇᶜ F⌣F′) (E ᶜ│• F′⌣F″) (.E ᵇ│• F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = (push *ᵇ) E ᶜ│• F′/F⌣F″/F
-   blah {a⌣a′ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (E ᵇ│ᵥ F′⌣F″) (.E ᵇ│ᵥ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (E ᵇ│ᵥ F′⌣F″) (.E ᵇ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = {!!}
-   blah {a⌣a′ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (E ᵇ│ᵥ F′⌣F″) (.E ᵇ│ᵥ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (E ᵇ│ᵥ F′⌣F″) (.E ᵇ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = {!!}
-   blah (P │ᵇᶜ F⌣F′) (E ᶜ│ᵥ F′⌣F″) (.E ᵇ│ᵥ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (P │ᵇᶜ F⌣F′) (E ᶜ│ᵥ F′⌣F″) (.E ᵇ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = {!!}
-   blah {a⌣a′ = ᵇ∇ᵇ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″)
+      with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = (push *) P │ᵇᵇ F′/F⌣F″/F
-   blah {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″)
+      with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = (push *) P │ᵇᶜ F′/F⌣F″/F
-   blah {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″)
+      with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = (push *) P │ᵇᶜ F′/F⌣F″/F
-   blah {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″)
+      with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = {!!}
-   blah {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″)
+      with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = (push *) P │ᶜᶜ F′/F⌣F″/F
-   blah {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″)
+      with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = {!!}
-   blah {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″)
+      with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = (push *) P │ᶜᶜ F′/F⌣F″/F
-   blah {a⌣a′ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᶜ F′⌣F″) (.P │ᵇᶜ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᶜ F′⌣F″) (.P │ᵇᶜ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = (push *) P │ᵇᶜ F′/F⌣F″/F
-   blah {a⌣a′ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᶜ F′⌣F″) (.P │ᵇᶜ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᶜ F′⌣F″) (.P │ᵇᶜ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = (push *) P │ᶜᶜ F′/F⌣F″/F
-   blah (P │ᵇᶜ F⌣F′) (.P │ᶜᶜ F′⌣F″) (.P │ᵇᶜ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (P │ᵇᶜ F⌣F′) (.P │ᶜᶜ F′⌣F″) (.P │ᵇᶜ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = (push *) P │ᶜᶜ F′/F⌣F″/F
-   blah (E ᵇ│• F⌣F′) (E′⌣E″ │• F′⌣F″) (E′ ᵇ│• F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (E ᵇ│• F⌣F′) (E′⌣E″ │• F′⌣F″) (E′ ᵇ│• F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = {!!} │• F′/F⌣F″/F
-   blah (E ᵇ│• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E′ ᵇ│ᵥ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (E ᵇ│• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E′ ᵇ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = {!!}
-   blah (E ᵇ│ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E′ ᵇ│ᵥ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (E ᵇ│ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E′ ᵇ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = {!!}
-   blah (P │ᶜᶜ F⌣F′) (E ᶜ│• F′⌣F″) (.E ᶜ│• F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (P │ᶜᶜ F⌣F′) (E ᶜ│• F′⌣F″) (.E ᶜ│• F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = _ ᶜ│• F′/F⌣F″/F
-   blah (P │ᶜᶜ F⌣F′) (E ᶜ│ᵥ F′⌣F″) (.E ᶜ│ᵥ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (P │ᶜᶜ F⌣F′) (E ᶜ│ᵥ F′⌣F″) (.E ᶜ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = E ᶜ│ᵥ F′/F⌣F″/F
-   blah (P │ᶜᶜ F⌣F′) (.P │ᶜᶜ F′⌣F″) (.P │ᶜᶜ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (P │ᶜᶜ F⌣F′) (.P │ᶜᶜ F′⌣F″) (.P │ᶜᶜ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = P │ᶜᶜ F′/F⌣F″/F
-   blah (E ᶜ│• F⌣F′) (E′⌣E″ │• F′⌣F″) (E′ ᶜ│• F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (E ᶜ│• F⌣F′) (E′⌣E″ │• F′⌣F″) (E′ ᶜ│• F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = E′⌣E″ │• F′/F⌣F″/F
-   blah (E ᶜ│• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E′ ᶜ│ᵥ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (E ᶜ│• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E′ ᶜ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = E′⌣E″ │•ᵥ F′/F⌣F″/F
-   blah (E ᶜ│ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E′ ᶜ│ᵥ F⌣F″) with blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (E ᶜ│ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E′ ᶜ│ᵥ F⌣F″) with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | F′/F⌣F″/F = E′⌣E″ │ᵥ F′/F⌣F″/F
-   blah (E⌣E′ │• F⌣F′) (E′⌣E″ │• F′⌣F″) (E⌣E″ │• F⌣F″) with blah E⌣E′ E′⌣E″ E⌣E″ | blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (E⌣E′ │• F⌣F′) (E′⌣E″ │• F′⌣F″) (E⌣E″ │• F⌣F″)
+      with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ | /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | E′/E⌣E″/E | F′/F⌣F″/F = {!!} │• F′/F⌣F″/F
-   blah (E⌣E′ │• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │•ᵥ F⌣F″) with blah E⌣E′ E′⌣E″ E⌣E″ | blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (E⌣E′ │• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │•ᵥ F⌣F″)
+      with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ | /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | E′/E⌣E″/E | F′/F⌣F″/F = {!!} │•ᵥ F′/F⌣F″/F
-   blah (E⌣E′ │•ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │•ᵥ F⌣F″) with blah E⌣E′ E′⌣E″ E⌣E″ | blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (E⌣E′ │•ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │•ᵥ F⌣F″)
+      with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ | /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | E′/E⌣E″/E | F′/F⌣F″/F = {!!} │ᵥ F′/F⌣F″/F
-   blah (E⌣E′ │ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │ᵥ F⌣F″) with blah E⌣E′ E′⌣E″ E⌣E″ | blah F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (E⌣E′ │ᵥ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (E⌣E″ │ᵥ F⌣F″)
+      with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ | /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    ... | E′/E⌣E″/E | F′/F⌣F″/F = {!!}
-   blah (ν• E⌣E′) (ν• E′⌣E″) (ν• E⌣E″) = blah E⌣E′ E′⌣E″ E⌣E″
-   blah (ν• E⌣E′) (ν•ᵇ E′⌣E″) (ν•ᵇ E⌣E″) = blah E⌣E′ E′⌣E″ E⌣E″
-   blah (ν• E⌣E′) (ν•ᶜ E′⌣E″) (ν•ᶜ E⌣E″) = blah E⌣E′ E′⌣E″ E⌣E″
-   blah (ν•ᵇ E⌣E′) (νᵇᵇ E′⌣E″) (ν•ᵇ E⌣E″) = blah E⌣E′ E′⌣E″ E⌣E″
-   blah (ν•ᵇ E⌣E′) (νᵛᵛ E′⌣E″) (ν•ᵇ E⌣E″) = blah E⌣E′ E′⌣E″ E⌣E″
-   blah (ν•ᵇ E⌣E′) (νᵇᶜ E′⌣E″) (ν•ᶜ E⌣E″) = blah E⌣E′ E′⌣E″ E⌣E″
-   blah (ν•ᶜ E⌣E′) (νᶜᶜ E′⌣E″) (ν•ᶜ E⌣E″) = blah E⌣E′ E′⌣E″ E⌣E″
-   blah (νᵇᵇ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (ν• E⌣E′) (ν• E′⌣E″) (ν• E⌣E″) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (ν• E⌣E′) (ν•ᵇ E′⌣E″) (ν•ᵇ E⌣E″) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (ν• E⌣E′) (ν•ᶜ E′⌣E″) (ν•ᶜ E⌣E″) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (ν•ᵇ E⌣E′) (νᵇᵇ E′⌣E″) (ν•ᵇ E⌣E″) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (ν•ᵇ E⌣E′) (νᵛᵛ E′⌣E″) (ν•ᵇ E⌣E″) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (ν•ᵇ E⌣E′) (νᵇᶜ E′⌣E″) (ν•ᶜ E⌣E″) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (ν•ᶜ E⌣E′) (νᶜᶜ E′⌣E″) (ν•ᶜ E⌣E″) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (νᵇᵇ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (νᵇᵇ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (νᵇᵇ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (νᵇᵇ E⌣E′) (νᵇᶜ E′⌣E″) (νᵇᶜ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (νᵇᵇ E⌣E′) (νᵇᶜ E′⌣E″) (νᵇᶜ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (νᵛᵛ E⌣E′) (νᵇᶜ E′⌣E″) (νᵇᶜ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᶜ E′⌣E″) (νᵇᶜ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (νᵇᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᵇᶜ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (νᵇᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᵇᶜ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   blah (νᶜᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᶜᶜ E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (νᶜᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᶜᶜ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = νᶜᶜ E′/E⌣E″/E
-   blah (! E⌣E′) (! E′⌣E″) (! E⌣E″) with blah E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (! E⌣E′) (! E′⌣E″) (! E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E
