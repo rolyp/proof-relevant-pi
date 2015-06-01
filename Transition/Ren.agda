@@ -30,7 +30,7 @@ module Transition.Ren where
    (ρ *ᵇ) (E ➕₁ Q) = (ρ *ᵇ) E ➕₁ (ρ *) Q
    (ρ *ᵇ) (E ᵇ│ Q) rewrite ᴿ+-comm 1 ρ Q = (ρ *ᵇ) E ᵇ│ (ρ *) Q
    (ρ *ᵇ) (P │ᵇ F) rewrite ᴿ+-comm 1 ρ P = (ρ *) P │ᵇ (ρ *ᵇ) F
-   (ρ *ᵇ) (ν•_ {x = x} E) = ν• ((suc ρ *ᶜ) E)
+   (ρ *ᵇ) (ν• E) = ν• ((suc ρ *ᶜ) E)
    (ρ *ᵇ) (νᵇ_ {R = R} {a = a} E) with (suc ρ *ᵇ) E
    ... | E′ rewrite ᴿ+-comm 1 ρ a | sym (swap-suc-suc ρ R) = νᵇ E′
    (ρ *ᵇ) (! E) = ! (ρ *ᵇ) E

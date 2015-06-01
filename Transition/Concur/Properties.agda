@@ -52,9 +52,12 @@ module Transition.Concur.Properties where
    (ρ *ᵇᵇ⌣) (P │ᵇᵇ F⌣F′) rewrite ᴿ+-comm 1 ρ P = (ρ *) P │ᵇᵇ (ρ *ᵇᵇ⌣) F⌣F′
    (ρ *ᵇᵇ⌣) (E⌣E′ ᵇᵇ│ Q) rewrite ᴿ+-comm 1 ρ Q = (ρ *ᵇᵇ⌣) E⌣E′ ᵇᵇ│ (ρ *) Q
    (ρ *ᵇᵇ⌣) (ν• E⌣E′) = ν• (suc ρ *ᶜᶜ⌣) E⌣E′
-   (ρ *ᵇᵇ⌣) (ν•ᵇ E⌣E′) = {!!}
-   (ρ *ᵇᵇ⌣) (νᵇᵇ E⌣E′) = {!!}
-   (ρ *ᵇᵇ⌣) (νᵛᵛ E⌣E′) = {!!}
+   (ρ *ᵇᵇ⌣) (ν•ᵇ_ {a = a} {E = E} E⌣E′) with (suc ρ *ᶜ) E
+   ... | E′ = {!!}
+   (ρ *ᵇᵇ⌣) (νᵇᵇ_ {a = a} {a′} {E = E} E⌣E′) with (suc ρ *ᵇ) E
+   ... | E′ rewrite ᴿ+-comm 1 ρ a = {!!}
+   (ρ *ᵇᵇ⌣) (νᵛᵛ_ {E = E} E⌣E′) with (suc ρ *ᵇ) E
+   ... | E′ = {!!}
    (ρ *ᵇᵇ⌣) (! E⌣E′) = ! (ρ *ᵇᵇ⌣) E⌣E′
 
    _*ᶜᵇ⌣ : ∀ {Γ Γ′} {P : Proc Γ} {a a′ R R′} {a⌣a′ : a ᶜ ᴬ⌣ a′ ᵇ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ a′ ᵇ - _ ]→ R′}
