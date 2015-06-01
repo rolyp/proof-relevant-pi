@@ -5,7 +5,8 @@ module Transition.Concur.Properties where
    open import Action as ᴬ using (Action; inc; _ᴬ⌣_); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ._ᴬ⌣_
    open import Name using (zero; _+_)
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
-   open import Ren as ᴿ using (Ren; suc; push; pop; swap; ᴿ+-comm); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; suc; push; pop; swap); open ᴿ.Renameable ⦃...⦄
+   open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
    open import Transition.Ren
    open import Transition.Concur using (ᴬ⊖; Concur₁; module Concur₁; Delta′; Delta; ⊖₁; ⌣-sym); open Concur₁
@@ -43,8 +44,7 @@ module Transition.Concur.Properties where
 
    _*ᵇᵇ⌣ : ∀ {Γ Γ′} {P : Proc Γ} {a a′ R R′} {a⌣a′ : a ᵇ ᴬ⌣ a′ ᵇ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᵇ - _ ]→ R′}
           (ρ : Ren Γ Γ′) → E ⌣₁[ a⌣a′ ] E′ → (ρ *ᵇ) E ⌣₁[ (ρ *ᴬ⌣) a⌣a′ ] (ρ *ᵇ) E′
-   (ρ *ᵇᵇ⌣) (_ᵇ│ᵇ_ {Q = Q} E F) with (push * ∘ ρ *) Q
-   ... | _ rewrite ᴿ+-comm 1 ρ Q = {!!}
+   (ρ *ᵇᵇ⌣) (_ᵇ│ᵇ_ {P = P} {Q} E F) rewrite ᴿ+-comm 1 ρ Q | ᴿ+-comm 1 ρ P = (ρ *ᵇ) E ᵇ│ᵇ (ρ *ᵇ) F
    (ρ *ᵇᵇ⌣) (E⌣E′ ➕₁ Q) = (ρ *ᵇᵇ⌣) E⌣E′ ➕₁ _
    (ρ *ᵇᵇ⌣) (P │ᵇᵇ E⌣E′) = {!!}
    (ρ *ᵇᵇ⌣) (E⌣E′ ᵇᵇ│ Q) = {!!}
@@ -65,7 +65,7 @@ module Transition.Concur.Properties where
    _*ᶜᶜ⌣ : ∀ {Γ Γ′} {P : Proc Γ} {a a′ R R′} {a⌣a′ : a ᶜ ᴬ⌣ a′ ᶜ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′}
           (ρ : Ren Γ Γ′) → E ⌣₁[ a⌣a′ ] E′ → (ρ *ᶜ) E ⌣₁[ (ρ *ᴬ⌣) a⌣a′ ] (ρ *ᶜ) E′
    _*ᶜᶜ⌣ = {!!}
-
+{-
    -- Residuation preserves concurrency.
    /-preserves-⌣ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a⌣a′ : a ᴬ⌣ a′} {a′⌣a″ : a′ ᴬ⌣ a″} {a⌣a″ : a ᴬ⌣ a″}
           {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
@@ -280,3 +280,4 @@ module Transition.Concur.Properties where
    ... | E′/E⌣E″/E = νᶜᶜ E′/E⌣E″/E
    /-preserves-⌣ (! E⌣E′) (! E′⌣E″) (! E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E
+-}
