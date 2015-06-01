@@ -225,8 +225,9 @@ module Transition.Concur.Properties where
    ... | E′/E⌣E″/E = {!!}
    /-preserves-⌣ (νᵇᵇ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = {!!}
-   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = {!!}
+   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ_ {a′ = x •} E⌣E″) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ | E′/E⌣E″/E with (swap *ᶜ) E′/E | (swap *ᵇ) E″/E | (swap *ᶜᵇ⌣) E′/E⌣E″/E
+   ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E = {!!}
 {-
    /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = νᶜᶜ (swap *ᶜᶜ⌣) E′/E⌣E″/E
