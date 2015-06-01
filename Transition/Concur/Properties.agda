@@ -57,13 +57,13 @@ module Transition.Concur.Properties where
    (ρ *ᵇᵇ⌣) (E⌣E′ ᵇᵇ│ Q) rewrite ᴿ+-comm 1 ρ Q = (ρ *ᵇᵇ⌣) E⌣E′ ᵇᵇ│ (ρ *) Q
    (ρ *ᵇᵇ⌣) (ν• E⌣E′) = ν• (suc ρ *ᶜᶜ⌣) E⌣E′
    (ρ *ᵇᵇ⌣) (ν•ᵇ_ {R = R} {R′} {a} {E} {E′} E⌣E′) with (suc ρ *ᵇ) E′ | (suc ρ *ᶜᵇ⌣) E⌣E′
-   ... | E† | suc-ρ-*E⌣suc-ρ-*E′ rewrite ᴿ+-comm 1 ρ a | sym (swap-suc-suc ρ R′) = ν•ᵇ suc-ρ-*E⌣suc-ρ-*E′
-   (ρ *ᵇᵇ⌣) (νᵇᵇ_ {R = R} {R′} {a} {a′} {E} {E′} E⌣E′) with (suc ρ *ᵇ) E | (suc ρ *ᵇ) E′
-   ... | E† | E‡ rewrite ᴿ+-comm 1 ρ a | sym (swap-suc-suc ρ R) | ᴿ+-comm 1 ρ a′ | sym (swap-suc-suc ρ R′) =
-      νᵇᵇ {!!}
-   (ρ *ᵇᵇ⌣) (νᵛᵛ_ {R = R} {R′} {x} {u} {E} {E′} E⌣E′) with (suc ρ *ᵇ) E | (suc ρ *ᵇ) E′
-   ... | E† | E‡ rewrite ᴿ+-comm 1 ρ (• x) | sym (swap-suc-suc ρ R) | ᴿ+-comm 1 ρ (• u) | sym (swap-suc-suc ρ R′) =
-      νᵛᵛ {!!}
+   ... | _ | suc-ρ*E⌣E′ rewrite ᴿ+-comm 1 ρ a | sym (swap-suc-suc ρ R′) = ν•ᵇ suc-ρ*E⌣E′
+   (ρ *ᵇᵇ⌣) (νᵇᵇ_ {R = R} {R′} {a} {a′} {E} {E′} E⌣E′) with (suc ρ *ᵇ) E | (suc ρ *ᵇ) E′ | (suc ρ *ᵇᵇ⌣) E⌣E′
+   ... | _ | _ | suc-ρ*E⌣E′
+      rewrite ᴿ+-comm 1 ρ a | sym (swap-suc-suc ρ R) | ᴿ+-comm 1 ρ a′ | sym (swap-suc-suc ρ R′) = νᵇᵇ suc-ρ*E⌣E′
+   (ρ *ᵇᵇ⌣) (νᵛᵛ_ {R = R} {R′} {x} {u} {E} {E′} E⌣E′) with (suc ρ *ᵇ) E | (suc ρ *ᵇ) E′ | (suc ρ *ᵇᵇ⌣) E⌣E′
+   ... | E† | E‡ | suc-ρ*E⌣E′
+      rewrite ᴿ+-comm 1 ρ (• x) | sym (swap-suc-suc ρ R) | ᴿ+-comm 1 ρ (• u) | sym (swap-suc-suc ρ R′) = νᵛᵛ suc-ρ*E⌣E′
    (ρ *ᵇᵇ⌣) (! E⌣E′) = ! (ρ *ᵇᵇ⌣) E⌣E′
 
    _*ᶜᵇ⌣ = {!!}
