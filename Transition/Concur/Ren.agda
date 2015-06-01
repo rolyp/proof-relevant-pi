@@ -51,7 +51,7 @@ module Transition.Concur.Ren where
    _*ᵇᶜ⌣ : ∀ {Γ Γ′} {P : Proc Γ} {a a′ R R′} {a⌣a′ : a ᵇ ᴬ⌣ a′ ᶜ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′}
           (ρ : Ren Γ Γ′) → E ⌣₁[ a⌣a′ ] E′ → (ρ *ᵇ) E ⌣₁[ (ρ *ᴬ⌣) a⌣a′ ] (ρ *ᶜ) E′
 
-   (ρ *ᵇᵇ⌣) (_ᵇ│ᵇ_ {P = P} {Q} E F) rewrite ᴿ+-comm 1 ρ Q | ᴿ+-comm 1 ρ P = (ρ *ᵇ) E ᵇ│ᵇ (ρ *ᵇ) F
+   (ρ *ᵇᵇ⌣) (_ᵇ│ᵇ_ {P = P} {Q} E F) rewrite ᴿ+-comm 1 ρ P | ᴿ+-comm 1 ρ Q = (ρ *ᵇ) E ᵇ│ᵇ (ρ *ᵇ) F
    (ρ *ᵇᵇ⌣) (E⌣E′ ➕₁ Q) = (ρ *ᵇᵇ⌣) E⌣E′ ➕₁ _
    (ρ *ᵇᵇ⌣) (P │ᵇᵇ F⌣F′) rewrite ᴿ+-comm 1 ρ P = (ρ *) P │ᵇᵇ (ρ *ᵇᵇ⌣) F⌣F′
    (ρ *ᵇᵇ⌣) (E⌣E′ ᵇᵇ│ Q) rewrite ᴿ+-comm 1 ρ Q = (ρ *ᵇᵇ⌣) E⌣E′ ᵇᵇ│ (ρ *) Q
@@ -66,7 +66,7 @@ module Transition.Concur.Ren where
       rewrite ᴿ+-comm 1 ρ (• x) | sym (swap-suc-suc ρ R) | ᴿ+-comm 1 ρ (• u) | sym (swap-suc-suc ρ R′) = νᵛᵛ suc-ρ*E⌣E′
    (ρ *ᵇᵇ⌣) (! E⌣E′) = ! (ρ *ᵇᵇ⌣) E⌣E′
 
-   (ρ *ᶜᵇ⌣) (E ᶜ│ᵇ F) = {!!}
+   (ρ *ᶜᵇ⌣) (_ᶜ│ᵇ_ {P = P} E F) rewrite ᴿ+-comm 1 ρ P = (ρ *ᶜ) E ᶜ│ᵇ (ρ *ᵇ) F
    (ρ *ᶜᵇ⌣) (E⌣E′ ➕₁ Q) = (ρ *ᶜᵇ⌣) E⌣E′ ➕₁ _
    (ρ *ᶜᵇ⌣) (! E⌣E′) = ! (ρ *ᶜᵇ⌣) E⌣E′
 
