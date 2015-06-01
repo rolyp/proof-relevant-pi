@@ -44,11 +44,14 @@ module Transition.Concur.Properties where
 
    _*ᵇᵇ⌣ : ∀ {Γ Γ′} {P : Proc Γ} {a a′ R R′} {a⌣a′ : a ᵇ ᴬ⌣ a′ ᵇ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᵇ - _ ]→ R′}
           (ρ : Ren Γ Γ′) → E ⌣₁[ a⌣a′ ] E′ → (ρ *ᵇ) E ⌣₁[ (ρ *ᴬ⌣) a⌣a′ ] (ρ *ᵇ) E′
+   _*ᶜᶜ⌣ : ∀ {Γ Γ′} {P : Proc Γ} {a a′ R R′} {a⌣a′ : a ᶜ ᴬ⌣ a′ ᶜ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′}
+          (ρ : Ren Γ Γ′) → E ⌣₁[ a⌣a′ ] E′ → (ρ *ᶜ) E ⌣₁[ (ρ *ᴬ⌣) a⌣a′ ] (ρ *ᶜ) E′
+
    (ρ *ᵇᵇ⌣) (_ᵇ│ᵇ_ {P = P} {Q} E F) rewrite ᴿ+-comm 1 ρ Q | ᴿ+-comm 1 ρ P = (ρ *ᵇ) E ᵇ│ᵇ (ρ *ᵇ) F
    (ρ *ᵇᵇ⌣) (E⌣E′ ➕₁ Q) = (ρ *ᵇᵇ⌣) E⌣E′ ➕₁ _
-   (ρ *ᵇᵇ⌣) (P │ᵇᵇ E⌣E′) = {!!}
-   (ρ *ᵇᵇ⌣) (E⌣E′ ᵇᵇ│ Q) = {!!}
-   (ρ *ᵇᵇ⌣) (ν• E⌣E′) = {!!}
+   (ρ *ᵇᵇ⌣) (P │ᵇᵇ F⌣F′) rewrite ᴿ+-comm 1 ρ P = (ρ *) P │ᵇᵇ (ρ *ᵇᵇ⌣) F⌣F′
+   (ρ *ᵇᵇ⌣) (E⌣E′ ᵇᵇ│ Q) rewrite ᴿ+-comm 1 ρ Q = (ρ *ᵇᵇ⌣) E⌣E′ ᵇᵇ│ (ρ *) Q
+   (ρ *ᵇᵇ⌣) (ν• E⌣E′) = ν• (suc ρ *ᶜᶜ⌣) E⌣E′
    (ρ *ᵇᵇ⌣) (ν•ᵇ E⌣E′) = {!!}
    (ρ *ᵇᵇ⌣) (νᵇᵇ E⌣E′) = {!!}
    (ρ *ᵇᵇ⌣) (νᵛᵛ E⌣E′) = {!!}
@@ -62,8 +65,6 @@ module Transition.Concur.Properties where
           (ρ : Ren Γ Γ′) → E ⌣₁[ a⌣a′ ] E′ → (ρ *ᵇ) E ⌣₁[ (ρ *ᴬ⌣) a⌣a′ ] (ρ *ᶜ) E′
    _*ᵇᶜ⌣ = {!!}
 
-   _*ᶜᶜ⌣ : ∀ {Γ Γ′} {P : Proc Γ} {a a′ R R′} {a⌣a′ : a ᶜ ᴬ⌣ a′ ᶜ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′}
-          (ρ : Ren Γ Γ′) → E ⌣₁[ a⌣a′ ] E′ → (ρ *ᶜ) E ⌣₁[ (ρ *ᴬ⌣) a⌣a′ ] (ρ *ᶜ) E′
    _*ᶜᶜ⌣ = {!!}
 {-
    -- Residuation preserves concurrency.
