@@ -80,7 +80,8 @@ module Transition.Concur.Ren where
    (ρ *ᵇᶜ⌣) (E⌣E′ ᵇᶜ│ Q) rewrite ᴿ+-comm 1 ρ Q = (ρ *ᵇᶜ⌣) E⌣E′ ᵇᶜ│ (ρ *) Q
    (ρ *ᵇᶜ⌣) (ν•ᶜ_ {a = a} {E} {E′} E⌣E′) with (suc ρ *ᶜ) E′ | (suc ρ *ᶜᶜ⌣) E⌣E′
    ... | _ | suc-ρ*E⌣E′ rewrite ᴿ+-comm 1 ρ a = ν•ᶜ suc-ρ*E⌣E′
-   (ρ *ᵇᶜ⌣) (νᵇᶜ E⌣E′) = {!!}
+   (ρ *ᵇᶜ⌣) (νᵇᶜ_ {R = R} {a = a} {a′} {E} {E′} E⌣E′) with (suc ρ *ᵇ) E | (suc ρ *ᶜ) E′ | (suc ρ *ᵇᶜ⌣) E⌣E′
+   ... | _ | _ | suc-ρ*E⌣E′ rewrite ᴿ+-comm 1 ρ a | ᴿ+-comm 1 ρ a′ | sym (swap-suc-suc ρ R) = νᵇᶜ suc-ρ*E⌣E′
    (ρ *ᵇᶜ⌣) (! E⌣E′) = ! (ρ *ᵇᶜ⌣) E⌣E′
 
    (ρ *ᶜᶜ⌣) (E ᶜ│ᶜ F) = (ρ *ᶜ) E ᶜ│ᶜ (ρ *ᶜ) F
