@@ -19,10 +19,8 @@ module Transition.Ren where
    (ρ *ᶜ) (E ➕₁ Q) = (ρ *ᶜ) E ➕₁ (ρ *) Q
    (ρ *ᶜ) (E ᶜ│ Q) = (ρ *ᶜ) E ᶜ│ (ρ *) Q
    (ρ *ᶜ) (P │ᶜ F) = (ρ *) P │ᶜ (ρ *ᶜ) F
-   (ρ *ᶜ) (_│•_ {R = R} {y = y} E F) with (ρ *ᵇ) E
-   ... | E′ rewrite pop-comm ρ y R = E′ │• (ρ *ᶜ) F
-   (ρ *ᶜ) (_•│_ {S = S} {y = y} E F) with (ρ *ᵇ) F
-   ... | F′ rewrite pop-comm ρ y S = (ρ *ᶜ) E •│ F′
+   (ρ *ᶜ) (_│•_ {R = R} {y = y} E F) rewrite pop-comm ρ y R = (ρ *ᵇ) E │• (ρ *ᶜ) F
+   (ρ *ᶜ) (_•│_ {S = S} {y = y} E F) rewrite pop-comm ρ y S = (ρ *ᶜ) E •│ (ρ *ᵇ) F
    (ρ *ᶜ) (E │ᵥ F) = (ρ *ᵇ) E │ᵥ (ρ *ᵇ) F
    (ρ *ᶜ) (νᶜ_ {a = a} E) with (suc ρ *ᶜ) E
    ... | E′ rewrite ᴿ+-comm 1 ρ a = νᶜ E′
@@ -30,11 +28,9 @@ module Transition.Ren where
 
    (ρ *ᵇ) (x •∙ P) = (ρ *) x •∙ (suc ρ *) P
    (ρ *ᵇ) (E ➕₁ Q) = (ρ *ᵇ) E ➕₁ (ρ *) Q
-   (ρ *ᵇ) (E ᵇ│ Q) with (push * ∘ ρ *) Q
-   ... | _ rewrite ᴿ+-comm 1 ρ Q = (ρ *ᵇ) E ᵇ│ (ρ *) Q
-   (ρ *ᵇ) (P │ᵇ F) with (push * ∘ ρ *) P
-   ... | _ rewrite ᴿ+-comm 1 ρ P = (ρ *) P │ᵇ (ρ *ᵇ) F
-   (ρ *ᵇ) (ν•_ {x = x} E) with (suc ρ *ᶜ) E; ... | E′ = ν• E′
+   (ρ *ᵇ) (E ᵇ│ Q) rewrite ᴿ+-comm 1 ρ Q = (ρ *ᵇ) E ᵇ│ (ρ *) Q
+   (ρ *ᵇ) (P │ᵇ F) rewrite ᴿ+-comm 1 ρ P = (ρ *) P │ᵇ (ρ *ᵇ) F
+   (ρ *ᵇ) (ν•_ {x = x} E) = ν• ((suc ρ *ᶜ) E)
    (ρ *ᵇ) (νᵇ_ {R = R} {a = a} E) with (suc ρ *ᵇ) E
    ... | E′ rewrite ᴿ+-comm 1 ρ a | sym (swap-suc-suc ρ R) = νᵇ E′
    (ρ *ᵇ) (! E) = ! (ρ *ᵇ) E
