@@ -80,13 +80,13 @@ module Transition.Concur.Properties where
    ... | E′/E⌣E″/E = E′/E⌣E″/E ᵇᶜ│ (push *) Q
 -}
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵇ∇ᵇ} {ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = {!!}
+   ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᵇ│ (push *) Q
 {-
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵇ∇ᵇ} {ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᶜ│ (push *) Q
 -}
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = {!!}
+   ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᵇ│ (push *) Q
 {-
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᶜ│ (push *) Q
@@ -187,8 +187,8 @@ module Transition.Concur.Properties where
    ... | F′/F⌣F″/F = (push *) P │ᵇᶜ F′/F⌣F″/F
 -}
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″)
-      with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   ... | F′/F⌣F″/F = {!!}
+      with ⊖₁ F⌣F′ | ⊖₁ F⌣F″ | /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   ... | F′/F ᵀΔ F/F′ | F″/F ᵀΔ F/F″ | F′/F⌣F″/F = {!!}
 {-
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″)
       with /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
