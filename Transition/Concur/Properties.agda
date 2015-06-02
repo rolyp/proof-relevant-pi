@@ -34,9 +34,9 @@ module Transition.Concur.Properties where
       with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E with (pop y *ᵇ) (E/E′ (⊖₁ E⌣E″))
    ... | pop-y*E/E″ rewrite pop∘push y a = E′/E⌣E″/E │•ᵇ (push *ᶜ) F
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │•ᵇ F) (E⌣E″ │•ᵇ .F) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   ... | E′/E⌣E″/E = E′/E⌣E″/E │•ᶜ (push *ᶜ) F
 {-
-   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │•ᵇ F) (E⌣E″ │•ᵇ .F) with ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E″/E ᵀΔ _ | E′/E⌣E″/E = E′/E⌣E″/E │•ᶜ (push *ᶜ) F
    /-preserves-⌣ (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ │•ᶜ F) (_│•ᵇ_ {y = y} {a = a} E⌣E″ .F)
       with ⊖₁ E⌣E′ | ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | _ ᵀΔ _ | E″/E ᵀΔ E/E″ | E′/E⌣E″/E with (pop y *ᵇ) E/E″
