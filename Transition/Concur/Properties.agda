@@ -214,17 +214,17 @@ module Transition.Concur.Properties where
       νᵇᶜ (swap *ᵇᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ_ {a′ = x •} E⌣E″)
       with (swap *ᶜ) (E′/E (⊖₁ E⌣E′)) | (swap *ᵇ) (E′/E (⊖₁ E⌣E″)) | (swap *ᶜᵇ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
-   ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E = {!!}
+   ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E = νᶜᵇ swap*E′/E⌣E″/E
    /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ_ {a′ = • x} E⌣E″)
       with (swap *ᶜ) (E′/E (⊖₁ E⌣E′)) | (swap *ᵇ) (E′/E (⊖₁ E⌣E″)) | (swap *ᶜᵇ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
-   ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E = {!!}
+   ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E = νᶜᵇ swap*E′/E⌣E″/E
    /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) = νᶜᶜ (swap *ᶜᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    /-preserves-⌣ (νᵇᵇ_ {a = x •} E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) = νᵛᵛ (swap *ᵇᵇ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    /-preserves-⌣ (νᵇᵇ_ {a = • x} E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) = νᵛᵛ (swap *ᵇᵇ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    /-preserves-⌣ (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) = νᵇᶜ (swap *ᵇᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″)
       with (swap *ᶜ) (E′/E (⊖₁ E⌣E′)) | (swap *ᵇ) (E′/E (⊖₁ E⌣E″)) | (swap *ᶜᵇ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
-   ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E = {!!}
+   ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E = νᶜᵇ swap*E′/E⌣E″/E
    /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) = νᶜᶜ (swap *ᶜᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    /-preserves-⌣ (νᵇᵇ_ {a = x •} {a} E⌣E′) (νᵇᶜ_ {a′ = a′} E′⌣E″) (νᵇᶜ E⌣E″)
       with (swap *ᵇ) (E′/E (⊖₁ E⌣E′)) | (swap *ᶜ) (E′/E (⊖₁ E⌣E″)) | (swap *ᵇᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
