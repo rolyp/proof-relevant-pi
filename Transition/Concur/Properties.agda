@@ -19,6 +19,7 @@ module Transition.Concur.Properties where
                    {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
                    (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → E′ ⌣₁[ a′⌣a″ ] E″ → (E⌣E″ : E ⌣₁[ a⌣a″ ] E″) →
                    E′/E (⊖₁ E⌣E′) ⌣₁[ /-preserves-ᴬ⌣ a⌣a′ a′⌣a″ a⌣a″ ] E′/E (⊖₁ E⌣E″)
+{-
    /-preserves-⌣ {E = x •∙ ._} E⌣E′ () E⌣E″
    /-preserves-⌣ {E = • x 〈 y 〉∙ ._} E⌣E′ () E⌣E″
    /-preserves-⌣ (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
@@ -81,28 +82,24 @@ module Transition.Concur.Properties where
    ... | pop-y*E/E″ rewrite pop∘push y a = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │•ᶜ F
    /-preserves-⌣ (E ᶜ│ᵇ F) (E′ ᵇ│• F′⌣F″) (_│•ᶜ_ {y = y} {a = a} E⌣E″ F′) with (pop y *ᶜ) (E/E′ (⊖₁ E⌣E″))
    ... | pop-y*E/E″ rewrite pop∘push y a = E′/E (⊖₁ E⌣E″) ᵇ│• F′⌣F″
-{-
-   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│• F⌣F′) (_│•ᶜ_ {y = y} {a = a} E⌣E′ F′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ with (pop y *ᶜ) E/E′
-   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E ᶜ│• F⌣F′
-   /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᶜ .F) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥᶜ F
-   /-preserves-⌣ (E ᶜ│ᵇ F) (E′ ᵇ│ᵥ F⌣F′) (E⌣E′ │ᵥᶜ F′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ _ = E′/E ᵇ│ᵥ F⌣F′
-   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│ᵥ F⌣F′) (E⌣E′ │ᵥᶜ F′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ _ = E′/E ᶜ│ᵥ F⌣F′
+   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│• F⌣F′) (_│•ᶜ_ {y = y} {a = a} E⌣E′ F′) with (pop y *ᶜ) (E/E′ (⊖₁ E⌣E′))
+   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E (⊖₁ E⌣E′) ᶜ│• F⌣F′
+-}
+   /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᶜ .F) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │ᵥᶜ F
+   /-preserves-⌣ (E ᶜ│ᵇ F) (E′ ᵇ│ᵥ F⌣F′) (E⌣E′ │ᵥᶜ F′) = E′/E (⊖₁ E⌣E′) ᵇ│ᵥ F⌣F′
+   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│ᵥ F⌣F′) (E⌣E′ │ᵥᶜ F′) = E′/E (⊖₁ E⌣E′) ᶜ│ᵥ F⌣F′
    /-preserves-⌣ {a′⌣a″ = ᵛ∇ᵛ} (E ᶜ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᵇᵇ F⌣F′
    /-preserves-⌣ {a′⌣a″ = ᵇ∇ᵇ} (E ᶜ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᵇᵇ F⌣F′
    /-preserves-⌣ (E ᶜ│ᵇ F) (P │ᵇᶜ F′⌣F″) (.E ᶜ│ᶜ F′) = _ │ᵇᶜ F′⌣F″
    /-preserves-⌣ (E ᶜ│ᶜ F) (P │ᶜᶜ F′⌣F″) (.E ᶜ│ᶜ F′) = _ │ᶜᶜ F′⌣F″
-   /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ ᶜᶜ│ .Q) (E⌣E″ ᶜᶜ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᶜ│ Q
+   /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ ᶜᶜ│ .Q) (E⌣E″ ᶜᶜ│ .Q) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᶜᶜ│ Q
    /-preserves-⌣ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) (_│•_ {x = x} {.y} {u} {z} E′⌣E″ F⌣F′) (E⌣E″ │•ᶜ F′)
       with ⊖₁ E⌣E′ | ⊖₁ E′⌣E″ | ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | _ ᵀΔ E/E′ | E″/E′ ᵀΔ E′/E″ | _ ᵀΔ E/E″ | E′/E⌣E″/E
       with (pop y *ᶜ) E/E′ | (pop y *ᵇ) E″/E′ | (pop z *ᵇ) E′/E″ | (pop z *ᶜ) E/E″
    ... | pop-y*E/E′ | pop-y*E″/E′ | pop-z*E′/E″ | pop-z*E/E″
       rewrite pop∘push y a | pop∘push u y | pop∘push x z | pop∘push z a = E′/E⌣E″/E │• F⌣F′
+{-
    /-preserves-⌣ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │ᵥᶜ F′)
       with ⊖₁ E⌣E′ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | _ ᵀΔ E/E′ | E′/E⌣E″/E with (pop y *ᶜ) E/E′
