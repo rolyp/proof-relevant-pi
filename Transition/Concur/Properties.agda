@@ -221,40 +221,29 @@ module Transition.Concur.Properties where
    /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵇᵇ_ {a′ = • x} E⌣E″)
       with (swap *ᶜ) (E′/E (⊖₁ E⌣E′)) | (swap *ᵇ) (E′/E (⊖₁ E⌣E″)) | (swap *ᶜᵇ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E = {!!}
-{-
-   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = νᶜᶜ (swap *ᶜᶜ⌣) E′/E⌣E″/E
-   /-preserves-⌣ (νᵇᵇ_ {a = x •} E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = νᵛᵛ (swap *ᵇᵇ⌣) E′/E⌣E″/E
-   /-preserves-⌣ (νᵇᵇ_ {a = • x} E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = νᵛᵛ (swap *ᵇᵇ⌣) E′/E⌣E″/E
-   /-preserves-⌣ (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = νᵇᶜ ((swap *ᵇᶜ⌣) E′/E⌣E″/E)
-   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ | E′/E⌣E″/E with (swap *ᶜ) E′/E | (swap *ᵇ) E″/E | (swap *ᶜᵇ⌣) E′/E⌣E″/E
+   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᵇ E′⌣E″) (νᵛᵛ E⌣E″) = νᶜᶜ (swap *ᶜᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
+   /-preserves-⌣ (νᵇᵇ_ {a = x •} E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) = νᵛᵛ (swap *ᵇᵇ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
+   /-preserves-⌣ (νᵇᵇ_ {a = • x} E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″) = νᵛᵛ (swap *ᵇᵇ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
+   /-preserves-⌣ (νᵇᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) = νᵇᶜ (swap *ᵇᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
+   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵇᵇ E⌣E″)
+      with (swap *ᶜ) (E′/E (⊖₁ E⌣E′)) | (swap *ᵇ) (E′/E (⊖₁ E⌣E″)) | (swap *ᶜᵇ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E = {!!}
-   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = νᶜᶜ ((swap *ᶜᶜ⌣) E′/E⌣E″/E)
+   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵛᵛ E′⌣E″) (νᵛᵛ E⌣E″) = νᶜᶜ (swap *ᶜᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    /-preserves-⌣ (νᵇᵇ_ {a = x •} {a} E⌣E′) (νᵇᶜ_ {a′ = a′} E′⌣E″) (νᵇᶜ E⌣E″)
-       with ⊖₁ E⌣E′ | ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ | E′/E⌣E″/E with (swap *ᵇ) E′/E | (swap *ᶜ) E″/E | (swap *ᵇᶜ⌣) E′/E⌣E″/E
+      with (swap *ᵇ) (E′/E (⊖₁ E⌣E′)) | (swap *ᶜ) (E′/E (⊖₁ E⌣E″)) | (swap *ᵇᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E rewrite swap∘push∘push a | swap∘push∘push a′ = νᵇᶜ swap*E′/E⌣E″/E
    /-preserves-⌣ (νᵇᵇ_ {a = • x} {u •} E⌣E′) (νᵇᶜ_ {a′ = a′} E′⌣E″) (νᵇᶜ E⌣E″)
-      with ⊖₁ E⌣E′ | ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ | E′/E⌣E″/E with (swap *ᵇ) E′/E | (swap *ᶜ) E″/E | (swap *ᵇᶜ⌣) E′/E⌣E″/E
+      with (swap *ᵇ) (E′/E (⊖₁ E⌣E′)) | (swap *ᶜ) (E′/E (⊖₁ E⌣E″)) | (swap *ᵇᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E rewrite swap∘push∘push a′ = νᵇᶜ swap*E′/E⌣E″/E
-   /-preserves-⌣ (νᵇᵇ_ {a = • x} {• u} E⌣E′) (νᵇᶜ_ {a′ = a′} E′⌣E″) (νᵇᶜ E⌣E″) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ | E′/E⌣E″/E with (swap *ᵇ) E′/E | (swap *ᶜ) E″/E | (swap *ᵇᶜ⌣) E′/E⌣E″/E
+   /-preserves-⌣ (νᵇᵇ_ {a = • x} {• u} E⌣E′) (νᵇᶜ_ {a′ = a′} E′⌣E″) (νᵇᶜ E⌣E″)
+      with (swap *ᵇ) (E′/E (⊖₁ E⌣E′)) | (swap *ᶜ) (E′/E (⊖₁ E⌣E″)) | (swap *ᵇᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E rewrite swap∘push∘push a′ = νᵇᶜ swap*E′/E⌣E″/E
-   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᶜ_ {a′ = a′} E′⌣E″) (νᵇᶜ E⌣E″) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ | E′/E⌣E″/E with (swap *ᶜ) E′/E | (swap *ᶜ) E″/E | (swap *ᶜᶜ⌣) E′/E⌣E″/E
+   /-preserves-⌣ (νᵛᵛ E⌣E′) (νᵇᶜ_ {a′ = a′} E′⌣E″) (νᵇᶜ E⌣E″)
+      with (swap *ᶜ) (E′/E (⊖₁ E⌣E′)) | (swap *ᶜ) (E′/E (⊖₁ E⌣E″)) | (swap *ᶜᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E rewrite swap∘push∘push a′ = νᶜᶜ swap*E′/E⌣E″/E
-   /-preserves-⌣ (νᵇᶜ_ {a′ = a′} E⌣E′) (νᶜᶜ E′⌣E″) (νᵇᶜ_ {a′ = a″} E⌣E″) with ⊖₁ E⌣E′ | ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E ᵀΔ _ | E″/E ᵀΔ _ | E′/E⌣E″/E with (swap *ᶜ) E′/E | (swap *ᶜ) E″/E | (swap *ᶜᶜ⌣) E′/E⌣E″/E
+   /-preserves-⌣ (νᵇᶜ_ {a′ = a′} E⌣E′) (νᶜᶜ E′⌣E″) (νᵇᶜ_ {a′ = a″} E⌣E″)
+      with (swap *ᶜ) (E′/E (⊖₁ E⌣E′)) | (swap *ᶜ) (E′/E (⊖₁ E⌣E″)) | (swap *ᶜᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E rewrite swap∘push∘push a′ | swap∘push∘push a″ = νᶜᶜ swap*E′/E⌣E″/E
-   /-preserves-⌣ (νᶜᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᶜᶜ E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = νᶜᶜ E′/E⌣E″/E
-   /-preserves-⌣ (! E⌣E′) (! E′⌣E″) (! E⌣E″) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E
--}
+   /-preserves-⌣ (νᶜᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᶜᶜ E⌣E″) = νᶜᶜ /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
+   /-preserves-⌣ (! E⌣E′) (! E′⌣E″) (! E⌣E″) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    /-preserves-⌣ _ _ _ = {!!}
