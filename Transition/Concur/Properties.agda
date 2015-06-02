@@ -11,27 +11,6 @@ module Transition.Concur.Properties where
    open import Transition.Concur using (Concur₁; module Concur₁; Concur; Delta′; Delta; ⊖₁; ⌣-sym); open Concur₁
    open import Transition.Concur.Ren using (/-preserves-ᴬ⌣; _*ᵇᵇ⌣; _*ᵇᶜ⌣; _*ᶜᵇ⌣; _*ᶜᶜ⌣)
 
-   /-preserves-⌣′ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a⌣a′ : a ᴬ⌣ a′} {a′⌣a″ : a′ ᴬ⌣ a″} {a⌣a″ : a ᴬ⌣ a″}
-          {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
-          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → E′ ⌣₁[ a′⌣a″ ] E″ → (E⌣E″ : E ⌣₁[ a⌣a″ ] E″) →
-          Delta′.E′/E (⊖₁ E⌣E′) ⌣[ /-preserves-ᴬ⌣ a⌣a′ a′⌣a″ a⌣a″ ] Delta′.E′/E (⊖₁ E⌣E″)
-   /-preserves-⌣′ {E = x •∙ ._} E⌣E′ () E⌣E″
-   /-preserves-⌣′ {E = • x 〈 y 〉∙ ._} E⌣E′ () E⌣E″
-   /-preserves-⌣′ (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) = /-preserves-⌣′ E⌣E′ E′⌣E″ E⌣E″
-   /-preserves-⌣′ {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᵇ F) (E′ ᵇ│ᵇ .F) = inj₁ (_ ᵇ│ᵇ (push *ᵇ) F)
-   /-preserves-⌣′ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᵇ F) (E′ ᵇ│ᵇ .F) = inj₁ (_ ᶜ│ᵇ (push *ᵇ) F)
-   /-preserves-⌣′ {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᶜ F) (E′ ᵇ│ᶜ .F) = inj₁ (_ ᵇ│ᶜ (push *ᶜ) F)
-   /-preserves-⌣′ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᶜ F) (E′ ᵇ│ᶜ .F) = inj₁ (_ ᶜ│ᶜ (push *ᶜ) F)
-   /-preserves-⌣′ (E⌣E′ ᵇᶜ│ Q) (E ᶜ│ᵇ F) (E′ ᵇ│ᵇ .F) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ _ = inj₁ (E′/E ᶜ│ᵇ (push *ᵇ) F)
-   /-preserves-⌣′ (E⌣E′ ᶜᶜ│ Q) (E ᶜ│ᵇ F) (E′ ᶜ│ᵇ .F) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ _ = inj₁ (E′/E ᶜ│ᵇ F)
-   /-preserves-⌣′ (E⌣E′ ᵇᶜ│ Q) (E ᶜ│ᶜ F) (E′ ᵇ│ᶜ .F) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ _ = inj₁ (E′/E ᶜ│ᶜ (push *ᶜ) F)
-   /-preserves-⌣′ (E⌣E′ ᶜᶜ│ Q) (E ᶜ│ᶜ F) (E′ ᶜ│ᶜ .F) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ _ = inj₁ (E′/E ᶜ│ᶜ F)
-   /-preserves-⌣′ _ _ _ = {!!}
-
    -- Residuation preserves concurrency. There is an unpleasant case-explosion here because of the need to
    -- distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise across the three transitions.
    /-preserves-⌣ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a⌣a′ : a ᴬ⌣ a′} {a′⌣a″ : a′ ᴬ⌣ a″} {a⌣a″ : a ᴬ⌣ a″}
@@ -53,11 +32,11 @@ module Transition.Concur.Properties where
    ... | E′/E ᵀΔ _ = E′/E ᶜ│ᶜ (push *ᶜ) F
    /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E ᶜ│ᶜ F) (E′ ᶜ│ᶜ .F) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ _ = E′/E ᶜ│ᶜ F
-
    /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │•ᵇ F) (_│•ᵇ_ {y = y} {a = a} E⌣E″ .F)
       with ⊖₁ E⌣E′ | ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | _ ᵀΔ _ | _ ᵀΔ E/E″ | E′/E⌣E″/E with (pop y *ᵇ) E/E″
    ... | pop-y*E/E″ rewrite pop∘push y a = E′/E⌣E″/E │•ᵇ (push *ᶜ) F
+
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │•ᵇ F) (E⌣E″ │•ᵇ .F) with ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E″/E ᵀΔ _ | E′/E⌣E″/E = E′/E⌣E″/E │•ᶜ (push *ᶜ) F
    /-preserves-⌣ (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ │•ᶜ F) (_│•ᵇ_ {y = y} {a = a} E⌣E″ .F)
@@ -126,8 +105,9 @@ module Transition.Concur.Properties where
    /-preserves-⌣ (E ᶜ│ᵇ F) (E′ ᵇ│• F′⌣F″) (_│•ᶜ_ {y = y} {a = a} E⌣E″ F′) with ⊖₁ E⌣E″
    ... | E″/E ᵀΔ E/E″ with (pop y *ᶜ) E/E″
    ... | pop-y*E/E″ rewrite pop∘push y a = E″/E ᵇ│• F′⌣F″
-   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│• F⌣F′) (E⌣E″ │•ᶜ F′) with ⊖₁ E⌣E″
-   ... | E″/E ᵀΔ _ = {!!}
+   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│• F⌣F′) (_│•ᶜ_ {y = y} {a = a} E⌣E′ F′) with ⊖₁ E⌣E′
+   ... | E′/E ᵀΔ E/E′ with (pop y *ᶜ) E/E′
+   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E ᶜ│• F⌣F′
 {-
    /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᶜ .F) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥᶜ F
