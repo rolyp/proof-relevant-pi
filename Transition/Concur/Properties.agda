@@ -74,19 +74,14 @@ module Transition.Concur.Properties where
    /-preserves-⌣ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) (E′⌣E″ │• F⌣F′) (_│•ᵇ_ {y = z} {a = .a} E⌣E″ F′)
       with (pop y *ᵇ) (E/E′ (⊖₁ E⌣E′)) | (pop z *ᵇ) (E/E′ (⊖₁ E⌣E″))
    ... | pop-y*E/E′ | pop-y*E/E″ rewrite pop∘push y a | pop∘push z a = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │• (push *ᶜᶜ⌣) F⌣F′
+   /-preserves-⌣ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) (E′⌣E″ │•ᵥ F⌣F′) (E⌣E″ │ᵥᵇ F′) with (pop y *ᵇ) (E/E′ (⊖₁ E⌣E′))
+   ... | pop-y*E/E′ rewrite pop∘push y a = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │•ᵥ (push *ᶜᵇ⌣) F⌣F′
+   /-preserves-⌣ (E⌣E′ │ᵥᵇ F) (E′⌣E″ │ᵥ F⌣F′) (E⌣E″ │ᵥᵇ F′) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │ᵥ (push *ᵇᵇ⌣) F⌣F′
+   /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │•ᶜ F) (_│•ᶜ_ {y = y} {a = a} E⌣E″ .F) with (pop y *ᶜ) (E/E′ (⊖₁ E⌣E″))
+   ... | pop-y*E/E″ rewrite pop∘push y a = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │•ᶜ F
+   /-preserves-⌣ (E ᶜ│ᵇ F) (E′ ᵇ│• F′⌣F″) (_│•ᶜ_ {y = y} {a = a} E⌣E″ F′) with (pop y *ᶜ) (E/E′ (⊖₁ E⌣E″))
+   ... | pop-y*E/E″ rewrite pop∘push y a = E′/E (⊖₁ E⌣E″) ᵇ│• F′⌣F″
 {-
-   /-preserves-⌣ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) (E′⌣E″ │•ᵥ F⌣F′) (E⌣E″ │ᵥᵇ F′)
-      with ⊖₁ E⌣E′ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | _ ᵀΔ E/E′ | E′/E⌣E″/E with (pop y *ᵇ) E/E′
-   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E⌣E″/E │•ᵥ (push *ᶜᵇ⌣) F⌣F′
-   /-preserves-⌣ (E⌣E′ │ᵥᵇ F) (E′⌣E″ │ᵥ F⌣F′) (E⌣E″ │ᵥᵇ F′) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E │ᵥ (push *ᵇᵇ⌣) F⌣F′
-   /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ │•ᶜ F) (_│•ᶜ_ {y = y} {a = a} E⌣E″ .F) with ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | _ ᵀΔ E/E″ | E′/E⌣E″/E with (pop y *ᶜ) E/E″
-   ... | pop-y*E/E″ rewrite pop∘push y a = E′/E⌣E″/E │•ᶜ F
-   /-preserves-⌣ (E ᶜ│ᵇ F) (E′ ᵇ│• F′⌣F″) (_│•ᶜ_ {y = y} {a = a} E⌣E″ F′) with ⊖₁ E⌣E″
-   ... | E″/E ᵀΔ E/E″ with (pop y *ᶜ) E/E″
-   ... | pop-y*E/E″ rewrite pop∘push y a = E″/E ᵇ│• F′⌣F″
    /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│• F⌣F′) (_│•ᶜ_ {y = y} {a = a} E⌣E′ F′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ with (pop y *ᶜ) E/E′
    ... | pop-y*E/E′ rewrite pop∘push y a = E′/E ᶜ│• F⌣F′
