@@ -127,12 +127,12 @@ module Transition.Concur.Properties where
       (push *) P │ᵇᶜ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″)
       with ⊖₁ F⌣F′ | ⊖₁ F⌣F″ | /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   ... | F′/F ᵀΔ F/F′ | F″/F ᵀΔ F/F″ | F′/F⌣F″/F = {!!}
+   ... | F′/F ᵀΔ F/F′ | F″/F ᵀΔ F/F″ | F′/F⌣F″/F = (push *) P │ᶜᵇ F′/F⌣F″/F
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) =
       (push *) P │ᶜᶜ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″)
       with ⊖₁ F⌣F′ | ⊖₁ F⌣F″ | /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   ... | F′/F ᵀΔ F/F′ | F″/F ᵀΔ F/F″ | F′/F⌣F″/F = {!!}
+   ... | F′/F ᵀΔ F/F′ | F″/F ᵀΔ F/F″ | F′/F⌣F″/F = (push *) P │ᶜᵇ F′/F⌣F″/F
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) =
       (push *) P │ᶜᶜ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᶜ F′⌣F″) (.P │ᵇᶜ F⌣F″) = (push *) P │ᵇᶜ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″

@@ -96,6 +96,8 @@ module Transition.Concur where
              (P : Proc Γ) → F ⌣₁[ a⌣a′ ] F′ → P │ᵇ F ⌣₁[ a⌣a′ ] P │ᵇ F′
       _│ᵇᶜ_ : ∀ {Q S S′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {F : Q —[ a ᵇ - _ ]→ S} {F′ : Q —[ a′ ᶜ - _ ]→ S′} →
              (P : Proc Γ) → F ⌣₁[ ᵇ∇ᶜ ] F′ → P │ᵇ F ⌣₁[ ᵇ∇ᶜ ] P │ᶜ F′
+      _│ᶜᵇ_ : ∀ {Q S S′} {a : Actionᶜ Γ} {a′ : Actionᵇ Γ} {F : Q —[ a ᶜ - _ ]→ S} {F′ : Q —[ a′ ᵇ - _ ]→ S′} →
+             (P : Proc Γ) → F ⌣₁[ ᶜ∇ᵇ ] F′ → P │ᶜ F ⌣₁[ ᶜ∇ᵇ ] P │ᵇ F′
       _│ᶜᶜ_ : ∀ {Q S S′} {a a′ : Actionᶜ Γ} {F : Q —[ a ᶜ - _ ]→ S} {F′ : Q —[ a′ ᶜ - _ ]→ S′} →
              (P : Proc Γ) → F ⌣₁[ ᶜ∇ᶜ ] F′ → P │ᶜ F ⌣₁[ ᶜ∇ᶜ ] P │ᶜ F′
       _ᵇᵇ│_ : ∀ {P R R′} {a a′ : Actionᵇ Γ} {a⌣a′} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᵇ - _ ]→ R′} →
@@ -200,6 +202,8 @@ module Transition.Concur where
    ... | F′/F ᵀΔ F/F′ = (push *) P │ᵇ F′/F ᵀΔ (push *) P │ᵇ F/F′
    ⊖₁ (P │ᵇᶜ F⌣F′) with ⊖₁ F⌣F′
    ... | F′/F ᵀΔ F/F′ = (push *) P │ᶜ F′/F ᵀΔ P │ᵇ F/F′
+   ⊖₁ (P │ᶜᵇ F⌣F′) with ⊖₁ F⌣F′
+   ... | F′/F ᵀΔ F/F′ = P │ᵇ F′/F ᵀΔ (push *) P │ᶜ F/F′
    ⊖₁ (P │ᶜᶜ F⌣F′) with ⊖₁ F⌣F′
    ... | F′/F ᵀΔ F/F′ = P │ᶜ F′/F ᵀΔ P │ᶜ F/F′
    ⊖₁ (_ᵇᵇ│_ {a⌣a′ = ᵛ∇ᵛ} E⌣E′ Q) with ⊖₁ E⌣E′
