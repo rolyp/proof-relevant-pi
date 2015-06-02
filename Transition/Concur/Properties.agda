@@ -56,12 +56,12 @@ module Transition.Concur.Properties where
       /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᵇᵇ│ (push *) Q
    /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) =
       /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᵇᶜ│ (push *) Q
-   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵇ∇ᵇ} {ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = {!!}
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵇ∇ᵇ} {ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) =
+      /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᶜᵇ│ (push *) Q
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵇ∇ᵇ} {ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) =
       /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᶜᶜ│ (push *) Q
-   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = {!!}
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) =
+      /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᶜᵇ│ (push *) Q
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) =
       /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᶜᶜ│ (push *) Q
    /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) =
@@ -125,14 +125,12 @@ module Transition.Concur.Properties where
       (push *) P │ᵇᶜ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) =
       (push *) P │ᵇᶜ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″)
-      with ⊖₁ F⌣F′ | ⊖₁ F⌣F″ | /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   ... | F′/F ᵀΔ F/F′ | F″/F ᵀΔ F/F″ | F′/F⌣F″/F = (push *) P │ᶜᵇ F′/F⌣F″/F
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) =
+      (push *) P │ᶜᵇ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) =
       (push *) P │ᶜᶜ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″)
-      with ⊖₁ F⌣F′ | ⊖₁ F⌣F″ | /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   ... | F′/F ᵀΔ F/F′ | F″/F ᵀΔ F/F″ | F′/F⌣F″/F = (push *) P │ᶜᵇ F′/F⌣F″/F
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) =
+      (push *) P │ᶜᵇ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵛ∇ᵛ} (P │ᵇᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᵇᵇ F⌣F″) =
       (push *) P │ᶜᶜ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (P │ᵇᵇ F⌣F′) (.P │ᵇᶜ F′⌣F″) (.P │ᵇᶜ F⌣F″) = (push *) P │ᵇᶜ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
@@ -173,14 +171,12 @@ module Transition.Concur.Properties where
       (pop _ *ᵇᵇ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″) │ᵥ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) (E′⌣E″ │ᵥ F′⌣F″) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E″ F⌣F″) =
       νᶜᶜ (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │ᵥ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″)
-   /-preserves-⌣ (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E′⌣E″ F′⌣F″) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E″ F⌣F″)
-      with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ | /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   ... | E′/E⌣E″/E | F′/F⌣F″/F = νᶜᶜ (E′/E⌣E″/E │ᵥ• F′/F⌣F″/F)
+   /-preserves-⌣ (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E′⌣E″ F′⌣F″) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E″ F⌣F″) =
+      νᶜᶜ (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │ᵥ• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″)
    /-preserves-⌣ (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E′⌣E″ F′⌣F″) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E″ F⌣F″) =
       νᶜᶜ (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │•ᵥ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″)
-   /-preserves-⌣ (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E′⌣E″ F′⌣F″) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E″ F⌣F″)
-      with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ | /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   ... | E′/E⌣E″/E | F′/F⌣F″/F = νᶜᶜ (E′/E⌣E″/E │ᵥ• F′/F⌣F″/F)
+   /-preserves-⌣ (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E′⌣E″ F′⌣F″) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E″ F⌣F″) =
+      νᶜᶜ (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │ᵥ• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″)
    /-preserves-⌣ (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E′⌣E″ F′⌣F″) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E″ F⌣F″) =
       νᶜᶜ (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″)
    /-preserves-⌣ (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E′⌣E″ F′⌣F″) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E″ F⌣F″) =
