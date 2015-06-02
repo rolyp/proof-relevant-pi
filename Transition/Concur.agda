@@ -125,6 +125,8 @@ module Transition.Concur where
           E ⌣₁[ ᵛ∇ᵛ ] E′ → νᵇ E ⌣₁[ ᵛ∇ᵛ ] νᵇ E′
       νᵇᶜ_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ (push *) a ᵇ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
           E ⌣₁[ ᵇ∇ᶜ ] E′ → νᵇ E ⌣₁[ ᵇ∇ᶜ ] νᶜ E′
+      νᶜᵇ_ : ∀ {P R R′} {a : Actionᶜ Γ} {a′ : Actionᵇ Γ} {E : P —[ (push *) a ᶜ - _ ]→ R} {E′ : P —[ (push *) a′ ᵇ - _ ]→ R′} →
+          E ⌣₁[ ᶜ∇ᵇ ] E′ → νᶜ E ⌣₁[ ᶜ∇ᵇ ] νᵇ E′
       νᶜᶜ_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ (push *) a ᶜ - _ ]→ R} {E′ : P —[ (push *) a′ ᶜ - _ ]→ R′} →
           E ⌣₁[ ᶜ∇ᶜ ] E′ → νᶜ E ⌣₁[ ᶜ∇ᶜ ] νᶜ E′
       !_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {a⌣a′} {R R′} {E : P │ ! P —[ a - _ ]→ R} {E′ : P │ ! P —[ a′ - _ ]→ R′} →
@@ -239,6 +241,9 @@ module Transition.Concur where
    ⊖₁ (νᵇᶜ_ {a′ = a′} E⌣E′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ with (swap *ᶜ) E′/E
    ... | swap*E′/E rewrite swap∘push∘push a′ = νᶜ swap*E′/E ᵀΔ νᵇ E/E′
+   ⊖₁ (νᶜᵇ_ {a = a} E⌣E′) with ⊖₁ E⌣E′
+   ... | E′/E ᵀΔ E/E′ with (swap *ᶜ) E/E′
+   ... | swap*E/E′ rewrite swap∘push∘push a = νᵇ E′/E ᵀΔ νᶜ swap*E/E′
    ⊖₁ (νᶜᶜ E⌣E′) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ = νᶜ E′/E ᵀΔ νᶜ E/E′
    ⊖₁ (! E⌣E′) with ⊖₁ E⌣E′
