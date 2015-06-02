@@ -110,6 +110,9 @@ module Transition.Concur where
       _│•ᵥ_ : ∀ {x u y P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {F : Q —[ • x 〈 y 〉 ᶜ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
              E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ ᶜ∇ᵇ ] F′ → E │• F ⌣₁[ ᶜ∇ᶜ ] E′ │ᵥ F′
+      _│ᵥ•_ : ∀ {x u y P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
+             {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ • u 〈 y 〉 ᶜ - _ ]→ S′} →
+             E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ ᵇ∇ᶜ ] F′ → E │ᵥ F ⌣₁[ ᶜ∇ᶜ ] E′ │• F′
       _│ᵥ_ : ∀ {x u P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {•x⌣•u} {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
              E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ •x⌣•u ] F′ → E │ᵥ F ⌣₁[ ᶜ∇ᶜ ] E′ │ᵥ F′
@@ -215,6 +218,9 @@ module Transition.Concur where
    ⊖₁ (_│•ᵥ_ {u = u} {y} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
    ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ with (pop y *ᵇ) E′/E
    ... | pop-y*E′/E rewrite pop∘push u y = pop-y*E′/E │ᵥ F′/F ᵀΔ νᶜ (E/E′ │• F/F′)
+   ⊖₁ (_│ᵥ•_ {x = x} {y = y} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
+   ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ with (pop y *ᵇ) E/E′
+   ... | pop-y*E/E′ rewrite pop∘push x y = νᶜ (E′/E │• F′/F) ᵀΔ pop-y*E/E′ │ᵥ F/F′
    ⊖₁ (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
    ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ = νᶜ (E′/E │• F′/F) ᵀΔ νᶜ (E/E′ │• F/F′)
    ⊖₁ (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
