@@ -168,6 +168,7 @@ module Transition.Concur where
    syntax Delta′ a⌣a′ E E′ = E Δ′[ a⌣a′ ] E′
 
    open import Ren.Properties
+   open Delta′
 
    -- The symmetric residual  (E′/E , E/E′). The paper defines the residual using E and E′, with E ⌣ E′
    -- implicit; here we work directly with the proof of E ⌣ E′ and leave E and E′ implicit.
@@ -177,29 +178,19 @@ module Transition.Concur where
    ⊖₁ (E ᵇ│ᶜ F) = target E │ᶜ (push *ᶜ) F ᵀΔ E ᵇ│ target F
    ⊖₁ (E ᶜ│ᵇ F) = target E │ᵇ F ᵀΔ (push *ᶜ) E ᶜ│ target F
    ⊖₁ (E ᶜ│ᶜ F) = target E │ᶜ F ᵀΔ E ᶜ│ target F
-   ⊖₁ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ with (pop y *ᵇ) E/E′
-   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E │• (push *ᶜ) F ᵀΔ pop-y*E/E′ ᵇ│ target F
-   ⊖₁ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ with (pop y *ᶜ) E/E′
-   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E │• F ᵀΔ pop-y*E/E′ ᶜ│ target F
-   ⊖₁ (_ᵇ│•_ {y = y} E F⌣F′) with ⊖₁ F⌣F′
-   ... | F′/F ᵀΔ F/F′ = (push *ᵇ) E ᵀ.│• F′/F ᵀΔ (pop y *) (target E) │ᵇ F/F′
-   ⊖₁ (_ᶜ│•_ {y = y} E F⌣F′) with ⊖₁ F⌣F′
-   ... | F′/F ᵀΔ F/F′ = E │• F′/F ᵀΔ (pop y *) (target E) │ᶜ F/F′
-   ⊖₁ (E⌣E′ │ᵥᵇ F) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = E′/E │ᵥ (push *ᵇ) F ᵀΔ νᵇ (E/E′ ᵇ│ target F)
-   ⊖₁ (E⌣E′ │ᵥᶜ F) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = E′/E │ᵥ F ᵀΔ νᶜ (E/E′ ᶜ│ target F)
-   ⊖₁ (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) with ⊖₁ F⌣F′
-   ... | F′/F ᵀΔ F/F′ with (push *ᵇ) E
-   ... | push*E = push*E │• F′/F ᵀΔ ν• (target E │ᶜ F/F′)
-   ⊖₁ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) with ⊖₁ F⌣F′
-   ... | F′/F ᵀΔ F/F′ = (push *ᵇ) E │ᵥ F′/F ᵀΔ νᵇ (target E │ᵇ F/F′)
-   ⊖₁ (E ᶜ│ᵥ F⌣F′) with ⊖₁ F⌣F′
-   ... | F′/F ᵀΔ F/F′ = E │ᵥ F′/F ᵀΔ νᶜ (target E │ᶜ F/F′)
-   ⊖₁ (_│ᵇᵇ_ {a⌣a′ = ᵛ∇ᵛ} P F⌣F′) with ⊖₁ F⌣F′
-   ... | F′/F ᵀΔ F/F′ = (push *) P │ᶜ F′/F ᵀΔ (push *) P │ᶜ F/F′
+   ⊖₁ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) with (pop y *ᵇ) (E/E′ (⊖₁ E⌣E′))
+   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E (⊖₁ E⌣E′) │• (push *ᶜ) F ᵀΔ pop-y*E/E′ ᵇ│ target F
+   ⊖₁ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) with (pop y *ᶜ) (E/E′ (⊖₁ E⌣E′))
+   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E (⊖₁ E⌣E′) │• F ᵀΔ pop-y*E/E′ ᶜ│ target F
+   ⊖₁ (_ᵇ│•_ {y = y} E F⌣F′) = (push *ᵇ) E ᵀ.│• E′/E (⊖₁ F⌣F′) ᵀΔ (pop y *) (target E) │ᵇ E/E′ (⊖₁ F⌣F′)
+   ⊖₁ (_ᶜ│•_ {y = y} E F⌣F′) = E │• E′/E (⊖₁ F⌣F′) ᵀΔ (pop y *) (target E) │ᶜ E/E′ (⊖₁ F⌣F′)
+   ⊖₁ (E⌣E′ │ᵥᵇ F) = E′/E (⊖₁ E⌣E′) │ᵥ (push *ᵇ) F ᵀΔ νᵇ (E/E′ (⊖₁ E⌣E′) ᵇ│ target F)
+   ⊖₁ (E⌣E′ │ᵥᶜ F) = E′/E (⊖₁ E⌣E′) │ᵥ F ᵀΔ νᶜ (E/E′ (⊖₁ E⌣E′) ᶜ│ target F)
+   ⊖₁ (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) with (push *ᵇ) E
+   ... | push*E = push*E │• E′/E (⊖₁ F⌣F′) ᵀΔ ν• (target E │ᶜ E/E′ (⊖₁ F⌣F′))
+   ⊖₁ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) = (push *ᵇ) E │ᵥ E′/E (⊖₁ F⌣F′) ᵀΔ νᵇ (target E │ᵇ E/E′ (⊖₁ F⌣F′))
+   ⊖₁ (E ᶜ│ᵥ F⌣F′) = E │ᵥ E′/E (⊖₁ F⌣F′) ᵀΔ νᶜ (target E │ᶜ E/E′ (⊖₁ F⌣F′))
+   ⊖₁ (_│ᵇᵇ_ {a⌣a′ = ᵛ∇ᵛ} P F⌣F′) = (push *) P │ᶜ E′/E (⊖₁ F⌣F′) ᵀΔ (push *) P │ᶜ E/E′ (⊖₁ F⌣F′)
    ⊖₁ (_│ᵇᵇ_ {a⌣a′ = ᵇ∇ᵇ} P F⌣F′) with ⊖₁ F⌣F′
    ... | F′/F ᵀΔ F/F′ = (push *) P │ᵇ F′/F ᵀΔ (push *) P │ᵇ F/F′
    ⊖₁ (P │ᵇᶜ F⌣F′) with ⊖₁ F⌣F′
