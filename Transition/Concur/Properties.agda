@@ -45,41 +45,36 @@ module Transition.Concur.Properties where
    /-preserves-⌣ (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ │ᵥᶜ F) (E⌣E″ │ᵥᵇ .F) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │ᵥᶜ (push *ᵇ) F
    /-preserves-⌣ (E ᵇ│ᵇ F) (E′ ᵇ│ᵥ F⌣F′) (E⌣E′ │ᵥᵇ F′) = E′/E (⊖₁ E⌣E′) ᵇ│ᵥ (push *ᵇᵇ⌣) F⌣F′
    /-preserves-⌣ (E ᵇ│ᶜ F) (E′ ᶜ│ᵥ F⌣F′) (E⌣E′ │ᵥᵇ F′) = E′/E (⊖₁ E⌣E′) ᶜ│ᵥ (push *ᶜᵇ⌣) F⌣F′
-{-
    /-preserves-⌣ {a′⌣a″ = ᵇ∇ᵇ} (E ᵇ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᵇ│ᵇ F′) = _ │ᵇᵇ (push *ᵇᵇ⌣) F⌣F′
    /-preserves-⌣ {a′⌣a″ = ᵛ∇ᵛ} (E ᵇ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᵇ│ᵇ F′) = _ │ᵇᵇ (push *ᵇᵇ⌣) F⌣F′
    /-preserves-⌣ (E ᵇ│ᵇ F) (P │ᵇᶜ F⌣F′) (.E ᵇ│ᶜ F′) = _ │ᵇᶜ (push *ᵇᶜ⌣) F⌣F′
    /-preserves-⌣ (E ᵇ│ᶜ F) (P │ᶜᶜ F⌣F′) (.E ᵇ│ᶜ F′) = _ │ᶜᶜ (push *ᶜᶜ⌣) F⌣F′
-   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q)
-      with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E ᵇᵇ│ (push *) Q
-   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q)
-      with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E ᵇᶜ│ (push *) Q
-   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q)
-      with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E ᵇᵇ│ (push *) Q
-   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q)
-      with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E ᵇᶜ│ (push *) Q
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) =
+      /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᵇᵇ│ (push *) Q
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵇ∇ᵇ} {a⌣a″ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) =
+      /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᵇᶜ│ (push *) Q
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) =
+      /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᵇᵇ│ (push *) Q
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} {a′⌣a″ = ᵛ∇ᵛ} {a⌣a″ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) =
+      /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᵇᶜ│ (push *) Q
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵇ∇ᵇ} {ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = ?
-   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵇ∇ᵇ} {ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᶜ│ (push *) Q
+   ... | E′/E⌣E″/E = {!!}
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵇ∇ᵇ} {ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) =
+      /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᶜᶜ│ (push *) Q
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = ?
-   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᶜ│ (push *) Q
-   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E ᵇᶜ│ (push *) Q
-   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᶜ│ (push *) Q
-   /-preserves-⌣ (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ ᶜᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) with /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | E′/E⌣E″/E = E′/E⌣E″/E ᶜᶜ│ (push *) Q
+   ... | E′/E⌣E″/E = {!!}
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} {ᵛ∇ᵛ} {ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) =
+      /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᶜᶜ│ (push *) Q
+   /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) =
+      /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᵇᶜ│ (push *) Q
+   /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) =
+      /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᶜᶜ│ (push *) Q
+   /-preserves-⌣ (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ ᶜᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) =
+      /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᶜᶜ│ (push *) Q
    /-preserves-⌣ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) (E′⌣E″ │• F⌣F′) (_│•ᵇ_ {y = z} {a = .a} E⌣E″ F′)
-      with ⊖₁ E⌣E′ | ⊖₁ E⌣E″ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   ... | _ ᵀΔ E/E′ | _ ᵀΔ E/E″ | E′/E⌣E″/E with (pop y *ᵇ) E/E′ | (pop z *ᵇ) E/E″
-   ... | pop-y*E/E′ | pop-y*E/E″ rewrite pop∘push y a | pop∘push z a = E′/E⌣E″/E │• ((push *ᶜᶜ⌣) F⌣F′)
+      with (pop y *ᵇ) (E/E′ (⊖₁ E⌣E′)) | (pop z *ᵇ) (E/E′ (⊖₁ E⌣E″))
+   ... | pop-y*E/E′ | pop-y*E/E″ rewrite pop∘push y a | pop∘push z a = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │• (push *ᶜᶜ⌣) F⌣F′
+{-
    /-preserves-⌣ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) (E′⌣E″ │•ᵥ F⌣F′) (E⌣E″ │ᵥᵇ F′)
       with ⊖₁ E⌣E′ | /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    ... | _ ᵀΔ E/E′ | E′/E⌣E″/E with (pop y *ᵇ) E/E′
