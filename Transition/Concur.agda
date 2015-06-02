@@ -191,68 +191,42 @@ module Transition.Concur where
    ⊖₁ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) = (push *ᵇ) E │ᵥ E′/E (⊖₁ F⌣F′) ᵀΔ νᵇ (target E │ᵇ E/E′ (⊖₁ F⌣F′))
    ⊖₁ (E ᶜ│ᵥ F⌣F′) = E │ᵥ E′/E (⊖₁ F⌣F′) ᵀΔ νᶜ (target E │ᶜ E/E′ (⊖₁ F⌣F′))
    ⊖₁ (_│ᵇᵇ_ {a⌣a′ = ᵛ∇ᵛ} P F⌣F′) = (push *) P │ᶜ E′/E (⊖₁ F⌣F′) ᵀΔ (push *) P │ᶜ E/E′ (⊖₁ F⌣F′)
-   ⊖₁ (_│ᵇᵇ_ {a⌣a′ = ᵇ∇ᵇ} P F⌣F′) with ⊖₁ F⌣F′
-   ... | F′/F ᵀΔ F/F′ = (push *) P │ᵇ F′/F ᵀΔ (push *) P │ᵇ F/F′
-   ⊖₁ (P │ᵇᶜ F⌣F′) with ⊖₁ F⌣F′
-   ... | F′/F ᵀΔ F/F′ = (push *) P │ᶜ F′/F ᵀΔ P │ᵇ F/F′
-   ⊖₁ (P │ᶜᵇ F⌣F′) with ⊖₁ F⌣F′
-   ... | F′/F ᵀΔ F/F′ = P │ᵇ F′/F ᵀΔ (push *) P │ᶜ F/F′
-   ⊖₁ (P │ᶜᶜ F⌣F′) with ⊖₁ F⌣F′
-   ... | F′/F ᵀΔ F/F′ = P │ᶜ F′/F ᵀΔ P │ᶜ F/F′
-   ⊖₁ (_ᵇᵇ│_ {a⌣a′ = ᵛ∇ᵛ} E⌣E′ Q) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = E′/E ᶜ│ (push *) Q ᵀΔ E/E′ ᶜ│ (push *) Q
-   ⊖₁ (_ᵇᵇ│_ {a⌣a′ = ᵇ∇ᵇ} E⌣E′ Q) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = E′/E ᵇ│ (push *) Q ᵀΔ E/E′ ᵇ│ (push *) Q
-   ⊖₁ (E⌣E′ ᵇᶜ│ Q) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = E′/E ᶜ│ (push *) Q ᵀΔ E/E′ ᵇ│ Q
-   ⊖₁ (E⌣E′ ᶜᵇ│ Q) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = E′/E ᵇ│ Q ᵀΔ E/E′ ᶜ│ (push *) Q
-   ⊖₁ (E⌣E′ ᶜᶜ│ Q) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = E′/E ᶜ│ Q ᵀΔ E/E′ ᶜ│ Q
-   ⊖₁ (E⌣E′ ➕₁ F) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = E′/E ᵀΔ E/E′
-   ⊖₁ (_│•_ {x = x} {y} {u} {z} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
-   ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ with (pop y *ᵇ) E′/E | (pop z *ᵇ) E/E′
-   ... | pop-y*E′/E | pop-z*E/E′ rewrite pop∘push u y | pop∘push x z = pop-y*E′/E │• F′/F ᵀΔ pop-z*E/E′ │• F/F′
-   ⊖₁ (_│•ᵥ_ {u = u} {y} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
-   ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ with (pop y *ᵇ) E′/E
-   ... | pop-y*E′/E rewrite pop∘push u y = pop-y*E′/E │ᵥ F′/F ᵀΔ νᶜ (E/E′ │• F/F′)
-   ⊖₁ (_│ᵥ•_ {x = x} {y = y} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
-   ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ with (pop y *ᵇ) E/E′
-   ... | pop-y*E/E′ rewrite pop∘push x y = νᶜ (E′/E │• F′/F) ᵀΔ pop-y*E/E′ │ᵥ F/F′
-   ⊖₁ (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
-   ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ = νᶜ (E′/E │• F′/F) ᵀΔ νᶜ (E/E′ │• F/F′)
-   ⊖₁ (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′
-   ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ = νᶜ (E′/E │ᵥ F′/F) ᵀΔ νᶜ (E/E′ │ᵥ F/F′)
-   ⊖₁ (ν• E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = E′/E ᵀΔ E/E′
-   ⊖₁ (ν•ᵇ_ {x = x} {a = a} E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ with (swap *ᶜ) E/E′
-   ... | swap*E/E′ = E′/E ᵀΔ ν• swap*E/E′
-   ⊖₁ (ν•ᶜ E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = E′/E ᵀΔ ν• E/E′
-   ⊖₁ (νᵇᵇ_ {a = x •} {a} E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
+   ⊖₁ (_│ᵇᵇ_ {a⌣a′ = ᵇ∇ᵇ} P F⌣F′) = (push *) P │ᵇ E′/E (⊖₁ F⌣F′) ᵀΔ (push *) P │ᵇ E/E′ (⊖₁ F⌣F′)
+   ⊖₁ (P │ᵇᶜ F⌣F′) = (push *) P │ᶜ E′/E (⊖₁ F⌣F′) ᵀΔ P │ᵇ E/E′ (⊖₁ F⌣F′)
+   ⊖₁ (P │ᶜᵇ F⌣F′) = P │ᵇ E′/E (⊖₁ F⌣F′) ᵀΔ (push *) P │ᶜ E/E′ (⊖₁ F⌣F′)
+   ⊖₁ (P │ᶜᶜ F⌣F′) = P │ᶜ E′/E (⊖₁ F⌣F′) ᵀΔ P │ᶜ E/E′ (⊖₁ F⌣F′)
+   ⊖₁ (_ᵇᵇ│_ {a⌣a′ = ᵛ∇ᵛ} E⌣E′ Q) = E′/E (⊖₁ E⌣E′) ᶜ│ (push *) Q ᵀΔ E/E′ (⊖₁ E⌣E′) ᶜ│ (push *) Q
+   ⊖₁ (_ᵇᵇ│_ {a⌣a′ = ᵇ∇ᵇ} E⌣E′ Q) = E′/E (⊖₁ E⌣E′) ᵇ│ (push *) Q ᵀΔ E/E′ (⊖₁ E⌣E′) ᵇ│ (push *) Q
+   ⊖₁ (E⌣E′ ᵇᶜ│ Q) = E′/E (⊖₁ E⌣E′) ᶜ│ (push *) Q ᵀΔ E/E′ (⊖₁ E⌣E′) ᵇ│ Q
+   ⊖₁ (E⌣E′ ᶜᵇ│ Q) = E′/E (⊖₁ E⌣E′) ᵇ│ Q ᵀΔ E/E′ (⊖₁ E⌣E′) ᶜ│ (push *) Q
+   ⊖₁ (E⌣E′ ᶜᶜ│ Q) = E′/E (⊖₁ E⌣E′) ᶜ│ Q ᵀΔ E/E′ (⊖₁ E⌣E′) ᶜ│ Q
+   ⊖₁ (E⌣E′ ➕₁ F) = E′/E (⊖₁ E⌣E′) ᵀΔ E/E′ (⊖₁ E⌣E′)
+   ⊖₁ (_│•_ {x = x} {y} {u} {z} E⌣E′ F⌣F′) with (pop y *ᵇ) (E′/E (⊖₁ E⌣E′)) | (pop z *ᵇ) (E/E′ (⊖₁ E⌣E′))
+   ... | pop-y*E′/E | pop-z*E/E′ rewrite pop∘push u y | pop∘push x z = pop-y*E′/E │• E′/E (⊖₁ F⌣F′) ᵀΔ pop-z*E/E′ │• E/E′ (⊖₁ F⌣F′)
+   ⊖₁ (_│•ᵥ_ {u = u} {y} E⌣E′ F⌣F′) with (pop y *ᵇ) (E′/E (⊖₁ E⌣E′))
+   ... | pop-y*E′/E rewrite pop∘push u y = pop-y*E′/E │ᵥ E′/E (⊖₁ F⌣F′) ᵀΔ νᶜ (E/E′ (⊖₁ E⌣E′) │• E/E′ (⊖₁ F⌣F′))
+   ⊖₁ (_│ᵥ•_ {x = x} {y = y} E⌣E′ F⌣F′) with (pop y *ᵇ) (E/E′ (⊖₁ E⌣E′))
+   ... | pop-y*E/E′ rewrite pop∘push x y = νᶜ (E′/E (⊖₁ E⌣E′) │• E′/E (⊖₁ F⌣F′)) ᵀΔ pop-y*E/E′ │ᵥ E/E′ (⊖₁ F⌣F′)
+   ⊖₁ (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) = νᶜ (E′/E (⊖₁ E⌣E′) │• E′/E (⊖₁ F⌣F′)) ᵀΔ νᶜ (E/E′ (⊖₁ E⌣E′) │• E/E′ (⊖₁ F⌣F′))
+   ⊖₁ (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F⌣F′) = νᶜ (E′/E (⊖₁ E⌣E′) │ᵥ E′/E (⊖₁ F⌣F′)) ᵀΔ νᶜ (E/E′ (⊖₁ E⌣E′) │ᵥ E/E′ (⊖₁ F⌣F′))
+   ⊖₁ (ν• E⌣E′) = E′/E (⊖₁ E⌣E′) ᵀΔ E/E′ (⊖₁ E⌣E′)
+   ⊖₁ (ν•ᵇ_ {x = x} {a = a} E⌣E′) with (swap *ᶜ) (E/E′ (⊖₁ E⌣E′))
+   ... | swap*E/E′ = E′/E (⊖₁ E⌣E′) ᵀΔ ν• swap*E/E′
+   ⊖₁ (ν•ᶜ E⌣E′) = E′/E (⊖₁ E⌣E′) ᵀΔ ν• E/E′ (⊖₁ E⌣E′)
+   ⊖₁ (νᵇᵇ_ {a = x •} {a} E⌣E′) with (swap *ᵇ) (E/E′ (⊖₁ E⌣E′)) | (swap *ᵇ) (E′/E (⊖₁ E⌣E′))
    ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push a = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
-   ⊖₁ (νᵇᵇ_ {a = • x} {u •} E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
+   ⊖₁ (νᵇᵇ_ {a = • x} {u •} E⌣E′) with (swap *ᵇ) (E/E′ (⊖₁ E⌣E′)) | (swap *ᵇ) (E′/E (⊖₁ E⌣E′))
    ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
-   ⊖₁ (νᵇᵇ_ {a = • x} {• u} E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ with (swap *ᵇ) E/E′ | (swap *ᵇ) E′/E
+   ⊖₁ (νᵇᵇ_ {a = • x} {• u} E⌣E′) with (swap *ᵇ) (E/E′ (⊖₁ E⌣E′)) | (swap *ᵇ) (E′/E (⊖₁ E⌣E′))
    ... | swap*E/E′ | swap*E′/E = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
-   ⊖₁ (νᵛᵛ_ {x = x} {u} E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ with (swap *ᶜ) E/E′ | (swap *ᶜ) E′/E
+   ⊖₁ (νᵛᵛ_ {x = x} {u} E⌣E′) with (swap *ᶜ) (E/E′ (⊖₁ E⌣E′)) | (swap *ᶜ) (E′/E (⊖₁ E⌣E′))
    ... | swap*E/E′ | swap*E′/E = νᶜ swap*E′/E ᵀΔ νᶜ swap*E/E′
-   ⊖₁ (νᵇᶜ_ {a′ = a′} E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ with (swap *ᶜ) E′/E
-   ... | swap*E′/E rewrite swap∘push∘push a′ = νᶜ swap*E′/E ᵀΔ νᵇ E/E′
-   ⊖₁ (νᶜᵇ_ {a = a} E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ with (swap *ᶜ) E/E′
-   ... | swap*E/E′ rewrite swap∘push∘push a = νᵇ E′/E ᵀΔ νᶜ swap*E/E′
-   ⊖₁ (νᶜᶜ E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = νᶜ E′/E ᵀΔ νᶜ E/E′
-   ⊖₁ (! E⌣E′) with ⊖₁ E⌣E′
-   ... | E′/E ᵀΔ E/E′ = E′/E ᵀΔ E/E′
+   ⊖₁ (νᵇᶜ_ {a′ = a′} E⌣E′) with (swap *ᶜ) (E′/E (⊖₁ E⌣E′))
+   ... | swap*E′/E rewrite swap∘push∘push a′ = νᶜ swap*E′/E ᵀΔ νᵇ E/E′ (⊖₁ E⌣E′)
+   ⊖₁ (νᶜᵇ_ {a = a} E⌣E′) with (swap *ᶜ) (E/E′ (⊖₁ E⌣E′))
+   ... | swap*E/E′ rewrite swap∘push∘push a = νᵇ E′/E (⊖₁ E⌣E′) ᵀΔ νᶜ swap*E/E′
+   ⊖₁ (νᶜᶜ E⌣E′) = νᶜ (E′/E (⊖₁ E⌣E′)) ᵀΔ νᶜ (E/E′ (⊖₁ E⌣E′))
+   ⊖₁ (! E⌣E′) = E′/E (⊖₁ E⌣E′) ᵀΔ E/E′ (⊖₁ E⌣E′)
 
    -- Now symmetrise.
    ⊖ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
