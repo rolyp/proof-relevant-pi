@@ -61,6 +61,8 @@ module Transition.Concur where
 
    -- Whether two coinitial evaluation contexts are concurrent. Only give the left rules, then symmetrise.
    -- Convenient to have this indexed by the kind of action residual. TODO: cases for •│ and ᵥ│.
+   -- Note that this is not quite the "asymmetric reduction" of the symmetric version of the relation. In
+   -- particular the _ᶜᵇ│_ rule is implied by symmetry, but is useful to have in the asymmetric relation too.
    syntax Concur₁ E E′ a′/a = E ⌣₁[ a′/a ] E′
    infix 4 Concur₁
 
@@ -102,6 +104,8 @@ module Transition.Concur where
               E ⌣₁[ a⌣a′ ] E′ → (Q : Proc Γ) → E ᵇ│ Q ⌣₁[ a⌣a′ ] E′ ᵇ│ Q
       _ᵇᶜ│_ : ∀ {P R R′} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′} →
               E ⌣₁[ ᵇ∇ᶜ ] E′ → (Q : Proc Γ) → E ᵇ│ Q ⌣₁[ ᵇ∇ᶜ ] E′ ᶜ│ Q
+      _ᶜᵇ│_ : ∀ {P R R′} {a : Actionᶜ Γ} {a′ : Actionᵇ Γ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ a′ ᵇ - _ ]→ R′} →
+              E ⌣₁[ ᶜ∇ᵇ ] E′ → (Q : Proc Γ) → E ᶜ│ Q ⌣₁[ ᶜ∇ᵇ ] E′ ᵇ│ Q
       _ᶜᶜ│_ : ∀ {P R R′} {a a′ : Actionᶜ Γ} {E : P —[ a ᶜ - _ ]→ R} {E′ : P —[ a′ ᶜ - _ ]→ R′} →
               E ⌣₁[ ᶜ∇ᶜ ] E′ → (Q : Proc Γ) → E ᶜ│ Q ⌣₁[ ᶜ∇ᶜ ] E′ ᶜ│ Q
       _│•_ : ∀ {x y u z P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
@@ -203,6 +207,8 @@ module Transition.Concur where
    ... | E′/E ᵀΔ E/E′ = E′/E ᵇ│ (push *) Q ᵀΔ E/E′ ᵇ│ (push *) Q
    ⊖₁ (E⌣E′ ᵇᶜ│ Q) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ = E′/E ᶜ│ (push *) Q ᵀΔ E/E′ ᵇ│ Q
+   ⊖₁ (E⌣E′ ᶜᵇ│ Q) with ⊖₁ E⌣E′
+   ... | E′/E ᵀΔ E/E′ = E′/E ᵇ│ Q ᵀΔ E/E′ ᶜ│ (push *) Q
    ⊖₁ (E⌣E′ ᶜᶜ│ Q) with ⊖₁ E⌣E′
    ... | E′/E ᵀΔ E/E′ = E′/E ᶜ│ Q ᵀΔ E/E′ ᶜ│ Q
    ⊖₁ (E⌣E′ ➕₁ F) with ⊖₁ E⌣E′
