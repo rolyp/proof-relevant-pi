@@ -49,7 +49,11 @@ module Transition.Concur.Properties where
    /-preserves-⌣ (νᶜᵇ_ {a = a} E⌣E′) (νᵇᶜ E′⌣E″) (νᶜᶜ E⌣E″) with (swap *ᶜ) (E/E′ (⊖₁ E⌣E′))
    ... | swap*E/E′ rewrite swap∘push∘push a = νᵇᶜ /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    /-preserves-⌣ (ν•ᶜ E⌣E′) (νᶜᵇ E′⌣E″) (ν•ᵇ E⌣E″) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
-   /-preserves-⌣ (νᵇᶜ E⌣E′) (νᶜᵇ E′⌣E″) (νᵇᵇ_ {a = x •} E⌣E″) = {!!}
+   /-preserves-⌣ (νᵇᶜ E⌣E′) (νᶜᵇ_ {a = a} {a′} E′⌣E″) (νᵇᵇ_ {a = x •} E⌣E″)
+      with (swap *ᶜ) (E′/E (⊖₁ E⌣E′)) | (swap *ᵇ) (E/E′ (⊖₁ E⌣E″)) | (swap *ᵇ) (E′/E (⊖₁ E⌣E″)) |
+           (swap *ᶜᵇ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
+   ... | swap*E′/E | swap*E/E″ | swap*E″/E | swap*E′/E⌣E″/E
+      rewrite swap∘push∘push x | swap∘push∘push a | swap∘push∘push a′ = νᶜᵇ swap*E′/E⌣E″/E
    /-preserves-⌣ (νᵇᶜ E⌣E′) (νᶜᵇ E′⌣E″) (νᵇᵇ_ {a = • x} {u •} E⌣E″) = {!!}
    /-preserves-⌣ (νᵇᶜ E⌣E′) (νᶜᵇ E′⌣E″) (νᵇᵇ_ {a = • x} {• u} E⌣E″) = {!!}
    /-preserves-⌣ (νᵇᶜ E⌣E′) (νᶜᵇ E′⌣E″) (νᵛᵛ E⌣E″) = {!!}
