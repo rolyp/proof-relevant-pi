@@ -72,9 +72,9 @@ module Transition.Concur.Properties where
    /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′ ᵇ│ᵇ F) (E ᶜ│ᵇ .F) = _ ᵇ│ᵇ F
    /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′ ᵇ│ᶜ F) (E ᶜ│ᶜ .F) = {!!} ᵇ│ᶜ F
    /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′⌣E″ │•ᵇ F) (E⌣E″ │•ᶜ .F) = {!!}
-   /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′⌣E″ │ᵥᵇ F) (E⌣E″ │ᵥᶜ .F) = {!!}
-   /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᶜᵇ│ .Q) = {!!}
-   /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′⌣E″ ᵇᶜ│ .Q) (E⌣E″ ᶜᶜ│ .Q) = {!!}
+   /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′⌣E″ │ᵥᵇ F) (E⌣E″ │ᵥᶜ .F) = _ │ᵥᵇ F
+   /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᶜᵇ│ .Q) = {!!} ᵇᵇ│ {!!}
+   /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′⌣E″ ᵇᶜ│ .Q) (E⌣E″ ᶜᶜ│ .Q) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᵇᶜ│ Q
    /-preserves-⌣ _ (E⌣E′ ᶜᵇ│ Q) _ = {!!}
    /-preserves-⌣ (P │ᶜᵇ F⌣F′) _ _ = {!!}
    /-preserves-⌣ _ (P │ᶜᵇ F⌣F′) _ = {!!}
