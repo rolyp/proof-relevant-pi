@@ -139,3 +139,34 @@ module Transition.Concur2 where
           E ⌣[ ᶜ∇ᶜ ] E′ → νᶜ E ⌣₁[ ᶜ∇ᶜ ] νᶜ E′
       !_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {a⌣a′} {R R′} {E : P │ ! P —[ a - _ ]→ R} {E′ : P │ ! P —[ a′ - _ ]→ R′} →
            E ⌣[ a⌣a′ ] E′ → ! E ⌣₁[ a⌣a′ ] ! E′
+
+   -- The type of the symmetric residual of concurrent transitions E and E′. Because cofinality of action
+   -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
+   record Delta′ {Γ P} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) {R R′}
+                (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) : Set where
+      constructor Delta
+      a′/a = π₁ (ᴬ⊖ a⌣a′)
+      a/a′ = π₂ (ᴬ⊖ a⌣a′)
+      Γ′ = Γ + inc₂ (a , a′/a)
+      field
+         {S S′} : Proc Γ′
+         E′/E : R —[ a′/a - _ ]→ subst Proc (inc₂-def a⌣a′) S
+         E/E′ : R′ —[ a/a′ - _ ]→ subst Proc (trans (inc₂-def a⌣a′) (ᴬ⊖-✓ a⌣a′)) S′
+
+   infixl 5 Delta
+   syntax Delta E E′ = E ᵀΔ E′
+   syntax Delta′ a⌣a′ E E′ = E Δ′[ a⌣a′ ] E′
+
+   open import Ren.Properties
+   open Delta′
+
+   -- The symmetric residual (E′/E , E/E′). The paper defines the residual using E and E′, with E ⌣ E′
+   -- implicit; here we work directly with the proof of E ⌣ E′ and leave E and E′ implicit.
+   ⊖₁ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
+        E ⌣₁[ a⌣a′ ] E′ → E Δ′[ a⌣a′ ] E′
+   ⊖ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
+       E ⌣[ a⌣a′ ] E′ → E Δ′[ a⌣a′ ] E′
+
+   ⊖₁ _ = {!!}
+
+   ⊖ _ = {!!}

@@ -174,7 +174,7 @@ module Transition.Concur where
    open import Ren.Properties
    open Delta′
 
-   -- The symmetric residual  (E′/E , E/E′). The paper defines the residual using E and E′, with E ⌣ E′
+   -- The symmetric residual (E′/E , E/E′). The paper defines the residual using E and E′, with E ⌣ E′
    -- implicit; here we work directly with the proof of E ⌣ E′ and leave E and E′ implicit.
    ⊖₁ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
         E ⌣₁[ a⌣a′ ] E′ → E Δ′[ a⌣a′ ] E′
