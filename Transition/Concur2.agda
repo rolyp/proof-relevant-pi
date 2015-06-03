@@ -65,11 +65,16 @@ module Transition.Concur2 where
    syntax Concur₁ E E′ a′/a = E ⌣₁[ a′/a ] E′
    infix 4 Concur₁
 
-   data Concur {Γ} : ∀ {a a′ : Action Γ} {P R R′}
-               (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → a ᴬ⌣ a′ → Set where
+   data Concur {Γ} : ∀ {a a′ : Action Γ} {P R R′} (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) → a ᴬ⌣ a′ → Set
+   data Concur₁ {Γ} : ∀ {a a′ : Action Γ} {P R R′} → P —[ a - _ ]→ R → P —[ a′ - _ ]→ R′ → a ᴬ⌣ a′ → Set
 
-   data Concur₁ {Γ} : ∀ {a a′ : Action Γ} {P R R′} →
-                P —[ a - _ ]→ R → P —[ a′ - _ ]→ R′ → a ᴬ⌣ a′ → Set where
+   data Concur {Γ} where
+      ⌣-sym : ∀ {a a′ : Action Γ} {P R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {a⌣a′ : a ᴬ⌣ a′} →
+              E ⌣₁[ a⌣a′ ] E′ → E′ ⌣[ ᴬ⌣-sym a⌣a′ ] E
+      [_] : ∀ {a a′ : Action Γ} {P R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {a⌣a′ : a ᴬ⌣ a′} →
+            E ⌣₁[ a⌣a′ ] E′ → E ⌣[ a⌣a′ ] E′
+
+   data Concur₁ {Γ} where
       _ᵇ│ᵇ_ : ∀ {P Q R S} {a a′ : Actionᵇ Γ}
              (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᵇ ] P │ᵇ F
       _ᵇ│ᶜ_ : ∀ {P Q R S} {a : Actionᵇ Γ} {a′ : Actionᶜ Γ}
