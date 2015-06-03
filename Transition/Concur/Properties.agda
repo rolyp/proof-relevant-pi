@@ -69,13 +69,15 @@ module Transition.Concur.Properties where
    ... | swap*E′/E | swap*E/E″ | swap*E″/E | swap*E′/E⌣E″/E rewrite swap∘push∘push a′ = νᶜᶜ swap*E′/E⌣E″/E
    /-preserves-⌣ (νᶜᶜ_ {a = a} E⌣E′) (νᶜᵇ E′⌣E″) (νᶜᵇ E⌣E″) with (swap *ᶜ) (E/E′ (⊖₁ E⌣E″))
    ... | swap*E/E″ rewrite swap∘push∘push a = νᶜᵇ (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
-   /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′ ᵇ│ᵇ F) (E ᶜ│ᵇ .F) = _ ᵇ│ᵇ F
-   /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′ ᵇ│ᶜ F) (E ᶜ│ᶜ .F) = {!!} ᵇ│ᶜ F
-   /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′⌣E″ │•ᵇ F) (E⌣E″ │•ᶜ .F) = {!!}
+   /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′ ᵇ│ᵇ F) (E ᶜ│ᵇ .F) = E′/E (⊖₁ E⌣E′) ᵇ│ᵇ F
+   /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′ ᵇ│ᶜ F) (E ᶜ│ᶜ .F) = E′/E (⊖₁ E⌣E′) ᵇ│ᶜ F
+   /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′⌣E″ │•ᵇ F) (_│•ᶜ_ {y = y} {a = a} E⌣E″ .F) with (pop y *ᶜ) (E/E′ (⊖₁ E⌣E″))
+   ... | pop-y*E/E″ rewrite pop∘push y a = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │•ᵇ F
    /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′⌣E″ │ᵥᵇ F) (E⌣E″ │ᵥᶜ .F) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │ᵥᵇ F
    /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′⌣E″ ᵇᵇ│ .Q) (E⌣E″ ᶜᵇ│ .Q) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᵇᵇ│ Q
    /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) (E′⌣E″ ᵇᶜ│ .Q) (E⌣E″ ᶜᶜ│ .Q) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᵇᶜ│ Q
-   /-preserves-⌣ _ (E⌣E′ ᶜᵇ│ Q) _ = {!!}
+   /-preserves-⌣ (E⌣E′ ᵇᶜ│ Q) (E′⌣E″ ᶜᵇ│ .Q) (E⌣E″ ᵇᵇ│ .Q) = ?
+   /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ ᶜᵇ│ .Q) (E⌣E″ ᶜᵇ│ .Q) = ?
    /-preserves-⌣ (P │ᶜᵇ F⌣F′) _ _ = {!!}
    /-preserves-⌣ _ (P │ᶜᵇ F⌣F′) _ = {!!}
 
