@@ -18,6 +18,7 @@ module Transition.Concur.Properties where
                    {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
                    (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → E′ ⌣₁[ a′⌣a″ ] E″ → (E⌣E″ : E ⌣₁[ a⌣a″ ] E″) →
                    E′/E (⊖₁ E⌣E′) ⌣₁[ /-preserves-ᴬ⌣ a⌣a′ a′⌣a″ a⌣a″ ] E′/E (⊖₁ E⌣E″)
+   -- TODO: relocate into appropriate parts of rest of proof.
    /-preserves-⌣ (E⌣E′ │ᵥ• F⌣F′) (E′⌣E″ │• F′⌣F″) (E⌣E″ │ᵥ• F⌣F″) =
       νᶜᶜ (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″)
    /-preserves-⌣ (_│ᵥ•_ {y = y} E⌣E′ F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E″ F⌣F″)
@@ -41,7 +42,9 @@ module Transition.Concur.Properties where
    ... | pop-y*E′/E″ = νᶜᶜ (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │ᵥ• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″)
    /-preserves-⌣ (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) (_│ᵥ•_ {y = y} E′⌣E″ F′⌣F″) (E⌣E″ │ᵥ• F⌣F″) with (pop y *ᵇ) (E/E′ (⊖₁ E′⌣E″))
    ... | pop-y*E′/E″ = νᶜᶜ (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″)
-   /-preserves-⌣ (νᶜᵇ E⌣E′) E′⌣E″ E⌣E″ = {!!}
+   /-preserves-⌣ (νᶜᵇ E⌣E′) (νᵇᵇ E′⌣E″) (νᶜᵇ E⌣E″) = ?
+   /-preserves-⌣ (νᶜᵇ E⌣E′) (νᵛᵛ E′⌣E″) (νᶜᵇ E⌣E″) = ?
+   /-preserves-⌣ (νᶜᵇ E⌣E′) (νᵇᶜ E′⌣E″) (νᶜᶜ E⌣E″) = ?
    /-preserves-⌣ (ν•ᶜ E⌣E′) (νᶜᵇ E′⌣E″) (ν•ᵇ E⌣E″) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    /-preserves-⌣ _ (νᶜᵇ E′⌣E″) _ = {!!}
    /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) _ _ = {!!}
@@ -49,6 +52,7 @@ module Transition.Concur.Properties where
    /-preserves-⌣ (P │ᶜᵇ F⌣F′) _ _ = {!!}
    /-preserves-⌣ _ (P │ᶜᵇ F⌣F′) _ = {!!}
 
+{-
    /-preserves-⌣ (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᵇ F) (E′ ᵇ│ᵇ .F) = _ ᵇ│ᵇ (push *ᵇ) F
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᵇ F) (E′ ᵇ│ᵇ .F) = _ ᶜ│ᵇ (push *ᵇ) F
@@ -266,4 +270,5 @@ module Transition.Concur.Properties where
    ... | swap*E′/E | swap*E″/E | swap*E′/E⌣E″/E rewrite swap∘push∘push a′ | swap∘push∘push a″ = νᶜᶜ swap*E′/E⌣E″/E
    /-preserves-⌣ (νᶜᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᶜᶜ E⌣E″) = νᶜᶜ /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    /-preserves-⌣ (! E⌣E′) (! E′⌣E″) (! E⌣E″) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
---   /-preserves-⌣ _ _ _ = {!!}
+-}
+   /-preserves-⌣ _ _ _ = {!!}
