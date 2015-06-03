@@ -83,10 +83,10 @@ module Transition.Concur.Properties where
    /-preserves-⌣ (P │ᶜᵇ F⌣F′) (E ᵇ│ᵥ F′⌣F″) (.E ᶜ│ᵥ F⌣F″) = E ᵇ│ᵥ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ (P │ᶜᵇ F⌣F′) (.P │ᵇᵇ F′⌣F″) (.P │ᶜᵇ F⌣F″) = P │ᵇᵇ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ (P │ᶜᵇ F⌣F′) (.P │ᵇᶜ F′⌣F″) (.P │ᶜᶜ F⌣F″) = P │ᵇᶜ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   /-preserves-⌣ (E ᵇ│ᶜ F) (P │ᶜᵇ F⌣F′) (.E ᵇ│ᵇ F′) = ?
-   /-preserves-⌣ (E ᶜ│ᶜ F) (P │ᶜᵇ F⌣F′) (.E ᶜ│ᵇ F′) = ?
-   /-preserves-⌣ (P │ᵇᶜ E⌣E′) (.P │ᶜᵇ F⌣F′) (.P │ᵇᵇ E⌣E″) = ?
-   /-preserves-⌣ (P │ᶜᶜ E⌣E′) (.P │ᶜᵇ F⌣F′) (.P │ᶜᵇ E⌣E″) = ?
+   /-preserves-⌣ (E ᵇ│ᶜ F) (P │ᶜᵇ F⌣F′) (.E ᵇ│ᵇ F′) = _ │ᶜᵇ (push *ᶜᵇ⌣) F⌣F′
+   /-preserves-⌣ (E ᶜ│ᶜ F) (P │ᶜᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᶜᵇ F⌣F′
+   /-preserves-⌣ (P │ᵇᶜ E⌣E′) (.P │ᶜᵇ F⌣F′) (.P │ᵇᵇ E⌣E″) = {!!}
+   /-preserves-⌣ (P │ᶜᶜ F⌣F′) (.P │ᶜᵇ F′⌣F″) (.P │ᶜᵇ F⌣F″) = P │ᶜᵇ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
 
 {-
    /-preserves-⌣ (E⌣E′ ➕₁ Q) (E′⌣E″ ➕₁ .Q) (E⌣E″ ➕₁ .Q) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
