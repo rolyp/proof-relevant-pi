@@ -85,8 +85,8 @@ module Transition.Concur.Properties where
    /-preserves-⌣ (P │ᶜᵇ F⌣F′) (.P │ᵇᶜ F′⌣F″) (.P │ᶜᶜ F⌣F″) = P │ᵇᶜ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ (E ᵇ│ᶜ F) (P │ᶜᵇ F⌣F′) (.E ᵇ│ᵇ F′) = _ │ᶜᵇ (push *ᶜᵇ⌣) F⌣F′
    /-preserves-⌣ (E ᶜ│ᶜ F) (P │ᶜᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᶜᵇ F⌣F′
-   /-preserves-⌣ (P │ᵇᶜ E⌣E′) (.P │ᶜᵇ F⌣F′) (_│ᵇᵇ_ {a⌣a′ = ᵇ∇ᵇ} .P E⌣E″) = {!!}
-   /-preserves-⌣ (P │ᵇᶜ E⌣E′) (.P │ᶜᵇ F⌣F′) (_│ᵇᵇ_ {a⌣a′ = ᵛ∇ᵛ} .P E⌣E″) = {!!}
+   /-preserves-⌣ (P │ᵇᶜ F⌣F′) (.P │ᶜᵇ F′⌣F″) (_│ᵇᵇ_ {a⌣a′ = ᵇ∇ᵇ} .P F⌣F″) = (push *) P │ᶜᵇ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (P │ᵇᶜ F⌣F′) (.P │ᶜᵇ F′⌣F″) (_│ᵇᵇ_ {a⌣a′ = ᵛ∇ᵛ} .P F⌣F″) = (push *) P │ᶜᶜ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ (P │ᶜᶜ F⌣F′) (.P │ᶜᵇ F′⌣F″) (.P │ᶜᵇ F⌣F″) = P │ᶜᵇ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
 
 {-
