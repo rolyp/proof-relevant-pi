@@ -67,7 +67,8 @@ module Transition.Concur.Properties where
       with (swap *ᶜ) (E′/E (⊖₁ E⌣E′)) | (swap *ᶜ) (E/E′ (⊖₁ E⌣E″)) | (swap *ᶜ) (E′/E (⊖₁ E⌣E″)) |
            (swap *ᶜᶜ⌣) (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    ... | swap*E′/E | swap*E/E″ | swap*E″/E | swap*E′/E⌣E″/E rewrite swap∘push∘push a′ = νᶜᶜ swap*E′/E⌣E″/E
-   /-preserves-⌣ (νᶜᶜ E⌣E′) (νᶜᵇ E′⌣E″) (νᶜᵇ E⌣E″) = {!!}
+   /-preserves-⌣ (νᶜᶜ_ {a = a} E⌣E′) (νᶜᵇ E′⌣E″) (νᶜᵇ E⌣E″) with (swap *ᶜ) (E/E′ (⊖₁ E⌣E″))
+   ... | swap*E/E″ rewrite swap∘push∘push a = νᶜᵇ (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″)
    /-preserves-⌣ (E⌣E′ ᶜᵇ│ Q) _ _ = {!!}
    /-preserves-⌣ _ (E⌣E′ ᶜᵇ│ Q) _ = {!!}
    /-preserves-⌣ (P │ᶜᵇ F⌣F′) _ _ = {!!}
