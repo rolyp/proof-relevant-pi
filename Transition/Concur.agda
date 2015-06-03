@@ -67,7 +67,7 @@ module Transition.Concur where
    syntax Concur₁ E E′ a′/a = E ⌣₁[ a′/a ] E′
    infix 4 Concur₁
 
-   data Concur₁ {Γ} : ∀ {a : Action Γ} {a′ : Action Γ} {P R R′} →
+   data Concur₁ {Γ} : ∀ {a a′ : Action Γ} {P R R′} →
                 P —[ a - _ ]→ R → P —[ a′ - _ ]→ R′ → a ᴬ⌣ a′ → Set where
       _ᵇ│ᵇ_ : ∀ {P Q R S} {a a′ : Actionᵇ Γ}
              (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) → E ᵇ│ Q ⌣₁[ ᵇ∇ᵇ ] P │ᵇ F
