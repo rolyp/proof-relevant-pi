@@ -37,9 +37,24 @@ module Transition.Concur.Properties where
 
    /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) (E′⌣E″ │ᵥ• F′⌣F″) (E′ ᵇ│• F⌣F″) =
       (push *ᵇᵇ⌣) E′⌣E″ │ᵥ• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-
    /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) (E′⌣E″ │ᵥ• F′⌣F″) (E′ ᵇ│• F⌣F″) =
       (push *ᵇᵇ⌣) E′⌣E″ │• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E′ F⌣F″) =
+      (push *ᵇᵇ⌣) E⌣E′ │ᵥ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E′ F⌣F″) =
+      (push *ᵇᵇ⌣) E⌣E′ │ᵥ• (/-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″)
+   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E′ F⌣F″) =
+      (push *ᵇᵇ⌣) E⌣E′ │ᵥ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E′ F⌣F″) =
+      (push *ᵇᵇ⌣) E⌣E′ │•ᵥ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E′ F⌣F″) =
+      (push *ᵇᵇ⌣) E⌣E′ │ᵥ• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E′ F⌣F″) =
+      (push *ᵇᵇ⌣) E⌣E′ │• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E′ F⌣F″) =
+      (push *ᵇᵇ⌣) E⌣E′ │•ᵥ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
+   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E′ F⌣F″) =
+      (push *ᵇᵇ⌣) E⌣E′ │• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
 
    /-preserves-⌣ (E ᶜ│ᵥ F⌣F′) (E⌣E′ │ᵥ• F′⌣F″) (E′ ᶜ│• F⌣F″) = E⌣E′ │ᵥ• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
 
@@ -213,23 +228,6 @@ module Transition.Concur.Properties where
    /-preserves-⌣ (E ᵇ│• F⌣F′) (E⌣E′ │•ᵥ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E′ F⌣F″) =
       (push *ᵇᵇ⌣) E⌣E′ │•ᵥ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ (E ᵇ│• F⌣F′) (E⌣E′ │•ᵥ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E′ F⌣F″) =
-      (push *ᵇᵇ⌣) E⌣E′ │• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-
-   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E′ F⌣F″) =
-      (push *ᵇᵇ⌣) E⌣E′ │ᵥ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E′ F⌣F″) =
-      (push *ᵇᵇ⌣) E⌣E′ │ᵥ• (/-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″)
-   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E′ F⌣F″) =
-      (push *ᵇᵇ⌣) E⌣E′ │ᵥ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E′ F⌣F″) =
-      (push *ᵇᵇ⌣) E⌣E′ │•ᵥ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E′ F⌣F″) =
-      ((push *ᵇᵇ⌣) E⌣E′) │ᵥ• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E′ F⌣F″) =
-      (push *ᵇᵇ⌣) E⌣E′ │• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵇ∇ᵇ} E′ F⌣F″) =
-      (push *ᵇᵇ⌣) E⌣E′ │•ᵥ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
-   /-preserves-⌣ (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E F⌣F′) (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F′⌣F″) (_ᵇ│ᵥ_ {a⌣a′ = ᵛ∇ᵛ} E′ F⌣F″) =
       (push *ᵇᵇ⌣) E⌣E′ │• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
 
    /-preserves-⌣ (P │ᶜᶜ F⌣F′) (E ᶜ│• F′⌣F″) (.E ᶜ│• F⌣F″) = _ ᶜ│• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
