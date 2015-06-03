@@ -116,7 +116,16 @@ module Transition.Concur.Properties where
    /-preserves-⌣ (E⌣E′ ᶜᶜ│ Q) (E′⌣E″ ᶜᶜ│ .Q) (E⌣E″ ᶜᶜ│ .Q) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᶜᶜ│ Q
 
    /-preserves-⌣ (E ᵇ│ᶜ F) (P │ᶜᵇ F⌣F′) (.E ᵇ│ᵇ F′) = _ │ᶜᵇ (push *ᶜᵇ⌣) F⌣F′
+   /-preserves-⌣ (E ᵇ│ᶜ F) (E′ ᶜ│• F′⌣F″) (_│•ᵇ_ {y = y} {a = a} E⌣E′ F′) with (pop y *ᵇ) (E/E′ (⊖₁ E⌣E′))
+   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E (⊖₁ E⌣E′) ᶜ│• (push *ᶜᶜ⌣) F′⌣F″
+   /-preserves-⌣ (E ᵇ│ᶜ F) (E′ ᶜ│ᵥ F⌣F′) (E⌣E′ │ᵥᵇ F′) = E′/E (⊖₁ E⌣E′) ᶜ│ᵥ (push *ᶜᵇ⌣) F⌣F′
+   /-preserves-⌣ (E ᵇ│ᶜ F) (P │ᶜᶜ F⌣F′) (.E ᵇ│ᶜ F′) = _ │ᶜᶜ (push *ᶜᶜ⌣) F⌣F′
+
    /-preserves-⌣ (E ᶜ│ᶜ F) (P │ᶜᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᶜᵇ F⌣F′
+   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│• F⌣F′) (_│•ᶜ_ {y = y} {a = a} E⌣E′ F′) with (pop y *ᶜ) (E/E′ (⊖₁ E⌣E′))
+   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E (⊖₁ E⌣E′) ᶜ│• F⌣F′
+   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│ᵥ F⌣F′) (E⌣E′ │ᵥᶜ F′) = E′/E (⊖₁ E⌣E′) ᶜ│ᵥ F⌣F′
+   /-preserves-⌣ (E ᶜ│ᶜ F) (P │ᶜᶜ F′⌣F″) (.E ᶜ│ᶜ F′) = _ │ᶜᶜ F′⌣F″
 
    /-preserves-⌣ (P │ᵇᶜ F⌣F′) (.P │ᶜᵇ F′⌣F″) (_│ᵇᵇ_ {a⌣a′ = ᵇ∇ᵇ} .P F⌣F″) = (push *) P │ᶜᵇ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
    /-preserves-⌣ (P │ᵇᶜ F⌣F′) (.P │ᶜᵇ F′⌣F″) (_│ᵇᵇ_ {a⌣a′ = ᵛ∇ᵛ} .P F⌣F″) = (push *) P │ᶜᶜ /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″
@@ -130,10 +139,8 @@ module Transition.Concur.Properties where
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E ᵇ│ᶜ F) (E′ ᵇ│ᶜ .F) = _ ᶜ│ᶜ (push *ᶜ) F
    /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │ᵥᵇ F) (E⌣E″ │ᵥᵇ .F) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │ᵥᵇ (push *ᵇ) F
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │ᵥᵇ F) (E⌣E″ │ᵥᵇ .F) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │ᵥᶜ (push *ᵇ) F
-
    /-preserves-⌣ {a⌣a′ = ᵇ∇ᵇ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │•ᵇ F) (_│•ᵇ_ {y = y} {a = a} E⌣E″ .F) with (pop y *ᵇ) (E/E′ (⊖₁ E⌣E″))
    ... | pop-y*E/E″ rewrite pop∘push y a = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │•ᵇ (push *ᶜ) F
-
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ │•ᵇ F) (E⌣E″ │•ᵇ .F) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │•ᶜ (push *ᶜ) F
    /-preserves-⌣ (E ᵇ│ᵇ F) (E′ ᵇ│• F′⌣F″) (_│•ᵇ_ {y = y} {a = a} E⌣E′ F′) with (pop y *ᵇ) (E/E′ (⊖₁ E⌣E′))
    ... | pop-y*E/E′ rewrite pop∘push y a = E′/E (⊖₁ E⌣E′) ᵇ│• (push *ᵇᶜ⌣) F′⌣F″
@@ -162,11 +169,6 @@ module Transition.Concur.Properties where
    /-preserves-⌣ {a⌣a′ = ᵛ∇ᵛ} (E⌣E′ ᵇᵇ│ Q) (E′⌣E″ ᵇᶜ│ .Q) (E⌣E″ ᵇᶜ│ .Q) =
       /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ ᶜᶜ│ (push *) Q
 
-   /-preserves-⌣ (E ᵇ│ᶜ F) (E′ ᶜ│• F′⌣F″) (_│•ᵇ_ {y = y} {a = a} E⌣E′ F′) with (pop y *ᵇ) (E/E′ (⊖₁ E⌣E′))
-   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E (⊖₁ E⌣E′) ᶜ│• (push *ᶜᶜ⌣) F′⌣F″
-   /-preserves-⌣ (E ᵇ│ᶜ F) (E′ ᶜ│ᵥ F⌣F′) (E⌣E′ │ᵥᵇ F′) = E′/E (⊖₁ E⌣E′) ᶜ│ᵥ (push *ᶜᵇ⌣) F⌣F′
-   /-preserves-⌣ (E ᵇ│ᶜ F) (P │ᶜᶜ F⌣F′) (.E ᵇ│ᶜ F′) = _ │ᶜᶜ (push *ᶜᶜ⌣) F⌣F′
-
    /-preserves-⌣ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) (E′⌣E″ │• F⌣F′) (_│•ᵇ_ {y = z} {a = .a} E⌣E″ F′)
       with (pop y *ᵇ) (E/E′ (⊖₁ E⌣E′)) | (pop z *ᵇ) (E/E′ (⊖₁ E⌣E″))
    ... | pop-y*E/E′ | pop-y*E/E″ rewrite pop∘push y a | pop∘push z a = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │• (push *ᶜᶜ⌣) F⌣F′
@@ -179,11 +181,6 @@ module Transition.Concur.Properties where
    /-preserves-⌣ {a′⌣a″ = ᵛ∇ᵛ} (E ᶜ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᵇᵇ F⌣F′
    /-preserves-⌣ {a′⌣a″ = ᵇ∇ᵇ} (E ᶜ│ᵇ F) (P │ᵇᵇ F⌣F′) (.E ᶜ│ᵇ F′) = _ │ᵇᵇ F⌣F′
    /-preserves-⌣ (E ᶜ│ᵇ F) (P │ᵇᶜ F′⌣F″) (.E ᶜ│ᶜ F′) = _ │ᵇᶜ F′⌣F″
-
-   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│• F⌣F′) (_│•ᶜ_ {y = y} {a = a} E⌣E′ F′) with (pop y *ᶜ) (E/E′ (⊖₁ E⌣E′))
-   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E (⊖₁ E⌣E′) ᶜ│• F⌣F′
-   /-preserves-⌣ (E ᶜ│ᶜ F) (E′ ᶜ│ᵥ F⌣F′) (E⌣E′ │ᵥᶜ F′) = E′/E (⊖₁ E⌣E′) ᶜ│ᵥ F⌣F′
-   /-preserves-⌣ (E ᶜ│ᶜ F) (P │ᶜᶜ F′⌣F″) (.E ᶜ│ᶜ F′) = _ │ᶜᶜ F′⌣F″
 
    /-preserves-⌣ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) (_│•_ {x = x} {.y} {u} {z} E′⌣E″ F⌣F′) (E⌣E″ │•ᶜ F′)
       with (pop y *ᶜ) (E/E′ (⊖₁ E⌣E′)) | (pop y *ᵇ) (E′/E (⊖₁ E′⌣E″)) |
