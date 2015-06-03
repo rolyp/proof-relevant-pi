@@ -18,7 +18,9 @@ module Transition.Concur.Properties where
                    {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
                    (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → E′ ⌣₁[ a′⌣a″ ] E″ → (E⌣E″ : E ⌣₁[ a⌣a″ ] E″) →
                    E′/E (⊖₁ E⌣E′) ⌣₁[ /-preserves-ᴬ⌣ a⌣a′ a′⌣a″ a⌣a″ ] E′/E (⊖₁ E⌣E″)
-   /-preserves-⌣ (E⌣E′ │ᵥ• F⌣F′) _ _ = {!!}
+   /-preserves-⌣ (E⌣E′ │ᵥ• F⌣F′) (E′⌣E″ │• F′⌣F″) (E⌣E″ │ᵥ• F⌣F″) =
+      νᶜᶜ (/-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″ │• /-preserves-⌣ F⌣F′ F′⌣F″ F⌣F″)
+   /-preserves-⌣ (E⌣E′ │ᵥ• F⌣F′) (E′⌣E″ │•ᵥ F′⌣F″) (E⌣E″ │ᵥ F⌣F″) = {!!}
    /-preserves-⌣ _ (E⌣E′ │ᵥ• F⌣F′) _ = {!!}
    /-preserves-⌣ (νᶜᵇ E⌣E′) _ _ = {!!}
    /-preserves-⌣ (ν•ᶜ E⌣E′) (νᶜᵇ E′⌣E″) (ν•ᵇ E⌣E″) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
@@ -246,4 +248,4 @@ module Transition.Concur.Properties where
    /-preserves-⌣ (νᶜᶜ E⌣E′) (νᶜᶜ E′⌣E″) (νᶜᶜ E⌣E″) = νᶜᶜ /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
    /-preserves-⌣ (! E⌣E′) (! E′⌣E″) (! E⌣E″) = /-preserves-⌣ E⌣E′ E′⌣E″ E⌣E″
 -}
-   /-preserves-⌣ _ _ _ = ?
+   /-preserves-⌣ _ _ _ = {!!}
