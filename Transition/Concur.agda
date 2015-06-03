@@ -59,7 +59,10 @@ module Transition.Concur where
    ᴬ⊖-✓ ᶜ∇ᵇ = refl
    ᴬ⊖-✓ ᶜ∇ᶜ = refl
 
-   -- The "symmetric reduction" of the relation which says whether two coinitial evaluation contexts are concurrent.
+   -- Whether two coinitial evaluation contexts are concurrent; define asymmetrically and then close under symmetry.
+   -- However, this is _not_ the "symmetric reduction" of the symmetric version; when proving preservation of
+   -- concurrency by residuation, it's useful to include the symmetrisation of some rules in this definition. In
+   -- particular the │ᶜᵇ, ᶜᵇ│, │•ᵥ and νᶜᵇ cases are all implied by symmetry, but nevertheless defined here.
    -- Convenient to have this indexed by the kind of action residual. TODO: cases for •│ and ᵥ│.
    syntax Concur₁ E E′ a′/a = E ⌣₁[ a′/a ] E′
    infix 4 Concur₁
