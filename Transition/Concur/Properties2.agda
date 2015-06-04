@@ -10,7 +10,10 @@ module Transition.Concur.Properties2 where
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
    open import Transition.Ren
    open import Transition.Concur2
-      using (Concur; Concur₁; module Concur; module Concur₁; Delta′; module Delta′; Delta; ⊖; ⊖₁; ⌣-sym; nibble);
+      using (
+         Concur; Concur₁; module Concur; module Concur₁; Delta′; module Delta′; Delta;
+         ⊖; ⊖₁; ⌣-sym; /-preserves-sym
+      );
       open Concur; open Concur₁; open Delta′
    open import Transition.Concur.Ren2 using (/-preserves-ᴬ⌣; _*ᵇᵇ⌣; _*ᵇᶜ⌣; _*ᶜᵇ⌣; _*ᶜᶜ⌣)
 
@@ -18,12 +21,18 @@ module Transition.Concur.Properties2 where
                    {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
                    (𝐸 : E ⌣[ a⌣a′ ] E′) → E″ ⌣[ a″⌣a′ ] E′ → (𝐸″ : E″ ⌣[ a″⌣a ] E) →
                    E/E′ (⊖ 𝐸″) ⌣[ /-preserves-ᴬ⌣ (ᴬ⌣-sym a″⌣a) a″⌣a′ a⌣a′ ] E′/E (⊖ 𝐸)
+   /-preserves-⌣₃ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a′⌣a : a′ ᴬ⌣ a} {a′⌣a″ : a′ ᴬ⌣ a″} {a″⌣a : a″ ᴬ⌣ a}
+                   {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
+                   (𝐸 : E′ ⌣[ a′⌣a ] E) → E′ ⌣[ a′⌣a″ ] E″ → (𝐸″ : E″ ⌣[ a″⌣a ] E) →
+                   E/E′ (⊖ 𝐸) ⌣[ /-preserves-ᴬ⌣ (ᴬ⌣-sym a′⌣a) a′⌣a″ (ᴬ⌣-sym a″⌣a) ] E/E′ (⊖ 𝐸″)
    /-preserves-⌣ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a⌣a′ : a ᴬ⌣ a′} {a′⌣a″ : a′ ᴬ⌣ a″} {a⌣a″ : a ᴬ⌣ a″}
                    {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
                    (𝐸 : E ⌣[ a⌣a′ ] E′) → E′ ⌣[ a′⌣a″ ] E″ → (𝐸″ : E ⌣[ a⌣a″ ] E″) →
                    E′/E (⊖ 𝐸) ⌣[ /-preserves-ᴬ⌣ a⌣a′ a′⌣a″ a⌣a″ ] E′/E (⊖ 𝐸″)
 
-   /-preserves-⌣₂ 𝐸 𝐸′ 𝐸″ = ?
+   /-preserves-⌣₂ 𝐸 𝐸′ 𝐸″ = {!!}
+
+   /-preserves-⌣₃ 𝐸 𝐸′ 𝐸″ = {!!}
 
    -- Residuation preserves concurrency. There is an unpleasant case-explosion here because of the need to
    -- distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise across the three transitions.
@@ -46,7 +55,7 @@ module Transition.Concur.Properties2 where
    /-preserves-⌣ [ _│ᵥ•_ {y = y} 𝐸 𝐹 ]ˡ [ 𝐸′ │ᵥ• 𝐹′ ] [ 𝐸″ │• 𝐹″ ] =
       [ (pop y *ᵇᵇ⌣) (/-preserves-⌣₂ 𝐸″ 𝐸′ 𝐸) │ᵥ• /-preserves-⌣₂ 𝐹″ 𝐹′ 𝐹 ]
    /-preserves-⌣ [ _│ᵥ•_ {y = y} 𝐸 𝐹 ]ˡ [ 𝐸′ │ᵥ• 𝐹′ ] [ 𝐸″ │• 𝐹″ ]ˡ =
-      let blah = /-preserves-⌣ (⌣-sym 𝐹) 𝐹′ (⌣-sym 𝐹″) in [ {!!} │ᵥ• {!!} ]
+      [ {!!} │ᵥ• /-preserves-⌣₃ 𝐹 𝐹′ 𝐹″ ]
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ]ˡ [ 𝐸′ │ᵥ 𝐹′ ] [ 𝐸″ │ᵥ• 𝐹″ ]ˡ = [ {!!} │ᵥ {!!} ]
    /-preserves-⌣ [ _│ᵥ•_ {y = y} 𝐸 𝐹 ]ˡ [ _│ᵥᵇ_ {a = a} 𝐸′ F ]ˡ [ 𝐸″ │•ᵇ F′ ]ˡ
       with (pop y *ᵇ) (E/E′ (⊖ 𝐸)) | (pop y *ᵇ) (E/E′ (⊖ 𝐸″))
