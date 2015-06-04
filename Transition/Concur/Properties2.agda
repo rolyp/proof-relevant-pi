@@ -1,6 +1,7 @@
 module Transition.Concur.Properties2 where
 
    open import SharedModules
+   open import Ext
 
    open import Action as ᴬ using (Action; _ᴬ⌣_; ᴬ⌣-sym); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ._ᴬ⌣_
    open import Proc as ᴾ using (Proc)
@@ -9,7 +10,7 @@ module Transition.Concur.Properties2 where
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
    open import Transition.Ren
    open import Transition.Concur2
-      using (Concur; Concur₁; module Concur; module Concur₁; Delta′; module Delta′; Delta; ⊖; ⊖₁; ⌣-sym);
+      using (Concur; Concur₁; module Concur; module Concur₁; Delta′; module Delta′; Delta; ⊖; ⊖₁; ⌣-sym; nibble);
       open Concur; open Concur₁; open Delta′
    open import Transition.Concur.Ren2 using (/-preserves-ᴬ⌣; _*ᵇᵇ⌣; _*ᵇᶜ⌣; _*ᶜᵇ⌣; _*ᶜᶜ⌣)
 
@@ -17,14 +18,15 @@ module Transition.Concur.Properties2 where
                    {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
                    (𝐸 : E ⌣[ a⌣a′ ] E′) → E″ ⌣[ a″⌣a′ ] E′ → (𝐸″ : E″ ⌣[ a″⌣a ] E) →
                    E/E′ (⊖ 𝐸″) ⌣[ /-preserves-ᴬ⌣ (ᴬ⌣-sym a″⌣a) a″⌣a′ a⌣a′ ] E′/E (⊖ 𝐸)
-   /-preserves-⌣₂ = {!!}
-
-   -- Residuation preserves concurrency. There is an unpleasant case-explosion here because of the need to
-   -- distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise across the three transitions.
    /-preserves-⌣ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a⌣a′ : a ᴬ⌣ a′} {a′⌣a″ : a′ ᴬ⌣ a″} {a⌣a″ : a ᴬ⌣ a″}
                    {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
                    (𝐸 : E ⌣[ a⌣a′ ] E′) → E′ ⌣[ a′⌣a″ ] E″ → (𝐸″ : E ⌣[ a⌣a″ ] E″) →
                    E′/E (⊖ 𝐸) ⌣[ /-preserves-ᴬ⌣ a⌣a′ a′⌣a″ a⌣a″ ] E′/E (⊖ 𝐸″)
+
+   /-preserves-⌣₂ 𝐸 𝐸′ 𝐸″ = ?
+
+   -- Residuation preserves concurrency. There is an unpleasant case-explosion here because of the need to
+   -- distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise across the three transitions.
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ] [ 𝐸′ │• 𝐹′ ] [ 𝐸″ │ᵥ• 𝐹″ ] = [ νᶜᶜ [ /-preserves-⌣ 𝐸 𝐸′ 𝐸″ │• /-preserves-⌣ 𝐹 𝐹′ 𝐹″ ] ]
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ] [ 𝐸′ │• 𝐹′ ]ˡ [ 𝐸″ │ᵥ• 𝐹″ ] =
       [ νᶜᶜ [ /-preserves-⌣ 𝐸 (⌣-sym 𝐸′) 𝐸″ │• /-preserves-⌣ 𝐹 (⌣-sym 𝐹′) 𝐹″ ] ]
@@ -41,8 +43,10 @@ module Transition.Concur.Properties2 where
       [ νᶜᶜ [ /-preserves-⌣₂ 𝐸 𝐸′ 𝐸″ │ᵥ• /-preserves-⌣₂ 𝐹 𝐹′ 𝐹″ ]ˡ ]
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ] [ 𝐸′ │ᵥ• 𝐹′ ]ˡ [ _│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} 𝐸″ 𝐹″ ]ˡ =
       [ νᶜᶜ [ ⌣-sym (/-preserves-⌣₂ 𝐸 𝐸′ 𝐸″) │• ⌣-sym (/-preserves-⌣₂ 𝐹 𝐹′ 𝐹″) ] ]
-   /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ]ˡ [ 𝐸′ │ᵥ• 𝐹′ ] [ 𝐸″ │• 𝐹″ ] = [ {!!} │ᵥ• {!!} ]
-   /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ]ˡ [ 𝐸′ │ᵥ• 𝐹′ ] [ 𝐸″ │• 𝐹″ ]ˡ = [ {!!} │ᵥ• {!!} ]
+   /-preserves-⌣ [ _│ᵥ•_ {y = y} 𝐸 𝐹 ]ˡ [ 𝐸′ │ᵥ• 𝐹′ ] [ 𝐸″ │• 𝐹″ ] =
+      [ (pop y *ᵇᵇ⌣) (/-preserves-⌣₂ 𝐸″ 𝐸′ 𝐸) │ᵥ• /-preserves-⌣₂ 𝐹″ 𝐹′ 𝐹 ]
+   /-preserves-⌣ [ _│ᵥ•_ {y = y} 𝐸 𝐹 ]ˡ [ 𝐸′ │ᵥ• 𝐹′ ] [ 𝐸″ │• 𝐹″ ]ˡ =
+      let blah = /-preserves-⌣ (⌣-sym 𝐹) 𝐹′ (⌣-sym 𝐹″) in [ {!!} │ᵥ• {!!} ]
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ]ˡ [ 𝐸′ │ᵥ 𝐹′ ] [ 𝐸″ │ᵥ• 𝐹″ ]ˡ = [ {!!} │ᵥ {!!} ]
    /-preserves-⌣ [ _│ᵥ•_ {y = y} 𝐸 𝐹 ]ˡ [ _│ᵥᵇ_ {a = a} 𝐸′ F ]ˡ [ 𝐸″ │•ᵇ F′ ]ˡ
       with (pop y *ᵇ) (E/E′ (⊖ 𝐸)) | (pop y *ᵇ) (E/E′ (⊖ 𝐸″))
@@ -52,7 +56,8 @@ module Transition.Concur.Properties2 where
    ... | pop-y*E/E′ | pop-y*E/E″ rewrite pop∘push y a = [ {!!} │ᵥᶜ {!!} ]ˡ
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ]ˡ [ E ᵇ│ᵥ 𝐹′ ]ˡ [ E′ ᵇ│• 𝐹″ ]ˡ = [ {!!} ᵇ│ᵥ {!!}]ˡ
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ]ˡ [ E ᶜ│ᵥ 𝐹′ ]ˡ [ E′ ᶜ│• 𝐹″ ]ˡ = [ {!!} ᶜ│ᵥ {!!} ]ˡ
-   /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ]ˡ [ 𝐸′ │ᵥ 𝐹′ ]ˡ [ 𝐸″ │ᵥ• 𝐹″ ]ˡ = [ {!!} │ᵥ {!!} ]
+   /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ]ˡ [ _│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} 𝐸′ 𝐹′ ]ˡ [ 𝐸″ │ᵥ• 𝐹″ ]ˡ = [ {!!} │ᵥ {!!} ]
+   /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ]ˡ [ _│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} 𝐸′ 𝐹′ ]ˡ [ 𝐸″ │ᵥ• 𝐹″ ]ˡ = [ {!!} │ᵥ {!!} ]
 {-
    /-preserves-⌣ (_│ᵥ•_ {y = y} 𝐸 𝐹) (𝐸′ │•ᵥ 𝐹′) (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} 𝐸″ 𝐹″) with (pop y *ᵇ) (E/E′ (⊖₁ 𝐸))
    ... | pop-y*E/E′ = νᶜᶜ (/-preserves-⌣ 𝐸 𝐸′ 𝐸″ │•ᵥ /-preserves-⌣ 𝐹 𝐹′ 𝐹″)
