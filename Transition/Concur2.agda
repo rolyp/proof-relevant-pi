@@ -140,9 +140,11 @@ module Transition.Concur2 where
       !_ : ∀ {P} {a : Action Γ} {a′ : Action Γ} {a⌣a′} {R R′} {E : P │ ! P —[ a - _ ]→ R} {E′ : P │ ! P —[ a′ - _ ]→ R′} →
            E ⌣[ a⌣a′ ] E′ → ! E ⌣₁[ a⌣a′ ] ! E′
 
-   postulate
-      ⌣-sym : ∀ {Γ} {a a′ : Action Γ} {P R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {a⌣a′ : a ᴬ⌣ a′} →
-              E ⌣[ a⌣a′ ] E′ → E′ ⌣[ ᴬ⌣-sym a⌣a′ ] E
+   -- Flip the bit which says which way around to read the constructor.
+   ⌣-sym : ∀ {Γ} {a a′ : Action Γ} {P R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {a⌣a′ : a ᴬ⌣ a′} →
+           E ⌣[ a⌣a′ ] E′ → E′ ⌣[ ᴬ⌣-sym a⌣a′ ] E
+   ⌣-sym [ 𝐸 ] = [ 𝐸 ]ˡ
+   ⌣-sym [ 𝐸 ]ˡ = [ subst (Concur₁ _ _) (sym (ᴬ⌣-sym-involutive _)) 𝐸 ]
 
    -- The type of the symmetric residual of concurrent transitions E and E′. Because cofinality of action
    -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
