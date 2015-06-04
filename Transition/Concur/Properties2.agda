@@ -9,7 +9,7 @@ module Transition.Concur.Properties2 where
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
    open import Transition.Ren
    open import Transition.Concur2
-      using (Concur; Concur₁; module Concur; module Concur₁; Delta′; module Delta′; Delta; ⊖; ⊖₁);
+      using (Concur; Concur₁; module Concur; module Concur₁; Delta′; module Delta′; Delta; ⊖; ⊖₁; ⌣-sym);
       open Concur; open Concur₁; open Delta′
    open import Transition.Concur.Ren2 using (/-preserves-ᴬ⌣; _*ᵇᵇ⌣; _*ᵇᶜ⌣; _*ᶜᵇ⌣; _*ᶜᶜ⌣)
 
@@ -21,7 +21,7 @@ module Transition.Concur.Properties2 where
                    E′/E (⊖ 𝐸) ⌣[ /-preserves-ᴬ⌣ a⌣a′ a′⌣a″ a⌣a″ ] E′/E (⊖ 𝐸″)
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ] [ 𝐸′ │• 𝐹′ ] [ 𝐸″ │ᵥ• 𝐹″ ] = [ νᶜᶜ [ /-preserves-⌣ 𝐸 𝐸′ 𝐸″ │• /-preserves-⌣ 𝐹 𝐹′ 𝐹″ ] ]
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ] [ 𝐸′ │• 𝐹′ ]ˡ [ 𝐸″ │ᵥ• 𝐹″ ] =
-      [ νᶜᶜ [ /-preserves-⌣ 𝐸 {!!} {!!} │• /-preserves-⌣ 𝐹 {!!} {!!} ] ]
+      [ νᶜᶜ [ /-preserves-⌣ 𝐸 (⌣-sym 𝐸′) 𝐸″ │• /-preserves-⌣ 𝐹 (⌣-sym 𝐹′) 𝐹″ ] ]
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ] [ 𝐸′ │ᵥ• 𝐹′ ]ˡ [ _│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} 𝐸″ 𝐹″ ] =
       [ νᶜᶜ [ /-preserves-⌣ 𝐸″ 𝐸′ 𝐸 │ᵥ• /-preserves-⌣ 𝐹″ 𝐹′ 𝐹 ]ˡ ]
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ] [ 𝐸′ │ᵥ• 𝐹′ ]ˡ [ _│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} 𝐸″ 𝐹″ ] =
