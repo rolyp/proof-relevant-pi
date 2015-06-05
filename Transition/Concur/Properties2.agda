@@ -42,6 +42,8 @@ module Transition.Concur.Properties2 where
 
    -- Residuation preserves concurrency. There is an unpleasant case-explosion here because of the need to
    -- distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise across the three transitions.
+   -- Should think of this as the residual of a concurrent pair after a transition.
+{-
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ] [ 𝐸′ │• 𝐹′ ] [ 𝐸″ │ᵥ• 𝐹″ ] = [ νᶜᶜ [ /-preserves-⌣ 𝐸 𝐸′ 𝐸″ │• /-preserves-⌣ 𝐹 𝐹′ 𝐹″ ] ]
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ] [ 𝐸′ │• 𝐹′ ]ˡ [ 𝐸″ │ᵥ• 𝐹″ ] =
       [ νᶜᶜ [ /-preserves-⌣ 𝐸 (⌣-sym 𝐸′) 𝐸″ │• /-preserves-⌣ 𝐹 (⌣-sym 𝐹′) 𝐹″ ] ]
@@ -66,10 +68,10 @@ module Transition.Concur.Properties2 where
       [ (pop y *ᵇᵇ⌣) (/-preserves-⌣₃ 𝐸 𝐸′ 𝐸″) │ᵥ /-preserves-⌣₃ 𝐹 𝐹′ 𝐹″ ]
    /-preserves-⌣ [ _│ᵥ•_ {y = y} 𝐸 𝐹 ]ˡ [ _│ᵥᵇ_ {a = a} 𝐸′ F ]ˡ [ 𝐸″ │•ᵇ F′ ]ˡ
       with (pop y *ᵇ) (E/E′ (⊖ 𝐸)) | (pop y *ᵇ) (E/E′ (⊖ 𝐸″)) | (pop y *ᵇᵇ⌣) (⌣-sym (/-preserves-⌣₄ 𝐸′ 𝐸 𝐸″))
-   ... | _ | _ | pop-y*E/E″⌣E/E′ rewrite pop∘push y a = [ pop-y*E/E″⌣E/E′ │ᵥᵇ _ ]ˡ
+   ... | _ | _ | pop-y*𝐸′/E′ rewrite pop∘push y a = [ pop-y*𝐸′/E′ │ᵥᵇ _ ]ˡ
    /-preserves-⌣ [ _│ᵥ•_ {y = y} 𝐸 𝐹 ]ˡ [ _│ᵥᶜ_ {a = a} 𝐸′ F ]ˡ [ 𝐸″ │•ᶜ F′ ]ˡ
       with (pop y *ᵇ) (E/E′ (⊖ 𝐸)) | (pop y *ᶜ) (E/E′ (⊖ 𝐸″)) | (pop y *ᶜᵇ⌣) (⌣-sym (/-preserves-⌣₄ 𝐸′ 𝐸 𝐸″))
-   ... | _ | _ | pop-y*E/E″⌣E/E′ rewrite pop∘push y a = [ pop-y*E/E″⌣E/E′ │ᵥᶜ _ ]ˡ
+   ... | _ | _ | pop-y*𝐸′/E′ rewrite pop∘push y a = [ pop-y*𝐸′/E′ │ᵥᶜ _ ]ˡ
    /-preserves-⌣ [ _│ᵥ•_ {x = x} {y = y} 𝐸 𝐹 ]ˡ [ E ᵇ│ᵥ 𝐹′ ]ˡ [ E′ ᵇ│• 𝐹″ ]ˡ with (pop y *ᵇ) (E/E′ (⊖ 𝐸))
    ... | pop-y*E/E′ rewrite pop∘push y (x •) = [ pop-y*E/E′ ᵇ│ᵥ ⌣-sym (/-preserves-⌣₄ 𝐹′ 𝐹 𝐹″) ]ˡ
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ]ˡ [ E ᶜ│ᵥ 𝐹′ ]ˡ [ E′ ᶜ│• 𝐹″ ]ˡ = [ _ ᶜ│ᵥ ⌣-sym (/-preserves-⌣₄ 𝐹′ 𝐹 𝐹″) ]ˡ
@@ -77,6 +79,11 @@ module Transition.Concur.Properties2 where
       [ (pop y *ᵇᵇ⌣) (/-preserves-⌣₄ 𝐸′ 𝐸 𝐸″) │ᵥ /-preserves-⌣₄ 𝐹′ 𝐹 𝐹″ ]
    /-preserves-⌣ [ _│ᵥ•_ {y = y} 𝐸 𝐹 ]ˡ [ _│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} 𝐸′ 𝐹′ ]ˡ [ 𝐸″ │ᵥ• 𝐹″ ]ˡ =
       [ (pop y *ᵇᵇ⌣) (/-preserves-⌣₄ 𝐸′ 𝐸 𝐸″) │ᵥ /-preserves-⌣₄ 𝐹′ 𝐹 𝐹″ ]
+-}
+   /-preserves-⌣ [ 𝐸 │ᵥᵇ 𝐹 ] [ x₁ ] [ x₂ ] = {!!}
+   /-preserves-⌣ [ 𝐸 │ᵥᵇ 𝐹 ] [ x₁ ] [ x₂ ]ˡ = {!!}
+   /-preserves-⌣ [ 𝐸 │ᵥᵇ 𝐹 ] [ x₁ ]ˡ [ x₂ ] = {!!}
+   /-preserves-⌣ [ 𝐸 │ᵥᵇ 𝐹 ] [ x₁ ]ˡ [ x₂ ]ˡ = {!!}
 {-
    /-preserves-⌣ (_│ᵥᵇ_ {a = a} 𝐸 F) (_│ᵥ•_ {y = y} 𝐸′ 𝐹′) (𝐸″ │•ᵇ F′) with (pop y *ᵇ) (E/E′ (⊖₁ 𝐸″))
    ... | pop-y*E/E″ rewrite pop∘push y a = /-preserves-⌣ 𝐸 𝐸′ 𝐸″ │ᵥ• (push *ᵇᶜ⌣) 𝐹′
