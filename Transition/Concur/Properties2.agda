@@ -49,6 +49,7 @@ module Transition.Concur.Properties2 where
    -- Residuation preserves concurrency. There is an unpleasant case-explosion here because of the need to
    -- distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise across the three transitions.
    -- Should think of this as the residual of a concurrent pair after a transition.
+{-
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ] [ 𝐸′ │• 𝐹′ ] [ 𝐸″ │ᵥ• 𝐹″ ] = [ νᶜᶜ [ /-preserves-⌣ 𝐸 𝐸′ 𝐸″ │• /-preserves-⌣ 𝐹 𝐹′ 𝐹″ ] ]
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ] [ 𝐸′ │• 𝐹′ ]ˡ [ 𝐸″ │ᵥ• 𝐹″ ] =
       [ νᶜᶜ [ /-preserves-⌣ 𝐸 (⌣-sym 𝐸′) 𝐸″ │• /-preserves-⌣ 𝐹 (⌣-sym 𝐹′) 𝐹″ ] ]
@@ -84,8 +85,9 @@ module Transition.Concur.Properties2 where
       [ (pop y *ᵇᵇ⌣) (/-preserves-⌣₄ 𝐸 𝐸′ 𝐸″) │ᵥ /-preserves-⌣₄ 𝐹 𝐹′ 𝐹″ ]
    /-preserves-⌣ [ _│ᵥ•_ {y = y} 𝐸 𝐹 ]ˡ [ _│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} 𝐸′ 𝐹′ ]ˡ [ 𝐸″ │ᵥ• 𝐹″ ]ˡ =
       [ (pop y *ᵇᵇ⌣) (/-preserves-⌣₄ 𝐸 𝐸′ 𝐸″) │ᵥ /-preserves-⌣₄ 𝐹 𝐹′ 𝐹″ ]
-
-   /-preserves-⌣ [ 𝐸 │ᵥᵇ F ] [ 𝐸′ │ᵥ• 𝐹′ ] [ 𝐸″ │•ᵇ F′ ] = [ {!!} ]ˡ
+-}
+   /-preserves-⌣ [ _│ᵥᵇ_ {a = a} 𝐸 F ] [ _│ᵥ•_ {y = y} 𝐸′ 𝐹′ ] [ 𝐸″ │•ᵇ F′ ] with (pop y *ᵇ) (E/E′ (⊖ 𝐸″))
+   ... | pop-y*E/E″ rewrite pop∘push y a = [ /-preserves-⌣ 𝐸 𝐸′ 𝐸″ │ᵥ• (push *ᵇᶜ⌣) 𝐹′ ]
    /-preserves-⌣ [ 𝐸 │ᵥᵇ F ] [ 𝐸′ │ᵥ 𝐹′ ] [ 𝐸″ │ᵥᵇ F′ ] = [ /-preserves-⌣ 𝐸 𝐸′ 𝐸″ │ᵥ (push *ᵇᵇ⌣) 𝐹′ ]
    /-preserves-⌣ [ 𝐸 │ᵥᵇ F ] [ 𝐸′ │ᵥᵇ .F ]ˡ [ _ᵇᵇ│_ {a⌣a′ = ᵇ∇ᵇ} 𝐸″ Q ] =
       [ ⌣-sym (/-preserves-⌣ᴰᵁᴰ 𝐸 𝐸′ 𝐸″) │ᵥᵇ (push *ᵇ) F ]ˡ
