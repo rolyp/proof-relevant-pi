@@ -1,3 +1,6 @@
+-- Residuation preserves concurrency. Should think of this as residual of a concurrent pair after a transition.
+-- There is an unpleasant case-explosion here because of the need to distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise
+-- across the three transitions.
 module Transition.Concur.Properties2 where
 
    open import SharedModules
@@ -67,7 +70,12 @@ module Transition.Concur.Properties2 where
       [ νᶜᶜ [ /-preserves-⌣₂ 𝐸 𝐸′ 𝐸″ │ᵥ• /-preserves-⌣₂ 𝐹 𝐹′ 𝐹″ ]ˡ ]
    │ᵥ•-preserves 𝐸 𝐹 [ 𝐸′ │ᵥ• 𝐹′ ]ˡ [ _│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} 𝐸″ 𝐹″ ]ˡ =
       [ νᶜᶜ [ ⌣-sym (/-preserves-⌣₂ 𝐸 𝐸′ 𝐸″) │• ⌣-sym (/-preserves-⌣₂ 𝐹 𝐹′ 𝐹″) ] ]
-   │ᵥ•-preserves 𝐸 𝐹 _ _ = {!!}
+   │ᵥ•-preserves _ _ [ _ │• _ ] [ () ]ˡ
+   │ᵥ•-preserves _ _ [ _ │•ᵇ _ ]ˡ [ () ]
+   │ᵥ•-preserves _ _ [ _ │•ᶜ _ ]ˡ [ () ]
+   │ᵥ•-preserves _ _ [ _ ᵇ│• _ ]ˡ [ () ]
+   │ᵥ•-preserves _ _ [ _ ᶜ│• _ ]ˡ [ () ]
+   │ᵥ•-preserves _ _ [ _ │• _ ]ˡ [ () ]ˡ
 
    │ᵥ•ˡ-preserves : ∀ {Γ} {P Q : Proc Γ} {x u y a″ R R′ R″ S S′} {a⌣a″  : τ ᶜ ᴬ⌣ a″} {a′⌣a″ : τ ᶜ ᴬ⌣ a″}
                    {E : P —[ (x •) ᵇ - _ ]→ R} {F : Q —[ (• x) ᵇ - _ ]→ S}
@@ -93,16 +101,13 @@ module Transition.Concur.Properties2 where
       [ (pop y *ᵇᵇ⌣) (/-preserves-⌣₄ 𝐸 𝐸′ 𝐸″) │ᵥ /-preserves-⌣₄ 𝐹 𝐹′ 𝐹″ ]
    │ᵥ•ˡ-preserves {y = y} 𝐸 𝐹 [ _│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} 𝐸′ 𝐹′ ]ˡ [ 𝐸″ │ᵥ• 𝐹″ ]ˡ =
       [ (pop y *ᵇᵇ⌣) (/-preserves-⌣₄ 𝐸 𝐸′ 𝐸″) │ᵥ /-preserves-⌣₄ 𝐹 𝐹′ 𝐹″ ]
-   │ᵥ•ˡ-preserves 𝐸 𝐹 [ _ │ᵥ _ ] [ () ]
-   │ᵥ•ˡ-preserves 𝐸 𝐹 [ _ │ᵥᵇ _ ]ˡ [ () ]
-   │ᵥ•ˡ-preserves 𝐸 𝐹 [ _ │ᵥᶜ _ ]ˡ [ () ]
-   │ᵥ•ˡ-preserves 𝐸 𝐹 [ _ ᵇ│ᵥ _ ]ˡ [ () ]
-   │ᵥ•ˡ-preserves 𝐸 𝐹 [ _ ᶜ│ᵥ _ ]ˡ [ () ]
-   │ᵥ•ˡ-preserves 𝐸 𝐹 [ _ │ᵥ _ ]ˡ [ () ]
+   │ᵥ•ˡ-preserves _ _ [ _ │ᵥ _ ] [ () ]
+   │ᵥ•ˡ-preserves _ _ [ _ │ᵥᵇ _ ]ˡ [ () ]
+   │ᵥ•ˡ-preserves _ _ [ _ │ᵥᶜ _ ]ˡ [ () ]
+   │ᵥ•ˡ-preserves _ _ [ _ ᵇ│ᵥ _ ]ˡ [ () ]
+   │ᵥ•ˡ-preserves _ _ [ _ ᶜ│ᵥ _ ]ˡ [ () ]
+   │ᵥ•ˡ-preserves _ _ [ _ │ᵥ _ ]ˡ [ () ]
 
-   -- Residuation preserves concurrency. There is an unpleasant case-explosion here because of the need to
-   -- distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise across the three transitions.
-   -- Should think of this as the residual of a concurrent pair after a transition.
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ] = │ᵥ•-preserves 𝐸 𝐹
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ]ˡ = │ᵥ•ˡ-preserves 𝐸 𝐹
 {-
