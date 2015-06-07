@@ -38,13 +38,6 @@ module Transition.Concur2 where
    ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Action (Γ + inc a) × Action (Γ + inc a′)
    ᴬ⊖ a⌣a′ = π₂ (ᴬΔ a⌣a′) (ᴬ/ a⌣a′) , π₂ (ᴬΔ (ᴬ⌣-sym a⌣a′)) (ᴬ/ (ᴬ⌣-sym a⌣a′))
 
-   ᴬ/-preserves-sym : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → π₂ (ᴬ⊖ a⌣a′) ≡ π₁ (ᴬ⊖ (ᴬ⌣-sym a⌣a′))
-   ᴬ/-preserves-sym ᵛ∇ᵛ = refl
-   ᴬ/-preserves-sym ᵇ∇ᵇ = refl
-   ᴬ/-preserves-sym ᵇ∇ᶜ = refl
-   ᴬ/-preserves-sym ᶜ∇ᵇ = refl
-   ᴬ/-preserves-sym ᶜ∇ᶜ = refl
-
    -- A pair of composable actions.
    Action₂ : Cxt → Set
    Action₂ Γ = Σ[ a ∈ Action Γ ] Action (Γ + inc a)
@@ -250,8 +243,8 @@ module Transition.Concur2 where
 
    /-preserves-sym₂ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
                       (𝐸 : E ⌣[ a⌣a′ ] E′) →
-                      let blah : R′ —[ π₁ (ᴬ⊖ (ᴬ⌣-sym a⌣a′)) - _ ]→ subst Proc (inc₂-def (ᴬ⌣-sym a⌣a′)) (S (⊖ (⌣-sym 𝐸)))
-                          blah = E′/E (⊖ (⌣-sym 𝐸))
+                      let blah : R′ —[ π₂ (ᴬ⊖ a⌣a′) - _ ]→ subst Proc (inc₂-def (ᴬ⌣-sym a⌣a′)) (S (⊖ (⌣-sym 𝐸)))
+                          blah = subst (λ P → R′ —[ π₂ (ᴬ⊖ a⌣a′) - _ ]→ P) {!!} (E/E′ (⊖ 𝐸)) -- E′/E (⊖ (⌣-sym 𝐸))
                           blah₂ : R′ —[ π₂ (ᴬ⊖ a⌣a′) - _ ]→ subst Proc (trans (inc₂-def a⌣a′) (ᴬ⊖-✓ a⌣a′)) (S′ (⊖ 𝐸))
                           blah₂ = E/E′ (⊖ 𝐸)
                       in ⊤
