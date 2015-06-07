@@ -254,11 +254,11 @@ module Transition.Concur2 where
    gibble ([_]ˡ {a⌣a′ = ᶜ∇ᵇ} 𝐸) = ≅-refl
    gibble ([_]ˡ {a⌣a′ = ᶜ∇ᶜ} 𝐸) = ≅-refl
 
-   /-preserves-sym₂ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′}
+   /-preserves-sym₃ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′}
                       {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} (𝐸 : E ⌣[ a⌣a′ ] E′) →
-                      let open ≅-Reasoning
-                          blah : R′ —[ π₂ (ᴬ⊖ a⌣a′) - _ ]→ Proc↱ (inc₂-def (ᴬ⌣-sym a⌣a′)) (S (⊖ (⌣-sym 𝐸)))
-                          blah = subst (λ P → R′ —[ π₂ (ᴬ⊖ a⌣a′) - _ ]→ P) (≅-to-≡ (begin
+                      let open ≅-Reasoning in
+                      E′/E (⊖ (⌣-sym 𝐸)) ≡
+                             subst (λ P → R′ —[ π₂ (ᴬ⊖ a⌣a′) - _ ]→ P) (≅-to-≡ (begin
                                 Proc↱ (trans (inc₂-def a⌣a′) (ᴬ⊖-✓ a⌣a′)) (S′ (⊖ 𝐸))
                              ≅⟨ Proc↲ (trans (inc₂-def a⌣a′) (ᴬ⊖-✓ a⌣a′)) _ ⟩
                                 S′ (⊖ 𝐸)
@@ -266,8 +266,5 @@ module Transition.Concur2 where
                                 S (⊖ (⌣-sym 𝐸))
                              ≅⟨ ≅-sym (Proc↲ (inc₂-def (ᴬ⌣-sym a⌣a′)) _) ⟩
                                 Proc↱ (inc₂-def (ᴬ⌣-sym a⌣a′)) (S (⊖ (⌣-sym 𝐸)))
-                             ∎)) (E/E′ (⊖ 𝐸)) -- E′/E (⊖ (⌣-sym 𝐸))
-                          blah₂ : R′ —[ π₂ (ᴬ⊖ a⌣a′) - _ ]→ Proc↱ (trans (inc₂-def a⌣a′) (ᴬ⊖-✓ a⌣a′)) (S′ (⊖ 𝐸))
-                          blah₂ = E/E′ (⊖ 𝐸)
-                      in ⊤
-   /-preserves-sym₂ 𝐸 = {!!}
+                             ∎)) (E/E′ (⊖ 𝐸))
+   /-preserves-sym₃ = {!!}
