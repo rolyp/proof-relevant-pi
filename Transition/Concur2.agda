@@ -268,4 +268,13 @@ module Transition.Concur2 where
                             Proc↱ (inc₂-def (ᴬ⌣-sym a⌣a′)) (S (⊖ (⌣-sym 𝐸)))
                          ∎))
                       (E/E′ (⊖ 𝐸))
-   /-preserves-sym₃ = {!!}
+   /-preserves-sym₃ ([_] {a⌣a′ = ᵛ∇ᵛ} 𝐸) = refl
+   /-preserves-sym₃ ([_] {a⌣a′ = ᵇ∇ᵇ} 𝐸) = refl
+   /-preserves-sym₃ ([_] {a⌣a′ = ᵇ∇ᶜ} 𝐸) = refl
+   /-preserves-sym₃ ([_] {a⌣a′ = ᶜ∇ᵇ} 𝐸) = refl
+   /-preserves-sym₃ ([_] {a⌣a′ = ᶜ∇ᶜ} 𝐸) = refl
+   /-preserves-sym₃ ([_]ˡ {a⌣a′ = ᵛ∇ᵛ} 𝐸) = refl
+   /-preserves-sym₃ ([_]ˡ {a⌣a′ = ᵇ∇ᵇ} 𝐸) = refl
+   /-preserves-sym₃ ([_]ˡ {a⌣a′ = ᵇ∇ᶜ} 𝐸) = refl
+   /-preserves-sym₃ ([_]ˡ {a⌣a′ = ᶜ∇ᵇ} 𝐸) = refl
+   /-preserves-sym₃ ([_]ˡ {a⌣a′ = ᶜ∇ᶜ} 𝐸) = refl
