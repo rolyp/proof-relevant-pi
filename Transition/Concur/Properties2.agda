@@ -15,7 +15,7 @@ module Transition.Concur.Properties2 where
    open import Transition.Concur2
       using (
          Concur; Concur₁; module Concur; module Concur₁; Delta′; module Delta′; Delta;
-         ⊖; ⊖₁; ⌣-sym; /-preserves-sym
+         ⊖; ⊖₁; ⌣-sym; /-preserves-sym; /-preserves-sym₃
       );
       open Concur; open Concur₁; open Delta′
    open import Transition.Concur.Ren2 using (/-preserves-ᴬ⌣; _*ᵇᵇ⌣; _*ᵇᶜ⌣; _*ᶜᵇ⌣; _*ᶜᶜ⌣)
@@ -49,7 +49,8 @@ module Transition.Concur.Properties2 where
                    (𝐸 : E ⌣[ a⌣a′ ] E′) → E′ ⌣[ a′⌣a″ ] E″ → (𝐸″ : E ⌣[ a⌣a″ ] E″) →
                    E′/E (⊖ 𝐸) ⌣[ /-preserves-ᴬ⌣ a⌣a′ a′⌣a″ a⌣a″ ] E′/E (⊖ 𝐸″)
 
-   /-preserves-⌣ᴰᴰᵁ 𝐸 𝐸′ 𝐸″ = {!!}
+   /-preserves-⌣ᴰᴰᵁ 𝐸 𝐸′ 𝐸″ =
+      let blah = /-preserves-⌣ 𝐸 𝐸′ (⌣-sym 𝐸″) in {!!}
 
    /-preserves-⌣ᴰᵁᴰ 𝐸 𝐸′ 𝐸″ = {!!}
 
@@ -57,18 +58,11 @@ module Transition.Concur.Properties2 where
 
    /-preserves-⌣ᴰᵁᵁ 𝐸 𝐸′ 𝐸″ = {!!}
 
-   /-preserves-⌣ᵁᴰᵁ 𝐸 𝐸′ 𝐸″ = {!!}
+   /-preserves-⌣ᵁᴰᵁ 𝐸 𝐸′ 𝐸″ =
+      let blah = /-preserves-⌣ (⌣-sym 𝐸) 𝐸′ (⌣-sym 𝐸″) in {!!}
 
-   /-preserves-⌣ᵁᵁᵁ {a′⌣a = a′⌣a} {a″⌣a′} {a″⌣a} 𝐸 𝐸′ 𝐸″ =
-      let blah : E′/E (⊖ (⌣-sym 𝐸)) ⌣[ /-preserves-ᴬ⌣ (ᴬ⌣-sym a′⌣a) (ᴬ⌣-sym a″⌣a′) (ᴬ⌣-sym a″⌣a) ] E′/E (⊖ (⌣-sym 𝐸″))
-          blah = /-preserves-⌣ (⌣-sym 𝐸) (⌣-sym 𝐸′) (⌣-sym 𝐸″)
-          bloop₁ : E′/E (⊖ (⌣-sym 𝐸)) ≅ E/E′ (⊖ 𝐸)
-          bloop₁ = ≅-sym (/-preserves-sym 𝐸)
-          bloop₂ : E′/E (⊖ (⌣-sym 𝐸″)) ≅ E/E′ (⊖ 𝐸″)
-          bloop₂ = ≅-sym (/-preserves-sym 𝐸″)
-          gibble : E/E′ (⊖ 𝐸) ⌣[ /-preserves-ᴬ⌣ (ᴬ⌣-sym a′⌣a) (ᴬ⌣-sym a″⌣a′) (ᴬ⌣-sym a″⌣a) ] E/E′ (⊖ 𝐸″)
-          gibble = {!!}
-      in gibble
+   /-preserves-⌣ᵁᵁᵁ 𝐸 𝐸′ 𝐸″ =
+      let blah = /-preserves-⌣ (⌣-sym 𝐸) (⌣-sym 𝐸′) (⌣-sym 𝐸″) in {!!}
 {-
    │ᵥ•-preserves : ∀ {Γ} {P Q : Proc Γ} {x u y a″ R R′ R″ S S′} {a⌣a″  : τ ᶜ ᴬ⌣ a″} {a′⌣a″ : τ ᶜ ᴬ⌣ a″}
                    {E : P —[ (x •) ᵇ - _ ]→ R} {F : Q —[ (• x) ᵇ - _ ]→ S}
