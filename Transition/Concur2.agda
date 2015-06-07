@@ -257,14 +257,15 @@ module Transition.Concur2 where
    /-preserves-sym₃ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′}
                       {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} (𝐸 : E ⌣[ a⌣a′ ] E′) →
                       let open ≅-Reasoning in
-                      E′/E (⊖ (⌣-sym 𝐸)) ≡
-                             subst (λ P → R′ —[ π₂ (ᴬ⊖ a⌣a′) - _ ]→ P) (≅-to-≡ (begin
-                                Proc↱ (trans (inc₂-def a⌣a′) (ᴬ⊖-✓ a⌣a′)) (S′ (⊖ 𝐸))
-                             ≅⟨ Proc↲ (trans (inc₂-def a⌣a′) (ᴬ⊖-✓ a⌣a′)) _ ⟩
-                                S′ (⊖ 𝐸)
-                             ≅⟨ gibble 𝐸 ⟩
-                                S (⊖ (⌣-sym 𝐸))
-                             ≅⟨ ≅-sym (Proc↲ (inc₂-def (ᴬ⌣-sym a⌣a′)) _) ⟩
-                                Proc↱ (inc₂-def (ᴬ⌣-sym a⌣a′)) (S (⊖ (⌣-sym 𝐸)))
-                             ∎)) (E/E′ (⊖ 𝐸))
+                      E′/E (⊖ (⌣-sym 𝐸)) ≡ subst (λ P → R′ —[ π₂ (ᴬ⊖ a⌣a′) - _ ]→ P) (≅-to-≡ (
+                         begin
+                            Proc↱ (trans (inc₂-def a⌣a′) (ᴬ⊖-✓ a⌣a′)) (S′ (⊖ 𝐸))
+                         ≅⟨ Proc↲ (trans (inc₂-def a⌣a′) (ᴬ⊖-✓ a⌣a′)) _ ⟩
+                            S′ (⊖ 𝐸)
+                         ≅⟨ gibble 𝐸 ⟩
+                            S (⊖ (⌣-sym 𝐸))
+                         ≅⟨ ≅-sym (Proc↲ (inc₂-def (ᴬ⌣-sym a⌣a′)) _) ⟩
+                            Proc↱ (inc₂-def (ᴬ⌣-sym a⌣a′)) (S (⊖ (⌣-sym 𝐸)))
+                         ∎))
+                      (E/E′ (⊖ 𝐸))
    /-preserves-sym₃ = {!!}
