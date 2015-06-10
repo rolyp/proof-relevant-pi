@@ -38,7 +38,6 @@ module Transition where
    source : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Proc Γ
    source {P = P} _ = P
 
-   -- Bundling these together simplifies the proofs that involve these projections on slices.
    out : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Σ[ a′ ∈ Action Γ ] Proc (Γ + inc a′)
    out {a = a} {R} _ = a , R
 
