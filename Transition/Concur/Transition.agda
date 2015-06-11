@@ -1,6 +1,9 @@
 -- The residual of a concurrent pair after a transition (residuation preserves concurrency).
 -- There is an unpleasant case-explosion here because of the need to distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise
 -- across the three transitions.
+--
+-- Agda is unable to compile this file. It requires a larger stack (I used +RTS -K40M -RTS), but even then it
+-- runs out of heap on my machine.
 module Transition.Concur.Transition where
 
    open import SharedModules
@@ -726,12 +729,11 @@ module Transition.Concur.Transition where
    │ᶜᶜˡ-preserves _ _ [ _ ᵇ│ᶜ _ ]ˡ [ () ]
    │ᶜᶜˡ-preserves _ _ [ _ ᶜ│ᶜ _ ]ˡ [ () ]
    │ᶜᶜˡ-preserves _ _ [ ._ │ᵇᶜ _ ]ˡ [ () ]
--}
 
    ᵇ│ᵇ-preserves : ∀ {Γ} {P Q : Proc Γ} {a a′ a″ R R″ S} {a′⌣a″} {a⌣a″}
-                  (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) {E″ : P │ Q —[ a″ - _ ]→ R″}
-                  (𝐸 : P │ᵇ F ⌣[ a′⌣a″ ] E″) (𝐸′ : E ᵇ│ Q ⌣[ a⌣a″ ] E″) →
-                  R │ᵇ (push *ᵇ) F ⌣[ /-preserves-ᴬ⌣ ᵇ∇ᵇ a′⌣a″ a⌣a″ ] E′/E (⊖ 𝐸′)
+                  (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) {E″ : P │ Q —[ a″ - _ ]→ R″} →
+                  P │ᵇ F ⌣[ a′⌣a″ ] E″ → (𝐸″ : E ᵇ│ Q ⌣[ a⌣a″ ] E″) →
+                  R │ᵇ (push *ᵇ) F ⌣[ /-preserves-ᴬ⌣ ᵇ∇ᵇ a′⌣a″ a⌣a″ ] E′/E (⊖ 𝐸″)
    ᵇ│ᵇ-preserves E F [ _ᵇ│•_ {y = y} E′ 𝐹 ] [ _│•ᵇ_ {a = a} 𝐸 F′ ] with (pop y *ᵇ) (E/E′ (⊖ 𝐸))
    ... | _ rewrite pop∘push y a = [ E′/E (⊖ 𝐸) ᵇ│• (push *ᵇᶜ⌣) 𝐹 ]
    ᵇ│ᵇ-preserves E F [ E′ ᵇ│ᵥ 𝐹 ] [ 𝐸 │ᵥᵇ F′ ] = [ E′/E (⊖ 𝐸) ᵇ│ᵥ (push *ᵇᵇ⌣) 𝐹 ]
@@ -753,9 +755,9 @@ module Transition.Concur.Transition where
    ᵇ│ᵇ-preserves _ _ [ _ │ᵇᵇ _ ]ˡ [ () ]ˡ
 
    ᵇ│ᵇˡ-preserves : ∀ {Γ} {P Q : Proc Γ} {a a′ a″ R R″ S} {a′⌣a″} {a⌣a″}
-                  (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) {E″ : P │ Q —[ a″ - _ ]→ R″}
-                  (𝐸 : E ᵇ│ Q ⌣[ a′⌣a″ ] E″) (𝐸′ : P │ᵇ F ⌣[ a⌣a″ ] E″) →
-                  (push *ᵇ) E ᵇ│ S ⌣[ /-preserves-ᴬ⌣ ᵇ∇ᵇ a′⌣a″ a⌣a″ ] E′/E (⊖ 𝐸′)
+                  (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᵇ - _ ]→ S) {E″ : P │ Q —[ a″ - _ ]→ R″} →
+                  E ᵇ│ Q ⌣[ a′⌣a″ ] E″ → (𝐸″ : P │ᵇ F ⌣[ a⌣a″ ] E″) →
+                  (push *ᵇ) E ᵇ│ S ⌣[ /-preserves-ᴬ⌣ ᵇ∇ᵇ a′⌣a″ a⌣a″ ] E′/E (⊖ 𝐸″)
    ᵇ│ᵇˡ-preserves E F [ .E ᵇ│ᵇ F′ ] [ _│ᵇᵇ_ {a⌣a′ = ᵇ∇ᵇ} P 𝐹 ] = [ (push *ᵇ) E ᵇ│ᵇ E′/E (⊖ 𝐹) ]
    ᵇ│ᵇˡ-preserves E F [ .E ᵇ│ᵇ F′ ] [ _│ᵇᵇ_ {a⌣a′ = ᵛ∇ᵛ} P 𝐹 ] = [ (push *ᵇ) E ᵇ│ᶜ E′/E (⊖ 𝐹) ]
    ᵇ│ᵇˡ-preserves E F [ .E ᵇ│ᶜ F′ ] [ P │ᵇᶜ 𝐹 ] = [ (push *ᵇ) E ᵇ│ᶜ E′/E (⊖ 𝐹) ]
@@ -775,6 +777,19 @@ module Transition.Concur.Transition where
    ᵇ│ᵇˡ-preserves _ _ [ _ │•ᵇ _ ] [ () ]ˡ
    ᵇ│ᵇˡ-preserves _ _ [ _ │ᵥᵇ _ ] [ () ]ˡ
    ᵇ│ᵇˡ-preserves _ _ [ _ ᵇᵇ│ _ ]ˡ [ () ]
+-}
+
+   ᵇ│ᶜ-preserves : ∀ {Γ} {P Q : Proc Γ} {a a′ a″ R R″ S} {a′⌣a″} {a⌣a″}
+                  (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) {E″ : P │ Q —[ a″ - _ ]→ R″} →
+                  P │ᶜ F ⌣[ a′⌣a″ ] E″ → (𝐸″ : E ᵇ│ Q ⌣[ a⌣a″ ] E″) →
+                  R │ᶜ (push *ᶜ) F ⌣[ /-preserves-ᴬ⌣ ᵇ∇ᶜ a′⌣a″ a⌣a″ ] E′/E (⊖ 𝐸″)
+   ᵇ│ᶜ-preserves E F 𝐸 𝐸′ = {!!}
+
+   ᵇ│ᶜˡ-preserves : ∀ {Γ} {P Q : Proc Γ} {a a′ a″ R R″ S} {a′⌣a″} {a⌣a″}
+                  (E : P —[ a ᵇ - _ ]→ R) (F : Q —[ a′ ᶜ - _ ]→ S) {E″ : P │ Q —[ a″ - _ ]→ R″} →
+                  E ᵇ│ Q ⌣[ a′⌣a″ ] E″ → (𝐸″ : P │ᶜ F ⌣[ a⌣a″ ] E″) →
+                  E ᵇ│ S ⌣[ /-preserves-ᴬ⌣ ᶜ∇ᵇ a′⌣a″ a⌣a″ ] E′/E (⊖ 𝐸″)
+   ᵇ│ᶜˡ-preserves E F 𝐸 𝐸′ = {!!}
 
 {-
    /-preserves-⌣ [ 𝐸 │ᵥ• 𝐹 ] = │ᵥ•-preserves 𝐸 𝐹
@@ -797,7 +812,10 @@ module Transition.Concur.Transition where
    /-preserves-⌣ [ P │ᶜᶜ 𝐹 ]ˡ = │ᶜᶜˡ-preserves P 𝐹
    /-preserves-⌣ [ E ᵇ│ᵇ F ] = ᵇ│ᵇ-preserves E F
    /-preserves-⌣ [ E ᵇ│ᵇ F ]ˡ = ᵇ│ᵇˡ-preserves E F
+   /-preserves-⌣ [ E ᵇ│ᶜ F ] = ᵇ│ᶜ-preserves E F
 -}
+
+   /-preserves-⌣ [ E ᵇ│ᶜ F ]ˡ = ᵇ│ᶜˡ-preserves E F
 
 {-
    /-preserves-⌣ (E ᵇ│ᶜ F) (P │ᶜᵇ 𝐹) (.E ᵇ│ᵇ F′) = _ │ᶜᵇ (push *ᶜᵇ⌣) 𝐹
