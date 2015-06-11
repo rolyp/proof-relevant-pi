@@ -61,7 +61,7 @@ module Transition.Concur2 where
    ᴬ⊖-✓ ᶜ∇ᶜ = refl
 
    -- Whether two coinitial evaluation contexts are concurrent; define symmetric reduction and then close under
-   -- symmetry. Convenient to have this indexed by the kind of action residual. TODO: cases for •│ and ᵥ│.
+   -- symmetry. Convenient to have this indexed by the kind of action residual.
    syntax Concur E E′ a⌣a′ = E ⌣[ a⌣a′ ] E′
    syntax Concur₁ E E′ a′/a = E ⌣₁[ a′/a ] E′
    infix 4 Concur₁

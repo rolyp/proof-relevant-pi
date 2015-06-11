@@ -20,7 +20,6 @@ module Transition.Ren where
    (ρ *ᶜ) (E ᶜ│ Q) = (ρ *ᶜ) E ᶜ│ (ρ *) Q
    (ρ *ᶜ) (P │ᶜ F) = (ρ *) P │ᶜ (ρ *ᶜ) F
    (ρ *ᶜ) (_│•_ {R = R} {y = y} E F) rewrite pop-comm ρ y R = (ρ *ᵇ) E │• (ρ *ᶜ) F
-   (ρ *ᶜ) (_•│_ {S = S} {y = y} E F) rewrite pop-comm ρ y S = (ρ *ᶜ) E •│ (ρ *ᵇ) F
    (ρ *ᶜ) (E │ᵥ F) = (ρ *ᵇ) E │ᵥ (ρ *ᵇ) F
    (ρ *ᶜ) (νᶜ_ {a = a} E) with (suc ρ *ᶜ) E
    ... | E′ rewrite ᴿ+-comm 1 ρ a = νᶜ E′

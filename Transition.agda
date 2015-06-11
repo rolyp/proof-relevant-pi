@@ -10,7 +10,8 @@ module Transition where
    import Proc.Ren
    open import Ren as ᴿ using (push; pop; swap; Renameable); open ᴿ.Renameable ⦃...⦄
 
-   -- Transitions carry an explicit size index so we can define residuals to be size-preserving.
+   -- Transitions carry an explicit size index so we can define residuals to be size-preserving. Symmetric
+   -- variants of _│•_ and _│ᵥ_ are omitted.
    data _—[_-_]→_ {Γ} : Proc Γ → (a : Action Γ) → Size → Proc (Γ + inc a) → Set where
       _•∙_ : ∀ {ι} (x : Name Γ) (P : Proc (Γ + 1)) → x •∙ P —[ x • ᵇ - ↑ ι ]→ P
       •_〈_〉∙_ : ∀ {ι} (x y : Name Γ) (P : Proc Γ) → • x 〈 y 〉∙ P —[ • x 〈 y 〉 ᶜ - ↑ ι ]→ P
@@ -21,9 +22,6 @@ module Transition where
       _│ᶜ_ : ∀ {ι Q} {a : Actionᶜ Γ} {S} → (P : Proc Γ) → Q —[ a ᶜ - ι ]→ S → P │ Q —[ a ᶜ - ↑ ι ]→ P │ S
       _│•_ : ∀ {ι P R Q S} {x : Name Γ} {y : Name Γ} →
              P —[ x • ᵇ - ι ]→ R → Q —[ • x 〈 y 〉 ᶜ - ι ]→ S → P │ Q —[ τ ᶜ - ↑ ι ]→ (pop y *) R │ S
-      _•│_ : ∀ {ι P R Q S} {x : Name Γ} {y : Name Γ} →
-             P —[ • x 〈 y 〉 ᶜ - ι ]→ R → Q —[ x • ᵇ - ι ]→ S → P │ Q —[ τ ᶜ - ↑ ι ]→ R │ (pop y *) S
-      -- TODO: add _ᵥ│_ variant.
       _│ᵥ_ : ∀ {ι P R Q S} {x : Name Γ} → P —[ x • ᵇ - ι ]→ R → Q —[ (• x) ᵇ - ι ]→ S →
              P │ Q —[ τ ᶜ - ↑ ι ]→ ν (R │ S)
       ν•_ : ∀ {ι P R} {x : Name Γ} → P —[ • suc x 〈 zero 〉 ᶜ - ι ]→ R → ν P —[ (• x) ᵇ - ↑ ι ]→ R
@@ -32,7 +30,7 @@ module Transition where
       !_ : ∀ {ι P} {a : Action Γ} {R} → P │ ! P —[ a - ι ]→ R → ! P —[ a - ↑ ι ]→ R
 
    infixl 0 _—[_-_]→_
-   infixl 6 _➕₁_ _ᵇ│_ _ᶜ│_ _│ᵇ_ _│ᶜ_ _│•_ _•│_ _│ᵥ_
+   infixl 6 _➕₁_ _ᵇ│_ _ᶜ│_ _│ᵇ_ _│ᶜ_ _│•_ _│ᵥ_
    infixr 7 _•∙_ •_〈_〉∙_
 
    source : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Proc Γ
