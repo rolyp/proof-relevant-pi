@@ -78,9 +78,7 @@ module Transition.Concur.Cofinal where
       ≈⟨ (pop y *⁼) (⊖₁-✓ E⌣E′) ⟩
          (pop y *) S′
       ∎) │ ≈-reflexive (*-preserves-id _)
-{-
-   ⊖₁-✓ (_ᵇ│•_ {y = y} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | _ ᵀΔ _ | id*S₁≈S′₁ =
+   ⊖₁-✓ (_ᵇ│•_ {y = y} E F⌣F′) =
       let R = target E in
       (begin
          (id *) ((pop (ᴺ.suc y) *) ((suc push *) R))
@@ -88,7 +86,8 @@ module Transition.Concur.Cofinal where
          ((pop (ᴺ.suc y) *) ((suc push *) R))
       ≡⟨ sym (pop∘suc-push y _) ⟩
          (push *) ((pop y *) R)
-      ∎) │ id*S₁≈S′₁
+      ∎) │ (⊖₁-✓ F⌣F′)
+{-
    ⊖₁-✓ (E ᶜ│• F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | id*S₁≈S′₁ = ≈-reflexive (*-preserves-id _) │ id*S₁≈S′₁
    ⊖₁-✓ (E⌣E′ │ᵥᵇ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
