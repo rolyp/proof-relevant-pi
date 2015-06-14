@@ -1,6 +1,7 @@
--- Residuation preserves concurrency. There is a slight case-explosion here because of the need to
--- distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise across the three transitions.
-module Transition.Concur.Properties where
+-- Residuation preserves concurrency; alternatively, the "residual" of a concurrent pair after a third concurrent
+-- transition. There is a slight case-explosion here because of the need to distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases
+-- pairwise across the three transitions.
+module Transition.Concur.Transition where
 
    open import SharedModules
 
@@ -10,13 +11,14 @@ module Transition.Concur.Properties where
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
    open import Transition.Ren
-   open import Transition.Concur using (Concur₁; module Concur₁; Concur; Delta′; module Delta′; Delta; ⊖; ⊖₁; ⌣-sym);
+   open import Transition.Concur
+      using (Concur₁; module Concur₁; Concur; Delta′; module Delta′; Delta; ⊖; ⊖₁; ⌣-sym);
       open Concur₁; open Delta′
    open import Transition.Concur.Ren using (/-preserves-ᴬ⌣; _*ᵇᵇ⌣; _*ᵇᶜ⌣; _*ᶜᵇ⌣; _*ᶜᶜ⌣)
 
    -- Haven't found a way to prove this for the symmetrised relation ⌣ as defined. I can prove it for a
    -- version of ⌣ which has a symmetric variant of each rule, but the resulting definition is very large and
-   -- Agda can barely compile 1/4 of it before running out of memory. Try to manage with this for now.
+   -- Agda can barely compile 1/4 of it before running out of memory. Manage with this for now.
    /-preserves-⌣₁ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a⌣a′ : a ᴬ⌣ a′} {a′⌣a″ : a′ ᴬ⌣ a″} {a⌣a″ : a ᴬ⌣ a″}
                    {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
                    (𝐸 : E ⌣₁[ a⌣a′ ] E′) → E′ ⌣₁[ a′⌣a″ ] E″ → (𝐸″ : E ⌣₁[ a⌣a″ ] E″) →
