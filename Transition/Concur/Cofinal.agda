@@ -87,12 +87,9 @@ module Transition.Concur.Cofinal where
       ≡⟨ sym (pop∘suc-push y _) ⟩
          (push *) ((pop y *) R)
       ∎) │ (⊖₁-✓ F⌣F′)
-{-
-   ⊖₁-✓ (E ᶜ│• F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
-   ... | _ ᵀΔ _ | id*S₁≈S′₁ = ≈-reflexive (*-preserves-id _) │ id*S₁≈S′₁
-   ⊖₁-✓ (E⌣E′ │ᵥᵇ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | E′/E ᵀΔ E/E′ | swap*S≈S′ =
-      let S = target E′/E; S′ = target E/E′; S₁ = target F in
+   ⊖₁-✓ (E ᶜ│• F⌣F′) = ≈-reflexive (*-preserves-id _) │ (⊖₁-✓ F⌣F′)
+   ⊖₁-✓ (E⌣E′ │ᵥᵇ F) =
+      let S = S (⊖₁ E⌣E′); S′ = S′ (⊖₁ E⌣E′); S₁ = target F in
       ν ((
          begin
             (suc id *) S
@@ -100,7 +97,7 @@ module Transition.Concur.Cofinal where
             S
          ≡⟨ sym (swap-involutive _) ⟩
             (swap *) ((swap *) S)
-         ≈⟨ (swap *⁼) swap*S≈S′ ⟩
+         ≈⟨ (swap *⁼) (⊖₁-✓ E⌣E′) ⟩
             (swap *) S′
          ∎) │ (
          begin
@@ -111,6 +108,7 @@ module Transition.Concur.Cofinal where
             (swap *) ((push *) S₁)
          ∎))
       where open ≈-Reasoning
+{-
    ⊖₁-✓ (E⌣E′ │ᵥᶜ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | E′/E ᵀΔ E/E′ | id*S≈S′ =
       let S = target E′/E; S′ = target E/E′ in
