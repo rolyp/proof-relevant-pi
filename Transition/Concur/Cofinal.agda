@@ -188,6 +188,28 @@ module Transition.Concur.Cofinal where
       ≈⟨ (pop y *⁼) ((suc (pop z) *⁼) swap*S≈S′) ⟩
          (pop y *) ((suc (pop z) *) S′)
       ∎) │ id*S₂≈S′₂
+   ⊖₁-✓ (_│•ᵥ_ {u = u} {y} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
+   ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ | swap*S₁≈S′₁ | id*S₂≈S′₂ =
+      let S₁ = target E′/E; S′₁ = target E/E′; S₂ = target F′/F; S′₂ = target F/F′ in
+      ν ((
+         begin
+            (suc id *) ((suc (pop y) *) S₁)
+         ≡⟨ +-id-elim 1 _ ⟩
+            (suc (pop y) *) S₁
+         ≡⟨ cong (suc (pop y) *) (sym (swap-involutive _ )) ⟩
+            (suc (pop y) *) ((swap *) ((swap *) S₁))
+         ≈⟨ (suc (pop y) *⁼) ((swap *⁼) swap*S₁≈S′₁) ⟩
+            (suc (pop y) *) ((swap *) S′₁)
+         ≡⟨ suc-pop∘swap y _ ⟩
+            (pop ((push *) y) *) S′₁
+         ∎) │ (
+         begin
+            (suc id *) S₂
+         ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+            (id *) S₂
+         ≈⟨ id*S₂≈S′₂ ⟩
+            S′₂
+         ∎))
    ⊖₁-✓ (_│ᵥ_ {x = x} {u} {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) with ⊖₁ E⌣E′ | ⊖₁ F⌣F′ | ⊖₁-✓ E⌣E′ | ⊖₁-✓ F⌣F′
    ... | E′/E ᵀΔ E/E′ | F′/F ᵀΔ F/F′ | swap*S₁≈S′₁ | id*S₂≈S′₂ =
       let S₁ = target E′/E; S′₁ = target E/E′; S₂ = target F′/F; S′₂ = target F/F′ in
