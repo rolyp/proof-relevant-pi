@@ -32,10 +32,11 @@ module Transition.Concur.Cofinal where
    ⋈[ Γ , aa′ , m ] P P′ = ((braid aa′ ᴿ+ m) *) P ≈ P′
 
    open ≈-Reasoning
+   open Delta′
 
    -- Correctness of residuals, with respect to the above notion of cofinality. Use ≈-Reasoning for maximum clarity.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → let open Delta′ (⊖₁ E⌣E′) in ⋈[ Γ , (a , π₁ (ᴬ⊖ a⌣a′)) , zero ] S S′
+          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → ⋈[ Γ , (a , π₁ (ᴬ⊖ a⌣a′)) , zero ] (S (⊖₁ E⌣E′)) (S′ (⊖₁ E⌣E′))
    ⊖₁-✓ (E ᵇ│ᵇ F) =
       let R = target E; S = target F in
       (begin
@@ -51,34 +52,33 @@ module Transition.Concur.Cofinal where
    ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-reflexive (*-preserves-id _) │ ≈-reflexive (*-preserves-id _)
    ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-reflexive (*-preserves-id _) │ ≈-reflexive (*-preserves-id _)
    ⊖₁-✓ (E ᶜ│ᶜ F) = ≈-reflexive (*-preserves-id _) │ ≈-reflexive (*-preserves-id _)
-   ⊖₁-✓ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′ | (swap *⁼) (⊖₁-✓ E⌣E′)
-   ... | E′/E ᵀΔ E/E′ | swap*swap*S≈swap*S′ with (pop y *ᵇ) E/E′
+   ⊖₁-✓ (_│•ᵇ_ {y = y} {a = a} E⌣E′ F) with (pop y *ᵇ) (E/E′ (⊖₁ E⌣E′))
    ... | pop-y*E/E′ rewrite pop∘push y a =
-      let S = target E′/E; S′ = target E/E′ in
+      let S = S (⊖₁ E⌣E′); S′ = S′ (⊖₁ E⌣E′) in
       (begin
          (id *) ((pop ((push *) y) *) S)
       ≡⟨ *-preserves-id _ ⟩
          (pop ((push *) y) *) S
       ≡⟨ cong (pop ((push *) y) *) (sym (swap-involutive _)) ⟩
          (pop ((push *) y) *) ((swap *) ((swap *) S))
-      ≈⟨ (pop ((push *) y) *⁼) swap*swap*S≈swap*S′ ⟩
+      ≈⟨ (pop ((push *) y) *⁼) ((swap *⁼) (⊖₁-✓ E⌣E′)) ⟩
          (pop ((push *) y) *) ((swap *) S′)
       ≡⟨ sym (pop∘swap y _) ⟩
          (suc (pop y) *) S′
       ∎) │ ≈-reflexive (*-preserves-id _)
-   ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
-   ... | E′/E ᵀΔ E/E′ | id*S≈S′ with (pop y *ᶜ) E/E′
+   ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} E⌣E′ F) with (pop y *ᶜ) (E/E′ (⊖₁ E⌣E′))
    ... | pop-y*E/E′ rewrite pop∘push y a =
-      let S = target E′/E; S′ = target E/E′ in
+      let S = S (⊖₁ E⌣E′); S′ = S′ (⊖₁ E⌣E′) in
       (begin
          (id *) ((pop y *) S)
       ≡⟨ *-preserves-id _ ⟩
          (pop y *) S
       ≡⟨ cong (pop y *) (sym (*-preserves-id _)) ⟩
          (pop y *) ((id *) S)
-      ≈⟨ (pop y *⁼) id*S≈S′ ⟩
+      ≈⟨ (pop y *⁼) (⊖₁-✓ E⌣E′) ⟩
          (pop y *) S′
       ∎) │ ≈-reflexive (*-preserves-id _)
+{-
    ⊖₁-✓ (_ᵇ│•_ {y = y} E F⌣F′) with ⊖₁ F⌣F′ | ⊖₁-✓ F⌣F′
    ... | _ ᵀΔ _ | id*S₁≈S′₁ =
       let R = target E in
@@ -334,6 +334,8 @@ module Transition.Concur.Cofinal where
       ∎)
    ⊖₁-✓ (! E⌣E′) with ⊖₁ E⌣E′ | ⊖₁-✓ E⌣E′
    ... | _ ᵀΔ _ | σ*S≈S′ = σ*S≈S′
+-}
+   ⊖₁-✓ _ = {!!}
 
    symmetrise : ∀ {Γ} {S S′ : Proc Γ} → (id *) S ≈ S′ → (id *) S′ ≈ S
    symmetrise {S = S} {S′} id*S≈S′ =
@@ -349,7 +351,7 @@ module Transition.Concur.Cofinal where
 
    -- Now symmetrise.
    ⊖-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-         (E⌣E′ : E ⌣[ a⌣a′ ] E′) → let open Delta′ (⊖ E⌣E′) in ⋈[ Γ , (a , π₁ (ᴬ⊖ a⌣a′)) , zero ] S S′
+         (E⌣E′ : E ⌣[ a⌣a′ ] E′) → ⋈[ Γ , (a , π₁ (ᴬ⊖ a⌣a′)) , zero ] (S (⊖ E⌣E′)) (S′ (⊖ E⌣E′))
    ⊖-✓ (inj₁ E⌣E′) = ⊖₁-✓ E⌣E′
    ⊖-✓ (inj₂ E′⌣E) with ⊖₁ E′⌣E | ⊖₁-✓ E′⌣E
    ⊖-✓ {a⌣a′ = ᵛ∇ᵛ} (inj₂ E′⌣E) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
