@@ -22,14 +22,14 @@ module Transition.Concur.Cofinal where
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
    -- structurally congruent, or structurally congruent with each other's swap image.
-   braid : ∀ {Γ} (aa′ : Action₂ Γ) → let Γ′ = Γ + inc₂ aa′ in Ren Γ′ Γ′
+   braid : ∀ {Γ} (ӓ : Action₂ Γ) → let Γ′ = Γ + inc₂ ӓ in Ren Γ′ Γ′
    braid (_ ᵇ , _ ᵇ) = swap
    braid (_ ᵇ , _ ᶜ) = id
    braid (_ ᶜ , _ ᵇ) = id
    braid (_ ᶜ , _ ᶜ) = id
 
-   ⋈[_,_,_] : ∀ Γ (aa′ : Action₂ Γ) (m : Cxt) → let Γ′ = Γ + inc₂ aa′ in Proc (Γ′ + m) → Proc (Γ′ + m) → Set
-   ⋈[ Γ , aa′ , m ] P P′ = ((braid aa′ ᴿ+ m) *) P ≈ P′
+   ⋈[_,_,_] : ∀ Γ (ӓ : Action₂ Γ) (m : Cxt) → let Γ′ = Γ + inc₂ ӓ in Proc (Γ′ + m) → Proc (Γ′ + m) → Set
+   ⋈[ Γ , ӓ , m ] P P′ = ((braid ӓ ᴿ+ m) *) P ≈ P′
 
    open ≈-Reasoning
    open Delta′
