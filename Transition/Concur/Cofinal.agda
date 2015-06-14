@@ -152,12 +152,12 @@ module Transition.Concur.Cofinal where
    ⊖₁-✓ (_│ᵇᵇ_ {a⌣a′ = ᵛ∇ᵛ} P F⌣F′) = ≈-reflexive (*-preserves-id _) │ ⊖₁-✓ F⌣F′
    ⊖₁-✓ (_│ᵇᵇ_ {a⌣a′ = ᵇ∇ᵇ} P F⌣F′) rewrite swap∘push∘push P = ≈-refl │ ⊖₁-✓ F⌣F′
    ⊖₁-✓ (P │ᵇᶜ F⌣F′) = ≈-reflexive (*-preserves-id _) │ ⊖₁-✓ F⌣F′
-   ⊖₁-✓ (P │ᶜᵇ F⌣F′) = ?
+   ⊖₁-✓ (P │ᶜᵇ F⌣F′) = ≈-reflexive (*-preserves-id _) │ ⊖₁-✓ F⌣F′
    ⊖₁-✓ (P │ᶜᶜ F⌣F′) = ≈-reflexive (*-preserves-id _) │ ⊖₁-✓ F⌣F′
    ⊖₁-✓ (_ᵇᵇ│_ {a⌣a′ = ᵛ∇ᵛ} E⌣E′ _) = ⊖₁-✓ E⌣E′ │ ≈-reflexive (*-preserves-id _)
    ⊖₁-✓ (_ᵇᵇ│_ {a⌣a′ = ᵇ∇ᵇ} E⌣E′ Q) rewrite swap∘push∘push Q = ⊖₁-✓ E⌣E′ │ ≈-refl
    ⊖₁-✓ (E⌣E′ ᵇᶜ│ Q) = ⊖₁-✓ E⌣E′ │ ≈-reflexive (*-preserves-id _)
-   ⊖₁-✓ (E⌣E′ ᶜᵇ│ Q) = ?
+   ⊖₁-✓ (E⌣E′ ᶜᵇ│ Q) = ⊖₁-✓ E⌣E′ │ ≈-reflexive (*-preserves-id _)
    ⊖₁-✓ (E⌣E′ ᶜᶜ│ Q) = ⊖₁-✓ E⌣E′ │ ≈-reflexive (*-preserves-id _)
    ⊖₁-✓ (E⌣E′ ➕₁ Q) = ⊖₁-✓ E⌣E′
    ⊖₁-✓ (_│•_ {y = y} {z = z} E⌣E′ F⌣F′) =
@@ -192,7 +192,7 @@ module Transition.Concur.Cofinal where
          ≈⟨ ⊖₁-✓ F⌣F′ ⟩
             S′₂
          ∎))
-   ⊖₁-✓ (_│ᵥ•_ {y = y} E⌣E′ F⌣F′) = ?
+   ⊖₁-✓ (_│ᵥ•_ {y = y} E⌣E′ F⌣F′) = {!!}
    ⊖₁-✓ (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) =
       let S₁ = S (⊖₁ E⌣E′); S′₁ = S′ (⊖₁ E⌣E′); S₂ = S (⊖₁ F⌣F′); S′₂ = S′ (⊖₁ F⌣F′) in
       ν ((
@@ -284,7 +284,7 @@ module Transition.Concur.Cofinal where
          (swap *) S′
       ∎)
    ⊖₁-✓ (νᵇᶜ_ {a′ = a′} E⌣E′) with (swap *ᶜ) (E′/E (⊖₁ E⌣E′))
-   ... | swap*E′/E rewrite swap∘push∘push a′ =
+   ... | _ rewrite swap∘push∘push a′ =
       let S = S (⊖₁ E⌣E′); S′ = S′ (⊖₁ E⌣E′) in
       ν (begin
          (suc id *) ((swap *) S)
@@ -295,7 +295,18 @@ module Transition.Concur.Cofinal where
       ≈⟨ (swap *⁼) (⊖₁-✓ E⌣E′) ⟩
          (swap *) S′
       ∎)
-   ⊖₁-✓ (νᶜᵇ_ {a′ = a′} E⌣E′) = ?
+   ⊖₁-✓ (νᶜᵇ_ {a = a} E⌣E′) with (swap *ᶜ) (E/E′ (⊖₁ E⌣E′))
+   ... | _ rewrite swap∘push∘push a =
+      let S = S (⊖₁ E⌣E′); S′ = S′ (⊖₁ E⌣E′) in
+      ν (begin
+         (suc id *) ((swap *) S)
+      ≡⟨ +-id-elim 1 _ ⟩
+         (swap *) S
+      ≡⟨ cong (swap *) (sym (*-preserves-id _)) ⟩
+         (swap *) ((id *) S)
+      ≈⟨ (swap *⁼) (⊖₁-✓ E⌣E′) ⟩
+         (swap *) S′
+      ∎)
    ⊖₁-✓ (νᶜᶜ E⌣E′) =
       let S = S (⊖₁ E⌣E′); S′ = S′ (⊖₁ E⌣E′) in
       ν (begin
