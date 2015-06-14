@@ -62,8 +62,6 @@ module StructuralCong.Transition where
    ⊖ (P │ᶜ F) (φ │ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in (φ │ ψ/F) Δ (ᴾ⁼.target φ │ᶜ F/ψ)
    ⊖ (_│•_ {y = y} E F) (φ │ ψ) = let φ/E Δ E/φ = ⊖ E φ; ψ/F Δ F/ψ = ⊖ F ψ in
       ((pop y *⁼) φ/E │ ψ/F) Δ (E/φ │• F/ψ)
-   ⊖ (_•│_ {y = y} E F) (φ │ ψ) = let φ/E Δ E/φ = ⊖ E φ; ψ/F Δ F/ψ = ⊖ F ψ in
-      (φ/E │ (pop y *⁼) ψ/F) Δ (E/φ •│ F/ψ)
    ⊖ (E │ᵥ F) (φ │ ψ) = let φ/E Δ E/φ = ⊖ E φ; ψ/F Δ F/ψ = ⊖ F ψ in ν (φ/E │ ψ/F) Δ (E/φ │ᵥ F/ψ)
    ⊖ (ν• E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ ν• E/φ
    ⊖ (νᵇ E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in ν ((swap *⁼) φ/E) Δ νᵇ E/φ

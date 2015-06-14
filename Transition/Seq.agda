@@ -19,7 +19,7 @@ module Transition.Seq where
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; source; target)
    open import Transition.Concur using (Concur; ⌣-sym; module Delta′; Delta; ⊖; ᴬ⊖; ᴬ⊖-✓; Action₂; inc₂)
-   open import Transition.Concur.Properties using (braid; ⋈[_,_,_]; ⊖-✓)
+   open import Transition.Concur.Cofinal using (braid; ⋈[_,_,_]; ⊖-✓)
    open import Transition.Ren using (_Δ_; _*′)
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
