@@ -192,7 +192,16 @@ module Transition.Concur.Cofinal where
          ≈⟨ ⊖₁-✓ F⌣F′ ⟩
             S′₂
          ∎))
-   ⊖₁-✓ (_│ᵥ•_ {y = y} E⌣E′ F⌣F′) = {!!}
+   ⊖₁-✓ (_│ᵥ•_ {y = y} E⌣E′ F⌣F′) =
+      let S₁ = S (⊖₁ E⌣E′); S′₁ = S′ (⊖₁ E⌣E′); S₂ = S (⊖₁ F⌣F′); S′₂ = S′ (⊖₁ F⌣F′) in
+      ν ({!!} │ (
+      begin
+         (suc id *) S₂
+      ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+         (id *) S₂
+      ≈⟨ ⊖₁-✓ F⌣F′ ⟩
+         S′₂
+      ∎))
    ⊖₁-✓ (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} E⌣E′ F⌣F′) =
       let S₁ = S (⊖₁ E⌣E′); S′₁ = S′ (⊖₁ E⌣E′); S₂ = S (⊖₁ F⌣F′); S′₂ = S′ (⊖₁ F⌣F′) in
       ν ((
