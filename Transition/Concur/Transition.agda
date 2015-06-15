@@ -1,11 +1,12 @@
--- Residuation preserves concurrency; alternatively, the "residual" of a concurrent pair after a third concurrent
--- transition. There is a slight case-explosion here because of the need to distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases
--- pairwise across the three transitions.
+-- The "residual" of a concurrent pair after a third concurrent transition. There is a slight case-explosion here
+-- because of the need to distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise across the three transitions.
+-- Haven't found a way to prove this for the symmetrised relation ⌣ as defined. Can prove it for a version of ⌣
+-- which has a symmetric variant of each rule, but the proof is big and Agda runs out of memory compiling it.
 module Transition.Concur.Transition where
 
    open import SharedModules
 
-   open import Action as ᴬ using (Action; _ᴬ⌣_); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ._ᴬ⌣_
+   open import Action as ᴬ using (Action; _ᴬ⌣_; ᴬ⌣-sym); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ._ᴬ⌣_
    open import Proc as ᴾ using (Proc)
    open import Ren as ᴿ using (Ren; push; pop; swap); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
@@ -16,9 +17,14 @@ module Transition.Concur.Transition where
       open Concur₁; open Delta′
    open import Transition.Concur.Ren using (/-preserves-ᴬ⌣; _*ᵇᵇ⌣; _*ᵇᶜ⌣; _*ᶜᵇ⌣; _*ᶜᶜ⌣)
 
-   -- Haven't found a way to prove this for the symmetrised relation ⌣ as defined. I can prove it for a
-   -- version of ⌣ which has a symmetric variant of each rule, but the resulting definition is very large and
-   -- Agda can barely compile 1/4 of it before running out of memory. Manage with this for now.
+   -- A "rotationally symmetric" version might be more useful.
+   postulate
+      /-preserves-⌣₁′ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {𝑎 : a ᴬ⌣ a′} {𝑎′ : a′ ᴬ⌣ a″} {𝑎″ : a″ ᴬ⌣ a}
+                       {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
+                       (𝐸 : E ⌣₁[ 𝑎 ] E′) → E′ ⌣₁[ 𝑎′ ] E″ → (𝐸″ : E″ ⌣₁[ 𝑎″ ] E) →
+                       E′/E (⊖₁ 𝐸) ⌣₁[ /-preserves-ᴬ⌣ 𝑎 𝑎′ (ᴬ⌣-sym 𝑎″) ] E/E′ (⊖₁ 𝐸″)
+
+   -- The residual 𝐸′/E.
    /-preserves-⌣₁ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a⌣a′ : a ᴬ⌣ a′} {a′⌣a″ : a′ ᴬ⌣ a″} {a⌣a″ : a ᴬ⌣ a″}
                    {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
                    (𝐸 : E ⌣₁[ a⌣a′ ] E′) → E′ ⌣₁[ a′⌣a″ ] E″ → (𝐸″ : E ⌣₁[ a⌣a″ ] E″) →
