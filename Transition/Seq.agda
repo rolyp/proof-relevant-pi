@@ -20,26 +20,8 @@ module Transition.Seq where
    open import Transition using (_—[_-_]→_; source; target)
    open import Transition.Concur using (Concur; ⌣-sym; module Delta′; Delta; ⊖; ᴬ⊖; ᴬ⊖-✓; Action₂; inc₂)
    open import Transition.Concur.Cofinal using (braid; ⋈[_,_,_]; ⊖-✓)
+   open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_)
    open import Transition.Ren using (_Δ_; _*′)
-
-   -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
-   infixl 5 _Δ′_
-   record _Δ′_ {ι Γ} {ӓ : Action₂ Γ} {m} {P P′ : Proc (Γ + inc₂ ӓ + m)} {a R}
-          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , ӓ , m ] P P′) : Set where
-      constructor _Δ_
-      field
-         {R′} : _
-         γ/E : ⋈[ Γ , ӓ , m + inc a ] (Proc↱ (+-assoc _ m (inc a)) R) R′
-      σ = braid {Γ} ӓ
-      field
-         E/γ : P′ —[ ((σ ᴿ+ m) *) a - ι ]→ Proc↱ (ren-preserves-inc-assoc σ m a) R′
-
-   ⊖′[_,_] : ∀ {ι Γ} (ӓ : Action₂ Γ) m {P P′ : Proc (Γ + inc₂ ӓ + m)} {a R}
-            (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , ӓ , m ] P P′) → _Δ′_ {ӓ = ӓ} {m = m} E γ
-   ⊖′[ ӓ , m ] {a = (_ •) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ ӓ , m ] {a = (• _) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ ӓ , m ] {a = • _ 〈 _ 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ ӓ , m ] {a = τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
 
    -- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
    -- composition is probably what we eventually want.
