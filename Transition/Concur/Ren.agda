@@ -12,7 +12,7 @@ module Transition.Concur.Ren where
    open import Transition.Ren
 
    -- Only in the two ᵛ∇ᵛ cases is the outcome not uniquely determined by the types; in each case
-   -- extrusions of the same binder are preserved.
+   -- the property of being extrusions of the same binder is preserved.
    /-preserves-ᴬ⌣ : ∀ {Γ} {a a′ a″ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) (a′⌣a″ : a′ ᴬ⌣ a″) (a⌣a″ : a ᴬ⌣ a″) →
          π₁ (ᴬ⊖ a⌣a′) ᴬ⌣ π₁ (ᴬ⊖ a⌣a″)
    /-preserves-ᴬ⌣ ᵛ∇ᵛ ᵛ∇ᵛ ᵛ∇ᵛ = ᶜ∇ᶜ

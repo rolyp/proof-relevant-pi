@@ -18,7 +18,7 @@ module Transition.Seq where
    open import StructuralCong.Proc using (_≈_; ≈-sym; ≈-refl)
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; source; target)
-   open import Transition.Concur using (Concur; ⌣-sym; module Delta′; Delta; ⊖; ᴬ⊖; ᴬ⊖-✓; Action₂; inc₂)
+   open import Transition.Concur using (Concur; ⌣-sym; module Delta′; Delta; ⊖; Action₂; inc₂)
    open import Transition.Concur.Cofinal using (braid; ⋈[_,_,_]; ⊖-✓)
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_)
    open import Transition.Ren using (_Δ_; _*′)

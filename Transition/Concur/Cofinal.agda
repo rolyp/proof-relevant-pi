@@ -16,7 +16,7 @@ module Transition.Concur.Cofinal where
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Concur
-      using (Concur₁; module Concur₁; Concur; Delta′; Delta; module Delta′; ᴬ⊖; ᴬ⊖-✓; ⊖₁; ⊖; Action₂; inc₂);
+      using (Concur₁; module Concur₁; Concur; Delta′; Delta; module Delta′; ᴬ⊖; ⊖₁; ⊖; Action₂; inc₂);
       open Concur₁
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
