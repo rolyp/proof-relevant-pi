@@ -28,8 +28,8 @@ module Transition.Concur.Cofinal where
    braid (_ ᶜ , _ ᵇ) = id
    braid (_ ᶜ , _ ᶜ) = id
 
-   ⋈[_,_,_] : ∀ Γ (ӓ : Action₂ Γ) (m : Cxt) → let Γ′ = Γ + inc₂ ӓ in Proc (Γ′ + m) → Proc (Γ′ + m) → Set
-   ⋈[ Γ , ӓ , m ] P P′ = ((braid ӓ ᴿ+ m) *) P ≈ P′
+   ⋈[_,_,_] : ∀ Γ (ӓ : Action₂ Γ) (Δ : Cxt) → let Γ′ = Γ + inc₂ ӓ in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
+   ⋈[ Γ , ӓ , Δ ] P P′ = ((braid ӓ ᴿ+ Δ) *) P ≈ P′
 
    open ≈-Reasoning
    open Delta′

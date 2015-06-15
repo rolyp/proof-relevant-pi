@@ -13,19 +13,19 @@ module Transition.Concur.Cofinal.Transition where
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
-   record _Δ′_ {ι Γ} {ӓ : Action₂ Γ} {m} {P P′ : Proc (Γ + inc₂ ӓ + m)} {a R}
-          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , ӓ , m ] P P′) : Set where
+   record _Δ′_ {ι Γ} {ӓ : Action₂ Γ} {Γ′} {P P′ : Proc (Γ + inc₂ ӓ + Γ′)} {a R}
+          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , ӓ , Γ′ ] P P′) : Set where
       constructor _Δ_
       field
          {R′} : _
-         γ/E : ⋈[ Γ , ӓ , m + inc a ] (Proc↱ (+-assoc _ m (inc a)) R) R′
+         γ/E : ⋈[ Γ , ӓ , Γ′ + inc a ] (Proc↱ (+-assoc _ Γ′ (inc a)) R) R′
       σ = braid {Γ} ӓ
       field
-         E/γ : P′ —[ ((σ ᴿ+ m) *) a - ι ]→ Proc↱ (ren-preserves-inc-assoc σ m a) R′
+         E/γ : P′ —[ ((σ ᴿ+ Γ′) *) a - ι ]→ Proc↱ (ren-preserves-inc-assoc σ Γ′ a) R′
 
-   ⊖′[_,_] : ∀ {ι Γ} (ӓ : Action₂ Γ) m {P P′ : Proc (Γ + inc₂ ӓ + m)} {a R}
-            (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , ӓ , m ] P P′) → _Δ′_ {ӓ = ӓ} {m = m} E γ
-   ⊖′[ ӓ , m ] {a = (_ •) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ ӓ , m ] {a = (• _) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ ӓ , m ] {a = • _ 〈 _ 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
-   ⊖′[ ӓ , m ] {a = τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ m) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[_,_] : ∀ {ι Γ} (ӓ : Action₂ Γ) Γ′ {P P′ : Proc (Γ + inc₂ ӓ + Γ′)} {a R}
+            (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , ӓ , Γ′ ] P P′) → _Δ′_ {ӓ = ӓ} {Γ′ = Γ′} E γ
+   ⊖′[ ӓ , Γ′ ] {a = (_ •) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ Γ′) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ ӓ , Γ′ ] {a = (• _) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ Γ′) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ ӓ , Γ′ ] {a = • _ 〈 _ 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ Γ′) *′) E) γ in φ/E′ Δ E′/φ
+   ⊖′[ ӓ , Γ′ ] {a = τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ Γ′) *′) E) γ in φ/E′ Δ E′/φ
