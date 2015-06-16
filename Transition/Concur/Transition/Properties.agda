@@ -11,7 +11,7 @@ module Transition.Concur.Transition.Properties where
    open import Transition using (_—[_-_]→_)
    open import Transition.Concur using (Concur₁; module Delta′; ᴬ⊖; ⊖₁; inc₂-def)
    open import Transition.Concur.Cofinal using (⊖₁-✓; ⋈[_,_,_])
-   open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; module _Δ′_)
+   open import Transition.Concur.Cofinal.Transition using (⊖′; module _Δ′_)
    open import Transition.Concur.Ren using (/-preserves-ᴬ⌣)
    open import Transition.Concur.Transition using (/-preserves-⌣₁′)
 
@@ -27,9 +27,9 @@ module Transition.Concur.Transition.Properties where
               E′/E″/E/E″ : subst Proc (inc₂-def 𝑎″) (S (⊖₁ 𝐸″)) —[ π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (Action.ᴬ⌣-sym 𝑎′))) - _ ]→
                           subst Proc (inc₂-def (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (Action.ᴬ⌣-sym 𝑎′))) (S (⊖₁ 𝐸/E″))
               E′/E″/E/E″ = E′/E (⊖₁ 𝐸/E″)
-              gib : S (⊖₁ 𝐸″) —[ π₁ (ᴬ⊖ {!!}) - _ ]→ subst Proc {!!} (S (⊖₁ 𝐸/E″))
+              gib : S (⊖₁ 𝐸″) —[ {!!} - _ ]→ subst Proc {!!} (S (⊖₁ 𝐸/E″))
               gib = {!!}
               open ≅-Reasoning
-              bib = ⊖′[ {!!} , {!!} ] gib γ
+              bib = ⊖′ gib γ
           in E/E′ (⊖₁ 𝐸′/E) ≅ E′/E″/E/E″
    blah _ _ _ = {!!}

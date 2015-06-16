@@ -11,10 +11,10 @@ module Transition.Concur.Ren where
    open import Transition.Concur using (ᴬ⊖; Concur₁; module Concur₁); open Concur₁
    open import Transition.Ren
 
-   -- Only in the two ᵛ∇ᵛ cases is the outcome not uniquely determined by the types; in each case
-   -- the property of being extrusions of the same binder is preserved.
+   -- Residual of a′ ᴬ⌣ a″ after a. Only in the two ᵛ∇ᵛ cases is the outcome not uniquely determined by the
+   -- types; in each case the property of being extrusions of the same binder is preserved. TODO: move?
    /-preserves-ᴬ⌣ : ∀ {Γ} {a a′ a″ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) (a′⌣a″ : a′ ᴬ⌣ a″) (a⌣a″ : a ᴬ⌣ a″) →
-         π₁ (ᴬ⊖ a⌣a′) ᴬ⌣ π₁ (ᴬ⊖ a⌣a″)
+                    π₁ (ᴬ⊖ a⌣a′) ᴬ⌣ π₁ (ᴬ⊖ a⌣a″)
    /-preserves-ᴬ⌣ ᵛ∇ᵛ ᵛ∇ᵛ ᵛ∇ᵛ = ᶜ∇ᶜ
    /-preserves-ᴬ⌣ ᵛ∇ᵛ ᵛ∇ᵛ ᵇ∇ᵇ = ᶜ∇ᵇ
    /-preserves-ᴬ⌣ ᵛ∇ᵛ ᵇ∇ᵇ ᵛ∇ᵛ = ᶜ∇ᶜ
