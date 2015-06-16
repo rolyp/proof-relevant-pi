@@ -31,5 +31,5 @@ module Transition.Concur.Transition.Properties where
               gib = {!!}
               open ≅-Reasoning
               bib = ⊖′[ {!!} , {!!} ] gib γ
-          in E/E′ (⊖₁ 𝐸′/E) ≅ E′/E (⊖₁ 𝐸/E″)
+          in E/E′ (⊖₁ 𝐸′/E) ≅ E′/E″/E/E″
    blah _ _ _ = {!!}
