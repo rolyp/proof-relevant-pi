@@ -33,7 +33,9 @@ module Transition.Concur.Transition.Properties where
               a† = subst Action (sym (inc₂-def 𝑎″)) a‡
               open ≅-Reasoning
               nib : a‡ ≅ subst Action (sym (inc₂-def 𝑎″)) a‡
-              nib = {!!}
+              nib = ≅-sym (≡-subst-removable Action (sym (inc₂-def 𝑎″)) a‡)
+              bib : inc a‡ ≅ inc (subst Action (sym (inc₂-def 𝑎″)) a‡)
+              bib = ?
               gib : S (⊖₁ 𝐸″) —[ a† - _ ]→ flip (subst Proc) (S (⊖₁ 𝐸/E″)) (≅-to-≡ (
                  begin
                     Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡)
