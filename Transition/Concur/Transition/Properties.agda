@@ -12,7 +12,7 @@ module Transition.Concur.Transition.Properties where
    open import Transition using (_—[_-_]→_)
    open import Transition.Concur using (Concur₁; module Delta′; ᴬ⊖; ⊖₁; inc₂; inc₂-def)
    open import Transition.Concur.Cofinal using (⊖₁-✓; ⋈[_,_,_])
-   open import Transition.Concur.Cofinal.Transition using (⊖′; module _Δ′_)
+   open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; module _Δ′_)
    open import Transition.Concur.Ren using (/-preserves-ᴬ⌣)
    open import Transition.Concur.Transition using (/-preserves-⌣₁′)
 
@@ -25,24 +25,26 @@ module Transition.Concur.Transition.Properties where
           let 𝐸′/E = /-preserves-⌣₁′ 𝐸 𝐸′ 𝐸″; 𝐸/E″ = /-preserves-⌣₁′ 𝐸″ 𝐸 𝐸′
               γ : ⋈[ Γ , (a″ , π₁ (ᴬ⊖ 𝑎″)) , zero ] (S (⊖₁ 𝐸″)) (S′ (⊖₁ 𝐸″))
               γ = ⊖₁-✓ 𝐸″
-              E′/E″/E/E″ : subst Proc (inc₂-def 𝑎″) (S (⊖₁ 𝐸″)) —[ π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′))) - _ ]→
+              a‡ = π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′)))
+              E′/E″/E/E″ : subst Proc (inc₂-def 𝑎″) (S (⊖₁ 𝐸″)) —[ a‡ - _ ]→
                           subst Proc (inc₂-def (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′))) (S (⊖₁ 𝐸/E″))
               E′/E″/E/E″ = E′/E (⊖₁ 𝐸/E″)
               a† : Action (Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)))
-              a† = subst Action (sym (inc₂-def 𝑎″)) (π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′))))
-              open EqReasoning (setoid _)
-              gib : S (⊖₁ 𝐸″) —[ a† - _ ]→ flip (subst Proc) (S (⊖₁ 𝐸/E″)) (
-                 begin
-                    Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′))))
-                 ≡⟨ {!!} ⟩
-                    Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc (π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′))))
-                 ≡⟨ {!!} ⟩
-                    Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc (π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′))))
-                 ≡⟨ {!!} ⟩
-                    Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc (subst Action (sym (inc₂-def 𝑎″)) (π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′)))))
-                 ∎)
-              gib = {!!}
+              a† = subst Action (sym (inc₂-def 𝑎″)) a‡
               open ≅-Reasoning
-              bib = ⊖′ {ӓ = a″ , π₁ (ᴬ⊖ 𝑎″)} {Γ′ = zero} gib γ
-          in E/E′ (⊖₁ 𝐸′/E) ≅ E′/E″/E/E″
+              nib : a‡ ≅ subst Action (sym (inc₂-def 𝑎″)) a‡
+              nib = {!!}
+              gib : S (⊖₁ 𝐸″) —[ a† - _ ]→ flip (subst Proc) (S (⊖₁ 𝐸/E″)) (≅-to-≡ (
+                 begin
+                    Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡)
+                 ≡⟨ {!!} ⟩
+                    Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
+                 ≡⟨ {!!} ⟩
+                    Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc a‡
+                 ≅⟨ {!!} ⟩
+                    Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc (subst Action (sym (inc₂-def 𝑎″)) a‡)
+                 ∎))
+              gib = {!!}
+              open _Δ′_
+          in E/E′ (⊖₁ 𝐸′/E) ≅ E/γ (⊖′[ (a″ , π₁ (ᴬ⊖ 𝑎″)) , zero ] gib γ)
    blah _ _ _ = {!!}

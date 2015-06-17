@@ -16,6 +16,6 @@ module Name where
    _+_ : Cxt → Cxt → Cxt
    _+_ = flip Nat._+_
 
-   +-assoc : ∀ m n o → (m + n) + o ≡ m + (n + o)
+   +-assoc : ∀ m n o → m + n + o ≡ m + (n + o)
    +-assoc m n zero = refl
    +-assoc m n (suc o) = cong suc (+-assoc m n o)
