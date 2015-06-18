@@ -36,19 +36,19 @@ module Transition.Concur.Transition.Properties where
               E′/E″/E/E″ = E′/E (⊖₁ 𝐸/E″)
               a† : Action (Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)))
               a† = subst Action (sym (inc₂-def ӓ)) a‡
-              open ≅-Reasoning
-              bib : inc a‡ ≅ inc (subst Action (sym (inc₂-def ӓ)) a‡)
-              bib = hcong Action (sym (inc₂-def ӓ)) inc (≅-sym (≡-subst-removable Action (sym (inc₂-def ӓ)) a‡))
-              gib : S (⊖₁ 𝐸″) —[ a† - _ ]→ flip (subst Proc) (S (⊖₁ 𝐸/E″)) (≅-to-≡ (
+              open EqReasoning (setoid _)
+              bib : inc a‡ ≡ inc (subst Action (sym (inc₂-def ӓ)) a‡)
+              bib = ≅-to-≡ (hcong Action (sym (inc₂-def ӓ)) inc (≅-sym (≡-subst-removable Action (sym (inc₂-def ӓ)) a‡)))
+              gib : S (⊖₁ 𝐸″) —[ a† - _ ]→ flip (subst Proc) (S (⊖₁ 𝐸/E″)) (
                  begin
                     Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡)
                  ≡⟨ sym (+-assoc _ _ (inc a‡)) ⟩
                     Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
                  ≡⟨ cong (λ Γ′ → Γ′ + inc a‡) (+-assoc _ _ (inc (π₁ (ᴬ⊖ 𝑎″)))) ⟩
                     Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc a‡
-                 ≅⟨ ≅-cong (λ Γ′ → Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + Γ′) bib ⟩
+                 ≡⟨ cong (λ Γ′ → Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + Γ′) bib ⟩
                     Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc (subst Action (sym (inc₂-def ӓ)) a‡)
-                 ∎))
+                 ∎)
               gib = {!!}
               open _Δ′_
           in E/E′ (⊖₁ 𝐸′/E) ≅ E/γ (⊖′[ (a″ , π₁ (ᴬ⊖ 𝑎″)) , zero ] gib γ)
