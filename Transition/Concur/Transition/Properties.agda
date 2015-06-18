@@ -6,7 +6,7 @@ module Transition.Concur.Transition.Properties where
    import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action using (_ᴬ⌣_; ᴬ⌣-sym; Action; inc)
-   open import Name using (zero; _+_)
+   open import Name using (zero; _+_; +-assoc)
    open import Proc using (Proc; Proc↲)
    import Proc.Ren
    open import Ren as ᴿ; open ᴿ.Renameable ⦃...⦄
@@ -29,8 +29,12 @@ module Transition.Concur.Transition.Properties where
               a‡ = π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′)))
               ӓ : Action₂ Γ
               ӓ = a″ , π₁ (ᴬ⊖ 𝑎″)
+              zib₁ : inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
+              zib₁ = refl
+              zib : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
+              zib = sym (+-assoc (Γ + inc a″) (inc (π₁ (ᴬ⊖ 𝑎″))) (inc a‡))
               E′/E″/E/E″ : subst Proc (inc₂-def′ ӓ) (S (⊖₁ 𝐸″)) —[ a‡ - _ ]→
-                          subst Proc (inc₂-def′ {!!}) (S (⊖₁ 𝐸/E″))
+                          subst Proc zib (S (⊖₁ 𝐸/E″))
               E′/E″/E/E″ = E′/E (⊖₁ 𝐸/E″)
               a† : Action (Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)))
               a† = subst Action (sym (inc₂-def′ ӓ)) a‡
