@@ -39,6 +39,8 @@ module Transition.Concur.Transition.Properties where
               bib = hcong Action (sym (inc₂-def 𝑎″)) inc {!!}
               quib : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
               quib = {!!}
+              wib₂ : Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) ≡ Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″))
+              wib₂ = sym (inc₂-def {!!})
               gib : S (⊖₁ 𝐸″) —[ a† - _ ]→ flip (subst Proc) (S (⊖₁ 𝐸/E″)) (≅-to-≡ (
                  begin
                     Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡)

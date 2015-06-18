@@ -8,7 +8,7 @@ module Transition.Concur where
       using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc; _ᴬ⌣_; ᴬ⌣-sym; ᴬ⌣-sym-involutive; ᴺinc-inc);
       open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ._ᴬ⌣_
    import Action.Ren
-   open import Name as ᴺ using (Name; Cxt; module Cxt; zero; _+_; toℕ)
+   open import Name as ᴺ using (Name; Cxt; module Cxt; zero; _+_; +-assoc; toℕ)
    open import Ren as ᴿ using (Ren; Renameable; ᴺren; suc; push; pop; swap); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
@@ -50,6 +50,9 @@ module Transition.Concur where
    inc₂-def ᵇ∇ᶜ = refl
    inc₂-def ᶜ∇ᵇ = refl
    inc₂-def ᶜ∇ᶜ = refl
+
+   inc₂-def′ : ∀ {Γ} (ӓ : Action₂ Γ) {Γ′} → Γ′ + inc₂ ӓ ≡ Γ′ + inc (π₁ ӓ) + inc (π₂ ӓ)
+   inc₂-def′ (a , a′) {Γ′} = sym (+-assoc Γ′ (inc a) (inc a′))
 
    -- Cofinality of action residuals is simply agreement on target context.
    ᴬ⊖-✓ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Γ + inc a + inc (π₁ (ᴬ⊖ a⌣a′)) ≡ Γ + inc a′ + inc (π₂ (ᴬ⊖ a⌣a′))
@@ -164,8 +167,8 @@ module Transition.Concur where
       Γ′ = Γ + inc₂ (a , a′/a)
       field
          {S S′} : Proc Γ′
-         E′/E : R —[ a′/a - _ ]→ subst Proc (inc₂-def a⌣a′) S
-         E/E′ : R′ —[ a/a′ - _ ]→ subst Proc (trans (inc₂-def a⌣a′) (ᴬ⊖-✓ a⌣a′)) S′
+         E′/E : R —[ a′/a - _ ]→ subst Proc (inc₂-def′ (a , a′/a)) S
+         E/E′ : R′ —[ a/a′ - _ ]→ subst Proc (trans (inc₂-def′ (a , a′/a)) (ᴬ⊖-✓ a⌣a′)) S′
 
    infixl 5 Delta
    syntax Delta E E′ = E ᵀΔ E′
