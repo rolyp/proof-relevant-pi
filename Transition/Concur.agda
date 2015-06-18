@@ -44,7 +44,7 @@ module Transition.Concur where
    inc₂ : ∀ {Γ} → Action₂ Γ → Cxt
    inc₂ (a , a′) = inc a + inc a′
 
-   inc₂-def : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Γ + inc₂ (a , π₁ (ᴬ⊖ a⌣a′)) ≡ Γ + inc a + inc (π₁ (ᴬ⊖ a⌣a′))
+   inc₂-def : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) {Γ′} → Γ′ + inc₂ (a , π₁ (ᴬ⊖ a⌣a′)) ≡ Γ′ + inc a + inc (π₁ (ᴬ⊖ a⌣a′))
    inc₂-def ᵛ∇ᵛ = refl
    inc₂-def ᵇ∇ᵇ = refl
    inc₂-def ᵇ∇ᶜ = refl

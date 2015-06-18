@@ -1,6 +1,7 @@
 module Transition.Concur.Transition.Properties where
 
    open import SharedModules
+   open import Ext
    import Relation.Binary.HeterogeneousEquality
    import Relation.Binary.EqReasoning as EqReasoning
 
@@ -35,15 +36,17 @@ module Transition.Concur.Transition.Properties where
               nib : a‡ ≅ subst Action (sym (inc₂-def 𝑎″)) a‡
               nib = ≅-sym (≡-subst-removable Action (sym (inc₂-def 𝑎″)) a‡)
               bib : inc a‡ ≅ inc (subst Action (sym (inc₂-def 𝑎″)) a‡)
-              bib = ?
+              bib = hcong Action (sym (inc₂-def 𝑎″)) inc {!!}
+              quib : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
+              quib = {!!}
               gib : S (⊖₁ 𝐸″) —[ a† - _ ]→ flip (subst Proc) (S (⊖₁ 𝐸/E″)) (≅-to-≡ (
                  begin
                     Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡)
-                 ≡⟨ {!!} ⟩
+                 ≡⟨ quib ⟩
                     Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
                  ≡⟨ {!!} ⟩
                     Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc a‡
-                 ≅⟨ {!!} ⟩
+                 ≅⟨ ≅-cong (λ Γ′ → Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + Γ′) bib ⟩
                     Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc (subst Action (sym (inc₂-def 𝑎″)) a‡)
                  ∎))
               gib = {!!}
