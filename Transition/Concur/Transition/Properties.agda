@@ -5,9 +5,9 @@ module Transition.Concur.Transition.Properties where
    import Relation.Binary.HeterogeneousEquality
    import Relation.Binary.EqReasoning as EqReasoning
 
-   open import Action using (_ᴬ⌣_; ᴬ⌣-sym; Action; inc)
+   open import Action using (_ᴬ⌣_; ᴬ⌣-sym; Action; Action↱; Action↲; inc)
    open import Name using (zero; _+_; +-assoc)
-   open import Proc using (Proc; Proc↲)
+   open import Proc using (Proc; Proc↱; Proc↲)
    import Proc.Ren
    open import Ren as ᴿ; open ᴿ.Renameable ⦃...⦄
    open import Transition using (_—[_-_]→_)
@@ -29,23 +29,19 @@ module Transition.Concur.Transition.Properties where
               a‡ = π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′)))
               ӓ : Action₂ Γ
               ӓ = a″ , π₁ (ᴬ⊖ 𝑎″)
-              zib : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
-              zib = sym (+-assoc (Γ + inc a″) (inc (π₁ (ᴬ⊖ 𝑎″))) (inc a‡))
-              E′/E″/E/E″ : Proc↱ (inc₂-def ӓ) (S (⊖₁ 𝐸″)) —[ a‡ - _ ]→ Proc↱ zib (S (⊖₁ 𝐸/E″))
+              E′/E″/E/E″ : Proc↱ (inc₂-def ӓ) (S (⊖₁ 𝐸″)) —[ a‡ - _ ]→
+                          Proc↱ (sym (+-assoc (Γ + inc a″) (inc (π₁ (ᴬ⊖ 𝑎″))) (inc a‡))) (S (⊖₁ 𝐸/E″))
               E′/E″/E/E″ = E′/E (⊖₁ 𝐸/E″)
-              a† : Action (Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)))
-              a† = Action↱ (sym (inc₂-def ӓ)) a‡
               open EqReasoning (setoid _)
-              bib : inc a‡ ≡ inc (Action↱ (sym (inc₂-def ӓ)) a‡)
-              bib = ≅-to-≡ (hcong (sym (inc₂-def ӓ)) inc (≅-sym (Action↲ (sym (inc₂-def ӓ)) a‡)))
-              gib : S (⊖₁ 𝐸″) —[ a† - _ ]→ flip Proc↱ (S (⊖₁ 𝐸/E″)) (
+              gib : S (⊖₁ 𝐸″) —[ Action↱ (sym (inc₂-def ӓ)) a‡ - _ ]→ flip Proc↱ (S (⊖₁ 𝐸/E″)) (
                  begin
                     Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡)
                  ≡⟨ sym (+-assoc _ _ (inc a‡)) ⟩
                     Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
                  ≡⟨ cong (λ Γ′ → Γ′ + inc a‡) (+-assoc _ _ (inc (π₁ (ᴬ⊖ 𝑎″)))) ⟩
                     Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc a‡
-                 ≡⟨ cong (λ Γ′ → Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + Γ′) bib ⟩
+                 ≡⟨ cong (λ Γ′ → Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + Γ′)
+                    (≅-to-≡ (hcong Action (sym (inc₂-def ӓ)) inc (≅-sym (Action↲ (sym (inc₂-def ӓ)) a‡)))) ⟩
                     Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc (Action↱ (sym (inc₂-def ӓ)) a‡)
                  ∎)
               gib = {!!}
