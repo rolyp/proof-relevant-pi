@@ -29,8 +29,6 @@ module Transition.Concur.Transition.Properties where
               a‡ = π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′)))
               ӓ : Action₂ Γ
               ӓ = a″ , π₁ (ᴬ⊖ 𝑎″)
-              zib₁ : inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
-              zib₁ = refl
               zib : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
               zib = sym (+-assoc (Γ + inc a″) (inc (π₁ (ᴬ⊖ 𝑎″))) (inc a‡))
               E′/E″/E/E″ : subst Proc (inc₂-def′ ӓ) (S (⊖₁ 𝐸″)) —[ a‡ - _ ]→
