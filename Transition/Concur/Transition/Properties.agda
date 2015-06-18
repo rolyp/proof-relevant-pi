@@ -37,12 +37,8 @@ module Transition.Concur.Transition.Properties where
               a† : Action (Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)))
               a† = subst Action (sym (inc₂-def ӓ)) a‡
               open ≅-Reasoning
-              nib : a‡ ≅ subst Action (sym (inc₂-def ӓ)) a‡
-              nib = ≅-sym (≡-subst-removable Action (sym (inc₂-def ӓ)) a‡)
               bib : inc a‡ ≅ inc (subst Action (sym (inc₂-def ӓ)) a‡)
-              bib = hcong Action (sym (inc₂-def ӓ)) inc {!!}
-              wib₂ : Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) ≡ Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″))
-              wib₂ = sym (inc₂-def ӓ)
+              bib = hcong Action (sym (inc₂-def ӓ)) inc (≅-sym (≡-subst-removable Action (sym (inc₂-def ӓ)) a‡))
               gib : S (⊖₁ 𝐸″) —[ a† - _ ]→ flip (subst Proc) (S (⊖₁ 𝐸/E″)) (≅-to-≡ (
                  begin
                     Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡)
