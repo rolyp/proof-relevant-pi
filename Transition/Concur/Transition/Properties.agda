@@ -11,7 +11,7 @@ module Transition.Concur.Transition.Properties where
    import Proc.Ren
    open import Ren as ᴿ; open ᴿ.Renameable ⦃...⦄
    open import Transition using (_—[_-_]→_)
-   open import Transition.Concur using (Concur₁; module Delta′; Action₂; ᴬ⊖; ⊖₁; inc₂; inc₂-def′)
+   open import Transition.Concur using (Concur₁; module Delta′; Action₂; ᴬ⊖; ⊖₁; inc₂; inc₂-def)
    open import Transition.Concur.Cofinal using (⊖₁-✓; ⋈[_,_,_])
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; module _Δ′_)
    open import Transition.Concur.Ren using (/-preserves-ᴬ⌣)
@@ -31,29 +31,27 @@ module Transition.Concur.Transition.Properties where
               ӓ = a″ , π₁ (ᴬ⊖ 𝑎″)
               zib : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
               zib = sym (+-assoc (Γ + inc a″) (inc (π₁ (ᴬ⊖ 𝑎″))) (inc a‡))
-              E′/E″/E/E″ : subst Proc (inc₂-def′ ӓ) (S (⊖₁ 𝐸″)) —[ a‡ - _ ]→
+              E′/E″/E/E″ : subst Proc (inc₂-def ӓ) (S (⊖₁ 𝐸″)) —[ a‡ - _ ]→
                           subst Proc zib (S (⊖₁ 𝐸/E″))
               E′/E″/E/E″ = E′/E (⊖₁ 𝐸/E″)
               a† : Action (Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)))
-              a† = subst Action (sym (inc₂-def′ ӓ)) a‡
+              a† = subst Action (sym (inc₂-def ӓ)) a‡
               open ≅-Reasoning
-              nib : a‡ ≅ subst Action (sym (inc₂-def′ ӓ)) a‡
-              nib = ≅-sym (≡-subst-removable Action (sym (inc₂-def′ ӓ)) a‡)
-              bib : inc a‡ ≅ inc (subst Action (sym (inc₂-def′ ӓ)) a‡)
-              bib = hcong Action (sym (inc₂-def′ ӓ)) inc {!!}
-              quib : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
-              quib = {!!}
+              nib : a‡ ≅ subst Action (sym (inc₂-def ӓ)) a‡
+              nib = ≅-sym (≡-subst-removable Action (sym (inc₂-def ӓ)) a‡)
+              bib : inc a‡ ≅ inc (subst Action (sym (inc₂-def ӓ)) a‡)
+              bib = hcong Action (sym (inc₂-def ӓ)) inc {!!}
               wib₂ : Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) ≡ Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″))
-              wib₂ = sym (inc₂-def′ ӓ)
+              wib₂ = sym (inc₂-def ӓ)
               gib : S (⊖₁ 𝐸″) —[ a† - _ ]→ flip (subst Proc) (S (⊖₁ 𝐸/E″)) (≅-to-≡ (
                  begin
                     Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡)
-                 ≡⟨ quib ⟩
+                 ≡⟨ sym (+-assoc _ _ (inc a‡)) ⟩
                     Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
-                 ≡⟨ {!!} ⟩
+                 ≡⟨ cong (λ Γ′ → Γ′ + inc a‡) (+-assoc _ _ (inc (π₁ (ᴬ⊖ 𝑎″)))) ⟩
                     Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc a‡
                  ≅⟨ ≅-cong (λ Γ′ → Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + Γ′) bib ⟩
-                    Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc (subst Action (sym (inc₂-def′ ӓ)) a‡)
+                    Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc (subst Action (sym (inc₂-def ӓ)) a‡)
                  ∎))
               gib = {!!}
               open _Δ′_
