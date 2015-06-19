@@ -1,8 +1,6 @@
 module Transition.Concur.Transition.Properties where
 
    open import SharedModules
-   open import Ext
-   open import Ext.Relation.Binary.HeterogeneousEquality
    import Relation.Binary.EqReasoning as EqReasoning
    import Relation.Binary.HeterogeneousEquality
 
@@ -12,7 +10,8 @@ module Transition.Concur.Transition.Properties where
    import Proc.Ren
    open import Ren as ᴿ; open ᴿ.Renameable ⦃...⦄
    open import Transition using (_—[_-_]→_)
-   open import Transition.Concur using (Concur₁; module Delta′; Action₂; ᴬ⊖; ⊖₁; inc₂; inc₂-def)
+   open import Transition.Concur using (Concur₁; module Concur₁; module Delta′; Action₂; ᴬ⊖; ⊖₁; inc₂; inc₂-def);
+      open Concur₁
    open import Transition.Concur.Cofinal using (⊖₁-✓; ⋈[_,_,_])
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; module _Δ′_)
    open import Transition.Concur.Ren using (/-preserves-ᴬ⌣)
@@ -21,6 +20,9 @@ module Transition.Concur.Transition.Properties where
    open Delta′
    open _Δ′_
 
+   -- The 'cyclic' relationship between 𝐸, 𝐸′ and 𝐸″ means that E″ is mostly uninhabited for the asymmetric
+   -- version of ⌣, and so any proof of this would be trivial. On the other hand, Agda is extremely slow at
+   -- typechecking the proof, perhaps because of the complexity of the type. Needs some thought.
    blah : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {𝑎 : a ᴬ⌣ a′} {𝑎′ : a′ ᴬ⌣ a″} {𝑎″ : a″ ᴬ⌣ a}
           {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
           (𝐸 : E ⌣₁[ 𝑎 ] E′) (𝐸′ : E′ ⌣₁[ 𝑎′ ] E″) (𝐸″ : E″ ⌣₁[ 𝑎″ ] E) →

@@ -8,6 +8,8 @@ module SharedModules where
    open import Data.String public hiding (decSetoid; setoid)
    open import Data.Sum public hiding (map)
    open import Data.Unit public hiding (_≟_; decSetoid; preorder; setoid; _≤_; module _≤_)
+   open import Ext public hiding (_-×-_)
+   open import Ext.Relation.Binary.HeterogeneousEquality public
    open import Function public
    open import IO public
    open import Relation.Nullary public
