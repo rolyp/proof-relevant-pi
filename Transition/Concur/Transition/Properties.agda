@@ -65,7 +65,9 @@ module Transition.Concur.Transition.Properties where
                              (≅-sym (Proc↲ (sym a~) (S (⊖₁ 𝐸″)))) (Action↲ (sym (sym a~)) a‡)
                              (begin
                                  Proc↱ blah′ (S (⊖₁ (/-preserves-⌣₁′ 𝐸″ 𝐸 𝐸′)))
-                              ≅⟨ {!!} ⟩
+                              ≅⟨ Proc↲ blah′ _ ⟩
+                                 S (⊖₁ (/-preserves-⌣₁′ 𝐸″ 𝐸 𝐸′))
+                              ≅⟨ ≅-sym (Proc↲ (sym a≈) _) ⟩
                                  Proc↱ (sym a≈) (S (⊖₁ (/-preserves-⌣₁′ 𝐸″ 𝐸 𝐸′)))
                               ∎) ⟩
                     (Proc↱ (inc₂-def ӓ) (S (⊖₁ 𝐸″)) —[ a‡ - _ ]→ P‡)
