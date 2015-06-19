@@ -29,11 +29,14 @@ module Transition.Concur.Transition.Properties where
               a‡ = π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′)))
               ӓ : Action₂ Γ
               ӓ = a″ , π₁ (ᴬ⊖ 𝑎″)
-              E′/E″/E/E″ : Proc↱ (inc₂-def ӓ) (S (⊖₁ 𝐸″)) —[ a‡ - _ ]→
-                          Proc↱ (sym (+-assoc (Γ + inc a″) (inc (π₁ (ᴬ⊖ 𝑎″))) (inc a‡))) (S (⊖₁ 𝐸/E″))
+              P‡ : Proc (Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡)
+              P‡ = Proc↱ (sym (+-assoc (Γ + inc a″) (inc (π₁ (ᴬ⊖ 𝑎″))) (inc a‡))) (S (⊖₁ 𝐸/E″))
+              E′/E″/E/E″ : Proc↱ (inc₂-def ӓ) (S (⊖₁ 𝐸″)) —[ a‡ - _ ]→ {!!}
+
               E′/E″/E/E″ = E′/E (⊖₁ 𝐸/E″)
               open EqReasoning (setoid _)
-              gib : S (⊖₁ 𝐸″) —[ Action↱ (sym (inc₂-def ӓ)) a‡ - _ ]→ flip Proc↱ (S (⊖₁ 𝐸/E″)) (
+              P† :  Proc (Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc (Action↱ (sym (inc₂-def (a″ , π₁ (ᴬ⊖ 𝑎″)))) a‡))
+              P† = flip Proc↱ (S (⊖₁ 𝐸/E″)) (
                  begin
                     Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡)
                  ≡⟨ sym (+-assoc _ _ (inc a‡)) ⟩
@@ -44,6 +47,7 @@ module Transition.Concur.Transition.Properties where
                     (≅-to-≡ (hcong Action (sym (inc₂-def ӓ)) inc (≅-sym (Action↲ (sym (inc₂-def ӓ)) a‡)))) ⟩
                     Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc (Action↱ (sym (inc₂-def ӓ)) a‡)
                  ∎)
+              gib : S (⊖₁ 𝐸″) —[ Action↱ (sym (inc₂-def ӓ)) a‡ - _ ]→ P†
               gib = {!!}
               open _Δ′_
           in E/E′ (⊖₁ 𝐸′/E) ≅ E/γ (⊖′[ (a″ , π₁ (ᴬ⊖ 𝑎″)) , zero ] gib γ)
