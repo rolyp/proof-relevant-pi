@@ -44,7 +44,7 @@ module Transition.Concur.Transition.Properties where
                  ≡⟨ cong (λ Γ′ → Γ′ + inc a‡) (+-assoc _ _ (inc (π₁ (ᴬ⊖ 𝑎″)))) ⟩
                     Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc a‡
                  ≡⟨ cong (λ Γ′ → Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + Γ′)
-                    (≅-to-≡ (hcong Action (sym (inc₂-def ӓ)) inc (≅-sym (Action↲ (sym (inc₂-def ӓ)) a‡)))) ⟩
+                    (≅-to-≡ (≅-cong✴ Action (sym (inc₂-def ӓ)) inc (≅-sym (Action↲ (sym (inc₂-def ӓ)) a‡)))) ⟩
                     Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc (Action↱ (sym (inc₂-def ӓ)) a‡)
                  ∎)
               gib : S (⊖₁ 𝐸″) —[ Action↱ (sym (inc₂-def ӓ)) a‡ - _ ]→ P†
@@ -55,7 +55,7 @@ module Transition.Concur.Transition.Properties where
               quib =
                  begin
                     (S (⊖₁ 𝐸″) —[ Action↱ (sym (inc₂-def ӓ)) a‡ - _ ]→ P†)
-                 ≅⟨ {!≅-cong₃ (λ P a R → P —[ a - _ ]→ R) ? ? ?!} ⟩
+                 ≅⟨ ≅-cong✴₃ Proc {!!} (λ P a R → P —[ a - _ ]→ R) {!!} {!!} {!!} ⟩
                     (Proc↱ (inc₂-def ӓ) (S (⊖₁ 𝐸″)) —[ a‡ - _ ]→ P‡)
                  ∎
               open _Δ′_
