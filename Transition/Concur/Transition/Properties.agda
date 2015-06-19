@@ -30,10 +30,6 @@ module Transition.Concur.Transition.Properties where
               ӓ = a″ , π₁ (ᴬ⊖ 𝑎″)
               a≈ : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
               a≈ = sym (+-assoc (Γ + inc a″) (inc (π₁ (ᴬ⊖ 𝑎″))) (inc a‡))
-              P‡ : Proc (Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡)
-              P‡ = Proc↱ a≈ (S (⊖₁ 𝐸/E″))
-              E′/E″/E/E″ : Proc↱ (inc₂-def ӓ) (S (⊖₁ 𝐸″)) —[ a‡ - _ ]→ P‡
-              E′/E″/E/E″ = E′/E (⊖₁ 𝐸/E″)
               a~ : Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) ≡ Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″))
               a~ = sym (+-assoc Γ (inc a″) (inc (π₁ (ᴬ⊖ 𝑎″))))
               blah′ : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc₂ ӓ + inc (subst Action (sym a~) a‡)
@@ -49,10 +45,8 @@ module Transition.Concur.Transition.Properties where
                     (≅-to-≡ (≅-cong✴ Action (sym (inc₂-def ӓ)) inc (≅-sym (Action↲ (sym (inc₂-def ӓ)) a‡)))) ⟩
                     Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc (Action↱ (sym (inc₂-def ӓ)) a‡)
                  ∎
-              P† : Proc (Γ + inc₂ (a″ , π₁ (ᴬ⊖ 𝑎″)) + inc (Action↱ (sym (inc₂-def (a″ , π₁ (ᴬ⊖ 𝑎″)))) a‡))
-              P† = Proc↱ blah′ (S (⊖₁ 𝐸/E″))
               open ≅-Reasoning
-              gib : S (⊖₁ 𝐸″) —[ Action↱ (sym (inc₂-def ӓ)) a‡ - _ ]→ P†
+              gib : S (⊖₁ 𝐸″) —[ Action↱ (sym (inc₂-def ӓ)) a‡ - _ ]→ Proc↱ blah′ (S (⊖₁ 𝐸/E″))
               gib = ≅-subst✴₃ Proc (λ P a R → P —[ a - _ ]→ R)
                        (sym a~) (Proc↲ a~ (S (⊖₁ 𝐸″)))
                        (≅-sym (Action↲ (sym a~) a‡))
