@@ -43,3 +43,10 @@ module Transition where
 
    target : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Proc (Γ + inc a)
    target = π₂ ∘ out
+
+   -- Existentially quantified version.
+   record TransitionFrom {Γ} (P : Proc Γ) : Set where
+      field
+         a : Action _
+         R : Proc _
+         E : P —[ a - _ ]→ R
