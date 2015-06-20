@@ -30,18 +30,16 @@ module Transition.Concur.Transition.Properties where
               a‡ = π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′)))
               ӓ : Action₂ Γ
               ӓ = a″ , π₁ (ᴬ⊖ 𝑎″)
-              a≈ : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
-              a≈ = inc₂-def (π₁ (ᴬ⊖ 𝑎″) , a‡)
-              a~ : Γ + inc₂ ӓ ≡ Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″))
-              a~ = inc₂-def ӓ
-              blah′ : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc₂ ӓ + inc (subst Action (sym a~) a‡)
+              ӓ′ : Action₂ (Γ + inc a″)
+              ӓ′ = π₁ (ᴬ⊖ 𝑎″) , a‡
+              blah′ : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc₂ ӓ + inc (subst Action (sym (inc₂-def ӓ)) a‡)
               blah′ =
                  let open EqReasoning (setoid _) in
                  begin
-                    Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡)
-                 ≡⟨ a≈ ⟩
+                    Γ + inc a″ + inc₂ ӓ′
+                 ≡⟨ (inc₂-def ӓ′) ⟩
                     Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
-                 ≡⟨ cong (λ Γ′ → Γ′ + inc a‡) (sym a~) ⟩
+                 ≡⟨ cong (λ Γ′ → Γ′ + inc a‡) (sym (inc₂-def ӓ)) ⟩
                     Γ + inc₂ ӓ + inc a‡
                  ≡⟨ cong (λ Γ′ → Γ + inc₂ ӓ + Γ′)
                     (≅-to-≡ (≅-cong✴ Action (sym (inc₂-def ӓ)) inc (≅-sym (Action↲ (sym (inc₂-def ӓ)) a‡)))) ⟩
@@ -50,11 +48,11 @@ module Transition.Concur.Transition.Properties where
               open ≅-Reasoning
               gib : S (⊖₁ 𝐸″) —[ Action↱ (sym (inc₂-def ӓ)) a‡ - _ ]→ Proc↱ blah′ (S (⊖₁ 𝐸/E″))
               gib = ≅-subst✴₃ Proc (λ P a R → P —[ a - _ ]→ R)
-                       (sym a~) (Proc↲ a~ (S (⊖₁ 𝐸″)))
-                       (≅-sym (Action↲ (sym a~) a‡))
+                       (sym (inc₂-def ӓ)) (Proc↲ (inc₂-def ӓ) (S (⊖₁ 𝐸″)))
+                       (≅-sym (Action↲ (sym (inc₂-def ӓ)) a‡))
                        (begin
-                           Proc↱ a≈ (S (⊖₁ (/-preserves-⌣₁′ 𝐸″ 𝐸 𝐸′)))
-                        ≅⟨ Proc↲ a≈ _ ⟩
+                           Proc↱ (inc₂-def ӓ′) (S (⊖₁ (/-preserves-⌣₁′ 𝐸″ 𝐸 𝐸′)))
+                        ≅⟨ Proc↲ (inc₂-def ӓ′) _ ⟩
                            S (⊖₁ (/-preserves-⌣₁′ 𝐸″ 𝐸 𝐸′))
                         ≅⟨ ≅-sym (Proc↲ blah′ _) ⟩
                            Proc↱ blah′ (S (⊖₁ (/-preserves-⌣₁′ 𝐸″ 𝐸 𝐸′)))
