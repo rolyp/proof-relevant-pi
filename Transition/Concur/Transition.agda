@@ -1,7 +1,7 @@
 -- The "residual" of a concurrent pair after a third concurrent transition. There is a slight case-explosion here
 -- because of the need to distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise across the three transitions.
 -- Haven't found a way to prove this for the symmetrised relation ⌣ as defined. Can prove it for a version of ⌣
--- which has a symmetric variant of each rule, but the proof is big and Agda runs out of memory compiling it.
+-- which has a symmetric variant of each rule, but the proof is huge and Agda runs out of memory compiling it.
 module Transition.Concur.Transition where
 
    open import SharedModules
@@ -17,7 +17,8 @@ module Transition.Concur.Transition where
       open Concur₁; open Delta′
    open import Transition.Concur.Ren using (/-preserves-ᴬ⌣; _*ᵇᵇ⌣; _*ᵇᶜ⌣; _*ᶜᵇ⌣; _*ᶜᶜ⌣)
 
-   -- A "rotationally symmetric" version might be more useful.
+   -- A "cyclic" version is probably more useful. However for the asymmetric version of the relation, 𝐸″ would
+   -- be mostly uninhabited. Only the symmetric relation is usefully "cyclic".
    postulate
       /-preserves-⌣₁′ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {𝑎 : a ᴬ⌣ a′} {𝑎′ : a′ ᴬ⌣ a″} {𝑎″ : a″ ᴬ⌣ a}
                        {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
