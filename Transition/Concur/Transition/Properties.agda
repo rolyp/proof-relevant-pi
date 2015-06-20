@@ -3,7 +3,7 @@ module Transition.Concur.Transition.Properties where
 
    open import SharedModules
 
-   open import Action using (_ᴬ⌣_)
+   open import Action.Concur using (_ᴬ⌣_)
    open import Name using (zero)
    open import Proc using (Proc)
    open import Transition using (_—[_-_]→_)

@@ -5,8 +5,9 @@ module Action.Ren where
 
    open import Ext
 
-   open import Action as ᴬ using (Actionᵇ; Actionᶜ; Action; _ᵇ; _ᶜ; inc; _ᴬ⌣_);
-      open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ._ᴬ⌣_
+   open import Action as ᴬ using (Actionᵇ; Actionᶜ; Action; _ᵇ; _ᶜ; inc);
+      open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_); open _ᴬ⌣_
    open import Name using (_+_; +-assoc; toℕ)
    open import Ren as ᴿ using (Ren; Renameable; _ᴿ+_);
       open ᴿ.Renameable ⦃...⦄ renaming (

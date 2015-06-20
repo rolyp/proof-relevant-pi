@@ -5,10 +5,10 @@ module Transition.Concur where
    open import Ext
 
    open import Action as ᴬ
-      using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc; _ᴬ⌣_; ᴬ⌣-sym; ᴬ⌣-sym-involutive);
-      open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ._ᴬ⌣_
+      using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⌣-sym; ᴬ⌣-sym-involutive); open _ᴬ⌣_
    import Action.Ren
-   open import Name as ᴺ using (Name; Cxt; module Cxt; zero; _+_; +-assoc; toℕ)
+   open import Name as ᴺ using (Name; Cxt; module Cxt; zero; _+_)
    open import Ren as ᴿ using (Ren; Renameable; ᴺren; suc; push; pop; swap); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
    open import Proc as ᴾ using (Proc); open ᴾ.Proc

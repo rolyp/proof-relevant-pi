@@ -2,11 +2,10 @@ module Transition.Concur.Cofinal where
 
    open import SharedModules
 
-   open import Data.Fin using (Fin; toℕ)
-
-   open import Action as ᴬ using (Action; inc; _ᴬ⌣_; module _ᴬ⌣_); open ᴬ.Action; open ᴬ.Actionᵇ; open _ᴬ⌣_
+   open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_); open _ᴬ⌣_
    import Action.Ren
-   open import Name as ᴺ using (Cxt; Name; fromℕ≤; _+_; zero)
+   open import Name as ᴺ using (Cxt; Name; _+_; zero)
    open import Proc using (Proc); open Proc
    import Proc.Ren
    open import StructuralCong.Proc using (_≈_; module _≈_; ≈-refl; ≈-reflexive; ≈-sym; _*⁼; module ≈-Reasoning);

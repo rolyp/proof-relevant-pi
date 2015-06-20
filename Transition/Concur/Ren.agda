@@ -3,7 +3,8 @@ module Transition.Concur.Ren where
 
    open import SharedModules
 
-   open import Action as ᴬ using (Action; _ᴬ⌣_); open ᴬ._ᴬ⌣_; open ᴬ.Action; open ᴬ.Actionᵇ
+   open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_); open _ᴬ⌣_
    open import Proc using (Proc)
    open import Ren as ᴿ using (Ren; suc); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
