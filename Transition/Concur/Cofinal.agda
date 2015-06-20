@@ -16,19 +16,20 @@ module Transition.Concur.Cofinal where
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Concur
-      using (Concur₁; module Concur₁; Concur; Delta′; Delta; module Delta′; ᴬ⊖; ⊖₁; ⊖; Action₂; inc₂);
+      using (Concur₁; module Concur₁; Concur; Delta′; Delta; module Delta′; ᴬ⊖; ⊖₁; ⊖; Action₂);
       open Concur₁
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
    -- structurally congruent, or structurally congruent with each other's swap image.
-   braid : ∀ {Γ} (ӓ : Action₂ Γ) → let Γ′ = Γ + inc₂ ӓ in Ren Γ′ Γ′
+   braid : ∀ {Γ} (ӓ : Action₂ Γ) → let Γ′ = Γ + inc (π₁ ӓ) + inc (π₂ ӓ) in Ren Γ′ Γ′
    braid (_ ᵇ , _ ᵇ) = swap
    braid (_ ᵇ , _ ᶜ) = id
    braid (_ ᶜ , _ ᵇ) = id
    braid (_ ᶜ , _ ᶜ) = id
 
-   ⋈[_,_,_] : ∀ Γ (ӓ : Action₂ Γ) (Δ : Cxt) → let Γ′ = Γ + inc₂ ӓ in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
+   ⋈[_,_,_] : ∀ Γ (ӓ : Action₂ Γ) (Δ : Cxt) →
+              let Γ′ = Γ + inc (π₁ ӓ) + inc (π₂ ӓ) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
    ⋈[ Γ , ӓ , Δ ] P P′ = ((braid ӓ ᴿ+ Δ) *) P ≈ P′
 
    open ≈-Reasoning

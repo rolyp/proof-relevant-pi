@@ -10,7 +10,7 @@ module Transition.Concur.Transition.Properties where
    import Proc.Ren
    open import Ren as ᴿ; open ᴿ.Renameable ⦃...⦄
    open import Transition using (_—[_-_]→_)
-   open import Transition.Concur using (Concur₁; module Concur₁; module Delta′; Action₂; ᴬ⊖; ⊖₁; inc₂; inc₂-def);
+   open import Transition.Concur using (Concur₁; module Concur₁; module Delta′; Action₂; ᴬ⊖; ⊖₁);
       open Concur₁
    open import Transition.Concur.Cofinal using (⊖₁-✓; ⋈[_,_,_])
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; module _Δ′_)
@@ -31,29 +31,8 @@ module Transition.Concur.Transition.Properties where
               a/a″ = π₁ (ᴬ⊖ 𝑎″)
               a‡ : Action (Γ + inc a″ + inc a/a″)
               a‡ = π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′)))
-              ӓ : Action₂ Γ
-              ӓ = a″ , a/a″
-              ӓ′ : Action₂ (Γ + inc a″)
-              ӓ′ = a/a″ , a‡
-              blah′ : Γ + inc a″ + inc₂ ӓ′ ≡ Γ + inc₂ ӓ + inc (Action↱ (sym (inc₂-def ӓ)) a‡)
-              blah′ = let open EqReasoning (setoid _) in
-                 begin
-                    Γ + inc a″ + inc₂ ӓ′
-                 ≡⟨ inc₂-def ӓ′ ⟩
-                    Γ + inc a″ + inc a/a″ + inc a‡
-                 ≡⟨ cong (λ Γ′ → Γ′ + inc a‡) (sym (inc₂-def ӓ)) ⟩
-                    Γ + inc₂ ӓ + inc a‡
-                 ≡⟨ cong (λ Γ′ → Γ + inc₂ ӓ + Γ′)
-                    (≅-to-≡ (≅-cong✴ Action (sym (inc₂-def ӓ)) inc (≅-sym (Action↲ (sym (inc₂-def ӓ)) a‡)))) ⟩
-                    Γ + inc₂ ӓ + inc (Action↱ (sym (inc₂-def ӓ)) a‡)
-                 ∎
-              gib : S (⊖₁ 𝐸″) —[ Action↱ (sym (inc₂-def ӓ)) a‡ - _ ]→ Proc↱ blah′ (S (⊖₁ 𝐸/E″))
-              gib = let open ≅-Reasoning in
-                 ≅-subst✴₃ Proc (λ P a R → P —[ a - _ ]→ R)
-                    (sym (inc₂-def ӓ)) (Proc↲ (inc₂-def ӓ) (S (⊖₁ 𝐸″)))
-                    (≅-sym (Action↲ (sym (inc₂-def ӓ)) a‡))
-                    (≅-trans (Proc↲ (inc₂-def ӓ′) _) (≅-sym (Proc↲ blah′ _)))
-                    (E′/E (⊖₁ 𝐸/E″))
+              gib : S (⊖₁ 𝐸″) —[ a‡ - _ ]→ S (⊖₁ 𝐸/E″)
+              gib = ≅-subst✴₃ Proc (λ P a R → P —[ a - _ ]→ R) refl ≅-refl ≅-refl ≅-refl (E′/E (⊖₁ 𝐸/E″))
               open _Δ′_
-          in E/E′ (⊖₁ 𝐸′/E) ≅ E/γ (⊖′[ ӓ , zero ] gib (⊖₁-✓ 𝐸″))
+          in E/E′ (⊖₁ 𝐸′/E) ≅ E/γ (⊖′[ (a″ , a/a″) , zero ] gib (⊖₁-✓ 𝐸″))
    blah _ _ _ = {!!}
