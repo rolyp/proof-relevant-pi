@@ -31,9 +31,9 @@ module Transition.Concur.Transition.Properties where
               ӓ : Action₂ Γ
               ӓ = a″ , π₁ (ᴬ⊖ 𝑎″)
               a≈ : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″)) + inc a‡
-              a≈ = sym (+-assoc (Γ + inc a″) (inc (π₁ (ᴬ⊖ 𝑎″))) (inc a‡))
+              a≈ = inc₂-def (π₁ (ᴬ⊖ 𝑎″) , a‡)
               a~ : Γ + inc₂ ӓ ≡ Γ + inc a″ + inc (π₁ (ᴬ⊖ 𝑎″))
-              a~ = sym (+-assoc Γ (inc a″) (inc (π₁ (ᴬ⊖ 𝑎″))))
+              a~ = inc₂-def ӓ
               blah′ : Γ + inc a″ + inc₂ (π₁ (ᴬ⊖ 𝑎″) , a‡) ≡ Γ + inc₂ ӓ + inc (subst Action (sym a~) a‡)
               blah′ =
                  let open EqReasoning (setoid _) in
