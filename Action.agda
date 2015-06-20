@@ -25,17 +25,6 @@ module Action where
    inc (_ ᵇ) = ᴺ.suc zero
    inc (_ ᶜ) = zero
 
-   -- Composed actions bump the context by at most two variables.
-   inc-inc : ∀ {Γ} (a : Action Γ) (a′ : Action (Γ + inc a)) → inc a + inc a′ < 3
-   inc-inc (_ ᵇ) (_ ᵇ) = s≤s (s≤s (s≤s z≤n))
-   inc-inc (_ ᵇ) (_ ᶜ) = s≤s (s≤s z≤n)
-   inc-inc (_ ᶜ) (_ ᵇ) = s≤s (s≤s z≤n)
-   inc-inc (_ ᶜ) (_ ᶜ) = s≤s z≤n
-
-   -- Not sure if it would be more convenient to have inc return a Name 2.
-   ᴺinc-inc : ∀ {Γ} (a : Action Γ) (a′ : Action (Γ + inc a)) → Name 3
-   ᴺinc-inc a a′ = fromℕ≤ (inc-inc a a′)
-
    -- The 5 kinds of concurrent action. The ᵛ∇ᵛ case is what really makes this necessary.
    infix 4 _ᴬ⌣_
    data _ᴬ⌣_ {Γ} : (a a′ : Action Γ) → Set where

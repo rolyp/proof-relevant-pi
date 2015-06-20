@@ -5,7 +5,7 @@ module Transition.Concur where
    open import Ext
 
    open import Action as ᴬ
-      using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc; _ᴬ⌣_; ᴬ⌣-sym; ᴬ⌣-sym-involutive; ᴺinc-inc);
+      using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc; _ᴬ⌣_; ᴬ⌣-sym; ᴬ⌣-sym-involutive);
       open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ._ᴬ⌣_
    import Action.Ren
    open import Name as ᴺ using (Name; Cxt; module Cxt; zero; _+_; +-assoc; toℕ)
