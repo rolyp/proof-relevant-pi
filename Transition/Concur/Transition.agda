@@ -1,12 +1,13 @@
--- The "residual" of a concurrent pair after a third concurrent transition. There is a slight case-explosion here
--- because of the need to distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise across the three transitions.
+-- The "residual" of a concurrent pair after a third concurrent transition.
 -- Haven't found a way to prove this for the symmetrised relation ⌣ as defined. Can prove it for a version of ⌣
 -- which has a symmetric variant of each rule, but the proof is huge and Agda runs out of memory compiling it.
 module Transition.Concur.Transition where
 
    open import SharedModules
 
-   open import Action as ᴬ using (Action; _ᴬ⌣_; ᴬ⌣-sym); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ._ᴬ⌣_
+   open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⌣-sym); open _ᴬ⌣_
+   open import Action.Concur.Action using (/-preserves-ᴬ⌣)
    open import Proc as ᴾ using (Proc)
    open import Ren as ᴿ using (Ren; push; pop; swap); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
@@ -15,7 +16,7 @@ module Transition.Concur.Transition where
    open import Transition.Concur
       using (Concur₁; module Concur₁; Concur; Delta′; module Delta′; Delta; ⊖; ⊖₁; ⌣-sym);
       open Concur₁; open Delta′
-   open import Transition.Concur.Ren using (/-preserves-ᴬ⌣; _*ᵇᵇ⌣; _*ᵇᶜ⌣; _*ᶜᵇ⌣; _*ᶜᶜ⌣)
+   open import Transition.Concur.Ren using (_*ᵇᵇ⌣; _*ᵇᶜ⌣; _*ᶜᵇ⌣; _*ᶜᶜ⌣)
 
    -- A "cyclic" version is probably more useful. However for the asymmetric version of the relation, 𝐸″ would
    -- be mostly uninhabited. Only the symmetric relation is usefully "cyclic".
@@ -25,7 +26,7 @@ module Transition.Concur.Transition where
                        (𝐸 : E ⌣₁[ 𝑎 ] E′) → E′ ⌣₁[ 𝑎′ ] E″ → (𝐸″ : E″ ⌣₁[ 𝑎″ ] E) →
                        E′/E (⊖₁ 𝐸) ⌣₁[ /-preserves-ᴬ⌣ 𝑎 𝑎′ (ᴬ⌣-sym 𝑎″) ] E/E′ (⊖₁ 𝐸″)
 
-   -- The residual 𝐸′/E.
+   -- The residual 𝐸′/E. Slight case-explosion because of need to distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise.
    /-preserves-⌣₁ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {a⌣a′ : a ᴬ⌣ a′} {a′⌣a″ : a′ ᴬ⌣ a″} {a⌣a″ : a ᴬ⌣ a″}
                    {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
                    (𝐸 : E ⌣₁[ a⌣a′ ] E′) → E′ ⌣₁[ a′⌣a″ ] E″ → (𝐸″ : E ⌣₁[ a⌣a″ ] E″) →
