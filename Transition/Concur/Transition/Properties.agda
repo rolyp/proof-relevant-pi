@@ -21,18 +21,13 @@ module Transition.Concur.Transition.Properties where
    open _Δ′_
 
    -- The 'cyclic' relationship between 𝐸, 𝐸′ and 𝐸″ means that E″ is mostly uninhabited for the asymmetric
-   -- version of ⌣, and so any proof of this would be trivial. On the other hand, Agda is extremely slow at
-   -- typechecking the proof, perhaps because of the complexity of the type. Needs some thought.
+   -- version of ⌣, and so any proof of this would be trivial. Need to rethink.
    blah : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {𝑎 : a ᴬ⌣ a′} {𝑎′ : a′ ᴬ⌣ a″} {𝑎″ : a″ ᴬ⌣ a}
           {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
           (𝐸 : E ⌣₁[ 𝑎 ] E′) (𝐸′ : E′ ⌣₁[ 𝑎′ ] E″) (𝐸″ : E″ ⌣₁[ 𝑎″ ] E) →
           let 𝐸′/E = /-preserves-⌣₁′ 𝐸 𝐸′ 𝐸″; 𝐸/E″ = /-preserves-⌣₁′ 𝐸″ 𝐸 𝐸′
-              a/a″ : Action (Γ + inc a″)
-              a/a″ = π₁ (ᴬ⊖ 𝑎″)
-              a‡ : Action (Γ + inc a″ + inc a/a″)
-              a‡ = π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′)))
-              gib : S (⊖₁ 𝐸″) —[ a‡ - _ ]→ S (⊖₁ 𝐸/E″)
+              gib : S (⊖₁ 𝐸″) —[ π₁ (ᴬ⊖ (/-preserves-ᴬ⌣ 𝑎″ 𝑎 (ᴬ⌣-sym 𝑎′))) - _ ]→ S (⊖₁ 𝐸/E″)
               gib = ≅-subst✴₃ Proc (λ P a R → P —[ a - _ ]→ R) refl ≅-refl ≅-refl ≅-refl (E′/E (⊖₁ 𝐸/E″))
               open _Δ′_
-          in E/E′ (⊖₁ 𝐸′/E) ≅ E/γ (⊖′[ (a″ , a/a″) , zero ] gib (⊖₁-✓ 𝐸″))
+          in E/E′ (⊖₁ 𝐸′/E) ≅ E/γ (⊖′[ (a″ , π₁ (ᴬ⊖ 𝑎″)) , zero ] gib (⊖₁-✓ 𝐸″))
    blah _ _ _ = {!!}
