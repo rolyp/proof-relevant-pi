@@ -3,7 +3,7 @@ module Transition.Concur.Cofinal where
    open import SharedModules
 
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ
-   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_); open _ᴬ⌣_
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; Action₂); open _ᴬ⌣_
    import Action.Ren
    open import Name as ᴺ using (Cxt; Name; _+_; zero)
    open import Proc using (Proc); open Proc
@@ -14,8 +14,7 @@ module Transition.Concur.Cofinal where
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Concur
-      using (Concur₁; module Concur₁; Concur; Delta′; Delta; module Delta′; ᴬ⊖; ⊖₁; ⊖; Action₂);
-      open Concur₁
+      using (Concur₁; module Concur₁; Concur; Delta′; Delta; module Delta′; ⊖₁; ⊖); open Concur₁
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either

@@ -3,11 +3,11 @@ module Transition.Concur.Transition.Properties where
 
    open import SharedModules
 
-   open import Action.Concur using (_ᴬ⌣_)
+   open import Action.Concur using (_ᴬ⌣_; Action₂; ᴬ⊖)
    open import Name using (zero)
    open import Proc using (Proc)
    open import Transition using (_—[_-_]→_)
-   open import Transition.Concur using (Concur₁; module Concur₁; module Delta′; Action₂; ᴬ⊖; ⊖₁)
+   open import Transition.Concur using (Concur₁; module Concur₁; module Delta′; ⊖₁)
    open import Transition.Concur.Cofinal using (⊖₁-✓)
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; module _Δ′_)
    open import Transition.Concur.Transition using (/-preserves-⌣₁′)

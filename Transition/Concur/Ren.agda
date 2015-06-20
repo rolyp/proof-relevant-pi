@@ -4,12 +4,12 @@ module Transition.Concur.Ren where
    open import SharedModules
 
    open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ
-   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_); open _ᴬ⌣_
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖); open _ᴬ⌣_
    open import Proc using (Proc)
    open import Ren as ᴿ using (Ren; suc); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
    open import Transition using (_—[_-_]→_)
-   open import Transition.Concur using (ᴬ⊖; Concur₁; module Concur₁); open Concur₁
+   open import Transition.Concur using (Concur₁; module Concur₁); open Concur₁
    open import Transition.Ren
 
    -- Concurrent actions are preserved by renamings.
