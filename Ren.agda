@@ -6,7 +6,7 @@ module Ren where
    open import Data.Nat.Properties.Simple
    import Relation.Binary.EqReasoning as EqReasoning
 
-   open import Name as ᴺ using (Cxt; module Cxt; Name; _+_; zero; fromℕ; inject+; shift)
+   open import Name as ᴺ using (Cxt; module Cxt; Name; _+_; zero; shift)
 
    -- Hom-setoid over extensional equivalence. TODO: define a Category instance.
    Ren : Cxt → Cxt → Set

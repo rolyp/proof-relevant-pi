@@ -13,7 +13,7 @@ module Transition.Seq where
    open import Action.Ren using (ren-preserves-inc-assoc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _ᵇ∷_; _ᶜ∷_)
    open import Action.Seq.Ren using (ren-preserves-inc⋆-assoc)
-   open import Name as ᴺ using (Cxt; Name; _+_; +-assoc; zero; toℕ; +-left-identity)
+   open import Name as ᴺ using (Cxt; Name; _+_; +-assoc; zero; toℕ)
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Ren as ᴿ using (Ren; push; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import StructuralCong.Proc using (_≈_; ≈-sym; ≈-refl)
