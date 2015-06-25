@@ -7,8 +7,9 @@ module Transition.Seq where
 
    open import Ext
 
-   open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc; _ᴬ⌣_; module _ᴬ⌣_);
-      open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ; open ᴬ._ᴬ⌣_
+   open import Action as ᴬ using (Action; _ᵇ; _ᶜ; inc);
+      open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; Action₂); open _ᴬ⌣_
    open import Action.Ren using (ren-preserves-inc-assoc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆; []; _ᵇ∷_; _ᶜ∷_)
    open import Action.Seq.Ren using (ren-preserves-inc⋆-assoc)
@@ -18,7 +19,7 @@ module Transition.Seq where
    open import StructuralCong.Proc using (_≈_; ≈-sym; ≈-refl)
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; source; target)
-   open import Transition.Concur using (Concur; ⌣-sym; module Delta′; Delta; ⊖; Action₂; inc₂)
+   open import Transition.Concur using (Concur; ⌣-sym; module Delta′; Delta; ⊖)
    open import Transition.Concur.Cofinal using (braid; ⋈[_,_,_]; ⊖-✓)
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_)
    open import Transition.Ren using (_Δ_; _*′)
@@ -38,7 +39,7 @@ module Transition.Seq where
 
    -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. Cofinal by construction.
    infixl 5 _Δ⋆_
-   record _Δ⋆_ {Γ} {ӓ : Action₂ Γ} {m a⋆} {P P′ : Proc (Γ + inc₂ ӓ + m)} {R}
+   record _Δ⋆_ {Γ} {ӓ : Action₂ Γ} {m a⋆} {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + m)} {R}
           (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , m ] P P′) : Set where
       constructor _Δ_
       field
@@ -73,7 +74,7 @@ module Transition.Seq where
          (≅-sym (Proc↲ (cong (_+_ Γ′) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
 
    -- Mostly an exercise in heterogenous equality.
-   ⊖⋆[_,_] : ∀ {Γ} (ӓ : Action₂ Γ) m {P P′ : Proc (Γ + inc₂ ӓ + m)} {a⋆ R}
+   ⊖⋆[_,_] : ∀ {Γ} (ӓ : Action₂ Γ) m {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + m)} {a⋆ R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , m ] P P′) → _Δ⋆_ {ӓ = ӓ} {m = m} E⋆ γ
    ⊖⋆[ _ , _ ] [] γ = γ Δ []
    ⊖⋆[ ӓ , m ] {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
@@ -168,7 +169,8 @@ module Transition.Seq where
    ≃-refl (E ᶜ∷ E⋆) = E ᶜ∷ ≃-refl E⋆
 
    postulate
-      braid-involutive : ∀ {Γ} ӓ (a⋆ : Action⋆ (Γ + inc₂ ӓ + 0)) → ((braid ӓ ᴿ+ 0) *) (((braid ӓ ᴿ+ 0) *) a⋆) ≡ a⋆
+      braid-involutive :
+         ∀ {Γ} ӓ (a⋆ : Action⋆ (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + 0)) → ((braid ӓ ᴿ+ 0) *) (((braid ӓ ᴿ+ 0) *) a⋆) ≡ a⋆
 
    ≃-sym : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
    ≃-sym (E ᶜ∶⇋∶ᶜ E′ [ E⌣E′ ]∷ E⋆≃E′⋆) = {!!}

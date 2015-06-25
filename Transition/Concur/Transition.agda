@@ -1,6 +1,7 @@
--- The "residual" of a concurrent pair after a third concurrent transition.
--- Haven't found a way to prove this for the symmetrised relation ⌣ as defined. Can prove it for a version of ⌣
--- which has a symmetric variant of each rule, but the proof is huge and Agda runs out of memory compiling it.
+-- The "residual" of a concurrent pair after a third concurrent transition. It might be possible to prove this
+-- for the symmetrised relation ⌣ but it won't be a straightforward induction because of the way we close under
+-- symmetry. Can prove it for a version of ⌣ which has a symmetric variant of each rule, but the proof is huge
+-- and Agda runs out of memory compiling it.
 module Transition.Concur.Transition where
 
    open import SharedModules
