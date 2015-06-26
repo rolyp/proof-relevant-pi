@@ -24,19 +24,17 @@ module Action.Seq2.Ren where
 
    ren-preserves-inc⋆ ρ [ a ] = ren-preserves-inc ρ a
    ren-preserves-inc⋆ ρ [] = refl
-   ren-preserves-inc⋆ ρ (a⋆ ⍮ a′⋆) =
-      let bib : ((ρ ᴿ+ inc⋆ a⋆) *) a′⋆ ≅ Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) (((ρ ᴿ+ inc⋆ a⋆) *) a′⋆)
-          bib = ≅-sym (Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) (((ρ ᴿ+ inc⋆ a⋆) *) a′⋆))
-          blah = ≅-to-≡ (
+   ren-preserves-inc⋆ {Γ′ = Γ′} ρ (a⋆ ⍮ a′⋆) =
+      let IHₗ = ren-preserves-inc⋆ ρ a⋆
+          IHᵣ = let open ≅-Reasoning in
              begin
                 inc⋆ a′⋆
              ≡⟨ ren-preserves-inc⋆ (ρ ᴿ+ inc⋆ a⋆) a′⋆ ⟩
                 inc⋆ (((ρ ᴿ+ inc⋆ a⋆) *) a′⋆)
-             ≅⟨ ≅-cong✴ Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) inc⋆ bib ⟩
-                inc⋆ (Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) (((ρ ᴿ+ inc⋆ a⋆) *) a′⋆))
-             ∎) in
-      cong₂ _+_ (ren-preserves-inc⋆ ρ a⋆) blah
-      where open ≅-Reasoning
+             ≅⟨ ≅-cong✴ Action⋆ (cong (_+_ Γ′) IHₗ) inc⋆ (≅-sym (Action⋆↲ (cong (_+_ Γ′) IHₗ) (((ρ ᴿ+ inc⋆ a⋆) *) a′⋆))) ⟩
+                inc⋆ (Action⋆↱ (cong (_+_ Γ′) IHₗ) (((ρ ᴿ+ inc⋆ a⋆) *) a′⋆))
+             ∎ in
+      cong₂ _+_ IHₗ (≅-to-≡ IHᵣ)
 
    instance
       ren : Renameable Action⋆
@@ -49,10 +47,10 @@ module Action.Seq2.Ren where
          where
             -- Easy induction, using functoriality of * and (ᴿ+ Γ).
             *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
-            *-preserves-≃ₑ ρ≃ₑσ [] = refl
-            *-preserves-≃ₑ ρ≃ₑσ _ = {!!}
---          *-preserves-≃ₑ ρ≃ₑσ (a ᵇ∷ a⋆) = cong₂ _ᵇ∷_ (*-preserves-≃ₑ′ ρ≃ₑσ a) (*-preserves-≃ₑ (suc-preserves-≃ₑ ρ≃ₑσ) a⋆)
---          *-preserves-≃ₑ ρ≃ₑσ (a ᶜ∷ a⋆) = cong₂ _ᶜ∷_ (*-preserves-≃ₑ′ ρ≃ₑσ a) (*-preserves-≃ₑ ρ≃ₑσ a⋆)
+            *-preserves-≃ₑ ρ≃ₑσ [ a ] = cong [_] (*-preserves-≃ₑ′ ρ≃ₑσ a)
+            *-preserves-≃ₑ _ [] = refl
+            *-preserves-≃ₑ ρ≃ₑσ (a⋆ ⍮ a′⋆) = ≅-to-≡ (≅-cong₂ _⍮_ (≡-to-≅ (*-preserves-≃ₑ ρ≃ₑσ a⋆)) {!!})
+            -- (*-preserves-≃ₑ (suc-preserves-≃ₑ ρ≃ₑσ) a⋆)
 
             *-preserves-∘ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → ρ * ∘ σ * ≃ₑ (ρ ∘ σ) *
             *-preserves-∘ [] = refl
