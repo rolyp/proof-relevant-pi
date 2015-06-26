@@ -5,6 +5,7 @@ module Transition.Seq2 where
    open import Action using (inc)
    open import Action.Concur using (Action₂)
    open import Action.Seq2 as ᴬ⋆ using (Action⋆; inc⋆); open ᴬ⋆.Action⋆
+   open import Action.Seq2.Ren using (ren-preserves-inc⋆-assoc)
    open import Name using (_+_; +-assoc)
    open import Proc using (Proc; Proc↱)
    open import Ren as ᴿ using (_ᴿ+_); open ᴿ.Renameable ⦃...⦄

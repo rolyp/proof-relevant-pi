@@ -14,6 +14,10 @@ module Action.Seq2 where
       [_] : Action Γ → Action⋆ Γ
       _⍮_ : (a⋆ : Action⋆ Γ) (a′⋆ : Action⋆ (Γ + inc⋆ a⋆)) → Action⋆ Γ
 
+   -- Useful shorthand when working with heterogeneous equality.
+   Action⋆↱ = subst Action⋆
+   Action⋆↲ = ≡-subst-removable Action⋆
+
    inc⋆ [] = 0
    inc⋆ [ a ] = inc a
    inc⋆ (a⋆ ⍮ a′⋆) = inc⋆ a⋆ + inc⋆ a′⋆
