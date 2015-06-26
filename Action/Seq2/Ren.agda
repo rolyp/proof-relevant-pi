@@ -92,8 +92,6 @@ module Action.Seq2.Ren where
             subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ (ρ ∘ σ) a⋆)) ((((ρ ∘ σ) ᴿ+ inc⋆ a⋆) *) a′⋆)
          ∎)
       )
---          *-preserves-∘ {ρ = ρ} {σ} (a ᵇ∷ a⋆) =
---             cong₂ _ᵇ∷_ (*-preserves-∘′ a) (trans (*-preserves-∘ a⋆) (*-preserves-≃ₑ (suc-preserves-∘ ρ σ) a⋆))
 
    instance
       ren : Renameable Action⋆
