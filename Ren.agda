@@ -41,16 +41,6 @@ module Ren where
    +-preserves-∘ (ᴺ.suc _) _ _ zero = refl
    +-preserves-∘ (ᴺ.suc Δ) ρ σ (ᴺ.suc x) = cong ᴺ.suc (+-preserves-∘ Δ ρ σ x)
 
-   -- TODO: inline these versions.
-   suc-preserves-id : ∀ {Γ} → suc (id {A = Name Γ}) ≃ₑ id
-   suc-preserves-id = +-preserves-id 1
-
-   suc-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → suc ρ ≃ₑ suc σ
-   suc-preserves-≃ₑ = +-preserves-≃ₑ 1
-
-   suc-preserves-∘ : ∀ {Γ Δ Γ′} (ρ : Ren Δ Γ′) (σ : Ren Γ Δ) → suc ρ ∘ suc σ ≃ₑ suc (ρ ∘ σ)
-   suc-preserves-∘ = +-preserves-∘ 1
-
    -- shift n is a natural transformation between the identity functor and (· ᴿ+ n).
    ᴿ+-comm : ∀ {Γ Γ′} n (ρ : Ren Γ Γ′) → (ρ ᴿ+ n) ∘ shift {Γ} n ≃ₑ shift {Γ′} n ∘ ρ
    ᴿ+-comm zero _ _ = refl

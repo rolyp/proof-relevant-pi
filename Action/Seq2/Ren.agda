@@ -1,4 +1,5 @@
--- Extend residual of a renaming and an action to action sequences.
+-- Extend residual of a renaming and an action to action sequences. Mainly an exercise in heterogeneous
+-- equality, using functoriality of * and (ᴿ+ Γ).
 module Action.Seq2.Ren where
 
    open import SharedModules
@@ -10,7 +11,7 @@ module Action.Seq2.Ren where
    open import Action.Ren using (ren-preserves-inc; ren-preserves-target)
    open import Action.Seq2 as ᴬ⋆ using (Action⋆; Action⋆↱; Action⋆↲; inc⋆); open ᴬ⋆.Action⋆
    open import Name using (_+_; +-assoc; toℕ)
-   open import Ren as ᴿ using (Ren; Renameable; suc; suc-preserves-≃ₑ; suc-preserves-id; suc-preserves-∘; _ᴿ+_);
+   open import Ren as ᴿ using (Ren; Renameable; _ᴿ+_; +-preserves-≃ₑ; +-preserves-id; +-preserves-∘);
       open ᴿ.Renameable ⦃...⦄ renaming (
          _* to _*′; *-preserves-≃ₑ to *-preserves-≃ₑ′; *-preserves-∘ to *-preserves-∘′; *-preserves-id to *-preserves-id′
       )
@@ -36,6 +37,21 @@ module Action.Seq2.Ren where
              ∎ in
       cong₂ _+_ IHₗ (≅-to-≡ IHᵣ)
 
+   *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
+   *-preserves-≃ₑ ρ≃ₑσ [ a ] = cong [_] (*-preserves-≃ₑ′ ρ≃ₑσ a)
+   *-preserves-≃ₑ _ [] = refl
+   *-preserves-≃ₑ {ρ = ρ} {σ} ρ≃ₑσ (a⋆ ⍮ a′⋆) = ≅-to-≡ (≅-cong₂ _⍮_ (≡-to-≅ (*-preserves-≃ₑ ρ≃ₑσ a⋆)) (
+      let open ≅-Reasoning in
+      begin
+         subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) (((ρ ᴿ+ inc⋆ a⋆) *) a′⋆)
+      ≅⟨ Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) _ ⟩
+         ((ρ ᴿ+ inc⋆ a⋆) *) a′⋆
+      ≅⟨ ≡-to-≅ (*-preserves-≃ₑ (+-preserves-≃ₑ (inc⋆ a⋆) ρ≃ₑσ) a′⋆) ⟩
+         ((σ ᴿ+ inc⋆ a⋆) *) a′⋆
+      ≅⟨ ≅-sym (Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) _) ⟩
+         subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)
+      ∎))
+
    instance
       ren : Renameable Action⋆
       ren = record {
@@ -45,23 +61,6 @@ module Action.Seq2.Ren where
             *-preserves-id = *-preserves-id
          }
          where
-            -- Easy induction, using functoriality of * and (ᴿ+ Γ).
-            *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
-            *-preserves-≃ₑ ρ≃ₑσ [ a ] = cong [_] (*-preserves-≃ₑ′ ρ≃ₑσ a)
-            *-preserves-≃ₑ _ [] = refl
-            *-preserves-≃ₑ {ρ = ρ} {σ} ρ≃ₑσ (a⋆ ⍮ a′⋆) = ≅-to-≡ (≅-cong₂ _⍮_ (≡-to-≅ (*-preserves-≃ₑ ρ≃ₑσ a⋆)) (
-               let open ≅-Reasoning in
-               begin
-                  subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) (((ρ ᴿ+ inc⋆ a⋆) *) a′⋆)
-               ≅⟨ Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) _ ⟩
-                  ((ρ ᴿ+ inc⋆ a⋆) *) a′⋆
-               ≅⟨ {!!} ⟩
-                  ((σ ᴿ+ inc⋆ a⋆) *) a′⋆
-               ≅⟨ ≅-sym (Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) _) ⟩
-                  subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)
-               ∎))
-            -- (*-preserves-≃ₑ (suc-preserves-≃ₑ ρ≃ₑσ) a⋆)
-
             *-preserves-∘ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → ρ * ∘ σ * ≃ₑ (ρ ∘ σ) *
             *-preserves-∘ [] = refl
             *-preserves-∘ _ = {!!}
