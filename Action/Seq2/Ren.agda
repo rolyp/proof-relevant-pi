@@ -46,7 +46,7 @@ module Action.Seq2.Ren where
          subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) (((ρ ᴿ+ inc⋆ a⋆) *) a′⋆)
       ≅⟨ Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) _ ⟩
          ((ρ ᴿ+ inc⋆ a⋆) *) a′⋆
-      ≅⟨ ≡-to-≅ (*-preserves-≃ₑ (+-preserves-≃ₑ (inc⋆ a⋆) ρ≃ₑσ) a′⋆) ⟩
+      ≡⟨ *-preserves-≃ₑ (+-preserves-≃ₑ (inc⋆ a⋆) ρ≃ₑσ) a′⋆ ⟩
          ((σ ᴿ+ inc⋆ a⋆) *) a′⋆
       ≅⟨ ≅-sym (Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) _) ⟩
          subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)
@@ -72,8 +72,8 @@ module Action.Seq2.Ren where
                            (((ρ ᴿ+ inc⋆ ((σ *) a⋆)) *)
                             (subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)))
                   ≅⟨ Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ ρ ((σ *) a⋆))) _ ⟩
-                     (((ρ ᴿ+ inc⋆ ((σ *) a⋆)) *)
-                      (subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)))
+                     ((ρ ᴿ+ inc⋆ ((σ *) a⋆)) *)
+                     (subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆))
                   ≅⟨ {!!} ⟩
                      (((ρ ∘ σ) ᴿ+ inc⋆ a⋆) *) a′⋆
                   ≅⟨ ≅-sym (Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ (ρ ∘ σ) a⋆)) _) ⟩
@@ -92,11 +92,14 @@ module Action.Seq2.Ren where
                      let open ≅-Reasoning in
                      begin
                         subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ id a⋆)) (((id ᴿ+ inc⋆ a⋆) *) a′⋆)
-                     ≅⟨ {!!} ⟩
+                     ≅⟨ Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ id a⋆)) _ ⟩
+                        ((id ᴿ+ inc⋆ a⋆) *) a′⋆
+                     ≡⟨ *-preserves-≃ₑ (+-preserves-id (inc⋆ a⋆)) a′⋆ ⟩
+                        (id *) a′⋆
+                     ≡⟨ *-preserves-id a′⋆ ⟩
                         a′⋆
                      ∎)
                )
---             (trans (*-preserves-≃ₑ suc-preserves-id a⋆) (*-preserves-id a⋆))
 
 {-
    ren-preserves-inc⋆-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ Δ′ (a⋆ : Action⋆ (Γ + Δ′)) →
