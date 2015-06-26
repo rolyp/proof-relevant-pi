@@ -10,7 +10,7 @@ module Action.Seq.Ren where
    open import Action.Ren using (ren-preserves-target)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆); open ᴬ⋆.Action⋆
    open import Name using (_+_; +-assoc; toℕ)
-   open import Ren as ᴿ using (Ren; Renameable; suc; suc-preserves-≃ₑ; suc-preserves-id; suc-preserves-∘; _ᴿ+_);
+   open import Ren as ᴿ using (Ren; Renameable; suc; +-preserves-≃ₑ; +-preserves-id; +-preserves-∘; _ᴿ+_);
       open ᴿ.Renameable ⦃...⦄ renaming (
          _* to _*′; *-preserves-≃ₑ to *-preserves-≃ₑ′; *-preserves-∘ to *-preserves-∘′; *-preserves-id to *-preserves-id′
       )
@@ -32,19 +32,19 @@ module Action.Seq.Ren where
             -- Easy induction, using functoriality of * and suc.
             *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
             *-preserves-≃ₑ ρ≃ₑσ [] = refl
-            *-preserves-≃ₑ ρ≃ₑσ (a ᵇ∷ a⋆) = cong₂ _ᵇ∷_ (*-preserves-≃ₑ′ ρ≃ₑσ a) (*-preserves-≃ₑ (suc-preserves-≃ₑ ρ≃ₑσ) a⋆)
+            *-preserves-≃ₑ ρ≃ₑσ (a ᵇ∷ a⋆) = cong₂ _ᵇ∷_ (*-preserves-≃ₑ′ ρ≃ₑσ a) (*-preserves-≃ₑ (+-preserves-≃ₑ 1 ρ≃ₑσ) a⋆)
             *-preserves-≃ₑ ρ≃ₑσ (a ᶜ∷ a⋆) = cong₂ _ᶜ∷_ (*-preserves-≃ₑ′ ρ≃ₑσ a) (*-preserves-≃ₑ ρ≃ₑσ a⋆)
 
             *-preserves-∘ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → ρ * ∘ σ * ≃ₑ (ρ ∘ σ) *
             *-preserves-∘ [] = refl
             *-preserves-∘ {ρ = ρ} {σ} (a ᵇ∷ a⋆) =
-               cong₂ _ᵇ∷_ (*-preserves-∘′ a) (trans (*-preserves-∘ a⋆) (*-preserves-≃ₑ (suc-preserves-∘ ρ σ) a⋆))
+               cong₂ _ᵇ∷_ (*-preserves-∘′ a) (trans (*-preserves-∘ a⋆) (*-preserves-≃ₑ (+-preserves-∘ 1 ρ σ) a⋆))
             *-preserves-∘ (a ᶜ∷ a⋆) = cong₂ _ᶜ∷_ (*-preserves-∘′ a) (*-preserves-∘ a⋆)
 
             *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = Action⋆ Γ}
             *-preserves-id [] = refl
             *-preserves-id (a ᵇ∷ a⋆) =
-               cong₂ _ᵇ∷_ (*-preserves-id′ a) (trans (*-preserves-≃ₑ suc-preserves-id a⋆) (*-preserves-id a⋆))
+               cong₂ _ᵇ∷_ (*-preserves-id′ a) (trans (*-preserves-≃ₑ (+-preserves-id 1) a⋆) (*-preserves-id a⋆))
             *-preserves-id (a ᶜ∷ a⋆) = cong₂ _ᶜ∷_ (*-preserves-id′ a) (*-preserves-id a⋆)
 
    ren-preserves-inc⋆ : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → inc⋆ ≃ₑ inc⋆ ∘ ρ *′
