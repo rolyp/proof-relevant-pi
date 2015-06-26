@@ -62,8 +62,24 @@ module Action.Seq2.Ren where
          }
          where
             *-preserves-∘ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → ρ * ∘ σ * ≃ₑ (ρ ∘ σ) *
+            *-preserves-∘ [ a ] = cong [_] (*-preserves-∘′ a)
             *-preserves-∘ [] = refl
-            *-preserves-∘ _ = {!!}
+            *-preserves-∘ {ρ = ρ} {σ} (a⋆ ⍮ a′⋆) = ≅-to-≡ (
+               ≅-cong₂ _⍮_ (≡-to-≅ (*-preserves-∘ a⋆)) (
+                  let open ≅-Reasoning in
+                  begin
+                     subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ ρ ((σ *) a⋆)))
+                           (((ρ ᴿ+ inc⋆ ((σ *) a⋆)) *)
+                            (subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)))
+                  ≅⟨ Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ ρ ((σ *) a⋆))) _ ⟩
+                     (((ρ ᴿ+ inc⋆ ((σ *) a⋆)) *)
+                      (subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)))
+                  ≅⟨ {!!} ⟩
+                     (((ρ ∘ σ) ᴿ+ inc⋆ a⋆) *) a′⋆
+                  ≅⟨ ≅-sym (Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ (ρ ∘ σ) a⋆)) _) ⟩
+                     subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ (ρ ∘ σ) a⋆)) ((((ρ ∘ σ) ᴿ+ inc⋆ a⋆) *) a′⋆)
+                  ∎)
+               )
 --          *-preserves-∘ {ρ = ρ} {σ} (a ᵇ∷ a⋆) =
 --             cong₂ _ᵇ∷_ (*-preserves-∘′ a) (trans (*-preserves-∘ a⋆) (*-preserves-≃ₑ (suc-preserves-∘ ρ σ) a⋆))
 --          *-preserves-∘ (a ᶜ∷ a⋆) = cong₂ _ᶜ∷_ (*-preserves-∘′ a) (*-preserves-∘ a⋆)
