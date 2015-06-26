@@ -8,7 +8,7 @@ module Proc.Ren where
 
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Ren as ᴿ using (
-         Ren; suc; push; pop; swap; suc-preserves-≃ₑ; suc-preserves-id; suc-preserves-∘; Renameable; module Renameable; ᴺren
+         Ren; suc; push; pop; swap; +-preserves-≃ₑ; +-preserves-id; +-preserves-∘; Renameable; module Renameable; ᴺren
       );
       open Renameable ⦃...⦄ renaming (
          _* to _*′; *-preserves-≃ₑ to *-preserves-≃ₑ′; *-preserves-∘ to *-preserves-∘′; *-preserves-id to *-preserves-id′
@@ -34,16 +34,16 @@ module Proc.Ren where
 
             *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
             *-preserves-≃ₑ ρ≃ₑσ Ο = refl
-            *-preserves-≃ₑ ρ≃ₑσ (x •∙ P) = cong₂ _•∙_ (ρ≃ₑσ x) (*-preserves-≃ₑ (suc-preserves-≃ₑ ρ≃ₑσ) P)
+            *-preserves-≃ₑ ρ≃ₑσ (x •∙ P) = cong₂ _•∙_ (ρ≃ₑσ x) (*-preserves-≃ₑ (+-preserves-≃ₑ 1 ρ≃ₑσ) P)
             *-preserves-≃ₑ ρ≃ₑσ (• x 〈 y 〉∙ P) = cong₃ •_〈_〉∙_ (ρ≃ₑσ x) (ρ≃ₑσ y) (*-preserves-≃ₑ ρ≃ₑσ P)
             *-preserves-≃ₑ ρ≃ₑσ (P ➕ Q) = cong₂ _➕_ (*-preserves-≃ₑ ρ≃ₑσ P) (*-preserves-≃ₑ ρ≃ₑσ Q)
             *-preserves-≃ₑ ρ≃ₑσ (P │ Q) = cong₂ _│_ (*-preserves-≃ₑ ρ≃ₑσ P) (*-preserves-≃ₑ ρ≃ₑσ Q)
-            *-preserves-≃ₑ ρ≃ₑσ (ν P) = cong ν_ (*-preserves-≃ₑ (suc-preserves-≃ₑ ρ≃ₑσ) P)
+            *-preserves-≃ₑ ρ≃ₑσ (ν P) = cong ν_ (*-preserves-≃ₑ (+-preserves-≃ₑ 1 ρ≃ₑσ) P)
             *-preserves-≃ₑ ρ≃ₑσ (! P) = cong !_ (*-preserves-≃ₑ ρ≃ₑσ P)
 
             -- TODO: try again to move this to the typeclass?
             suc-∘-* : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → (suc ρ ∘ suc σ) * ≃ₑ suc (ρ ∘ σ) *
-            suc-∘-* = *-preserves-≃ₑ (suc-preserves-∘ _ _)
+            suc-∘-* = *-preserves-≃ₑ (+-preserves-∘ 1 _ _)
 
             *-preserves-∘ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → ρ * ∘ σ * ≃ₑ (ρ ∘ σ) *
             *-preserves-∘ Ο = refl
@@ -57,9 +57,9 @@ module Proc.Ren where
             *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = Proc Γ}
             *-preserves-id Ο = refl
             *-preserves-id (x •∙ P) =
-               *-preserves-id′ x ⟨ cong₂ _•∙_ ⟩ trans (*-preserves-≃ₑ suc-preserves-id P) (*-preserves-id P)
+               *-preserves-id′ x ⟨ cong₂ _•∙_ ⟩ trans (*-preserves-≃ₑ (+-preserves-id 1) P) (*-preserves-id P)
             *-preserves-id (• x 〈 y 〉∙ P) = cong₃ •_〈_〉∙_ (*-preserves-id′ x) (*-preserves-id′ y) (*-preserves-id P)
             *-preserves-id (P ➕ Q) = *-preserves-id P ⟨ cong₂ _➕_ ⟩ *-preserves-id Q
             *-preserves-id (P │ Q) = *-preserves-id P ⟨ cong₂ _│_ ⟩ *-preserves-id Q
-            *-preserves-id (ν P) = cong ν_ (trans (*-preserves-≃ₑ suc-preserves-id P) (*-preserves-id P))
+            *-preserves-id (ν P) = cong ν_ (trans (*-preserves-≃ₑ (+-preserves-id 1) P) (*-preserves-id P))
             *-preserves-id (! P) = cong !_ (*-preserves-id P)

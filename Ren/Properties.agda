@@ -10,7 +10,7 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    open import Ext
 
    open ᴺ using (Name; _+_; zero; shift)
-   open ᴿ using (module Renameable; suc; pop; push; _ᴿ+_; swap; ᴺren; suc-preserves-id; +-preserves-id)
+   open ᴿ using (module Renameable; suc; pop; push; _ᴿ+_; swap; ᴺren; +-preserves-id)
 
    module Renameable′ = Renameable {A = A}; open Renameable′ ⦃...⦄ -- fix A for all uses of *
    open Renameable ⦃...⦄ using () renaming (_* to _*′)

@@ -10,7 +10,7 @@ module Transition.Concur.Cofinal where
    import Proc.Ren
    open import StructuralCong.Proc using (_≈_; module _≈_; ≈-refl; ≈-reflexive; ≈-sym; _*⁼; module ≈-Reasoning);
       open _≈_ renaming (trans to ≈-trans)
-   open import Ren as ᴿ using (Ren; ᴺren; suc; _ᴿ+_; pop; push; swap; suc-preserves-id); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; ᴺren; suc; _ᴿ+_; pop; push; swap; +-preserves-id); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Concur
@@ -111,7 +111,7 @@ module Transition.Concur.Cofinal where
       ν ((
          begin
             (suc id *) S
-         ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+         ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
             (id *) S
          ≈⟨ ⊖₁-✓ E⌣E′ ⟩
             S′
@@ -142,7 +142,7 @@ module Transition.Concur.Cofinal where
       ν (≈-reflexive (+-id-elim 1 _) │ (
          begin
             (suc id *) S₁
-         ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+         ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
             (id *) S₁
          ≈⟨ ⊖₁-✓ F⌣F′ ⟩
             S′₁
@@ -185,7 +185,7 @@ module Transition.Concur.Cofinal where
          ∎) │ (
          begin
             (suc id *) S₂
-         ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+         ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
             (id *) S₂
          ≈⟨ ⊖₁-✓ F⌣F′ ⟩
             S′₂
@@ -205,7 +205,7 @@ module Transition.Concur.Cofinal where
       ) │ (
          begin
             (suc id *) S₂
-         ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+         ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
             (id *) S₂
          ≈⟨ ⊖₁-✓ F⌣F′ ⟩
             S′₂
@@ -224,7 +224,7 @@ module Transition.Concur.Cofinal where
          ∎) │ (
          begin
             (suc id *) S₂
-         ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+         ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
             (id *) S₂
          ≈⟨ ⊖₁-✓ F⌣F′ ⟩
             S′₂
@@ -328,7 +328,7 @@ module Transition.Concur.Cofinal where
       let S = S (⊖₁ E⌣E′); S′ = S′ (⊖₁ E⌣E′) in
       ν (begin
          (suc id *) S
-      ≡⟨ *-preserves-≃ₑ suc-preserves-id _ ⟩
+      ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
          (id *) S
       ≈⟨ ⊖₁-✓ E⌣E′ ⟩
          S′

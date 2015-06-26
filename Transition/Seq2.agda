@@ -11,8 +11,7 @@ module Transition.Seq2 where
    open import Ren as ᴿ using (_ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import Transition.Concur.Cofinal using (braid; ⋈[_,_,_]; ⊖-✓)
 
-   -- Use the APL operator ⍮ for diagrammatic-order composition, since Unicode seems to be lacking any useful
-   -- semicolons other than the one already reserved by Agda.
+   -- Use APL's ⍮ for diagrammatic-order composition, since Unicode's only useful semicolon is already reserved.
    infixr 9 _⍮_
 
    data _—[_]→⋆_ {Γ} (P : Proc Γ) : (a⋆ : Action⋆ Γ) → Proc (Γ + inc⋆ a⋆) → Set where
