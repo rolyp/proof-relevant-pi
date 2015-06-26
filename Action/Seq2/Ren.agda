@@ -43,13 +43,13 @@ module Action.Seq2.Ren where
    *-preserves-≃ₑ {ρ = ρ} {σ} ρ≃ₑσ (a⋆ ⍮ a′⋆) = ≅-to-≡ (≅-cong₂ _⍮_ (≡-to-≅ (*-preserves-≃ₑ ρ≃ₑσ a⋆)) (
       let open ≅-Reasoning in
       begin
-         subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) (((ρ ᴿ+ inc⋆ a⋆) *) a′⋆)
+         Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) (((ρ ᴿ+ inc⋆ a⋆) *) a′⋆)
       ≅⟨ Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) _ ⟩
          ((ρ ᴿ+ inc⋆ a⋆) *) a′⋆
       ≡⟨ *-preserves-≃ₑ (+-preserves-≃ₑ (inc⋆ a⋆) ρ≃ₑσ) a′⋆ ⟩
          ((σ ᴿ+ inc⋆ a⋆) *) a′⋆
       ≅⟨ ≅-sym (Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) _) ⟩
-         subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)
+         Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)
       ∎))
 
    *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = Action⋆ Γ}
@@ -59,7 +59,7 @@ module Action.Seq2.Ren where
          ≅-cong₂ _⍮_ (≡-to-≅ (*-preserves-id a⋆)) (
             let open ≅-Reasoning in
             begin
-               subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ id a⋆)) (((id ᴿ+ inc⋆ a⋆) *) a′⋆)
+               Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ id a⋆)) (((id ᴿ+ inc⋆ a⋆) *) a′⋆)
             ≅⟨ Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ id a⋆)) _ ⟩
                ((id ᴿ+ inc⋆ a⋆) *) a′⋆
             ≡⟨ *-preserves-≃ₑ (+-preserves-id (inc⋆ a⋆)) a′⋆ ⟩
@@ -76,20 +76,20 @@ module Action.Seq2.Ren where
       ≅-cong₂ _⍮_ (≡-to-≅ (*-preserves-∘ a⋆)) (
          let open ≅-Reasoning in
          begin
-            subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ ρ ((σ *) a⋆)))
-                  (((ρ ᴿ+ inc⋆ ((σ *) a⋆)) *)
-                   (subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)))
+            Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ ρ ((σ *) a⋆)))
+               (((ρ ᴿ+ inc⋆ ((σ *) a⋆)) *) (Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)))
          ≅⟨ Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ ρ ((σ *) a⋆))) _ ⟩
             ((ρ ᴿ+ inc⋆ ((σ *) a⋆)) *)
-            (subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆))
-         ≅⟨ {!!} ⟩
-            ((ρ ᴿ+ inc⋆ a⋆) *) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)
+               (Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆))
+         ≅⟨ ≅-cong₂ (λ Δ a⋆ → ((ρ ᴿ+ Δ) *) a⋆) (≡-to-≅ (sym (ren-preserves-inc⋆ σ a⋆))) (
+            Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) _) ⟩
+               ((ρ ᴿ+ inc⋆ a⋆) *) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)
          ≡⟨ *-preserves-∘ a′⋆ ⟩
             (((ρ ᴿ+ inc⋆ a⋆) ∘ (σ ᴿ+ inc⋆ a⋆)) *) a′⋆
          ≡⟨ *-preserves-≃ₑ (+-preserves-∘ (inc⋆ a⋆) ρ σ) a′⋆ ⟩
             (((ρ ∘ σ) ᴿ+ inc⋆ a⋆) *) a′⋆
          ≅⟨ ≅-sym (Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ (ρ ∘ σ) a⋆)) _) ⟩
-            subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ (ρ ∘ σ) a⋆)) ((((ρ ∘ σ) ᴿ+ inc⋆ a⋆) *) a′⋆)
+            Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ (ρ ∘ σ) a⋆)) ((((ρ ∘ σ) ᴿ+ inc⋆ a⋆) *) a′⋆)
          ∎)
       )
 
