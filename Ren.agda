@@ -20,29 +20,36 @@ module Ren where
    push : ∀ {Γ} → Ren Γ (Γ + 1)
    push = shift 1
 
-   -- TODO: define a Functor instance for suc.
-   suc-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → suc ρ ≃ₑ suc σ
-   suc-preserves-≃ₑ ρ≃ₑσ zero = refl
-   suc-preserves-≃ₑ ρ≃ₑσ (ᴺ.suc x) = cong ᴺ.suc (ρ≃ₑσ x)
-
-   suc-preserves-∘ : ∀ {Γ Δ Γ′} (ρ : Ren Δ Γ′) (σ : Ren Γ Δ) → suc ρ ∘ suc σ ≃ₑ suc (ρ ∘ σ)
-   suc-preserves-∘ _ _ zero = refl
-   suc-preserves-∘ _ _ (ᴺ.suc _) = refl
-
-   suc-preserves-id : ∀ {Γ} → suc (id {A = Name Γ}) ≃ₑ id
-   suc-preserves-id zero = refl
-   suc-preserves-id (ᴺ.suc x) = cong ᴺ.suc refl
-
    infixl 6 _ᴿ+_
    _ᴿ+_ : ∀ {Γ Γ′} → Ren Γ Γ′ → ∀ n → Ren (Γ + n) (Γ′ + n)
    ρ ᴿ+ zero = ρ
    ρ ᴿ+ (ᴺ.suc n) = suc (ρ ᴿ+ n)
 
-   -- Generalise suc-preserves-id to arbitrary n.
-   +-preserves-id : ∀ {Γ} n → (id {A = Name Γ} ᴿ+ n) ≃ₑ id
-   +-preserves-id zero x = refl
+   -- TODO: define a Functor instance for (ᴿ+ Δ).
+   +-preserves-id : ∀ {Γ} Δ → (id {A = Name Γ} ᴿ+ Δ) ≃ₑ id
+   +-preserves-id zero _ = refl
    +-preserves-id (ᴺ.suc _) zero = refl
-   +-preserves-id (ᴺ.suc n) (ᴺ.suc x) = cong ᴺ.suc (+-preserves-id n x)
+   +-preserves-id (ᴺ.suc Δ) (ᴺ.suc x) = cong ᴺ.suc (+-preserves-id Δ x)
+
+   +-preserves-≃ₑ : ∀ {Γ Γ′} Δ {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ ᴿ+ Δ ≃ₑ σ ᴿ+ Δ
+   +-preserves-≃ₑ zero ρ≃ₑσ = ρ≃ₑσ
+   +-preserves-≃ₑ (ᴺ.suc _) _ zero = refl
+   +-preserves-≃ₑ (ᴺ.suc Δ) ρ≃ₑσ (ᴺ.suc x) = cong ᴺ.suc (+-preserves-≃ₑ Δ ρ≃ₑσ x)
+
+   +-preserves-∘ : ∀ {Γ Δ Γ′} Δ′ (ρ : Ren Δ Γ′) (σ : Ren Γ Δ) → (ρ ᴿ+ Δ′) ∘ (σ ᴿ+ Δ′) ≃ₑ (ρ ∘ σ) ᴿ+ Δ′
+   +-preserves-∘ zero _ _ _ = refl
+   +-preserves-∘ (ᴺ.suc _) _ _ zero = refl
+   +-preserves-∘ (ᴺ.suc Δ) ρ σ (ᴺ.suc x) = cong ᴺ.suc (+-preserves-∘ Δ ρ σ x)
+
+   -- TODO: inline these versions.
+   suc-preserves-id : ∀ {Γ} → suc (id {A = Name Γ}) ≃ₑ id
+   suc-preserves-id = +-preserves-id 1
+
+   suc-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → suc ρ ≃ₑ suc σ
+   suc-preserves-≃ₑ = +-preserves-≃ₑ 1
+
+   suc-preserves-∘ : ∀ {Γ Δ Γ′} (ρ : Ren Δ Γ′) (σ : Ren Γ Δ) → suc ρ ∘ suc σ ≃ₑ suc (ρ ∘ σ)
+   suc-preserves-∘ = +-preserves-∘ 1
 
    -- shift n is a natural transformation between the identity functor and (· ᴿ+ n).
    ᴿ+-comm : ∀ {Γ Γ′} n (ρ : Ren Γ Γ′) → (ρ ᴿ+ n) ∘ shift {Γ} n ≃ₑ shift {Γ′} n ∘ ρ

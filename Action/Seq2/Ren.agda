@@ -49,7 +49,17 @@ module Action.Seq2.Ren where
             *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
             *-preserves-≃ₑ ρ≃ₑσ [ a ] = cong [_] (*-preserves-≃ₑ′ ρ≃ₑσ a)
             *-preserves-≃ₑ _ [] = refl
-            *-preserves-≃ₑ ρ≃ₑσ (a⋆ ⍮ a′⋆) = ≅-to-≡ (≅-cong₂ _⍮_ (≡-to-≅ (*-preserves-≃ₑ ρ≃ₑσ a⋆)) {!!})
+            *-preserves-≃ₑ {ρ = ρ} {σ} ρ≃ₑσ (a⋆ ⍮ a′⋆) = ≅-to-≡ (≅-cong₂ _⍮_ (≡-to-≅ (*-preserves-≃ₑ ρ≃ₑσ a⋆)) (
+               let open ≅-Reasoning in
+               begin
+                  subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) (((ρ ᴿ+ inc⋆ a⋆) *) a′⋆)
+               ≅⟨ Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ ρ a⋆)) _ ⟩
+                  ((ρ ᴿ+ inc⋆ a⋆) *) a′⋆
+               ≅⟨ {!!} ⟩
+                  ((σ ᴿ+ inc⋆ a⋆) *) a′⋆
+               ≅⟨ ≅-sym (Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) _) ⟩
+                  subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)
+               ∎))
             -- (*-preserves-≃ₑ (suc-preserves-≃ₑ ρ≃ₑσ) a⋆)
 
             *-preserves-∘ : ∀ {Γ Δ Γ′} {ρ : Ren Δ Γ′} {σ : Ren Γ Δ} → ρ * ∘ σ * ≃ₑ (ρ ∘ σ) *
@@ -60,11 +70,18 @@ module Action.Seq2.Ren where
 --          *-preserves-∘ (a ᶜ∷ a⋆) = cong₂ _ᶜ∷_ (*-preserves-∘′ a) (*-preserves-∘ a⋆)
 
             *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = Action⋆ Γ}
+            *-preserves-id [ a ] = cong [_] (*-preserves-id′ a)
             *-preserves-id [] = refl
-            *-preserves-id _ = {!!}
---          *-preserves-id (a ᵇ∷ a⋆) =
---             cong₂ _ᵇ∷_ (*-preserves-id′ a) (trans (*-preserves-≃ₑ suc-preserves-id a⋆) (*-preserves-id a⋆))
---          *-preserves-id (a ᶜ∷ a⋆) = cong₂ _ᶜ∷_ (*-preserves-id′ a) (*-preserves-id a⋆)
+            *-preserves-id (a⋆ ⍮ a′⋆) = ≅-to-≡ (
+                  ≅-cong₂ _⍮_ (≡-to-≅ (*-preserves-id a⋆)) (
+                     let open ≅-Reasoning in
+                     begin
+                        subst Action⋆ (cong (_+_ _) (ren-preserves-inc⋆ id a⋆)) (((id ᴿ+ inc⋆ a⋆) *) a′⋆)
+                     ≅⟨ {!!} ⟩
+                        a′⋆
+                     ∎)
+               )
+--             (trans (*-preserves-≃ₑ suc-preserves-id a⋆) (*-preserves-id a⋆))
 
 {-
    ren-preserves-inc⋆-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ Δ′ (a⋆ : Action⋆ (Γ + Δ′)) →
