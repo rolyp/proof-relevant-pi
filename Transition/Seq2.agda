@@ -75,10 +75,10 @@ module Transition.Seq2 where
           eab =
              let open EqReasoning (setoid _) in
              begin
-                Γ† + (Γ′ + inc⋆ (action⋆ E⋆)) + inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ (action⋆ E⋆))) *) a†⋆)
+                Γ† + (Γ′ + inc⋆ a⋆) + inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)
              ≡⟨ {!!} ⟩
                 Γ† + Γ′ + inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) +
-                inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (action⋆ E′⋆/γ/E⋆))
+                inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) Action.Seq2.Ren.*) a†⋆))
              ∎
           cib : source⋆ (E⋆/γ) —[ {!!} ]→⋆ {!!}
           cib = _⍮_ {a′⋆ = Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (action⋆ E′⋆/γ/E⋆)}
