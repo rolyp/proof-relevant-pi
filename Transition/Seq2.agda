@@ -5,7 +5,7 @@ module Transition.Seq2 where
 
    open import Action using (inc)
    open import Action.Concur using (Action₂)
-   open import Action.Seq2 as ᴬ⋆ using (Action⋆; inc⋆); open ᴬ⋆.Action⋆
+   open import Action.Seq2 as ᴬ⋆ using (Action⋆; Action⋆↱; inc⋆); open ᴬ⋆.Action⋆
    open import Action.Seq2.Ren using (ren-preserves-inc⋆-assoc)
    open import Name using (_+_; +-assoc)
    open import Proc using (Proc; Proc↱)
@@ -27,6 +27,9 @@ module Transition.Seq2 where
    target⋆ : ∀ {Γ} {P : Proc Γ} {a⋆ : Action⋆ Γ} {R} → P —[ a⋆ ]→⋆ R → Proc (Γ + inc⋆ a⋆)
    target⋆ {R = R} _ = R
 
+   action⋆ : ∀ {Γ} {P : Proc Γ} {a⋆ : Action⋆ Γ} {R} → P —[ a⋆ ]→⋆ R → Action⋆ Γ
+   action⋆ {a⋆ = a⋆} _ = a⋆
+
    -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. Cofinal by construction.
    infixl 5 _Δ⋆_
    record _Δ⋆_ {Γ} {ӓ : Action₂ Γ} {Γ′ a⋆} {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′)} {R}
@@ -42,5 +45,13 @@ module Transition.Seq2 where
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , Γ′ ] P P′) → _Δ⋆_ {ӓ = ӓ} {Γ′ = Γ′} E⋆ γ
    ⊖⋆[_,_] ӓ Γ′ [ E ] γ with ⊖′[ ӓ , Γ′ ] E γ
    ... | γ/E Δ E/γ = γ/E Δ [ E/γ ]
-   ⊖⋆[_,_] ӓ Γ′ [] γ = γ Δ []
-   ⊖⋆[_,_] ӓ Γ′ (E⋆ ⍮ E′⋆) γ = {!!}
+   ⊖⋆[_,_] _ _ [] γ = γ Δ []
+   ⊖⋆[_,_] {Γ} ӓ Γ′ {a⋆ = a⋆ ⍮ a′⋆} (E⋆ ⍮ E′⋆) γ with ⊖⋆[ ӓ , Γ′ ] E⋆ γ
+   ... | γ/E⋆ Δ E⋆/γ =
+      let a†⋆ : Action⋆ (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆))
+          a†⋆ = Action⋆↱ {!!} a′⋆
+          E†⋆ : Proc↱ (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆)) (target⋆ E⋆) —[ a†⋆ ]→⋆ {!!}
+          E†⋆ = {!!}
+      in {!!}
+-- with ⊖⋆[ ӓ , Γ′ + inc⋆ (action⋆ E⋆) ] {!E′⋆!} {-E′⋆-} γ/E⋆
+--   ... | _ = {!!} Δ {!!}
