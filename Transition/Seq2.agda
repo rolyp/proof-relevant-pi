@@ -72,7 +72,7 @@ module Transition.Seq2 where
           gib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) (a⋆ ⍮ a′⋆) ]→⋆
                 Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ (a⋆ ⍮ a′⋆))
                       (Proc↱ (cong₂ _+_ refl (trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆)))) R′)
-          gib = {!!}
+          gib = {! !}
           fub : inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆) ≡
                 inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆))
           fub = {!!}
@@ -89,11 +89,13 @@ module Transition.Seq2 where
                 Γ† + Γ′ + inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) +
                 inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆))
              ∎
-          cib : source⋆ (E⋆/γ) —[ {!!} ]→⋆ {!!}
-          cib = _⍮_ {a′⋆ = Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (action⋆ E′⋆/γ/E⋆)}
-                    {S = Proc↱ eab (target⋆ E′⋆/γ/E⋆)} E⋆/γ
-                    (≅-subst✴₃ Proc _—[_]→⋆_ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆)
-                               (≅-sym (Proc↲ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) _)) dib {!!} E′⋆/γ/E⋆)
+          cib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) a⋆ ⍮ Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) a†⋆ ]→⋆ {!
+                !}
+          cib = {!!}
+-- _⍮_ {a′⋆ = Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (action⋆ E′⋆/γ/E⋆)}
+--                    {S = Proc↱ eab (target⋆ E′⋆/γ/E⋆)} E⋆/γ
+--                    (≅-subst✴₃ Proc _—[_]→⋆_ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆)
+--                               (≅-sym (Proc↲ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) _)) dib {!!} E′⋆/γ/E⋆)
           fib : Γ′ + inc⋆ a⋆ + inc⋆ a†⋆ ≡ Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆)
           fib = trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆))
           jib : R′ ≅ Proc↱ (cong₂ _+_ refl (trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆)))) R′
@@ -118,4 +120,4 @@ module Transition.Seq2 where
                 (Proc↱ (+-assoc _ Γ′ (inc⋆ a⋆ + inc⋆ a′⋆)) (Proc↱ (+-assoc _ (inc⋆ a⋆) (inc⋆ a′⋆)) (target⋆ E′⋆)))
                 (Proc↱ (cong₂ _+_ refl fib) R′)
           zib = {!!}
-      in zib Δ cib
+      in zib Δ gib
