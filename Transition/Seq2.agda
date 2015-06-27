@@ -25,6 +25,9 @@ module Transition.Seq2 where
       _⍮_ : ∀ {a⋆ R a′⋆ S} → P —[ a⋆ ]→⋆ R → R —[ a′⋆ ]→⋆ S →
             P —[ a⋆ ⍮ a′⋆ ]→⋆ subst Proc (+-assoc Γ (inc⋆ a⋆) (inc⋆ a′⋆)) S
 
+   source⋆ : ∀ {Γ} {P : Proc Γ} {a⋆ : Action⋆ Γ} {R} → P —[ a⋆ ]→⋆ R → Proc Γ
+   source⋆ {P = P} _ = P
+
    target⋆ : ∀ {Γ} {P : Proc Γ} {a⋆ : Action⋆ Γ} {R} → P —[ a⋆ ]→⋆ R → Proc (Γ + inc⋆ a⋆)
    target⋆ {R = R} _ = R
 
@@ -37,11 +40,12 @@ module Transition.Seq2 where
           (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , Γ′ ] P P′) : Set where
       constructor _Δ_
       field
-         {R′} : _
+         {R′} : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆))
          γ/E⋆ : ⋈[ Γ , ӓ , Γ′ + inc⋆ a⋆ ] (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) R′
          E⋆/γ : P′ —[ ((braid ӓ ᴿ+ Γ′) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) R′
 
    -- Mostly an exercise in heterogenous equality.
+   {-# NO_TERMINATION_CHECK #-} -- for now
    ⊖⋆[_,_] : ∀ {Γ} (ӓ : Action₂ Γ) Γ′ {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′)} {a⋆ R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , Γ′ ] P P′) → _Δ⋆_ {ӓ = ӓ} {Γ′ = Γ′} E⋆ γ
    ⊖⋆[_,_] ӓ Γ′ [ E ] γ with ⊖′[ ӓ , Γ′ ] E γ
@@ -53,17 +57,33 @@ module Transition.Seq2 where
           bib = +-assoc _ Γ′ (inc⋆ a⋆)
           a†⋆ : Action⋆ (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆))
           a†⋆ = Action⋆↱ bib a′⋆
-          nib : inc⋆ a′⋆ ≡ inc⋆ (Action⋆↱ bib a′⋆)
+          nib : inc⋆ a′⋆ ≡ inc⋆ a†⋆
           nib = ≅-to-≡ (≅-cong✴ Action⋆ bib inc⋆ (≅-sym (Action⋆↲ bib a′⋆)))
           S : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆) + inc⋆ a†⋆)
-          S = Proc↱ (
-             let open EqReasoning (setoid _) in
-             begin
-                Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′ + inc⋆ a⋆ + inc⋆ a′⋆
-             ≡⟨ cong₂ _+_ bib nib ⟩
-                Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆) + inc⋆ (Action⋆↱ bib a′⋆)
-             ∎) (target⋆ E′⋆)
+          S = Proc↱ (cong₂ _+_ bib nib) (target⋆ E′⋆)
           E†⋆ : Proc↱ (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆)) (target⋆ E⋆) —[ a†⋆ ]→⋆ S
           E†⋆ = ≅-subst✴₃ Proc _—[_]→⋆_ bib (≅-sym (Proc↲ bib (target⋆ E⋆))) (≅-sym (Action⋆↲ bib a′⋆)) {!!} E′⋆
-          X Δ Y = ⊖⋆[ ӓ , Γ′ + inc⋆ (action⋆ E⋆) ] E†⋆ γ/E⋆
-      in ? Δ ?
+          _Δ_ {R′ = R′} γ/E⋆/E′⋆ E′⋆/γ/E⋆ = ⊖⋆[ ӓ , Γ′ + inc⋆ (action⋆ E⋆) ] E†⋆ γ/E⋆
+          gib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) (a⋆ ⍮ a′⋆) ]→⋆ subst Proc {!!} (target⋆ E′⋆)
+          gib = ≅-subst✴₃ Proc _—[_]→⋆_ refl ≅-refl ≅-refl {!!} (E⋆/γ ⍮ {!!})
+          fib : Γ′ + inc⋆ a⋆ + inc⋆ a†⋆ ≡ Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆)
+          fib =
+             let open EqReasoning (setoid _) in
+             begin
+                Γ′ + inc⋆ a⋆ + inc⋆ a†⋆
+             ≡⟨ cong₂ _+_ refl (sym nib) ⟩
+                Γ′ + inc⋆ a⋆ + inc⋆ a′⋆
+             ≡⟨ +-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆) ⟩
+                Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆)
+             ∎
+          zib : ⋈[ Γ , ӓ , Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆) ]
+               (subst Proc (+-assoc _ Γ′ (inc⋆ a⋆ + inc⋆ a′⋆)) (subst Proc (+-assoc _ (inc⋆ a⋆) (inc⋆ a′⋆)) (target⋆ E′⋆)))
+               (subst Proc (
+                   let open EqReasoning (setoid _) in
+                   begin
+                      Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆ + inc⋆ a†⋆)
+                   ≡⟨ cong₂ _+_ refl fib ⟩
+                      Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆))
+                   ∎) R′)
+          zib = {!!}
+      in zib Δ gib
