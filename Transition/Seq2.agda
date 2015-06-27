@@ -72,13 +72,19 @@ module Transition.Seq2 where
                 Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ (a⋆ ⍮ a′⋆))
                       (Proc↱ (cong₂ _+_ refl (trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆)))) R′)
           gib = {!!}
---                (E⋆/γ ⍮
--- ≅-subst✴₃ Proc _—[_]→⋆_ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆)
---                                  _ dib {!!} _
-          zib : source⋆ (E⋆/γ) —[ {!!} ]→⋆ {!!}
-          zib = _⍮_ {a′⋆ = Action⋆↱ {!!} (action⋆ E′⋆/γ/E⋆)} {S = Proc↱ {!!} (target⋆ E′⋆/γ/E⋆)}
-                E⋆/γ (≅-subst✴₃ Proc _—[_]→⋆_ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆)
-                                (≅-sym (Proc↲ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) _)) {!!} {!!} E′⋆/γ/E⋆)
+          eab =
+             let open EqReasoning (setoid _) in
+             begin
+                Γ† + (Γ′ + inc⋆ (action⋆ E⋆)) + inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ (action⋆ E⋆))) *) a†⋆)
+             ≡⟨ {!!} ⟩
+                Γ† + Γ′ + inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) +
+                inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (action⋆ E′⋆/γ/E⋆))
+             ∎
+          cib : source⋆ (E⋆/γ) —[ {!!} ]→⋆ {!!}
+          cib = _⍮_ {a′⋆ = Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (action⋆ E′⋆/γ/E⋆)}
+                    {S = Proc↱ eab (target⋆ E′⋆/γ/E⋆)} E⋆/γ
+                    (≅-subst✴₃ Proc _—[_]→⋆_ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆)
+                               (≅-sym (Proc↲ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) _)) dib {!!} E′⋆/γ/E⋆)
           fib : Γ′ + inc⋆ a⋆ + inc⋆ a†⋆ ≡ Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆)
           fib = trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆))
           jib : R′ ≅ Proc↱ (cong₂ _+_ refl (trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆)))) R′
