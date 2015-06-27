@@ -9,7 +9,7 @@ module Transition.Seq2 where
    open import Action.Seq2 as ᴬ⋆ using (Action⋆; Action⋆↱; Action⋆↲; inc⋆); open ᴬ⋆.Action⋆
    open import Action.Seq2.Ren using (ren-preserves-inc⋆-assoc)
    open import Name using (_+_; +-assoc)
-   open import Proc using (Proc; Proc↱)
+   open import Proc using (Proc; Proc↱; Proc↲)
    open import Ren as ᴿ using (_ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import Transition using (_—[_-_]→_)
    open import Transition.Concur.Cofinal using (braid; ⋈[_,_,_]; ⊖-✓)
@@ -47,9 +47,9 @@ module Transition.Seq2 where
    ⊖⋆[_,_] ӓ Γ′ [ E ] γ with ⊖′[ ӓ , Γ′ ] E γ
    ... | γ/E Δ E/γ = γ/E Δ [ E/γ ]
    ⊖⋆[_,_] _ _ [] γ = γ Δ []
-   ⊖⋆[_,_] {Γ} ӓ Γ′ {a⋆ = a⋆ ⍮ a′⋆} (E⋆ ⍮ E′⋆) γ with ⊖⋆[ ӓ , Γ′ ] E⋆ γ
-   ... | γ/E⋆ Δ E⋆/γ =
-      let bib : Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′ + inc⋆ a⋆ ≡ Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆)
+   ⊖⋆[_,_] {Γ} ӓ Γ′ {a⋆ = a⋆ ⍮ a′⋆} (E⋆ ⍮ E′⋆) γ =
+      let γ/E⋆ Δ E⋆/γ = ⊖⋆[ ӓ , Γ′ ] E⋆ γ
+          bib : Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′ + inc⋆ a⋆ ≡ Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆)
           bib = +-assoc _ Γ′ (inc⋆ a⋆)
           a†⋆ : Action⋆ (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆))
           a†⋆ = Action⋆↱ bib a′⋆
@@ -64,7 +64,6 @@ module Transition.Seq2 where
                 Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆) + inc⋆ (Action⋆↱ bib a′⋆)
              ∎) (target⋆ E′⋆)
           E†⋆ : Proc↱ (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆)) (target⋆ E⋆) —[ a†⋆ ]→⋆ S
-          E†⋆ = {!!}
-      in {!!}
--- with ⊖⋆[ ӓ , Γ′ + inc⋆ (action⋆ E⋆) ] {!E′⋆!} {-E′⋆-} γ/E⋆
---   ... | _ = {!!} Δ {!!}
+          E†⋆ = ≅-subst✴₃ Proc _—[_]→⋆_ bib (≅-sym (Proc↲ bib (target⋆ E⋆))) (≅-sym (Action⋆↲ bib a′⋆)) {!!} E′⋆
+          X Δ Y = ⊖⋆[ ӓ , Γ′ + inc⋆ (action⋆ E⋆) ] E†⋆ γ/E⋆
+      in ? Δ ?
