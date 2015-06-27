@@ -16,11 +16,12 @@ module Action where
       _ᵇ : Actionᵇ Γ → Action Γ
       _ᶜ : Actionᶜ Γ → Action Γ
 
-   -- Useful shorthand when working with heterogeneous equality.
+   -- Shorthand for working with heterogeneous equality.
    Action↱ = subst Action
    Action↲ = ≡-subst-removable Action
 
-   -- An action optionally bumps the context by a variable.
+   -- An action optionally bumps the context by a variable. We specify this "relatively" so that we can
+   -- easily show that how an action operates on the context is preserved by a renaming.
    inc : ∀ {Γ} → Action Γ → Cxt
    inc (_ ᵇ) = ᴺ.suc zero
    inc (_ ᶜ) = zero
