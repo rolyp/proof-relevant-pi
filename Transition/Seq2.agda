@@ -67,23 +67,9 @@ module Transition.Seq2 where
           gib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) (a⋆ ⍮ a′⋆) ]→⋆ subst Proc {!!} (target⋆ E′⋆)
           gib = ≅-subst✴₃ Proc _—[_]→⋆_ refl ≅-refl ≅-refl {!!} (E⋆/γ ⍮ {!!})
           fib : Γ′ + inc⋆ a⋆ + inc⋆ a†⋆ ≡ Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆)
-          fib =
-             let open EqReasoning (setoid _) in
-             begin
-                Γ′ + inc⋆ a⋆ + inc⋆ a†⋆
-             ≡⟨ cong₂ _+_ refl (sym nib) ⟩
-                Γ′ + inc⋆ a⋆ + inc⋆ a′⋆
-             ≡⟨ +-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆) ⟩
-                Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆)
-             ∎
+          fib = trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆))
           zib : ⋈[ Γ , ӓ , Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆) ]
-               (subst Proc (+-assoc _ Γ′ (inc⋆ a⋆ + inc⋆ a′⋆)) (subst Proc (+-assoc _ (inc⋆ a⋆) (inc⋆ a′⋆)) (target⋆ E′⋆)))
-               (subst Proc (
-                   let open EqReasoning (setoid _) in
-                   begin
-                      Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆ + inc⋆ a†⋆)
-                   ≡⟨ cong₂ _+_ refl fib ⟩
-                      Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆))
-                   ∎) R′)
+                (subst Proc (+-assoc _ Γ′ (inc⋆ a⋆ + inc⋆ a′⋆)) (subst Proc (+-assoc _ (inc⋆ a⋆) (inc⋆ a′⋆)) (target⋆ E′⋆)))
+                (subst Proc (cong₂ _+_ refl fib) R′)
           zib = {!!}
       in zib Δ gib
