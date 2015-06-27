@@ -77,13 +77,13 @@ module Action.Seq2.Ren where
          let open ≅-Reasoning in
          begin
             Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ ρ ((σ *) a⋆)))
-               (((ρ ᴿ+ inc⋆ ((σ *) a⋆)) *) (Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)))
+                     (((ρ ᴿ+ inc⋆ ((σ *) a⋆)) *) (Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)))
          ≅⟨ Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ ρ ((σ *) a⋆))) _ ⟩
             ((ρ ᴿ+ inc⋆ ((σ *) a⋆)) *)
-               (Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆))
+            (Action⋆↱ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆))
          ≅⟨ ≅-cong₂ (λ Δ a⋆ → ((ρ ᴿ+ Δ) *) a⋆) (≡-to-≅ (sym (ren-preserves-inc⋆ σ a⋆))) (
             Action⋆↲ (cong (_+_ _) (ren-preserves-inc⋆ σ a⋆)) _) ⟩
-               ((ρ ᴿ+ inc⋆ a⋆) *) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)
+                     ((ρ ᴿ+ inc⋆ a⋆) *) (((σ ᴿ+ inc⋆ a⋆) *) a′⋆)
          ≡⟨ *-preserves-∘ a′⋆ ⟩
             (((ρ ᴿ+ inc⋆ a⋆) ∘ (σ ᴿ+ inc⋆ a⋆)) *) a′⋆
          ≡⟨ *-preserves-≃ₑ (+-preserves-∘ (inc⋆ a⋆) ρ σ) a′⋆ ⟩

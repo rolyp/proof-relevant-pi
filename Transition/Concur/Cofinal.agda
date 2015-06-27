@@ -350,7 +350,8 @@ module Transition.Concur.Cofinal where
 
    -- Now symmetrise.
    ⊖-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-         (E⌣E′ : E ⌣[ a⌣a′ ] E′) → ⋈[ Γ , (a , π₁ (ᴬ⊖ a⌣a′)) , zero ] (S (⊖ E⌣E′)) (subst Proc (sym (ᴬ⊖-✓ a⌣a′)) (S′ (⊖ E⌣E′)))
+         (E⌣E′ : E ⌣[ a⌣a′ ] E′) →
+         ⋈[ Γ , (a , π₁ (ᴬ⊖ a⌣a′)) , zero ] (S (⊖ E⌣E′)) (subst Proc (sym (ᴬ⊖-✓ a⌣a′)) (S′ (⊖ E⌣E′)))
    ⊖-✓ (inj₁ E⌣E′) = ⊖₁-✓ E⌣E′
    ⊖-✓ (inj₂ E′⌣E) with ⊖₁ E′⌣E | ⊖₁-✓ E′⌣E
    ⊖-✓ {a⌣a′ = ᵛ∇ᵛ} (inj₂ E′⌣E) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
