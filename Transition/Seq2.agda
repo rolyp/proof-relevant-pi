@@ -65,62 +65,14 @@ module Transition.Seq2 where
           E†⋆ = ≅-subst✴₃ Proc _—[_]→⋆_ bib (≅-sym (Proc↲ bib (target⋆ E⋆))) (≅-sym (Action⋆↲ bib a′⋆))
                            (≅-sym (Proc↲ (cong₂ _+_ bib nib) (target⋆ E′⋆))) E′⋆
           _Δ_ {R′ = R′} γ/E⋆/E′⋆ E′⋆/γ/E⋆ = ⊖⋆[ ӓ , Γ′ + inc⋆ (action⋆ E⋆) ] E†⋆ γ/E⋆
-          gib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) (a⋆ ⍮ a′⋆) ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ (a⋆ ⍮ a′⋆))
-                  (subst Proc
-                   (cong₂ _+_ refl
-                    (trans
-                     (cong₂ _+_ refl
-                      (sym
-                       (≅-to-≡
-                        (≅-cong✴ Action⋆
-                         (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆))
-                         inc⋆
-                         (≅-sym
-                          (Action⋆↲ (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆))
-                           a′⋆))))))
-                     (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆))))
-                   (_Δ⋆_.R′
-                    (⊖⋆[ ӓ , Γ′ + inc⋆ (action⋆ E⋆) ]
-                     (≅-subst✴₃ Proc _—[_]→⋆_
-                      (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆))
-                      (≅-sym
-                       (Proc↲ (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆))
-                        (target⋆ E⋆)))
-                      (≅-sym
-                       (Action⋆↲ (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆))
-                        a′⋆))
-                      (≅-sym
-                       (Proc↲
-                        (cong₂ _+_ (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆))
-                         (≅-to-≡
-                          (≅-cong✴ Action⋆
-                           (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆))
-                           inc⋆
-                           (≅-sym
-                            (Action⋆↲ (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆))
-                             a′⋆)))))
-                        (target⋆ E′⋆)))
-                      E′⋆)
-                     (_Δ⋆_.γ/E⋆ (⊖⋆[ ӓ , Γ′ ] E⋆ γ)))))
-            {-subst Proc (
-             let open EqReasoning (setoid _) in
-             begin
-                Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′ + inc⋆ a⋆ + inc⋆ a′⋆
-             ≡⟨ +-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′) (inc⋆ a⋆) (inc⋆ a′⋆) ⟩
-                Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆)
-             ≡⟨ {!!} ⟩
-                Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′ +
-                (inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) +
-                 inc⋆ (Action⋆↱ (cong (_+_ (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′))
-                                      (ren-preserves-inc⋆ (braid ӓ ᴿ+ Γ′) a⋆))
-                                (((braid ӓ ᴿ+ Γ′ ᴿ+ inc⋆ a⋆) *) a′⋆)))
-             ∎) (target⋆ E′⋆)
--}
+          gib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) (a⋆ ⍮ a′⋆) ]→⋆
+                Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ (a⋆ ⍮ a′⋆))
+                      (Proc↱ (cong₂ _+_ refl (trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆)))) R′)
           gib = {!!} -- E⋆/γ ⍮ {!!}
           fib : Γ′ + inc⋆ a⋆ + inc⋆ a†⋆ ≡ Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆)
           fib = trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆))
           zib : ⋈[ Γ , ӓ , Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆) ]
-                (subst Proc (+-assoc _ Γ′ (inc⋆ a⋆ + inc⋆ a′⋆)) (subst Proc (+-assoc _ (inc⋆ a⋆) (inc⋆ a′⋆)) (target⋆ E′⋆)))
-                (subst Proc (cong₂ _+_ refl fib) R′)
+                (Proc↱ (+-assoc _ Γ′ (inc⋆ a⋆ + inc⋆ a′⋆)) (Proc↱ (+-assoc _ (inc⋆ a⋆) (inc⋆ a′⋆)) (target⋆ E′⋆)))
+                (Proc↱ (cong₂ _+_ refl fib) R′)
           zib = {!!}
       in zib Δ gib
