@@ -6,7 +6,7 @@ module Transition.Concur where
 
    open import Action as ᴬ
       using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
-   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⌣-sym; ᴬ⌣-sym-involutive; ᴬ⊖; ᴬ⊖-✓); open _ᴬ⌣_
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⌣-sym; ᴬ⌣-sym-involutive; ᴬ⊖); open _ᴬ⌣_
    import Action.Ren
    open import Name as ᴺ using (Name; Cxt; module Cxt; zero; _+_)
    open import Ren as ᴿ using (Ren; Renameable; ᴺren; suc; push; pop; swap); open ᴿ.Renameable ⦃...⦄
@@ -118,11 +118,11 @@ module Transition.Concur where
       constructor Delta
       a′/a = π₁ (ᴬ⊖ a⌣a′)
       a/a′ = π₂ (ᴬ⊖ a⌣a′)
-      Γ′ = Γ + inc a + inc a′/a
+--      Γ′ = Γ + inc a + inc a′/a
       field
-         {S S′} : Proc Γ′
+         {S S′} : _
          E′/E : R —[ a′/a - _ ]→ S
-         E/E′ : R′ —[ a/a′ - _ ]→ subst Proc (ᴬ⊖-✓ a⌣a′) S′
+         E/E′ : R′ —[ a/a′ - _ ]→ S′ --subst Proc (ᴬ⊖-✓ a⌣a′) S′
 
    infixl 5 Delta
    syntax Delta E E′ = E ᵀΔ E′

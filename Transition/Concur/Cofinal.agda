@@ -3,7 +3,7 @@ module Transition.Concur.Cofinal where
    open import SharedModules
 
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ
-   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; Action₂); open _ᴬ⌣_
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬ⊖-✓; Action₂); open _ᴬ⌣_
    import Action.Ren
    open import Name as ᴺ using (Cxt; Name; toℕ; _+_; zero)
    open import Proc using (Proc); open Proc
@@ -34,7 +34,8 @@ module Transition.Concur.Cofinal where
 
    -- Correctness of residuals, with respect to the above notion of cofinality. Use ≈-Reasoning for maximum clarity.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) → ⋈[ Γ , (a , π₁ (ᴬ⊖ a⌣a′)) , zero ] (S (⊖₁ E⌣E′)) (S′ (⊖₁ E⌣E′))
+          (E⌣E′ : E ⌣₁[ a⌣a′ ] E′) →
+          ⋈[ Γ , (a , π₁ (ᴬ⊖ a⌣a′)) , zero ] (S (⊖₁ E⌣E′)) (subst Proc (sym (ᴬ⊖-✓ a⌣a′)) (S′ (⊖₁ E⌣E′)))
    ⊖₁-✓ (E ᵇ│ᵇ F) =
       let R = target E; S = target F in
       (begin
@@ -349,7 +350,7 @@ module Transition.Concur.Cofinal where
 
    -- Now symmetrise.
    ⊖-✓ : ∀ {Γ P} {a a′ : Action Γ} {a⌣a′ : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-         (E⌣E′ : E ⌣[ a⌣a′ ] E′) → ⋈[ Γ , (a , π₁ (ᴬ⊖ a⌣a′)) , zero ] (S (⊖ E⌣E′)) (S′ (⊖ E⌣E′))
+         (E⌣E′ : E ⌣[ a⌣a′ ] E′) → ⋈[ Γ , (a , π₁ (ᴬ⊖ a⌣a′)) , zero ] (S (⊖ E⌣E′)) (subst Proc (sym (ᴬ⊖-✓ a⌣a′)) (S′ (⊖ E⌣E′)))
    ⊖-✓ (inj₁ E⌣E′) = ⊖₁-✓ E⌣E′
    ⊖-✓ (inj₂ E′⌣E) with ⊖₁ E′⌣E | ⊖₁-✓ E′⌣E
    ⊖-✓ {a⌣a′ = ᵛ∇ᵛ} (inj₂ E′⌣E) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
