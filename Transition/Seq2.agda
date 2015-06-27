@@ -2,10 +2,11 @@
 module Transition.Seq2 where
 
    open import SharedModules
+   import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action using (inc)
    open import Action.Concur using (Action₂)
-   open import Action.Seq2 as ᴬ⋆ using (Action⋆; Action⋆↱; inc⋆); open ᴬ⋆.Action⋆
+   open import Action.Seq2 as ᴬ⋆ using (Action⋆; Action⋆↱; Action⋆↲; inc⋆); open ᴬ⋆.Action⋆
    open import Action.Seq2.Ren using (ren-preserves-inc⋆-assoc)
    open import Name using (_+_; +-assoc)
    open import Proc using (Proc; Proc↱)
@@ -48,9 +49,21 @@ module Transition.Seq2 where
    ⊖⋆[_,_] _ _ [] γ = γ Δ []
    ⊖⋆[_,_] {Γ} ӓ Γ′ {a⋆ = a⋆ ⍮ a′⋆} (E⋆ ⍮ E′⋆) γ with ⊖⋆[ ӓ , Γ′ ] E⋆ γ
    ... | γ/E⋆ Δ E⋆/γ =
-      let a†⋆ : Action⋆ (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆))
-          a†⋆ = Action⋆↱ {!!} a′⋆
-          E†⋆ : Proc↱ (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆)) (target⋆ E⋆) —[ a†⋆ ]→⋆ {!!}
+      let bib : Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′ + inc⋆ a⋆ ≡ Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆)
+          bib = +-assoc _ Γ′ (inc⋆ a⋆)
+          a†⋆ : Action⋆ (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆))
+          a†⋆ = Action⋆↱ bib a′⋆
+          nib : inc⋆ a′⋆ ≡ inc⋆ (Action⋆↱ bib a′⋆)
+          nib = ≅-to-≡ (≅-cong✴ Action⋆ bib inc⋆ (≅-sym (Action⋆↲ bib a′⋆)))
+          S : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆) + inc⋆ a†⋆)
+          S = Proc↱ (
+             let open EqReasoning (setoid _) in
+             begin
+                Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′ + inc⋆ a⋆ + inc⋆ a′⋆
+             ≡⟨ cong₂ _+_ bib nib ⟩
+                Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆) + inc⋆ (Action⋆↱ bib a′⋆)
+             ∎) (target⋆ E′⋆)
+          E†⋆ : Proc↱ (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆)) (target⋆ E⋆) —[ a†⋆ ]→⋆ S
           E†⋆ = {!!}
       in {!!}
 -- with ⊖⋆[ ӓ , Γ′ + inc⋆ (action⋆ E⋆) ] {!E′⋆!} {-E′⋆-} γ/E⋆
