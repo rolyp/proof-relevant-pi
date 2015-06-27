@@ -7,7 +7,7 @@ module Transition.Seq2 where
    open import Action using (inc)
    open import Action.Concur using (Action₂)
    open import Action.Seq2 as ᴬ⋆ using (Action⋆; Action⋆↱; Action⋆↲; inc⋆); open ᴬ⋆.Action⋆
-   open import Action.Seq2.Ren using (ren-preserves-inc⋆-assoc)
+   open import Action.Seq2.Ren using (ren-preserves-inc⋆; ren-preserves-inc⋆-assoc)
    open import Name using (Cxt; _+_; +-assoc)
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Ren as ᴿ using (_ᴿ+_); open ᴿ.Renameable ⦃...⦄
@@ -63,9 +63,19 @@ module Transition.Seq2 where
           S = Proc↱ (cong₂ _+_ bib nib) (target⋆ E′⋆)
           E†⋆ : Proc↱ (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆)) (target⋆ E⋆) —[ a†⋆ ]→⋆ S
           E†⋆ = ≅-subst✴₃ Proc _—[_]→⋆_ bib (≅-sym (Proc↲ bib (target⋆ E⋆))) (≅-sym (Action⋆↲ bib a′⋆))
-                   (≅-sym (Proc↲ (cong₂ _+_ bib nib) (target⋆ E′⋆))) E′⋆
+                           (≅-sym (Proc↲ (cong₂ _+_ bib nib) (target⋆ E′⋆))) E′⋆
           _Δ_ {R′ = R′} γ/E⋆/E′⋆ E′⋆/γ/E⋆ = ⊖⋆[ ӓ , Γ′ + inc⋆ (action⋆ E⋆) ] E†⋆ γ/E⋆
-          gib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) (a⋆ ⍮ a′⋆) ]→⋆ subst Proc {!!} (target⋆ E′⋆)
+          gib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) (a⋆ ⍮ a′⋆) ]→⋆ subst Proc (
+             let open EqReasoning (setoid _) in
+             begin
+                Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′ + inc⋆ a⋆ + inc⋆ a′⋆
+             ≡⟨ {!!} ⟩
+                Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′ +
+                (inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) +
+                 inc⋆ (Action⋆↱ (cong (_+_ (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′))
+                                      (ren-preserves-inc⋆ (braid ӓ ᴿ+ Γ′) a⋆))
+                                (((braid ӓ ᴿ+ Γ′ ᴿ+ inc⋆ a⋆) *) a′⋆)))
+             ∎) (target⋆ E′⋆)
           gib = ≅-subst✴₃ Proc _—[_]→⋆_ refl ≅-refl ≅-refl {!!} (E⋆/γ ⍮ {!!})
           fib : Γ′ + inc⋆ a⋆ + inc⋆ a†⋆ ≡ Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆)
           fib = trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆))
