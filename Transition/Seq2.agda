@@ -45,7 +45,7 @@ module Transition.Seq2 where
          E⋆/γ : P′ —[ ((braid ӓ ᴿ+ Γ′) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) R′
 
    -- Mostly an exercise in heterogenous equality.
-   {-# NO_TERMINATION_CHECK #-} -- for now
+   {-# NO_TERMINATION_CHECK #-} -- investigate!
    ⊖⋆[_,_] : ∀ {Γ} (ӓ : Action₂ Γ) Γ′ {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′)} {a⋆ R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , Γ′ ] P P′) → _Δ⋆_ {ӓ = ӓ} {Γ′ = Γ′} E⋆ γ
    ⊖⋆[_,_] ӓ Γ′ [ E ] γ with ⊖′[ ӓ , Γ′ ] E γ
@@ -53,24 +53,50 @@ module Transition.Seq2 where
    ⊖⋆[_,_] _ _ [] γ = γ Δ []
    ⊖⋆[_,_] {Γ} ӓ Γ′ {a⋆ = a⋆ ⍮ a′⋆} (E⋆ ⍮ E′⋆) γ =
       let γ/E⋆ Δ E⋆/γ = ⊖⋆[ ӓ , Γ′ ] E⋆ γ
-          bib : Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′ + inc⋆ a⋆ ≡ Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆)
+          Γ† = Γ + inc (π₁ ӓ) + inc (π₂ ӓ)
+          bib : Γ† + Γ′ + inc⋆ a⋆ ≡ Γ† + (Γ′ + inc⋆ a⋆)
           bib = +-assoc _ Γ′ (inc⋆ a⋆)
-          a†⋆ : Action⋆ (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆))
+          a†⋆ : Action⋆ (Γ† + (Γ′ + inc⋆ a⋆))
           a†⋆ = Action⋆↱ bib a′⋆
           nib : inc⋆ a′⋆ ≡ inc⋆ a†⋆
           nib = ≅-to-≡ (≅-cong✴ Action⋆ bib inc⋆ (≅-sym (Action⋆↲ bib a′⋆)))
-          S : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + (Γ′ + inc⋆ a⋆) + inc⋆ a†⋆)
+          S : Proc (Γ† + (Γ′ + inc⋆ a⋆) + inc⋆ a†⋆)
           S = Proc↱ (cong₂ _+_ bib nib) (target⋆ E′⋆)
-          E†⋆ : Proc↱ (+-assoc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ)) Γ′ (inc⋆ a⋆)) (target⋆ E⋆) —[ a†⋆ ]→⋆ S
+          E†⋆ : Proc↱ (+-assoc Γ† Γ′ (inc⋆ a⋆)) (target⋆ E⋆) —[ a†⋆ ]→⋆ S
           E†⋆ = ≅-subst✴₃ Proc _—[_]→⋆_ bib (≅-sym (Proc↲ bib (target⋆ E⋆))) (≅-sym (Action⋆↲ bib a′⋆))
                            (≅-sym (Proc↲ (cong₂ _+_ bib nib) (target⋆ E′⋆))) E′⋆
           _Δ_ {R′ = R′} γ/E⋆/E′⋆ E′⋆/γ/E⋆ = ⊖⋆[ ӓ , Γ′ + inc⋆ (action⋆ E⋆) ] E†⋆ γ/E⋆
           gib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) (a⋆ ⍮ a′⋆) ]→⋆
                 Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ (a⋆ ⍮ a′⋆))
                       (Proc↱ (cong₂ _+_ refl (trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆)))) R′)
-          gib = {!!} -- E⋆/γ ⍮ {!!}
+          gib = ≅-subst✴₃ Proc _—[_]→⋆_ {!!} {!!} {!!} {!!}
+                (E⋆/γ ⍮ ≅-subst✴₃ Proc _—[_]→⋆_ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆)
+                                  (≅-sym (Proc↲ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) _)) {!!} {!!} E′⋆/γ/E⋆)
           fib : Γ′ + inc⋆ a⋆ + inc⋆ a†⋆ ≡ Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆)
           fib = trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆))
+          jib : R′ ≅ Proc↱ (cong₂ _+_ refl (trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆)))) R′
+          jib = ≅-sym (Proc↲ (cong₂ _+_ refl (trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆)))) R′)
+          twib : Proc↱ (+-assoc Γ† (Γ′ + inc⋆ a⋆) (inc⋆ (Action⋆↱ (+-assoc Γ† Γ′ (inc⋆ a⋆)) a′⋆)))
+                       (Proc↱ (cong₂ _+_ (+-assoc Γ† Γ′ (inc⋆ a⋆)) nib) (target⋆ E′⋆)) ≅
+                 Proc↱ (+-assoc Γ† Γ′ (inc⋆ a⋆ + inc⋆ a′⋆))
+                       (Proc↱ (+-assoc (Γ† + Γ′) (inc⋆ a⋆) (inc⋆ a′⋆)) (target⋆ E′⋆))
+          twib = let open ≅-Reasoning in
+             begin
+                Proc↱ (+-assoc Γ† (Γ′ + inc⋆ a⋆) (inc⋆ (Action⋆↱ (+-assoc Γ† Γ′ (inc⋆ a⋆)) a′⋆)))
+                      (Proc↱ (cong₂ _+_ (+-assoc Γ† Γ′ (inc⋆ a⋆)) nib) (target⋆ E′⋆))
+             ≅⟨ Proc↲ (+-assoc Γ† (Γ′ + inc⋆ a⋆) (inc⋆ (Action⋆↱ (+-assoc Γ† Γ′ (inc⋆ a⋆)) a′⋆))) _ ⟩
+                Proc↱ (cong₂ _+_ (+-assoc Γ† Γ′ (inc⋆ a⋆)) nib) (target⋆ E′⋆)
+             ≅⟨ Proc↲ (cong₂ _+_ (+-assoc Γ† Γ′ (inc⋆ a⋆)) nib) _ ⟩
+                target⋆ E′⋆
+             ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ† + Γ′) (inc⋆ a⋆) (inc⋆ a′⋆)) _) ⟩
+                Proc↱ (+-assoc (Γ† + Γ′) (inc⋆ a⋆) (inc⋆ a′⋆)) (target⋆ E′⋆)
+             ≅⟨ ≅-sym (Proc↲ (+-assoc Γ† Γ′ (inc⋆ a⋆ + inc⋆ a′⋆)) _) ⟩
+                Proc↱ (+-assoc Γ† Γ′ (inc⋆ a⋆ + inc⋆ a′⋆))
+                      (Proc↱ (+-assoc (Γ† + Γ′) (inc⋆ a⋆) (inc⋆ a′⋆)) (target⋆ E′⋆))
+             ∎
+          pib : Γ† + (Γ′ + inc⋆ a⋆ + inc⋆ (Action⋆↱ (+-assoc Γ† Γ′ (inc⋆ a⋆)) a′⋆)) ≡
+                Γ† + (Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆))
+          pib = {!!}
           zib : ⋈[ Γ , ӓ , Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆) ]
                 (Proc↱ (+-assoc _ Γ′ (inc⋆ a⋆ + inc⋆ a′⋆)) (Proc↱ (+-assoc _ (inc⋆ a⋆) (inc⋆ a′⋆)) (target⋆ E′⋆)))
                 (Proc↱ (cong₂ _+_ refl fib) R′)
