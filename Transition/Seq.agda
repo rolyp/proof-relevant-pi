@@ -16,6 +16,7 @@ module Transition.Seq where
    open import Name as ᴺ using (Cxt; Name; _+_; +-assoc; zero; toℕ)
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Ren as ᴿ using (Ren; push; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
+   open import Ren.Properties
    open import StructuralCong.Proc using (_≈_; ≈-sym; ≈-refl)
    open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_; source; target)
@@ -172,8 +173,9 @@ module Transition.Seq where
       braid-involutive :
          ∀ {Γ} ӓ (a⋆ : Action⋆ (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + 0)) → ((braid ӓ ᴿ+ 0) *) (((braid ӓ ᴿ+ 0) *) a⋆) ≡ a⋆
 
-   ≃-sym : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
-   ≃-sym (E ᶜ∶⇋∶ᶜ E′ [ E⌣E′ ]∷ E⋆≃E′⋆) = {!!}
+      ≃-sym : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
+{-
+   ≃-sym {a⋆ = a ᶜ∷ a′ ᶜ∷ a⋆} (E ᶜ∶⇋∶ᶜ E′ [ E⌣E′ ]∷ E⋆≃E′⋆) = {!!}
    ≃-sym ([ E ᶜ∶⇋∶ᵇ E′ ] E⋆) = {!!}
    ≃-sym ([ E ᵇ∶⇋∶ᵇ E′ ] E⋆) = {!!}
    ≃-sym ([ E ᵛ∶⇋∶ᵛ E′ ] E⋆) = {!!}
@@ -181,6 +183,7 @@ module Transition.Seq where
    ≃-sym (E ᵇ∷ E⋆) = E ᵇ∷ ≃-sym E⋆
    ≃-sym (E ᶜ∷ E⋆) = E ᶜ∷ ≃-sym E⋆
    ≃-sym (≃-trans T T′) = ≃-trans (≃-sym T′) (≃-sym T)
+-}
 
    -- Existentially quantified version so we can state isEquivalence.
    TraceFrom : ∀ {Γ} (P : Proc Γ) → Set
