@@ -25,6 +25,8 @@ module Transition.Seq2 where
       _⍮_ : ∀ {a⋆ R a′⋆ S} → P —[ a⋆ ]→⋆ R → R —[ a′⋆ ]→⋆ S →
             P —[ a⋆ ⍮ a′⋆ ]→⋆ Proc↱ (+-assoc Γ (inc⋆ a⋆) (inc⋆ a′⋆)) S
 
+   infixl 0 _—[_]→⋆_
+
    source⋆ : ∀ {Γ} {P : Proc Γ} {a⋆ : Action⋆ Γ} {R} → P —[ a⋆ ]→⋆ R → Proc Γ
    source⋆ {P = P} _ = P
 
