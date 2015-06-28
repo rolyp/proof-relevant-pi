@@ -35,7 +35,8 @@ module Transition.Seq2.Cofinal where
    ⊖⋆[_,_] {Γ} ӓ Γ′ {P′ = P′} {a⋆ = a⋆ ⍮ a′⋆} (E⋆ ⍮ E′⋆) γ =
       let γ/E⋆ Δ _ = ⊖⋆[ ӓ , Γ′ ] E⋆ γ
           R′ = _Δ⋆_.R′ (⊖⋆[ ӓ , Γ′ ] E⋆ γ)
-          E⋆/γ : P′ —[ ((braid ӓ ᴿ+ Γ′) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) R′
+          Ξ = ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆
+          E⋆/γ : P′ —[ ((braid ӓ ᴿ+ Γ′) *) a⋆ ]→⋆ Proc↱ Ξ R′
           E⋆/γ = _Δ⋆_.E⋆/γ (⊖⋆[ ӓ , Γ′ ] E⋆ γ)
           Γ† = Γ + inc (π₁ ӓ) + inc (π₂ ӓ)
           bib : Γ† + Γ′ + inc⋆ a⋆ ≡ Γ† + (Γ′ + inc⋆ a⋆)
@@ -51,47 +52,28 @@ module Transition.Seq2.Cofinal where
                           (≅-sym (Proc↲ (cong₂ _+_ bib nib) (target⋆ E′⋆))) E′⋆
           _Δ_ {R′ = S′} γ/E⋆/E′⋆ E′⋆/γ/E⋆ = ⊖⋆[ ӓ , Γ′ + inc⋆ (action⋆ E⋆) ] E†⋆ γ/E⋆
           dib : ((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆ ≅
-                Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)
-          dib = ≅-sym (Action⋆↲ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆))
+                Action⋆↱ Ξ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)
+          dib = ≅-sym (Action⋆↲ Ξ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆))
           gib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) (a⋆ ⍮ a′⋆) ]→⋆
                 Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ (a⋆ ⍮ a′⋆))
                       (Proc↱ (cong₂ _+_ refl (trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆)))) S′)
-          gib = {! !}
-          fub : inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆) ≅
-                inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆))
-          fub = ≅-cong✴ Action⋆ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) inc⋆
-                         (≅-sym (Action⋆↲ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) _))
-          eab : Γ† + (Γ′ + inc⋆ a⋆) + inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆) ≡
-                Γ† + Γ′ + inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) +
-                inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆))
-          eab =
-             let open EqReasoning (setoid _) in
-             begin
-                Γ† + (Γ′ + inc⋆ a⋆) + inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)
-             ≡⟨ cong (λ Γ → Γ + inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)) (sym (+-assoc Γ† Γ′ (inc⋆ a⋆))) ⟩
-                Γ† + Γ′ + inc⋆ a⋆ + inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)
-             ≡⟨ {!!} ⟩
-                Γ† + Γ′ + inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) + inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)
-             ≡⟨ cong (λ Γ → Γ† + Γ′ + inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) + Γ) (≅-to-≡ fub) ⟩
-                Γ† + Γ′ + inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) +
-                inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆))
-             ∎
-          bub : ((braid ӓ ᴿ+ (Γ′ + inc⋆ (action⋆ E⋆))) *) a†⋆ ≅ Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) a†⋆
+          gib = ≅-subst✴₃ Proc _—[_]→⋆_ refl ≅-refl {!!} {!!} (_⍮_
+                {a′⋆ = Action⋆↱ Ξ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)} E⋆/γ
+                (≅-subst✴₃ Proc _—[_]→⋆_ Ξ (≅-sym (Proc↲ Ξ _)) (≅-sym (Action⋆↲ Ξ _)) {!!} E′⋆/γ/E⋆))
+          bub : ((braid ӓ ᴿ+ (Γ′ + inc⋆ (action⋆ E⋆))) *) a†⋆ ≅ Action⋆↱ Ξ a†⋆
           bub = {!!}
-          pib : Γ† + (Γ′ + inc⋆ a⋆ + inc⋆ a†⋆) ≡
+          pib : Γ† + ((Γ′ + inc⋆ a⋆) + inc⋆ a†⋆) ≡
+                Γ† + Γ′ + (inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) + inc⋆ (Action⋆↱ Ξ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)))
+          pib = let open EqReasoning (setoid _) in
+             begin
+                Γ† + ((Γ′ + inc⋆ a⋆) + inc⋆ a†⋆)
+             ≡⟨ sym (+-assoc Γ† (Γ′ + inc⋆ a⋆) (inc⋆ a†⋆)) ⟩
+                Γ† + (Γ′ + inc⋆ a⋆) + inc⋆ a†⋆
+             ≡⟨ {!!} ⟩
                 Γ† + Γ′ +
                 (inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) +
-                 inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *)  a†⋆)))
-          pib = {!!}
-          cib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) a⋆ ⍮
-                                  Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆) ]→⋆
-                Proc↱ pib S′
-          cib = E⋆/γ ⍮ ≅-subst✴₃ Proc _—[_]→⋆_ {!!} {!!} {!!} {!!} E′⋆/γ/E⋆ --≅-subst✴₃ Proc _—[_]→⋆_ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆)
-                           --      (≅-sym (Proc↲ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) _)) bub {!!} E′⋆/γ/E⋆
--- _⍮_ {a′⋆ = Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (action⋆ E′⋆/γ/E⋆)}
---                    {S = Proc↱ eab (target⋆ E′⋆/γ/E⋆)} E⋆/γ
---                    (≅-subst✴₃ Proc _—[_]→⋆_ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆)
---                               (≅-sym (Proc↲ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) _)) dib {!!} E′⋆/γ/E⋆)
+                 inc⋆ (Action⋆↱ Ξ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *)  a†⋆)))
+             ∎
           fib : Γ′ + inc⋆ a⋆ + inc⋆ a†⋆ ≡ Γ′ + (inc⋆ a⋆ + inc⋆ a′⋆)
           fib = trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆))
           jib : S′ ≅ Proc↱ (cong₂ _+_ refl (trans (cong₂ _+_ refl (sym nib)) (+-assoc Γ′ (inc⋆ a⋆) (inc⋆ a′⋆)))) S′
