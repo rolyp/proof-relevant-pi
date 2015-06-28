@@ -86,14 +86,11 @@ module Transition.Seq2.Cofinal where
              ≡⟨ {!!} ⟩
                 Γ† + Γ′ + (inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) + inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) a†⋆))
              ∎
-          bob : Γ† + (Γ′ + inc⋆ a⋆ + inc⋆ a†⋆) ≡
-                Γ† + Γ′ + (inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) + inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) a†⋆))
-          bob = {!!}
           bub : ((braid ӓ ᴿ+ (Γ′ + inc⋆ (action⋆ E⋆))) *) a†⋆ ≅
                 Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) a†⋆
           bub = {!!}
-          cib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) a⋆ ⍮ Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) a†⋆ ]→⋆
-                Proc↱ bob S′
+          cib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) a⋆ ⍮ Action⋆↱ {!!} (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)  ]→⋆
+                Proc↱ arab S′
           cib = E⋆/γ ⍮ ≅-subst✴₃ Proc _—[_]→⋆_ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆)
                                  (≅-sym (Proc↲ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) _)) bub {!!} E′⋆/γ/E⋆
 -- _⍮_ {a′⋆ = Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (action⋆ E′⋆/γ/E⋆)}
