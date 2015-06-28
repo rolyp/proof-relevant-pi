@@ -2,11 +2,12 @@ module Transition.Seq.Example where
 
    open import Action as ᴬ using (); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (module _ᴬ⌣_); open _ᴬ⌣_
+   open import Action.Seq as ᴬ⋆ using (); open ᴬ⋆.Action⋆
    open import Name using (Cxt; Name; _+_)
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
    open import Transition.Concur using (Concur; Delta′; ⊖)
-   open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_)
+   open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_); open ᵀ⋆._—[_]→⋆_
 
    -- Two extrusion-rendezvous traces, where the extrusions are of the same binder.
    postulate
@@ -44,3 +45,9 @@ module Transition.Seq.Example where
 
    f′ : ν (R′ │ S′) —[ τ ᶜ - _ ]→ _
    f′ = νᶜ (E/E′ │• F/F′)
+
+   E⋆ : P │ Q —[ τ ᶜ∷ τ ᶜ∷ [] ]→⋆ _
+   E⋆ = e ᶜ∷ e′ ᶜ∷ []
+
+   F⋆ : P │ Q —[ τ ᶜ∷ τ ᶜ∷ [] ]→⋆ _
+   F⋆ = f ᶜ∷ f′ ᶜ∷ []
