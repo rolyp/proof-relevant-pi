@@ -75,13 +75,8 @@ module Transition.Seq2 where
           gib = {! !}
           fub : inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆) ≅
                 inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆))
-          fub = ≅-cong✴ Action⋆ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) inc⋆ (
-             let open ≅-Reasoning in
-             begin
-                ((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆
-             ≅⟨ ≅-sym (Action⋆↲ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) {!_!}) ⟩
-                Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)
-             ∎)
+          fub = ≅-cong✴ Action⋆ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) inc⋆
+                         (≅-sym (Action⋆↲ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) _))
           eab : Γ† + (Γ′ + inc⋆ a⋆) + inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆) ≡
                 Γ† + Γ′ + inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) +
                 inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆))
