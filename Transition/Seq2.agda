@@ -4,11 +4,11 @@ module Transition.Seq2 where
    open import SharedModules
    import Relation.Binary.EqReasoning as EqReasoning
 
-   open import Action using (inc)
+   open import Action as ᴬ using (inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (Action₂)
    open import Action.Seq2 as ᴬ⋆ using (Action⋆; Action⋆↱; Action⋆↲; inc⋆); open ᴬ⋆.Action⋆
    open import Action.Seq2.Ren using (ren-preserves-inc⋆; ren-preserves-inc⋆-assoc)
-   open import Name using (Cxt; _+_; +-assoc)
+   open import Name using (Cxt; Name; _+_; +-assoc)
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Ren as ᴿ using (_ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import Transition using (_—[_-_]→_)
@@ -83,15 +83,29 @@ module Transition.Seq2 where
              let open EqReasoning (setoid _) in
              begin
                 Γ† + (Γ′ + inc⋆ a⋆) + inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)
+             ≡⟨ cong (λ Γ → Γ + inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)) (sym (+-assoc Γ† Γ′ (inc⋆ a⋆))) ⟩
+                Γ† + Γ′ + inc⋆ a⋆ + inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)
              ≡⟨ {!!} ⟩
                 Γ† + Γ′ + inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) + inc⋆ (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆)
              ≡⟨ cong₂ _+_ refl fub ⟩
                 Γ† + Γ′ + inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) +
                 inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (((braid ӓ ᴿ+ (Γ′ + inc⋆ a⋆)) *) a†⋆))
              ∎
-          cib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) a⋆ ⍮ Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) a†⋆ ]→⋆ {!
-                !}
-          cib = {!!}
+          arab : Γ† + ((Γ′ + inc⋆ a⋆) + inc⋆ a†⋆) ≡
+                 Γ† + Γ′ + (inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) + inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) a†⋆))
+          arab = let open EqReasoning (setoid _) in
+             begin
+                Γ† + ((Γ′ + inc⋆ a⋆) + inc⋆ a†⋆)
+             ≡⟨ sym (+-assoc Γ† (Γ′ + inc⋆ a⋆) (inc⋆ a†⋆)) ⟩
+                Γ† + (Γ′ + inc⋆ a⋆) + inc⋆ a†⋆
+             ≡⟨ {!!} ⟩
+                Γ† + Γ′ + (inc⋆ (((braid ӓ ᴿ+ Γ′) *) a⋆) +
+                inc⋆ (Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) a†⋆))
+             ∎
+          cib : source⋆ (E⋆/γ) —[ ((braid ӓ ᴿ+ Γ′) *) a⋆ ⍮ Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) a†⋆ ]→⋆
+                Proc↱ {!!} R′
+          cib = E⋆/γ ⍮ ≅-subst✴₃ Proc _—[_]→⋆_ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆)
+                                 (≅-sym (Proc↲ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) _)) {!!} {!!} E′⋆/γ/E⋆
 -- _⍮_ {a′⋆ = Action⋆↱ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆) (action⋆ E′⋆/γ/E⋆)}
 --                    {S = Proc↱ eab (target⋆ E′⋆/γ/E⋆)} E⋆/γ
 --                    (≅-subst✴₃ Proc _—[_]→⋆_ (ren-preserves-inc⋆-assoc (braid ӓ) Γ′ a⋆)
