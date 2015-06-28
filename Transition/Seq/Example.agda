@@ -5,7 +5,7 @@ module Transition.Seq.Example where
    open import Name using (Cxt; Name; _+_)
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
-   open import Transition.Concur using (Concur)
+   open import Transition.Concur using (Concur; Delta′; ⊖)
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_)
 
    -- Two extrusion-rendezvous traces, where the extrusions are of the same binder.
@@ -21,8 +21,26 @@ module Transition.Seq.Example where
       E⌣E′ : E ⌣[ ᵇ∇ᵇ ] E′
       F⌣F′ : F ⌣[ ᵛ∇ᵛ ] F′
 
-   bibble : P │ Q —[ τ ᶜ - _ ]→ ν (R │ S)
-   bibble = E │ᵥ F
+   E′/E : {!!}
+   E′/E = Delta′.E′/E (⊖ E⌣E′)
 
-   quibble : P │ Q —[ τ ᶜ - _ ]→ ν (R′ │ S′)
-   quibble = E′ │ᵥ F′
+   E/E′ : {!!}
+   E/E′ = Delta′.E/E′ (⊖ E⌣E′)
+
+   F′/F : {!!}
+   F′/F = Delta′.E′/E (⊖ F⌣F′)
+
+   F/F′ : {!!}
+   F/F′ = Delta′.E/E′ (⊖ F⌣F′)
+
+   e : P │ Q —[ τ ᶜ - _ ]→ ν (R │ S)
+   e = E │ᵥ F
+
+   e′ : ν (R │ S) —[ τ ᶜ - _ ]→ _
+   e′ = νᶜ (E′/E │• F′/F)
+
+   f : P │ Q —[ τ ᶜ - _ ]→ ν (R′ │ S′)
+   f = E′ │ᵥ F′
+
+   f′ : ν (R′ │ S′) —[ τ ᶜ - _ ]→ _
+   f′ = νᶜ (E/E′ │• F/F′)
