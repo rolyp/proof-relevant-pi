@@ -8,21 +8,23 @@ module Transition.Seq.Example where
    open import Name using (Cxt; Name; _+_)
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
-   open import Transition.Concur using (Concur₁; Delta′; module Delta′; ⊖)
+   open import Transition.Concur using (Concur; Concur₁; Delta′; module Delta′; ⊖)
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_); open ᵀ⋆._—[_]→⋆_
 
-   -- Two extrusion-rendezvous traces, where the extrusions are of the same binder.
+   -- Three concurrent extrusion-rendezvous, where the extrusions are of the same binder.
    postulate
       Γ : Cxt
       P Q : Proc Γ
-      R R′ S S′ : Proc (Γ + 1)
-      x u : Name Γ
+      R R′ R″ S S′ S″ : Proc (Γ + 1)
+      x y z : Name Γ
       E : P —[ x • ᵇ - _ ]→ R
-      E′ : P —[ u • ᵇ - _ ]→ R′
+      E′ : P —[ y • ᵇ - _ ]→ R′
+      E″ : P —[ z • ᵇ - _ ]→ R″
       F : Q —[ (• x) ᵇ - _ ]→ S
-      F′ : Q —[ (• u) ᵇ - _ ]→ S′
-      E⌣E′ : E ⌣₁[ ᵇ∇ᵇ ] E′
-      F⌣F′ : F ⌣₁[ ᵛ∇ᵛ ] F′
+      F′ : Q —[ (• y) ᵇ - _ ]→ S′
+      F″ : Q —[ (• z) ᵇ - _ ]→ S″
+      E⌣E′ : E ⌣[ ᵇ∇ᵇ ] E′
+      F⌣F′ : F ⌣[ ᵛ∇ᵛ ] F′
 
    open Delta′ hiding (S; S′)
 
@@ -30,13 +32,13 @@ module Transition.Seq.Example where
    E₁ = E │ᵥ F
 
    E₂ : ν (R │ S) —[ τ ᶜ - _ ]→ _
-   E₂ = νᶜ (E′/E (⊖ (inj₁ E⌣E′)) │• E′/E (⊖ (inj₁ F⌣F′)))
+   E₂ = νᶜ (E′/E (⊖ E⌣E′) │• E′/E (⊖ F⌣F′))
 
    F₁ : P │ Q —[ τ ᶜ - _ ]→ ν (R′ │ S′)
    F₁ = E′ │ᵥ F′
 
    F₂ : ν (R′ │ S′) —[ τ ᶜ - _ ]→ _
-   F₂ = νᶜ (E/E′ (⊖ (inj₁ E⌣E′)) │• E/E′ (⊖ (inj₁ F⌣F′)))
+   F₂ = νᶜ (E/E′ (⊖ E⌣E′) │• E/E′ (⊖ F⌣F′))
 
    E⋆ : P │ Q —[ τ ᶜ∷ τ ᶜ∷ [] ]→⋆ _
    E⋆ = E₁ ᶜ∷ E₂ ᶜ∷ []

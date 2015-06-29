@@ -1,4 +1,5 @@
--- Traces and causal equivalence.
+-- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
+-- composition is probably what we eventually want.
 module Transition.Seq where
 
    open import SharedModules
@@ -9,8 +10,6 @@ module Transition.Seq where
    open import Proc using (Proc; Proc↱)
    open import Transition using (_—[_-_]→_)
 
-   -- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
-   -- composition is probably what we eventually want.
    infixr 5 _ᵇ∷_ _ᶜ∷_
    data _—[_]→⋆_ {Γ} (P : Proc Γ) : (a⋆ : Action⋆ Γ) → Proc (Γ + inc⋆ a⋆) → Set where
       [] : P —[ [] ]→⋆ P
