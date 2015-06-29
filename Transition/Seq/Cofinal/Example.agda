@@ -7,6 +7,7 @@ module Transition.Seq.Cofinal.Example where
    open import Transition using (target)
    open import Transition.Concur using (module Concur₁; Delta′; ⊖); open Concur₁
    open import Transition.Concur.Cofinal using (⊖-✓)
+   open import Transition.Concur.Transition.Properties using (/-preserves-cofin)
    open import Transition.Seq as ᵀ⋆; open ᵀ⋆._—[_]→⋆_
    open import Transition.Seq.Cofinal using (_≃_; module _≃_; _Δ_; ⊖⋆[_,_]); open _≃_
    open import Transition.Seq.Example
@@ -20,5 +21,5 @@ module Transition.Seq.Cofinal.Example where
           E′₃∷[] : target E′₂ —[ τ ᶜ∷ [] ]→⋆ _
           E′₃∷[] = E′₃ ᶜ∷ []
           gib : E₃∷[]/γ ≅ E′₃∷[]
-          gib = {!!}
+          gib = {!/-preserves-cofin ? ? ?!}
       in {!!}
