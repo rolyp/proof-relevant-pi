@@ -44,29 +44,34 @@ module Transition.Seq.Example where
    F′/F/F″/F = Delta′.E′/E (⊖ (/-preserves-⌣ (inj₁ 𝐹) (inj₁ 𝐹′) (inj₁ 𝐹″)))
    F″/F/F′/F = Delta′.E/E′ (⊖ (/-preserves-⌣ (inj₁ 𝐹) (inj₁ 𝐹′) (inj₁ 𝐹″)))
 
-   E₁ : P │ Q —[ τ ᶜ - _ ]→ ν (R │ S)
-   E₁ = E │ᵥ F
-
    P₁ = target E′/E
+   P′₁ = target E/E′
    Q₁ = target F′/F
-
-   E₂ : target E₁ —[ τ ᶜ - _ ]→ ν ((pop zero *) P₁ │ Q₁)
-   E₂ = νᶜ (E′/E │• F′/F)
+   Q′₁ = target F/F′
 
    P′ = target E′/E/E″/E
    Q′ = target F′/F/F″/F
 
+   E₁ : P │ Q —[ τ ᶜ - _ ]→ ν (R │ S)
+   E₁ = E │ᵥ F
+
+   E₂ : target E₁ —[ τ ᶜ - _ ]→ ν ((pop zero *) P₁ │ Q₁)
+   E₂ = νᶜ (E′/E │• F′/F)
+
    E₃ : target E₂ —[ τ ᶜ - _ ]→ ν ((pop zero *) ((suc (pop zero) *) P′) │ Q′)
    E₃ = νᶜ ((pop zero *ᵇ) E′/E/E″/E │• F′/F/F″/F)
 
-   F₁ : P │ Q —[ τ ᶜ - _ ]→ ν (R′ │ S′)
-   F₁ = E′ │ᵥ F′
+   E′₁ : P │ Q —[ τ ᶜ - _ ]→ ν (R′ │ S′)
+   E′₁ = E′ │ᵥ F′
 
-   F₂ : ν (R′ │ S′) —[ τ ᶜ - _ ]→ _
-   F₂ = νᶜ (E/E′ │• F/F′)
+   E′₂ : ν (R′ │ S′) —[ τ ᶜ - _ ]→ ν ((pop zero *) P′₁ │ Q′₁)
+   E′₂ = νᶜ (E/E′ │• F/F′)
 
-   E⋆ : P │ Q —[ τ ᶜ∷ τ ᶜ∷ [] ]→⋆ _
-   E⋆ = E₁ ᶜ∷ E₂ ᶜ∷ []
+   E′₃ : target E′₂ —[ τ ᶜ - _ ]→ ν {!!}
+   E′₃ = νᶜ {!!}
 
-   F⋆ : P │ Q —[ τ ᶜ∷ τ ᶜ∷ [] ]→⋆ _
-   F⋆ = F₁ ᶜ∷ F₂ ᶜ∷ []
+   E⋆ : P │ Q —[ τ ᶜ∷ τ ᶜ∷ τ ᶜ∷ [] ]→⋆ _
+   E⋆ = E₁ ᶜ∷ E₂ ᶜ∷ E₃ ᶜ∷ []
+
+   E′⋆ : P │ Q —[ τ ᶜ∷ τ ᶜ∷ [] ]→⋆ _
+   E′⋆ = E′₁ ᶜ∷ E′₂ ᶜ∷ []
