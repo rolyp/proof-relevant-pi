@@ -34,23 +34,16 @@ module Transition.Seq.Example where
       𝐹″ : F″ ⌣₁[ ᵛ∇ᵛ ] F
 
    E′/E = Delta′.E′/E (⊖ (inj₁ 𝐸))
-   E/E′ = Delta′.E/E′ (⊖ (inj₁ 𝐸))
    F′/F = Delta′.E′/E (⊖ (inj₁ 𝐹))
-   F/F′ = Delta′.E/E′ (⊖ (inj₁ 𝐹))
-
-   E′/E/E″/E = Delta′.E′/E (⊖ (/-preserves-⌣ (inj₁ 𝐸) (inj₁ 𝐸′) (inj₁ 𝐸″)))
-   E″/E/E′/E = Delta′.E/E′ (⊖ (/-preserves-⌣ (inj₁ 𝐸) (inj₁ 𝐸′) (inj₁ 𝐸″)))
-
-   F′/F/F″/F = Delta′.E′/E (⊖ (/-preserves-⌣ (inj₁ 𝐹) (inj₁ 𝐹′) (inj₁ 𝐹″)))
-   F″/F/F′/F = Delta′.E/E′ (⊖ (/-preserves-⌣ (inj₁ 𝐹) (inj₁ 𝐹′) (inj₁ 𝐹″)))
 
    P₁ = target E′/E
-   P′₁ = target E/E′
    Q₁ = target F′/F
-   Q′₁ = target F/F′
 
-   P′ = target E′/E/E″/E
-   Q′ = target F′/F/F″/F
+   E″/E/E′/E = Delta′.E′/E (⊖ (/-preserves-⌣ (inj₁ 𝐸) (inj₁ 𝐸′) (inj₁ 𝐸″)))
+   F″/F/F′/F = Delta′.E′/E (⊖ (/-preserves-⌣ (inj₁ 𝐹) (inj₁ 𝐹′) (inj₁ 𝐹″)))
+
+   P′ = target E″/E/E′/E
+   Q′ = target F″/F/F′/F
 
    E₁ : P │ Q —[ τ ᶜ - _ ]→ ν (R │ S)
    E₁ = E │ᵥ F
@@ -59,7 +52,19 @@ module Transition.Seq.Example where
    E₂ = νᶜ (E′/E │• F′/F)
 
    E₃ : target E₂ —[ τ ᶜ - _ ]→ ν ((pop zero *) ((suc (pop zero) *) P′) │ Q′)
-   E₃ = νᶜ ((pop zero *ᵇ) E′/E/E″/E │• F′/F/F″/F)
+   E₃ = νᶜ ((pop zero *ᵇ) E″/E/E′/E │• F″/F/F′/F)
+
+   E/E′ = Delta′.E/E′ (⊖ (inj₁ 𝐸))
+   F/F′ = Delta′.E/E′ (⊖ (inj₁ 𝐹))
+
+   P′₁ = target E/E′
+   Q′₁ = target F/F′
+
+   E″/E′/E/E′ = Delta′.E/E′ (⊖ (/-preserves-⌣ (inj₁ 𝐸′) (inj₁ 𝐸″) (inj₁ 𝐸)))
+   F″/F′/F/F′ = Delta′.E/E′ (⊖ (/-preserves-⌣ (inj₁ 𝐹′) (inj₁ 𝐹″) (inj₁ 𝐹)))
+
+   P″ = target E″/E′/E/E′
+   Q″ = target F″/F′/F/F′
 
    E′₁ : P │ Q —[ τ ᶜ - _ ]→ ν (R′ │ S′)
    E′₁ = E′ │ᵥ F′
@@ -67,11 +72,11 @@ module Transition.Seq.Example where
    E′₂ : ν (R′ │ S′) —[ τ ᶜ - _ ]→ ν ((pop zero *) P′₁ │ Q′₁)
    E′₂ = νᶜ (E/E′ │• F/F′)
 
-   E′₃ : target E′₂ —[ τ ᶜ - _ ]→ ν {!!}
-   E′₃ = νᶜ {!!}
+   E′₃ : target E′₂ —[ τ ᶜ - _ ]→ ν ((pop zero *) ((suc (pop zero) *) P″) │ Q″)
+   E′₃ = νᶜ ((pop zero *ᵇ) E″/E′/E/E′ │• F″/F′/F/F′)
 
    E⋆ : P │ Q —[ τ ᶜ∷ τ ᶜ∷ τ ᶜ∷ [] ]→⋆ _
    E⋆ = E₁ ᶜ∷ E₂ ᶜ∷ E₃ ᶜ∷ []
 
-   E′⋆ : P │ Q —[ τ ᶜ∷ τ ᶜ∷ [] ]→⋆ _
-   E′⋆ = E′₁ ᶜ∷ E′₂ ᶜ∷ []
+   E′⋆ : P │ Q —[ τ ᶜ∷ τ ᶜ∷ τ ᶜ∷ [] ]→⋆ _
+   E′⋆ = E′₁ ᶜ∷ E′₂ ᶜ∷ E′₃ ᶜ∷ []
