@@ -21,5 +21,5 @@ module Transition.Seq.Cofinal.Example where
           E′₃∷[] : target E′₂ —[ τ ᶜ∷ [] ]→⋆ _
           E′₃∷[] = E′₃ ᶜ∷ []
           gib : E₃∷[]/γ ≅ E′₃∷[]
-          gib = {!/-preserves-cofin ? ? ?!}
+          gib = {!!}
       in {!!}
