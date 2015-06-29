@@ -14,8 +14,7 @@ module Transition.Concur.Transition.Properties where
 
    open Delta′
 
-   -- To be substantial, this theorem needs to be stated for the *symmetric* version of the relation.
-   -- (See note on /-preserves-⌣.)
+   -- See note on /-preserves-⌣.
    postulate
       /-preserves-cofin :
          ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {𝑎 : a ᴬ⌣ a′} {𝑎′ : a′ ᴬ⌣ a″} {𝑎″ : a″ ᴬ⌣ a}

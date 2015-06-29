@@ -35,12 +35,13 @@ module Transition.Seq.Example where
 
    E′/E = Delta′.E′/E (⊖ (inj₁ 𝐸))
    F′/F = Delta′.E′/E (⊖ (inj₁ 𝐹))
-
    P₁ = target E′/E
    Q₁ = target F′/F
 
-   E″/E/E′/E = Delta′.E′/E (⊖ (/-preserves-⌣ (inj₁ 𝐸) (inj₁ 𝐸′) (inj₁ 𝐸″)))
-   F″/F/F′/F = Delta′.E′/E (⊖ (/-preserves-⌣ (inj₁ 𝐹) (inj₁ 𝐹′) (inj₁ 𝐹″)))
+   𝐸′/E = /-preserves-⌣ (inj₁ 𝐸) (inj₁ 𝐸′) (inj₁ 𝐸″)
+   𝐹′/F = /-preserves-⌣ (inj₁ 𝐹) (inj₁ 𝐹′) (inj₁ 𝐹″)
+   E″/E/E′/E = Delta′.E′/E (⊖ 𝐸′/E)
+   F″/F/F′/F = Delta′.E′/E (⊖ 𝐹′/F)
 
    P′ = target E″/E/E′/E
    Q′ = target F″/F/F′/F
@@ -56,12 +57,13 @@ module Transition.Seq.Example where
 
    E/E′ = Delta′.E/E′ (⊖ (inj₁ 𝐸))
    F/F′ = Delta′.E/E′ (⊖ (inj₁ 𝐹))
-
    P′₁ = target E/E′
    Q′₁ = target F/F′
 
-   E″/E′/E/E′ = Delta′.E/E′ (⊖ (/-preserves-⌣ (inj₁ 𝐸′) (inj₁ 𝐸″) (inj₁ 𝐸)))
-   F″/F′/F/F′ = Delta′.E/E′ (⊖ (/-preserves-⌣ (inj₁ 𝐹′) (inj₁ 𝐹″) (inj₁ 𝐹)))
+   𝐸″/E′ = /-preserves-⌣ (inj₁ 𝐸′) (inj₁ 𝐸″) (inj₁ 𝐸)
+   𝐹″/𝐹′ = /-preserves-⌣ (inj₁ 𝐹′) (inj₁ 𝐹″) (inj₁ 𝐹)
+   E″/E′/E/E′ = Delta′.E/E′ (⊖ 𝐸″/E′)
+   F″/F′/F/F′ = Delta′.E/E′ (⊖ 𝐹″/𝐹′)
 
    P″ = target E″/E′/E/E′
    Q″ = target F″/F′/F/F′
