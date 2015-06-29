@@ -105,26 +105,25 @@ module Transition.Seq.Cofinal where
    -- Causal equivalence.
    infix 4 _≃_
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ a′⋆ R R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
-      -- Transposition cases. Each specifies a way of extending an existing equivalence; would be
-      -- cleaner to define these as axiomatic cases.
+      -- Transposition axioms.
       _ᶜ∶⇋∶ᶜ_[_]∷_ : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᶜ - _ ]→ R′) →
                      (E⌣E′ : E ⌣[ ᶜ∇ᶜ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                     ∀ {a⋆ a′⋆ S S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
+                     ∀ {a⋆ S} (E⋆ : Q —[ a⋆ ]→⋆ S) →
                      let _ Δ E⋆/γ = ⊖⋆[ (a ᶜ , a′ ᶜ) , 0 ] E⋆ (⊖-✓ E⌣E′) in
                      E ᶜ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᶜ∷ E/E′ ᶜ∷ E⋆/γ
       [_ᶜ∶⇋∶ᵇ_] : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
                  ⦃ E⌣E′ : E ⌣[ ᶜ∇ᵇ ] E′ ⦄ → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                 ∀ {a⋆ a′⋆ S S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
+                 ∀ {a⋆ S} (E⋆ : Q —[ a⋆ ]→⋆ S) →
                  let _ Δ E⋆/γ = ⊖⋆[ (a ᶜ , a′ ᵇ) , 0 ] E⋆ (⊖-✓ E⌣E′) in
                  E ᶜ∷ E′/E ᵇ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᶜ∷ E⋆/γ
       [_ᵇ∶⇋∶ᵇ_] : ∀ {a a′} {R R′} (E : P —[ a ᵇ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
                  ⦃ E⌣E′ : E ⌣[ ᵇ∇ᵇ ] E′ ⦄ → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                 ∀ {a⋆ a′⋆ S S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
+                 ∀ {a⋆ S} (E⋆ : Q —[ a⋆ ]→⋆ S) →
                  let _ Δ E⋆/γ = ⊖⋆[ (a ᵇ , (push *) a′ ᵇ) , 0 ] E⋆ (⊖-✓ E⌣E′) in
                  E ᵇ∷ E′/E ᵇ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᵇ∷ E⋆/γ
       [_ᵛ∶⇋∶ᵛ_] : ∀ {x u} {R R′} (E : P —[ (• x) ᵇ - _ ]→ R) (E′ : P —[ (• u) ᵇ - _ ]→ R′) →
                  ⦃ E⌣E′ : E ⌣[ ᵛ∇ᵛ ] E′ ⦄ → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                 ∀ {a⋆ a′⋆ S S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
+                 ∀ {a⋆ S} (E⋆ : Q —[ a⋆ ]→⋆ S) →
                  let _ Δ E⋆/γ = ⊖⋆[ ((• x) ᵇ , • ᴺ.suc u 〈 zero 〉 ᶜ) , 0 ] E⋆ (⊖-✓ E⌣E′) in
                  E ᵇ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᶜ∷ E⋆/γ
       -- Close under trace constructors.
