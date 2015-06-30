@@ -23,8 +23,7 @@ module Transition.Concur.Cofinal.Transition where
          γ/E : ⋈[ Γ , ӓ , Γ′ + inc a ] (Proc↱ (+-assoc _ Γ′ (inc a)) R) R′
       σ = braid {Γ} ӓ
       field
-         {R″} : Proc _
-         E/γ : P′ —[ ((σ ᴿ+ Γ′) *) a - ι ]→ R″ -- Proc↱ (ren-preserves-inc-assoc σ Γ′ a) R′
+         E/γ : P′ —[ ((σ ᴿ+ Γ′) *) a - ι ]→ Proc↱ (ren-preserves-inc-assoc σ Γ′ a) R′
 
    -- Hoped Agda would be able to infer ӓ and Γ′ from γ here, but apparently not.
    ⊖′[_,_] : ∀ {ι Γ} (ӓ : Action₂ Γ) Γ′ {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′)} {a R}
@@ -33,18 +32,3 @@ module Transition.Concur.Cofinal.Transition where
    ⊖′[ ӓ , Γ′ ] {a = (• _) ᵇ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ Γ′) *′) E) γ in φ/E′ Δ E′/φ
    ⊖′[ ӓ , Γ′ ] {a = • _ 〈 _ 〉 ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ Γ′) *′) E) γ in φ/E′ Δ E′/φ
    ⊖′[ ӓ , Γ′ ] {a = τ ᶜ} E γ = let φ/E′ Δ E′/φ = ⊖† (((braid ӓ ᴿ+ Γ′) *′) E) γ in φ/E′ Δ E′/φ
-
-   ⊖′-✓ : ∀ {ι Γ} (ӓ : Action₂ Γ) Γ′ {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′)} {a R}
-          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , ӓ , Γ′ ] P P′) → let _Δ_ {R′} _ {R″} _ = ⊖′[ ӓ , Γ′ ] E γ in R′ ≅ R″
-   ⊖′-✓ _ _ {a = (_ •) ᵇ} _ _ = ≅-refl
-   ⊖′-✓ _ _ {a = (• _) ᵇ} _ _ = ≅-refl
-   ⊖′-✓ _ _ {a = • _ 〈 _ 〉 ᶜ} _ _ = ≅-refl
-   ⊖′-✓ _ _ {a = τ ᶜ} _ _ = ≅-refl
-
-   ⊖′-✓′ : ∀ {ι Γ} (ӓ : Action₂ Γ) Γ′ {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′)} {a R}
-          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , ӓ , Γ′ ] P P′) → let _Δ_ {R′} _ {R″} _ = ⊖′[ ӓ , Γ′ ] E γ in
-          R″ ≡ Proc↱ (ren-preserves-inc-assoc (braid ӓ) Γ′ a) R′
-   ⊖′-✓′ ӓ Γ′ {a = (_ •) ᵇ} E γ = refl
-   ⊖′-✓′ ӓ Γ′ {a = (• _) ᵇ} E γ = refl
-   ⊖′-✓′ _ _ {a = • _ 〈 _ 〉 ᶜ} _ _ = refl
-   ⊖′-✓′ _ _ {a = τ ᶜ} _ _ = refl
