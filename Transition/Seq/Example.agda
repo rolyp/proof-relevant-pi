@@ -49,10 +49,10 @@ module Transition.Seq.Example where
    E₁ : P │ Q —[ τ ᶜ - _ ]→ ν (R │ S)
    E₁ = E │ᵥ F
 
-   E₂ : target E₁ —[ τ ᶜ - _ ]→ ν ((pop zero *) P₁ │ Q₁)
+   E₂ : ν (R │ S)  —[ τ ᶜ - _ ]→ ν ((pop zero *) P₁ │ Q₁)
    E₂ = νᶜ (E′/E │• F′/F)
 
-   E₃ : target E₂ —[ τ ᶜ - _ ]→ ν ((pop zero *) ((suc (pop zero) *) P′) │ Q′)
+   E₃ : ν ((pop zero *) P₁ │ Q₁) —[ τ ᶜ - _ ]→ ν ((pop zero *) ((suc (pop zero) *) P′) │ Q′)
    E₃ = νᶜ ((pop zero *ᵇ) E″/E/E′/E │• F″/F/F′/F)
 
    E/E′ = Delta′.E/E′ (⊖ (inj₁ 𝐸))
@@ -74,7 +74,7 @@ module Transition.Seq.Example where
    E′₂ : ν (R′ │ S′) —[ τ ᶜ - _ ]→ ν ((pop zero *) P′₁ │ Q′₁)
    E′₂ = νᶜ (E/E′ │• F/F′)
 
-   E′₃ : target E′₂ —[ τ ᶜ - _ ]→ ν ((pop zero *) ((suc (pop zero) *) P″) │ Q″)
+   E′₃ : ν ((pop zero *) P′₁ │ Q′₁) —[ τ ᶜ - _ ]→ ν ((pop zero *) ((suc (pop zero) *) P″) │ Q″)
    E′₃ = νᶜ ((pop zero *ᵇ) E″/E′/E/E′ │• F″/F′/F/F′)
 
    E⋆ : P │ Q —[ τ ᶜ∷ τ ᶜ∷ τ ᶜ∷ [] ]→⋆ _
