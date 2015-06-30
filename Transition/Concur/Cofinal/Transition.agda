@@ -36,7 +36,15 @@ module Transition.Concur.Cofinal.Transition where
 
    ⊖′-✓ : ∀ {ι Γ} (ӓ : Action₂ Γ) Γ′ {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′)} {a R}
           (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , ӓ , Γ′ ] P P′) → let _Δ_ {R′} _ {R″} _ = ⊖′[ ӓ , Γ′ ] E γ in R′ ≅ R″
-   ⊖′-✓ ӓ Γ′ {a = (_ •) ᵇ} E γ = ≅-refl
-   ⊖′-✓ ӓ Γ′ {a = (• _) ᵇ} E γ = ≅-refl
+   ⊖′-✓ _ _ {a = (_ •) ᵇ} _ _ = ≅-refl
+   ⊖′-✓ _ _ {a = (• _) ᵇ} _ _ = ≅-refl
    ⊖′-✓ _ _ {a = • _ 〈 _ 〉 ᶜ} _ _ = ≅-refl
    ⊖′-✓ _ _ {a = τ ᶜ} _ _ = ≅-refl
+
+   ⊖′-✓′ : ∀ {ι Γ} (ӓ : Action₂ Γ) Γ′ {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′)} {a R}
+          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , ӓ , Γ′ ] P P′) → let _Δ_ {R′} _ {R″} _ = ⊖′[ ӓ , Γ′ ] E γ in
+          R″ ≡ Proc↱ (ren-preserves-inc-assoc (braid ӓ) Γ′ a) R′
+   ⊖′-✓′ ӓ Γ′ {a = (_ •) ᵇ} E γ = refl
+   ⊖′-✓′ ӓ Γ′ {a = (• _) ᵇ} E γ = refl
+   ⊖′-✓′ _ _ {a = • _ 〈 _ 〉 ᶜ} _ _ = refl
+   ⊖′-✓′ _ _ {a = τ ᶜ} _ _ = refl
