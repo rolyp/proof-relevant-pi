@@ -5,7 +5,7 @@ module Transition.Seq.Cofinal where
    open import Action as ᴬ using (inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (Action₂; module _ᴬ⌣_); open _ᴬ⌣_
    open import Action.Ren using (ren-preserves-inc-assoc)
-   open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆); open ᴬ⋆.Action⋆
+   open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
    open import Action.Seq.Ren using (ren-preserves-inc⋆-assoc)
    open import Name as ᴺ using (_+_; +-assoc; zero)
    open import Ren as ᴿ using (Ren; _ᴿ+_; push); open ᴿ.Renameable ⦃...⦄
@@ -57,13 +57,13 @@ module Transition.Seq.Cofinal where
    ⊖⋆[_,_] : ∀ {Γ} (ӓ : Action₂ Γ) m {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + m)} {a⋆ R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , m ] P P′) → _Δ⋆_ {ӓ = ӓ} {m = m} E⋆ γ
    ⊖⋆[ _ , _ ] [] γ = γ Δ []
-   ⊖⋆[ ӓ , m ] {a⋆ = a ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
+   ⊖⋆[ ӓ , m ] {a⋆ = a ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ӓ , m + 1 ] E⋆ γ/E | ren-preserves-inc-assoc (braid ӓ) m (a ᵇ)
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (braid ӓ) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′) =
       let σ = braid ӓ
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
-             subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᵇ∷ ((σ ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
+             subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᴬ⋆.ᵇ∷ ((σ ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
                    Proc↱ (+-assoc _ 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆)))
                          (Proc↱ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′)
@@ -73,19 +73,19 @@ module Transition.Seq.Cofinal where
                    S′
                 ≅⟨ ≅-sym (Proc↲ (cong (_+_ _) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
                    Proc↱ (cong (_+_ _) (+-assoc m 1 (inc⋆ a⋆))) S′
-                ≅⟨ ≅-sym (Proc↲ (ren-preserves-inc⋆-assoc σ m (a ᵇ∷ a⋆)) _) ⟩
-                   Proc↱ (ren-preserves-inc⋆-assoc σ m (a ᵇ∷ a⋆))
+                ≅⟨ ≅-sym (Proc↲ (ren-preserves-inc⋆-assoc σ m (a ᴬ⋆.ᵇ∷ a⋆)) _) ⟩
+                   Proc↱ (ren-preserves-inc⋆-assoc σ m (a ᴬ⋆.ᵇ∷ a⋆))
                          (Proc↱ (cong (_+_ _) (+-assoc m 1 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᵇ∷ E⋆/γ/E)
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
-   ⊖⋆[ ӓ , m ] {a⋆ = a ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
+   ⊖⋆[ ӓ , m ] {a⋆ = a ᴬ⋆.ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ӓ , m ] E⋆ γ/E | ren-preserves-inc-assoc (braid ӓ) m (a ᶜ)
    ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (braid ӓ) m 0 (inc⋆ a⋆) (target⋆ E⋆) S′) =
       let σ = braid ӓ
           open ≅-Reasoning
           E/γ∷E⋆/γ/E =
-             subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᶜ∷ ((σ ᴿ+ m) *) a⋆ ]→⋆ P) (≅-to-≡ (
+             subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᴬ⋆.ᶜ∷ ((σ ᴿ+ m) *) a⋆ ]→⋆ P) (≅-to-≡ (
                 begin
                    Proc↱ (+-assoc _ 0 (inc⋆ (((σ ᴿ+ m) *) a⋆)))
                          (Proc↱ (ren-preserves-inc⋆-assoc σ m a⋆) S′)
@@ -95,8 +95,8 @@ module Transition.Seq.Cofinal where
                    S′
                 ≅⟨ ≅-sym (Proc↲ (cong (_+_ _) (+-assoc m 0 (inc⋆ a⋆))) S′) ⟩
                    Proc↱ (cong (_+_ _) (+-assoc m 0 (inc⋆ a⋆))) S′
-                ≅⟨ ≅-sym (Proc↲ (ren-preserves-inc⋆-assoc σ m (a ᶜ∷ a⋆)) _) ⟩
-                   Proc↱ (ren-preserves-inc⋆-assoc σ m (a ᶜ∷ a⋆))
+                ≅⟨ ≅-sym (Proc↲ (ren-preserves-inc⋆-assoc σ m (a ᴬ⋆.ᶜ∷ a⋆)) _) ⟩
+                   Proc↱ (ren-preserves-inc⋆-assoc σ m (a ᴬ⋆.ᶜ∷ a⋆))
                          (Proc↱ (cong (_+_ _) (+-assoc m 0 (inc⋆ a⋆))) S′)
                 ∎)
              ) (E/γ ᶜ∷ E⋆/γ/E)
