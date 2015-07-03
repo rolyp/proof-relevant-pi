@@ -4,7 +4,7 @@ module Transition.Seq.Example where
 
    open import Action as ᴬ using (); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (module _ᴬ⌣_); open _ᴬ⌣_
-   open import Action.Seq as ᴬ⋆ using (); open ᴬ⋆.Action⋆
+   open import Action.Seq as ᴬ⋆ using ()
    open import Name using (Cxt; Name; zero; _+_)
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Ren as ᴿ using (suc; pop); open ᴿ.Renameable ⦃...⦄
@@ -77,8 +77,8 @@ module Transition.Seq.Example where
    E′₃ : ν ((pop zero *) P′₁ │ Q′₁) —[ τ ᶜ - _ ]→ ν ((pop zero *) ((suc (pop zero) *) P″) │ Q″)
    E′₃ = νᶜ ((pop zero *ᵇ) E″/E′/E/E′ │• F″/F′/F/F′)
 
-   E⋆ : P │ Q —[ τ ᶜ∷ τ ᶜ∷ τ ᶜ∷ [] ]→⋆ _
+   E⋆ : P │ Q —[ _ ]→⋆ _
    E⋆ = E₁ ᶜ∷ E₂ ᶜ∷ E₃ ᶜ∷ []
 
-   E′⋆ : P │ Q —[ τ ᶜ∷ τ ᶜ∷ τ ᶜ∷ [] ]→⋆ _
+   E′⋆ : P │ Q —[ _ ]→⋆ _
    E′⋆ = E′₁ ᶜ∷ E′₂ ᶜ∷ E′₃ ᶜ∷ []
