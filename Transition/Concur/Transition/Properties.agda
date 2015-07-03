@@ -14,7 +14,7 @@ module Transition.Concur.Transition.Properties where
 
    open Delta′
 
-   -- See note on /-preserves-⌣.
+   -- See note on /-preserves-⌣. Haven't proven this yet as it really requires symmetric ⌣ to be substantial.
    postulate
       /-preserves-cofin :
          ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {𝑎 : a ᴬ⌣ a′} {𝑎′ : a′ ᴬ⌣ a″} {𝑎″ : a″ ᴬ⌣ a}
