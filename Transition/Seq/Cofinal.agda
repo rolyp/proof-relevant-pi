@@ -151,7 +151,7 @@ module Transition.Seq.Cofinal where
    open Properties
 
    postulate
-      -- TODO: prove.
+      -- Not trivial to prove, so come back to this.
       ≃-sym : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
 
    -- Existentially quantified version so we can state isEquivalence.

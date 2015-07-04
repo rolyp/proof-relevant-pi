@@ -1,5 +1,5 @@
--- Traces are lists of composable transitions. Snoc lists would make more sense implementation-wise;
--- composition is probably what we eventually want.
+-- Traces are lists of composable transitions. Snoc lists might be closer to execution, which grows to the right.
+-- Concatenation/append proved utterly unmanageable from a heterogeneous equality point of view.
 module Transition.Seq where
 
    open import SharedModules

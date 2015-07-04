@@ -5,6 +5,7 @@ module Action.Seq where
    open import Name as ᴺ using (Cxt; Name; _+_)
 
    -- Wanted a single _∷_ taking a (bound or non-bound) action, with (inc a) in its type. That caused mayhem.
+   infixr 5 _ᵇ∷_ _ᶜ∷_
    data Action⋆ (Γ : Cxt) : Set where
       []  : Action⋆ Γ
       _ᵇ∷_ : (a : Actionᵇ Γ) (a⋆ : Action⋆ (Γ + 1)) → Action⋆ Γ
