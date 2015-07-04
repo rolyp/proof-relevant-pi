@@ -151,27 +151,9 @@ module Transition.Seq.Cofinal where
    open Properties
 
    postulate
+      -- TODO: prove.
       ≃-sym : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
-{-
-   ≃-sym {a⋆ = a ᶜ∷ a′ ᶜ∷ a⋆} {E⋆ = ._ ᶜ∷ ._ ᶜ∷ E⋆} (E ᶜ∶⇋∶ᶜ E′ [ E⌣E′ ]∷ E⋆≃E′⋆) =
-      let E′⋆≃E⋆ = ≃-sym E⋆≃E′⋆
-          E⋆/γ = ⊖⋆[ (a ᶜ , a′ ᶜ) , 0 ] E⋆ (⊖-✓ E⌣E′)
-          S′ = Proc↱ (ren-preserves-inc⋆-assoc id 0 a⋆) (_Δ⋆_.R′ E⋆/γ)
-          E′⋆ : S (⊖ (⌣-sym E⌣E′)) —[ (id *) a⋆ ]→⋆ S′
-          E′⋆ = subst (λ S → S —[ (id *) a⋆ ]→⋆ S′) (⊖-preserves-sym′ E⌣E′) (_Δ⋆_.E⋆/γ E⋆/γ)
-          result′ : E′ ᶜ∷ E′/E (⊖ (⌣-sym E⌣E′)) ᶜ∷ E′⋆ ≃ E ᶜ∷ E/E′ (⊖ (⌣-sym E⌣E′)) ᶜ∷ {!!}
-          result′ = E′ ᶜ∶⇋∶ᶜ E [ ⌣-sym E⌣E′ ]∷ {!!}
-          result : E′ ᶜ∷ E/E′ (⊖ E⌣E′) ᶜ∷ (_Δ⋆_.E⋆/γ E⋆/γ) ≃ E ᶜ∷ E′/E (⊖ E⌣E′) ᶜ∷ E⋆
-          result = {!!}
-      in {!!}
-   ≃-sym ([ E ᶜ∶⇋∶ᵇ E′ ] E⋆) = {!!}
-   ≃-sym ([ E ᵇ∶⇋∶ᵇ E′ ] E⋆) = {!!}
-   ≃-sym ([ E ᵛ∶⇋∶ᵛ E′ ] E⋆) = {!!}
-   ≃-sym [] = []
-   ≃-sym (E ᵇ∷ E⋆) = E ᵇ∷ ≃-sym E⋆
-   ≃-sym (E ᶜ∷ E⋆) = E ᶜ∷ ≃-sym E⋆
-   ≃-sym (≃-trans T T′) = ≃-trans (≃-sym T′) (≃-sym T)
--}
+
    -- Existentially quantified version so we can state isEquivalence.
    TraceFrom : ∀ {Γ} (P : Proc Γ) → Set
    TraceFrom P = Σ[ a⋆ ∈ Action⋆ _ ] Σ[ R ∈ Proc _ ] P —[ a⋆ ]→⋆ R

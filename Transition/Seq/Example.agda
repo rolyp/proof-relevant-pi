@@ -15,6 +15,7 @@ module Transition.Seq.Example where
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_); open ᵀ⋆._—[_]→⋆_
 
    -- Three concurrent extrusion-rendezvous, where the extrusions are of the same binder.
+   -- TODO: show that the 6 interleavings of these are casually equivalent.
    postulate
       Γ : Cxt
       P Q : Proc Γ
