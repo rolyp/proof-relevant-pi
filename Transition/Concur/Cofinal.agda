@@ -32,7 +32,7 @@ module Transition.Concur.Cofinal where
    open ≈-Reasoning
    open Delta′
 
-   -- Correctness of residuals, with respect to the above notion of cofinality. Use ≈-Reasoning for maximum clarity.
+   -- Called 'cofin' in the paper. Use ≈-Reasoning for maximum clarity.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
           (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈[ Γ , (a , π₁ (ᴬ⊖ 𝑎)) , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
    ⊖₁-✓ (E ᵇ│ᵇ F) =

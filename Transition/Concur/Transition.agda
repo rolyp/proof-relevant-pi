@@ -6,25 +6,36 @@ module Transition.Concur.Transition where
    open import SharedModules
 
    open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ
-   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⌣-sym); open _ᴬ⌣_
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⌣-sym; ᴬ⊖); open _ᴬ⌣_
    open import Action.Concur.Action using (/-preserves-ᴬ⌣)
+   open import Name using (zero)
    open import Proc as ᴾ using (Proc)
    open import Ren as ᴿ using (Ren; push; pop; swap); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
-   open import Transition.Ren
+   open import Transition.Ren using (_*ᵇ; _*ᶜ)
    open import Transition.Concur
       using (Concur₁; module Concur₁; Concur; Delta′; module Delta′; Delta; ⊖; ⊖₁; ⌣-sym);
       open Concur₁; open Delta′
+   open import Transition.Concur.Cofinal using (⊖-✓)
+   open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; module _Δ′_)
    open import Transition.Concur.Ren using (_*ᵇᵇ⌣; _*ᵇᶜ⌣; _*ᶜᵇ⌣; _*ᶜᶜ⌣)
 
-   -- A "cyclic" version is probably more useful. However for the asymmetric version of the relation, 𝐸″ would
-   -- be mostly uninhabited. Only the symmetric relation is usefully "cyclic".
+   -- A "cyclic" version is probably more useful. However for the asymmetric version of the relation, 𝐸″
+   -- would be mostly uninhabited. TODO: 𝐸/E and E/𝐸 notation, once I've improved overloading situation.
    postulate
       /-preserves-⌣ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {𝑎 : a ᴬ⌣ a′} {𝑎′ : a′ ᴬ⌣ a″} {𝑎″ : a″ ᴬ⌣ a}
                       {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
                       (𝐸 : E ⌣[ 𝑎 ] E′) → E′ ⌣[ 𝑎′ ] E″ → (𝐸″ : E″ ⌣[ 𝑎″ ] E) →
                       E′/E (⊖ 𝐸) ⌣[ /-preserves-ᴬ⌣ 𝑎 𝑎′ (ᴬ⌣-sym 𝑎″) ] E/E′ (⊖ 𝐸″)
+
+      -- This would be the correctness property for E\𝐸, I think.
+      /-preserves-cofin :
+         ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {𝑎 : a ᴬ⌣ a′} {𝑎′ : a′ ᴬ⌣ a″} {𝑎″ : a″ ᴬ⌣ a}
+         {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} {E″ : P —[ a″ - _ ]→ R″} →
+         (𝐸 : E ⌣[ 𝑎 ] E′) (𝐸′ : E′ ⌣[ 𝑎′ ] E″) (𝐸″ : E″ ⌣[ 𝑎″ ] E) →
+         let 𝐸′/E = /-preserves-⌣ 𝐸 𝐸′ 𝐸″; 𝐸/E″ = /-preserves-⌣ 𝐸″ 𝐸 𝐸′; open _Δ′_
+         in E/E′ (⊖ 𝐸′/E) ≅ E/γ (⊖′[ (a″ , π₁ (ᴬ⊖ 𝑎″)) , zero ] (E′/E (⊖ 𝐸/E″)) (⊖-✓ 𝐸″))
 
    -- The residual 𝐸′/E. Slight case-explosion because of need to distinguish the ᵛ∇ᵛ and ᵇ∇ᵇ cases pairwise.
    /-preserves-⌣₁ : ∀ {Γ} {P : Proc Γ} {a a′ a″ R R′ R″} {𝑎 : a ᴬ⌣ a′} {𝑎′ : a′ ᴬ⌣ a″} {𝑎″ : a ᴬ⌣ a″}

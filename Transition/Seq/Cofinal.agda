@@ -102,7 +102,7 @@ module Transition.Seq.Cofinal where
              ) (E/γ ᶜ∷ E⋆/γ/E)
       in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
 
-   -- Causal equivalence. Would be nice to get rid of the redundancy in the constructor signatures.
+   -- Causal equivalence. TODO: eliminate redundancy in constructor signatures.
    infix 4 _≃_
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ a′⋆ R R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
       -- Transposition cases, which can't be axioms without a way of extending a trace to the right.
