@@ -55,7 +55,8 @@ module StructuralCong.Transition where
    -- Compatibility.
    ⊖ (x •∙ P) (.x •∙ .P) = ≈-refl Δ (x •∙ P)
    ⊖ (• x 〈 y 〉∙ P) (• .x 〈 .y 〉∙ .P) = ≈-refl Δ (• x 〈 y 〉∙ P)
-   ⊖ (E ➕₁ Q) (φ ➕ ψ) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ (E/φ ➕₁ ᴾ⁼.target ψ)
+   ⊖ (E ➕₁ Q) (φ ➕₁ .Q) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ (E/φ ➕₁ Q)
+   ⊖ (E ➕₁ Q) (P ➕₂ ψ) = ≈-refl Δ (E ➕₁ ᴾ⁼.target ψ)
    ⊖ (E ᵇ│ Q) (φ │ ψ) = let φ/E Δ E/φ = ⊖ E φ in (φ/E │ (push *⁼) ψ) Δ (E/φ ᵇ│ ᴾ⁼.target ψ)
    ⊖ (E ᶜ│ Q) (φ │ ψ) = let φ/E Δ E/φ = ⊖ E φ in (φ/E │ ψ) Δ (E/φ ᶜ│ ᴾ⁼.target ψ)
    ⊖ (P │ᵇ F) (φ │ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in ((push *⁼) φ │ ψ/F) Δ (ᴾ⁼.target φ │ᵇ F/ψ)

@@ -16,7 +16,7 @@ module StructuralCong.Proc where
    -- Synactic equivalence "modulo" a single transposition of adjacent binders. In the de Bruijn setting
    -- this means equating ν (ν P) with ν (ν (swap * P)). Not a congruence, in contrast to the LFMTP 2015 setup.
    infix 4 _≈_
-   infixl 6 _➕_ _│_
+   infixl 6 _➕₁_ _│_
    data _≈_ {Γ} : Proc Γ → Proc Γ → Set where
       -- Braidings. We need left and right versions of the rule to prove the lattice isos, although symmetry is
       -- derivable without them. TODO: revert to a single version of the rule.
@@ -26,7 +26,8 @@ module StructuralCong.Proc where
       Ο : Ο ≈ Ο
       _•∙_ : ∀ (x : Name Γ) P → x •∙ P ≈ x •∙ P
       •_〈_〉∙_ : ∀ (x y : Name Γ) P → • x 〈 y 〉∙ P ≈ • x 〈 y 〉∙ P
-      _➕_ : ∀ {P Q R S} → P ≈ R → Q ≈ S → P ➕ Q ≈ R ➕ S
+      _➕₁_ : ∀ {P R} → P ≈ R → ∀ Q → P ➕ Q ≈ R ➕ Q
+      _➕₂_ : ∀ {Q S} → ∀ P → Q ≈ S → P ➕ Q ≈ P ➕ S
       _│_ : ∀ {P Q R S} → P ≈ R → Q ≈ S → P │ Q ≈ R │ S
       ν_ : ∀ {P R} → P ≈ R → ν P ≈ ν R
       !_ : ∀ {P R} → P ≈ R → ! P ≈ ! R
@@ -43,7 +44,7 @@ module StructuralCong.Proc where
    ≈-refl {x = Ο} = Ο
    ≈-refl {x = x •∙ P} = x •∙ P
    ≈-refl {x = • x 〈 y 〉∙ P} = • x 〈 y 〉∙ P
-   ≈-refl {x = P ➕ Q} = ≈-refl ➕ ≈-refl
+   ≈-refl {x = P ➕ Q} = ≈-refl ➕₁ Q
    ≈-refl {x = P │ Q} = ≈-refl │ ≈-refl
    ≈-refl {x = ν P} = ν ≈-refl
    ≈-refl {x = ! P} = ! ≈-refl
@@ -55,7 +56,8 @@ module StructuralCong.Proc where
    ≈-sym Ο = Ο
    ≈-sym (x •∙ P) = x •∙ P
    ≈-sym (• x 〈 y 〉∙ P) = • x 〈 y 〉∙ P
-   ≈-sym (P ➕ Q) = ≈-sym P ➕ ≈-sym Q
+   ≈-sym (P ➕₁ Q) = ≈-sym P ➕₁ Q
+   ≈-sym (P ➕₂ Q) = P ➕₂ ≈-sym Q
    ≈-sym (P │ Q) = ≈-sym P │ ≈-sym Q
    ≈-sym (ν P) = ν ≈-sym P
    ≈-sym (! P) = ! ≈-sym P
@@ -65,7 +67,8 @@ module StructuralCong.Proc where
    ≈-sym-involutive Ο = refl
    ≈-sym-involutive (x •∙ P) = refl
    ≈-sym-involutive (• x 〈 y 〉∙ φ) = refl
-   ≈-sym-involutive (φ ➕ ψ) = cong₂ _➕_ (≈-sym-involutive φ) (≈-sym-involutive ψ)
+   ≈-sym-involutive (φ ➕₁ Q) = cong (λ P → P ➕₁ Q) (≈-sym-involutive φ)
+   ≈-sym-involutive (P ➕₂ ψ) = cong (λ Q → P ➕₂ Q) (≈-sym-involutive ψ)
    ≈-sym-involutive (φ │ ψ) = cong₂ _│_ (≈-sym-involutive φ) (≈-sym-involutive ψ)
    ≈-sym-involutive (νν-swapₗ P) = refl
    ≈-sym-involutive (νν-swapᵣ P) = refl
@@ -77,7 +80,7 @@ module StructuralCong.Proc where
    ≈-sym-refl Ο = refl
    ≈-sym-refl (x •∙ P) = refl
    ≈-sym-refl (• x 〈 y 〉∙ P) = refl
-   ≈-sym-refl (P ➕ Q) = cong₂ (λ P Q → P ➕ Q) (≈-sym-refl P) (≈-sym-refl Q)
+   ≈-sym-refl (P ➕ Q) = cong (λ P → P ➕₁ Q) (≈-sym-refl P)
    ≈-sym-refl (P │ Q) = cong₂ (λ P Q → P │ Q) (≈-sym-refl P) (≈-sym-refl Q)
    ≈-sym-refl (ν P) = cong (λ P → ν P) (≈-sym-refl P)
    ≈-sym-refl (! P) = cong (λ P → ! P) (≈-sym-refl P)
@@ -116,8 +119,9 @@ module StructuralCong.Proc where
    (ρ *⁼) Ο = Ο
    (ρ *⁼) (x •∙ P) = (ρ *) x •∙ (suc ρ *) P
    (ρ *⁼) (• x 〈 y 〉∙ P) = • (ρ *) x 〈 (ρ *) y 〉∙ (ρ *) P
-   (ρ *⁼) (P ➕ R) = (ρ *⁼) P ➕ (ρ *⁼) R
-   (ρ *⁼) (P │ R) = (ρ *⁼) P │ (ρ *⁼) R
+   (ρ *⁼) (P ➕₁ Q) = (ρ *⁼) P ➕₁ (ρ *) Q
+   (ρ *⁼) (P ➕₂ Q) = (ρ *) P ➕₂ (ρ *⁼) Q
+   (ρ *⁼) (P │ Q) = (ρ *⁼) P │ (ρ *⁼) Q
    (ρ *⁼) (ν P) = ν (suc ρ *⁼) P
    (ρ *⁼) (! P) = ! (ρ *⁼) P
    -- Transitivity.
