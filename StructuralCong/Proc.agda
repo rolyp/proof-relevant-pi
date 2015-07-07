@@ -1,4 +1,4 @@
--- Braiding congruence. TODO: rename accordingly.
+-- Braiding. TODO: rename accordingly.
 module StructuralCong.Proc where
 
    open import SharedModules hiding ([_]; preorder) renaming (sym to ≡-sym; trans to ≡-trans)
@@ -13,13 +13,13 @@ module StructuralCong.Proc where
       open Renameable ⦃...⦄
    open import Ren.Properties
 
-   -- A subset of the usual pi calculus structural congruence, namely equivalence modulo permutation
-   -- of adjacent binders. In the de Bruijn setting this means equating ν (ν P) with ν (ν (swap * P)).
+   -- Synactic equivalence "modulo" a single transposition of adjacent binders. In the de Bruijn setting
+   -- this means equating ν (ν P) with ν (ν (swap * P)). Not a congruence, in contrast to the LFMTP 2015 setup.
    infix 4 _≈_
    infixl 6 _➕_ _│_
    data _≈_ {Γ} : Proc Γ → Proc Γ → Set where
-      -- Structural congruence. We need left and right versions of the rule to prove the lattice isos,
-      -- although symmetry is derivable without them.
+      -- Braidings. We need left and right versions of the rule to prove the lattice isos, although symmetry is
+      -- derivable without them. TODO: revert to a single version of the rule.
       νν-swapₗ : ∀ P → ν (ν (swap *) P) ≈ ν (ν P)
       νν-swapᵣ : ∀ P → ν (ν P) ≈ ν (ν (swap *) P)
       -- Compatibility.
