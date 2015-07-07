@@ -53,7 +53,7 @@ module StructuralCong.Transition where
    ⊖ (νᶜ_ {a = a} (νᶜ E)) (νν-swapᵣ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap∘push∘push a = νν-swapᵣ _ Δ νᶜ (νᶜ swap*E)
    -- Compatibility.
-   ⊖ (x •∙ P) (.x •∙ φ) = φ Δ (x •∙ ᴾ⁼.target φ)
+   ⊖ (x •∙ P) (.x •∙ .P) = ≈-refl Δ (x •∙ P)
    ⊖ (• x 〈 y 〉∙ P) (• .x 〈 .y 〉∙ φ) = φ Δ (• x 〈 y 〉∙ ᴾ⁼.target φ)
    ⊖ (E ➕₁ Q) (φ ➕ ψ) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ (E/φ ➕₁ ᴾ⁼.target ψ)
    ⊖ (E ᵇ│ Q) (φ │ ψ) = let φ/E Δ E/φ = ⊖ E φ in (φ/E │ (push *⁼) ψ) Δ (E/φ ᵇ│ ᴾ⁼.target ψ)

@@ -5,11 +5,11 @@ module StructuralCong.Transition.Properties where
 
    open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Name as ᴺ using (Name; zero)
-   open import StructuralCong.Proc as ᴾ⁼ using (_≅_); open ᴾ⁼._≅_
+   open import StructuralCong.Proc as ᴾ⁼ using (_≈_); open ᴾ⁼._≈_
    open import StructuralCong.Transition using (⊖; _Δ_)
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
 
-   ⊖-ν•-ν : ∀ {ι Γ P P′ R} {x : Name Γ} (E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - ι ]→ R) {φ : P ≅ P′} →
+   ⊖-ν•-ν : ∀ {ι Γ P P′ R} {x : Name Γ} (E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - ι ]→ R) {φ : P ≈ P′} →
             ⊖ (ν• E) (ν φ) ≡ let φ/E Δ E/φ = ⊖ E φ in φ/E Δ ν• E/φ
    ⊖-ν•-ν (• ._ 〈 ._ 〉∙ _) = refl
    ⊖-ν•-ν (_ ➕₁ _) = refl
@@ -18,7 +18,7 @@ module StructuralCong.Transition.Properties where
    ⊖-ν•-ν (νᶜ _) = refl
    ⊖-ν•-ν (! _) = refl
 
-   ⊖-trans : ∀ {ι Γ P P′ P″} {a : Action Γ} {R} (E : P —[ a - ι ]→ R) {φ : P ≅ P′} {φ′ : P′ ≅ P″} →
+   ⊖-trans : ∀ {ι Γ P P′ P″} {a : Action Γ} {R} (E : P —[ a - ι ]→ R) {φ : P ≈ P′} {φ′ : P′ ≈ P″} →
              ⊖ E (trans φ φ′) ≡ let φ/E Δ E/φ = ⊖ E φ; φ′/E/φ Δ E/φ/φ′ = ⊖ E/φ φ′ in (trans φ/E φ′/E/φ) Δ E/φ/φ′
    ⊖-trans (_ •∙ _) = refl
    ⊖-trans (• _ 〈 _ 〉∙ _) = refl
@@ -28,7 +28,6 @@ module StructuralCong.Transition.Properties where
    ⊖-trans (_ │ᵇ _) = refl
    ⊖-trans (_ │ᶜ _) = refl
    ⊖-trans (_ │• _) = refl
-   ⊖-trans (_ •│ _) = refl
    ⊖-trans (_ │ᵥ _) = refl
    ⊖-trans (ν• (• ._ 〈 ._ 〉∙ _)) = refl
    ⊖-trans (ν• (_ ➕₁ _)) = refl
@@ -58,7 +57,6 @@ module StructuralCong.Transition.Properties where
    ⊖-trans (νᶜ_ {a = τ} (_ ᶜ│ _)) = refl
    ⊖-trans (νᶜ_ {a = τ} (_ │ᶜ _)) = refl
    ⊖-trans (νᶜ_ {a = τ} (_ │• _)) = refl
-   ⊖-trans (νᶜ_ {a = τ} (_ •│ _)) = refl
    ⊖-trans (νᶜ_ {a = τ} (_ │ᵥ _)) = refl
    ⊖-trans (νᶜ_ {a = τ} (νᶜ _)) = refl
    ⊖-trans (νᶜ_ {a = τ} (! _)) = refl

@@ -75,7 +75,7 @@ module StructuralCong.Proc where
 
    ≈-sym-refl : ∀ {Γ} (P : Proc Γ) → ≈-sym (≈-refl {x = P}) ≡ ≈-refl
    ≈-sym-refl Ο = refl
-   ≈-sym-refl (x •∙ P) = {!!}
+   ≈-sym-refl (x •∙ P) = refl
    ≈-sym-refl (• x 〈 y 〉∙ P) = cong (λ P → • x 〈 y 〉∙ P) (≈-sym-refl P)
    ≈-sym-refl (P ➕ Q) = cong₂ (λ P Q → P ➕ Q) (≈-sym-refl P) (≈-sym-refl Q)
    ≈-sym-refl (P │ Q) = cong₂ (λ P Q → P │ Q) (≈-sym-refl P) (≈-sym-refl Q)
