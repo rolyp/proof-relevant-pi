@@ -25,7 +25,7 @@ module StructuralCong.Proc where
       -- Compatibility.
       Ο : Ο ≈ Ο
       _•∙_ : ∀ (x : Name Γ) P → x •∙ P ≈ x •∙ P
-      •_〈_〉∙_ : ∀ {P R} (x y : Name Γ) → P ≈ R → • x 〈 y 〉∙ P ≈ • x 〈 y 〉∙ R
+      •_〈_〉∙_ : ∀ (x y : Name Γ) P → • x 〈 y 〉∙ P ≈ • x 〈 y 〉∙ P
       _➕_ : ∀ {P Q R S} → P ≈ R → Q ≈ S → P ➕ Q ≈ R ➕ S
       _│_ : ∀ {P Q R S} → P ≈ R → Q ≈ S → P │ Q ≈ R │ S
       ν_ : ∀ {P R} → P ≈ R → ν P ≈ ν R
@@ -42,7 +42,7 @@ module StructuralCong.Proc where
    ≈-refl : ∀ {Γ} → Reflexive (_≈_ {Γ})
    ≈-refl {x = Ο} = Ο
    ≈-refl {x = x •∙ P} = x •∙ P
-   ≈-refl {x = • x 〈 y 〉∙ P} = • x 〈 y 〉∙ ≈-refl
+   ≈-refl {x = • x 〈 y 〉∙ P} = • x 〈 y 〉∙ P
    ≈-refl {x = P ➕ Q} = ≈-refl ➕ ≈-refl
    ≈-refl {x = P │ Q} = ≈-refl │ ≈-refl
    ≈-refl {x = ν P} = ν ≈-refl
@@ -54,7 +54,7 @@ module StructuralCong.Proc where
    ≈-sym (νν-swapᵣ P) = νν-swapₗ P
    ≈-sym Ο = Ο
    ≈-sym (x •∙ P) = x •∙ P
-   ≈-sym (• x 〈 y 〉∙ P) = • x 〈 y 〉∙ ≈-sym P
+   ≈-sym (• x 〈 y 〉∙ P) = • x 〈 y 〉∙ P
    ≈-sym (P ➕ Q) = ≈-sym P ➕ ≈-sym Q
    ≈-sym (P │ Q) = ≈-sym P │ ≈-sym Q
    ≈-sym (ν P) = ν ≈-sym P
@@ -64,7 +64,7 @@ module StructuralCong.Proc where
    ≈-sym-involutive : ∀ {Γ} {P P′ : Proc Γ} (φ : P ≈ P′) → ≈-sym (≈-sym φ) ≡ φ
    ≈-sym-involutive Ο = refl
    ≈-sym-involutive (x •∙ P) = refl
-   ≈-sym-involutive (• x 〈 y 〉∙ φ) = cong (λ P → • x 〈 y 〉∙ P) (≈-sym-involutive φ)
+   ≈-sym-involutive (• x 〈 y 〉∙ φ) = refl
    ≈-sym-involutive (φ ➕ ψ) = cong₂ _➕_ (≈-sym-involutive φ) (≈-sym-involutive ψ)
    ≈-sym-involutive (φ │ ψ) = cong₂ _│_ (≈-sym-involutive φ) (≈-sym-involutive ψ)
    ≈-sym-involutive (νν-swapₗ P) = refl
@@ -76,7 +76,7 @@ module StructuralCong.Proc where
    ≈-sym-refl : ∀ {Γ} (P : Proc Γ) → ≈-sym (≈-refl {x = P}) ≡ ≈-refl
    ≈-sym-refl Ο = refl
    ≈-sym-refl (x •∙ P) = refl
-   ≈-sym-refl (• x 〈 y 〉∙ P) = cong (λ P → • x 〈 y 〉∙ P) (≈-sym-refl P)
+   ≈-sym-refl (• x 〈 y 〉∙ P) = refl
    ≈-sym-refl (P ➕ Q) = cong₂ (λ P Q → P ➕ Q) (≈-sym-refl P) (≈-sym-refl Q)
    ≈-sym-refl (P │ Q) = cong₂ (λ P Q → P │ Q) (≈-sym-refl P) (≈-sym-refl Q)
    ≈-sym-refl (ν P) = cong (λ P → ν P) (≈-sym-refl P)
@@ -115,7 +115,7 @@ module StructuralCong.Proc where
    -- Compatibility.
    (ρ *⁼) Ο = Ο
    (ρ *⁼) (x •∙ P) = (ρ *) x •∙ (suc ρ *) P
-   (ρ *⁼) (• x 〈 y 〉∙ P) = • (ρ *) x 〈 (ρ *) y 〉∙ (ρ *⁼) P
+   (ρ *⁼) (• x 〈 y 〉∙ P) = • (ρ *) x 〈 (ρ *) y 〉∙ (ρ *) P
    (ρ *⁼) (P ➕ R) = (ρ *⁼) P ➕ (ρ *⁼) R
    (ρ *⁼) (P │ R) = (ρ *⁼) P │ (ρ *⁼) R
    (ρ *⁼) (ν P) = ν (suc ρ *⁼) P
