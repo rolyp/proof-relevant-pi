@@ -68,6 +68,18 @@ module Transition.Concur.Cofinal where
          ∎) │₁ _ ⟩
          (suc (pop y) *) S′ │ (push *) S₁
       ∎
+   ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} 𝐸 F) with (pop y *ᶜ) (E/E′ (⊖₁ 𝐸))
+   ... | pop-y*E/E′ rewrite pop∘push y a =
+      let open ≈-Reasoning; S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
+      begin
+         (id *) ((pop y *) S │ S₁)
+      ≡⟨ *-preserves-id _ ⟩
+         (pop y *) S │ S₁
+      ≈⟨ {!!} │₁ _ ⟩
+         (pop y *) ((id *) S) │ S₁
+      ≈⟨ (pop y *⁼) (⊖₁-✓ 𝐸) │₁ _ ⟩
+         (pop y *) S′ │ S₁
+      ∎
    ⊖₁-✓ _ = {!!}
 {-
    ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} 𝐸 F) with (pop y *ᶜ) (E/E′ (⊖₁ 𝐸))
