@@ -35,7 +35,7 @@ module Transition.Concur.Cofinal where
 
    open Delta′
 
-   -- TODO: put in a more generic location.
+   -- TODO: move to a more generic location.
    swap-swap : ∀ {Γ} {P P′ : Proc (Γ + 2)} → (swap *) P ≡ P′ → P ≡ (swap *) P′
    swap-swap {P = P} {P′} swap*P≡P′ =
       let open EqReasoning (setoid _) in
@@ -50,44 +50,39 @@ module Transition.Concur.Cofinal where
    -- Called 'cofin' in the paper. Use ≈-Reasoning for maximum clarity.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
           (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈[ Γ , (a , π₁ (ᴬ⊖ 𝑎)) , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
-   ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘push (target E) | swap∘suc-push (target F) = refl
+   ⊖₁-✓ (E ᵇ│ᵇ F) = sym (cong₂ _│_ (swap∘push (target E)) (swap∘suc-push (target F)))
    ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-refl
    ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-refl
    ⊖₁-✓ (E ᶜ│ᶜ F) = ≈-refl
    ⊖₁-✓ (_│•ᵇ_ {y = y} {a = a} 𝐸 F) with (pop y *ᵇ) (E/E′ (⊖₁ 𝐸))
    ... | pop-y*E/E′ rewrite pop∘push y a =
       let open ≈-Reasoning; S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
-      begin
-         (pop (push y) *) S │ (push *) S₁
-      ≈⟨ (
-         begin
-            _
-         ≡⟨ cong (pop (push y) *) (swap-swap (⊖₁-✓ 𝐸)) ⟩
-            (pop (push y) *) ((swap *) S′)
-         ≡⟨ sym (pop∘swap y _) ⟩
-            _
-         ∎) │₁ _ ⟩
-         (suc (pop y) *) S′ │ (push *) S₁
-      ∎
+      (begin
+         (pop (push y) *) S
+      ≡⟨ cong (pop (push y) *) (swap-swap (⊖₁-✓ 𝐸)) ⟩
+         (pop (push y) *) ((swap *) S′)
+      ≡⟨ sym (pop∘swap y _) ⟩
+         (suc (pop y) *) S′
+      ∎) │₁ refl
    ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} 𝐸 F) with (pop y *ᶜ) (E/E′ (⊖₁ 𝐸))
-   ... | pop-y*E/E′ rewrite pop∘push y a = (pop y *⁼) (⊖₁-✓ 𝐸) │₁ _
+   ... | pop-y*E/E′ rewrite pop∘push y a = (pop y *⁼) (⊖₁-✓ 𝐸) │₁ refl
    ⊖₁-✓ (_ᵇ│•_ {y = y} E 𝐹) =
       let open ≈-Reasoning; R = target E; S = S (⊖₁ 𝐹); S′ = S′ (⊖₁ 𝐹) in
       begin
          (pop (push y) *) ((suc push *) R) │ S
       ≡⟨ cong (flip _│_ S) (sym (pop∘suc-push y _)) ⟩
          (push *) ((pop y *) R) │ S
-      ≈⟨ _ │₂ ⊖₁-✓ 𝐹 ⟩
+      ≈⟨ refl │₂ ⊖₁-✓ 𝐹 ⟩
          (push *) ((pop y *) R) │ S′
       ∎
-   ⊖₁-✓ (E ᶜ│• 𝐹) = _ │₂ ⊖₁-✓ 𝐹
+   ⊖₁-✓ (E ᶜ│• 𝐹) = refl │₂ ⊖₁-✓ 𝐹
    ⊖₁-✓ (𝐸 │ᵥᵇ F) =
       let open ≈-Reasoning; S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
       ν (begin
             S │ (suc push *) S₁
          ≡⟨ cong (_│_ S) (swap∘push _) ⟩
             S │ (swap *) ((push *) S₁)
-         ≈⟨ ≈-reflexive (swap-swap (⊖₁-✓ 𝐸)) │₁ _ ⟩
+         ≈⟨ ≈-reflexive (swap-swap (⊖₁-✓ 𝐸)) │₁ refl ⟩
             (swap *) S′ │ (swap *) ((push *) S₁)
          ∎)
    ⊖₁-✓ _ = {!!}
