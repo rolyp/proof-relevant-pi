@@ -154,6 +154,7 @@ module Transition.Concur.Cofinal where
       ≡⟨ cong (swap *) (cong (suc swap *) (⊖₁-✓ 𝐸)) ⟩
          (swap *) ((suc swap *) S′)
       ∎)
+   ⊖₁-✓ (νᵛᵛ 𝐸) = cong ν_ (cong (swap *) (⊖₁-✓ 𝐸))
    ⊖₁-✓ _ = {!!}
 {-
    ⊖₁-✓ (νᵛᵛ 𝐸) =
