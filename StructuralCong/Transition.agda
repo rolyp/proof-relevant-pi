@@ -27,7 +27,6 @@ module StructuralCong.Transition where
    -- The symmetric residual. TODO: make infix.
    ⊖ : ∀ {ι Γ P P′} {a : Action Γ} {R} (E : P —[ a - ι ]→ R) (φ : P ≈ P′) → E Δ⁼ φ
 
-   -- Structural congruences.
    ⊖ (ν•_ {x = x} (νᶜ E)) (νν-swapₗ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap-involutive P = ν ≈-reflexive (sym (swap-involutive _)) Δ νᵇ (ν• swap*E)
    ⊖ (νᵇ_ {a = • x} (ν• E)) (νν-swapₗ P) with (swap *ᶜ) E
@@ -52,7 +51,6 @@ module StructuralCong.Transition where
       ≈-trans (νν-swapᵣ _) (ν (ν ≈-reflexive (swap∘suc-swap∘swap _))) Δ νᵇ (νᵇ swap*E)
    ⊖ (νᶜ_ {a = a} (νᶜ E)) (νν-swapᵣ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap∘push∘push a = νν-swapᵣ _ Δ νᶜ (νᶜ swap*E)
-   -- Compatibility.
    ⊖ (x •∙ P) (.x •∙ refl) = ≈-refl Δ (x •∙ P)
    ⊖ (• x 〈 y 〉∙ P) (• .x 〈 .y 〉∙ refl) = ≈-refl Δ (• x 〈 y 〉∙ P)
    ⊖ (E ➕₁ Q) (φ ➕₁ refl) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ (E/φ ➕₁ Q)
@@ -61,14 +59,14 @@ module StructuralCong.Transition where
    ⊖ (E ᶜ│ Q) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in (φ/E │₁ refl) Δ (E/φ ᶜ│ Q)
    ⊖ (P │ᵇ F) (φ │₁ refl) = ((push *⁼) φ │₁ refl) Δ (ᴾ⁼.target φ │ᵇ F)
    ⊖ (P │ᶜ F) (φ │₁ refl) = (φ │₁ refl) Δ (ᴾ⁼.target φ │ᶜ F)
-   ⊖ (E ᵇ│ Q) (refl │₂ ψ) = {!!}
-   ⊖ (E ᶜ│ Q) (refl │₂ ψ) = {!!}
-   ⊖ (P │ᵇ F) (refl │₂ ψ) = {!!}
-   ⊖ (P │ᶜ F) (refl │₂ ψ) = {!!}
+   ⊖ (E ᵇ│ Q) (refl │₂ ψ) = (refl │₂ (push *⁼) ψ) Δ (E ᵇ│ ᴾ⁼.target ψ)
+   ⊖ (E ᶜ│ Q) (refl │₂ ψ) = (refl │₂ ψ) Δ (E ᶜ│ ᴾ⁼.target ψ)
+   ⊖ (P │ᵇ F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in (refl │₂ ψ/F) Δ (P │ᵇ F/ψ)
+   ⊖ (P │ᶜ F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in (refl │₂ ψ/F) Δ (P │ᶜ F/ψ)
    ⊖ (_│•_ {y = y} E F) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in ((pop y *⁼) φ/E │₁ refl) Δ (E/φ │• F)
-   ⊖ (_│•_ {y = y} E F) (refl │₂ ψ) = {!!}
+   ⊖ (E │• F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in (refl │₂ ψ/F) Δ (E │• F/ψ)
    ⊖ (E │ᵥ F) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in (ν (φ/E │₁ refl)) Δ (E/φ │ᵥ F)
-   ⊖ (E │ᵥ F) (refl │₂ ψ) = ?
+   ⊖ (E │ᵥ F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in (ν (refl │₂ ψ/F)) Δ (E │ᵥ F/ψ)
    ⊖ (ν• E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ ν• E/φ
    ⊖ (νᵇ E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in ν ((swap *⁼) φ/E) Δ νᵇ E/φ
    ⊖ (νᶜ E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in ν φ/E Δ νᶜ E/φ
