@@ -18,17 +18,26 @@ module Transition.Concur.Cofinal where
       using (Concur₁; module Concur₁; Concur; Delta′; Delta; module Delta′; ⊖₁; ⊖); open Concur₁
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
-   -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
-   -- structurally congruent, or structurally congruent with each other's swap image.
    braid : ∀ {Γ} (ӓ : Action₂ Γ) → let Γ′ = Γ + inc (π₁ ӓ) + inc (π₂ ӓ) in Ren Γ′ Γ′
    braid (_ ᵇ , _ ᵇ) = swap
    braid (_ ᵇ , _ ᶜ) = id
    braid (_ ᶜ , _ ᵇ) = id
    braid (_ ᶜ , _ ᶜ) = id
 
+   -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
+   -- structurally congruent, or structurally congruent with each other's swap image.
    ⋈[_,_,_] : ∀ Γ (ӓ : Action₂ Γ) (Δ : Cxt) →
               let Γ′ = Γ + inc (π₁ ӓ) + inc (π₂ ӓ) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
    ⋈[ Γ , ӓ , Δ ] P P′ = ((braid ӓ ᴿ+ Δ) *) P ≈ P′
+
+   -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
+   -- related by an (optional) "bound" braid, or by a "free" braid.
+   ⋈′[_,_,_] : ∀ Γ (ӓ : Action₂ Γ) (Δ : Cxt) →
+              let Γ′ = Γ + inc (π₁ ӓ) + inc (π₂ ӓ) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
+   ⋈′[_,_,_] _ (_ ᵇ , _ ᵇ) Δ P P′ = ((swap ᴿ+ Δ) *) P ≡ P′
+   ⋈′[_,_,_] _ (_ ᵇ , _ ᶜ) _ P P′ = P ≈ P′
+   ⋈′[_,_,_] _ (_ ᶜ , _ ᵇ) Δ P P′ = P ≈ P′
+   ⋈′[_,_,_] _ (_ ᶜ , _ ᶜ) Δ P P′ = P ≈ P′
 
    open Delta′
 
@@ -91,6 +100,7 @@ module Transition.Concur.Cofinal where
       ≈⟨ _ │₂ ⊖₁-✓ 𝐹 ⟩
          (push *) ((pop y *) R) │ S′
       ∎
+   ⊖₁-✓ (E ᶜ│• 𝐹) = {!!}
    ⊖₁-✓ _ = {!!}
 {-
    ⊖₁-✓ (E ᶜ│• 𝐹) = ≈-reflexive (*-preserves-id _) │ (⊖₁-✓ 𝐹)
