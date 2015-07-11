@@ -155,43 +155,12 @@ module Transition.Concur.Cofinal where
          (swap *) ((suc swap *) S′)
       ∎)
    ⊖₁-✓ (νᵛᵛ 𝐸) = cong ν_ (cong (swap *) (⊖₁-✓ 𝐸))
+   ⊖₁-✓ (νᵇᶜ_ {a′ = a′} 𝐸) with (swap *ᶜ) (E′/E (⊖₁ 𝐸))
+   ... | _ rewrite swap∘push∘push a′ = cong ν_ (cong (swap *) (⊖₁-✓ 𝐸))
+   ⊖₁-✓ (νᶜᵇ_ {a = a} 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
+   ... | _ rewrite swap∘push∘push a = cong ν_ (cong (swap *) (⊖₁-✓ 𝐸))
    ⊖₁-✓ _ = {!!}
 {-
-   ⊖₁-✓ (νᵛᵛ 𝐸) =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      ν (begin
-         (suc id *) ((swap *) S)
-      ≡⟨ +-id-elim 1 _ ⟩
-         (swap *) S
-      ≡⟨ cong (swap *) (sym (*-preserves-id _)) ⟩
-         (swap *) ((id *) S)
-      ≈⟨ (swap *⁼) (⊖₁-✓ 𝐸) ⟩
-         (swap *) S′
-      ∎)
-   ⊖₁-✓ (νᵇᶜ_ {a′ = a′} 𝐸) with (swap *ᶜ) (E′/E (⊖₁ 𝐸))
-   ... | _ rewrite swap∘push∘push a′ =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      ν (begin
-         (suc id *) ((swap *) S)
-      ≡⟨ +-id-elim 1 _ ⟩
-         (swap *) S
-      ≡⟨ cong (swap *) (sym (*-preserves-id _)) ⟩
-         (swap *) ((id *) S)
-      ≈⟨ (swap *⁼) (⊖₁-✓ 𝐸) ⟩
-         (swap *) S′
-      ∎)
-   ⊖₁-✓ (νᶜᵇ_ {a = a} 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
-   ... | _ rewrite swap∘push∘push a =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      ν (begin
-         (suc id *) ((swap *) S)
-      ≡⟨ +-id-elim 1 _ ⟩
-         (swap *) S
-      ≡⟨ cong (swap *) (sym (*-preserves-id _)) ⟩
-         (swap *) ((id *) S)
-      ≈⟨ (swap *⁼) (⊖₁-✓ 𝐸) ⟩
-         (swap *) S′
-      ∎)
    ⊖₁-✓ (νᶜᶜ 𝐸) =
       let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
       ν (begin
