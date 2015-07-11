@@ -25,19 +25,13 @@ module Transition.Concur.Cofinal where
    braid (_ ᶜ , _ ᶜ) = id
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
-   -- structurally congruent, or structurally congruent with each other's swap image.
+   -- related by an (optional) "bound" braid, or by a "free" braid.
    ⋈[_,_,_] : ∀ Γ (ӓ : Action₂ Γ) (Δ : Cxt) →
               let Γ′ = Γ + inc (π₁ ӓ) + inc (π₂ ӓ) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
-   ⋈[ Γ , ӓ , Δ ] P P′ = ((braid ӓ ᴿ+ Δ) *) P ≈ P′
-
-   -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
-   -- related by an (optional) "bound" braid, or by a "free" braid.
-   ⋈′[_,_,_] : ∀ Γ (ӓ : Action₂ Γ) (Δ : Cxt) →
-              let Γ′ = Γ + inc (π₁ ӓ) + inc (π₂ ӓ) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
-   ⋈′[_,_,_] _ (_ ᵇ , _ ᵇ) Δ P P′ = ((swap ᴿ+ Δ) *) P ≡ P′
-   ⋈′[_,_,_] _ (_ ᵇ , _ ᶜ) _ P P′ = P ≈ P′
-   ⋈′[_,_,_] _ (_ ᶜ , _ ᵇ) Δ P P′ = P ≈ P′
-   ⋈′[_,_,_] _ (_ ᶜ , _ ᶜ) Δ P P′ = P ≈ P′
+   ⋈[_,_,_] _ (_ ᵇ , _ ᵇ) Δ P P′ = ((swap ᴿ+ Δ) *) P ≡ P′
+   ⋈[_,_,_] _ (_ ᵇ , _ ᶜ) _ P P′ = P ≈ P′
+   ⋈[_,_,_] _ (_ ᶜ , _ ᵇ) Δ P P′ = P ≈ P′
+   ⋈[_,_,_] _ (_ ᶜ , _ ᶜ) Δ P P′ = P ≈ P′
 
    open Delta′
 
@@ -55,7 +49,7 @@ module Transition.Concur.Cofinal where
 
    -- Called 'cofin' in the paper. Use ≈-Reasoning for maximum clarity.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈′[ Γ , (a , π₁ (ᴬ⊖ 𝑎)) , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
+          (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈[ Γ , (a , π₁ (ᴬ⊖ 𝑎)) , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
    ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘push (target E) | swap∘suc-push (target F) = refl
    ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-refl
    ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-refl
@@ -63,11 +57,7 @@ module Transition.Concur.Cofinal where
    ⊖₁-✓ (_│•ᵇ_ {y = y} {a = a} 𝐸 F) with (pop y *ᵇ) (E/E′ (⊖₁ 𝐸))
    ... | pop-y*E/E′ rewrite pop∘push y a =
       let open ≈-Reasoning; S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
-      {!!}
-{-
       begin
-         (id *) ((pop (push y) *) S │ (push *) S₁)
-      ≡⟨ *-preserves-id _ ⟩
          (pop (push y) *) S │ (push *) S₁
       ≈⟨ (
          begin
@@ -79,27 +69,13 @@ module Transition.Concur.Cofinal where
          ∎) │₁ _ ⟩
          (suc (pop y) *) S′ │ (push *) S₁
       ∎
--}
    ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} 𝐸 F) with (pop y *ᶜ) (E/E′ (⊖₁ 𝐸))
-   ... | pop-y*E/E′ rewrite pop∘push y a =
-      let open ≈-Reasoning; S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
-      {!!}
-{-
-      begin
-         (id *) ((pop y *) S │ S₁)
-      ≡⟨ *-preserves-id _ ⟩
-         (pop y *) S │ S₁
-      ≈⟨ (pop y *⁼) (⊖₁-✓ 𝐸) │₁ _ ⟩
-         (pop y *) S′ │ S₁
-      ∎
--}
+   ... | pop-y*E/E′ rewrite pop∘push y a = (pop y *⁼) (⊖₁-✓ 𝐸) │₁ _
    ⊖₁-✓ (_ᵇ│•_ {y = y} E 𝐹) =
       let open ≈-Reasoning; R = target E; S = S (⊖₁ 𝐹); S′ = S′ (⊖₁ 𝐹) in
       {!!}
 {-
       begin
-         (id *) ((pop (push y) *) ((suc push *) R) │ S)
-      ≡⟨ *-preserves-id _ ⟩
          (pop (push y) *) ((suc push *) R) │ S
       ≡⟨ cong₂ _│_ (sym (pop∘suc-push y _)) (sym (*-preserves-id _)) ⟩
          (push *) ((pop y *) R) │ (id *) S
