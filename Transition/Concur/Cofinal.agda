@@ -75,25 +75,13 @@ module Transition.Concur.Cofinal where
          (id *) ((pop y *) S │ S₁)
       ≡⟨ *-preserves-id _ ⟩
          (pop y *) S │ S₁
-      ≈⟨ {!!} │₁ _ ⟩
+      ≈⟨ (pop y *⁼) (≈-reflexive (sym (*-preserves-id _))) │₁ _ ⟩
          (pop y *) ((id *) S) │ S₁
       ≈⟨ (pop y *⁼) (⊖₁-✓ 𝐸) │₁ _ ⟩
          (pop y *) S′ │ S₁
       ∎
    ⊖₁-✓ _ = {!!}
 {-
-   ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} 𝐸 F) with (pop y *ᶜ) (E/E′ (⊖₁ 𝐸))
-   ... | pop-y*E/E′ rewrite pop∘push y a =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      (begin
-         (id *) ((pop y *) S)
-      ≡⟨ *-preserves-id _ ⟩
-         (pop y *) S
-      ≡⟨ cong (pop y *) (sym (*-preserves-id _)) ⟩
-         (pop y *) ((id *) S)
-      ≈⟨ (pop y *⁼) (⊖₁-✓ 𝐸) ⟩
-         (pop y *) S′
-      ∎) │ ≈-reflexive (*-preserves-id _)
    ⊖₁-✓ (_ᵇ│•_ {y = y} E 𝐹) =
       let R = target E in
       (begin
