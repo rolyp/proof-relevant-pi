@@ -33,8 +33,6 @@ module Transition.Concur.Cofinal where
    ⋈[_,_,_] _ (_ ᶜ , _ ᵇ) Δ P P′ = P ≈ P′
    ⋈[_,_,_] _ (_ ᶜ , _ ᶜ) Δ P P′ = P ≈ P′
 
-   open Delta′
-
    -- TODO: move to a more generic location.
    swap-swap : ∀ {Γ} {P P′ : Proc (Γ + 2)} → (swap *) P ≡ P′ → P ≡ (swap *) P′
    swap-swap {P = P} {P′} swap*P≡P′ =
@@ -47,6 +45,9 @@ module Transition.Concur.Cofinal where
          (swap *) P′
       ∎
 
+   open Delta′
+   open ≈-Reasoning
+
    -- Called 'cofin' in the paper. Use ≈-Reasoning for maximum clarity.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
           (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈[ Γ , (a , π₁ (ᴬ⊖ 𝑎)) , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
@@ -56,7 +57,7 @@ module Transition.Concur.Cofinal where
    ⊖₁-✓ (E ᶜ│ᶜ F) = ≈-refl
    ⊖₁-✓ (_│•ᵇ_ {y = y} {a = a} 𝐸 F) with (pop y *ᵇ) (E/E′ (⊖₁ 𝐸))
    ... | pop-y*E/E′ rewrite pop∘push y a =
-      let open ≈-Reasoning; S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
+      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
       (begin
          (pop (push y) *) S
       ≡⟨ cong (pop (push y) *) (swap-swap (⊖₁-✓ 𝐸)) ⟩
@@ -67,7 +68,7 @@ module Transition.Concur.Cofinal where
    ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} 𝐸 F) with (pop y *ᶜ) (E/E′ (⊖₁ 𝐸))
    ... | pop-y*E/E′ rewrite pop∘push y a = (pop y *⁼) (⊖₁-✓ 𝐸) │₁ refl
    ⊖₁-✓ (_ᵇ│•_ {y = y} E 𝐹) =
-      let open ≈-Reasoning; R = target E; S = S (⊖₁ 𝐹); S′ = S′ (⊖₁ 𝐹) in
+      let R = target E; S = S (⊖₁ 𝐹); S′ = S′ (⊖₁ 𝐹) in
       begin
          (pop (push y) *) ((suc push *) R) │ S
       ≡⟨ cong (flip _│_ S) (sym (pop∘suc-push y _)) ⟩
@@ -77,7 +78,7 @@ module Transition.Concur.Cofinal where
       ∎
    ⊖₁-✓ (E ᶜ│• 𝐹) = refl │₂ ⊖₁-✓ 𝐹
    ⊖₁-✓ (𝐸 │ᵥᵇ F) =
-      let open ≈-Reasoning; S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
+      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
       ν (begin
             S │ (suc push *) S₁
          ≡⟨ cong (_│_ S) (swap∘push _) ⟩
@@ -85,6 +86,7 @@ module Transition.Concur.Cofinal where
          ≈⟨ ≈-reflexive (swap-swap (⊖₁-✓ 𝐸)) │₁ refl ⟩
             (swap *) S′ │ (swap *) ((push *) S₁)
          ∎)
+   ⊖₁-✓ (𝐸 │ᵥᶜ F) = ν (⊖₁-✓ 𝐸 │₁ refl)
    ⊖₁-✓ _ = {!!}
 {-
    ⊖₁-✓ (𝐸 │ᵥᶜ F) =
