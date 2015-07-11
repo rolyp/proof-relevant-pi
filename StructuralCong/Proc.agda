@@ -26,10 +26,10 @@ module StructuralCong.Proc where
       Ο : Ο ≈ Ο
       _•∙_ : ∀ (x : Name Γ) {P P′} → P ≡ P′ → x •∙ P ≈ x •∙ P′
       •_〈_〉∙_ : ∀ (x y : Name Γ) {P P′} → P ≡ P′ → • x 〈 y 〉∙ P ≈ • x 〈 y 〉∙ P′
-      _➕₁_ : ∀ {P R} → P ≈ R → ∀ Q → P ➕ Q ≈ R ➕ Q
-      _➕₂_ : ∀ {Q S} → ∀ P → Q ≈ S → P ➕ Q ≈ P ➕ S
-      _│₁_ : ∀ {P R} → P ≈ R → ∀ Q → P │ Q ≈ R │ Q
-      _│₂_ : ∀ {Q S} → ∀ P → Q ≈ S → P │ Q ≈ P │ S
+      _➕₁_ : ∀ {P Q R S} → P ≈ R → Q ≡ S → P ➕ Q ≈ R ➕ Q
+      _➕₂_ : ∀ {P Q R S} → P ≡ R → Q ≈ S → P ➕ Q ≈ P ➕ S
+      _│₁_ : ∀ {P Q R S} → P ≈ R → Q ≡ S → P │ Q ≈ R │ Q
+      _│₂_ : ∀ {P Q R S} → P ≡ R → Q ≈ S → P │ Q ≈ P │ S
       ν_ : ∀ {P R} → P ≈ R → ν P ≈ ν R
       !_ : ∀ {P R} → P ≈ R → ! P ≈ ! R
       -- Symmetry and reflexivity are derivable. (Writing this as ∘ in the paper, with arguments reversed).
@@ -45,8 +45,8 @@ module StructuralCong.Proc where
    ≈-refl {x = Ο} = Ο
    ≈-refl {x = x •∙ P} = x •∙ refl
    ≈-refl {x = • x 〈 y 〉∙ P} = • x 〈 y 〉∙ refl
-   ≈-refl {x = P ➕ Q} = ≈-refl ➕₁ Q
-   ≈-refl {x = P │ Q} = ≈-refl │₁ Q
+   ≈-refl {x = P ➕ Q} = ≈-refl ➕₁ refl
+   ≈-refl {x = P │ Q} = ≈-refl │₁ refl
    ≈-refl {x = ν P} = ν ≈-refl
    ≈-refl {x = ! P} = ! ≈-refl
 
@@ -83,8 +83,8 @@ module StructuralCong.Proc where
    ≈-sym-refl Ο = refl
    ≈-sym-refl (x •∙ P) = refl
    ≈-sym-refl (• x 〈 y 〉∙ P) = refl
-   ≈-sym-refl (P ➕ Q) = cong (flip _➕₁_ Q) (≈-sym-refl P)
-   ≈-sym-refl (P │ Q) = cong (flip _│₁_ Q) (≈-sym-refl P)
+   ≈-sym-refl (P ➕ Q) = cong (flip _➕₁_ refl) (≈-sym-refl P)
+   ≈-sym-refl (P │ Q) = cong (flip _│₁_ refl) (≈-sym-refl P)
    ≈-sym-refl (ν P) = cong (λ P → ν P) (≈-sym-refl P)
    ≈-sym-refl (! P) = cong (λ P → ! P) (≈-sym-refl P)
 
@@ -122,10 +122,10 @@ module StructuralCong.Proc where
    (ρ *⁼) Ο = Ο
    (ρ *⁼) (x •∙ P) = (ρ *) x •∙ cong (suc ρ *) P
    (ρ *⁼) (• x 〈 y 〉∙ P) = • (ρ *) x 〈 (ρ *) y 〉∙ cong (ρ *) P
-   (ρ *⁼) (P ➕₁ Q) = (ρ *⁼) P ➕₁ (ρ *) Q
-   (ρ *⁼) (P ➕₂ Q) = (ρ *) P ➕₂ (ρ *⁼) Q
-   (ρ *⁼) (P │₁ Q) = (ρ *⁼) P │₁ (ρ *) Q
-   (ρ *⁼) (P │₂ Q) = (ρ *) P │₂ (ρ *⁼) Q
+   (ρ *⁼) (P ➕₁ Q) = (ρ *⁼) P ➕₁ cong (ρ *) Q
+   (ρ *⁼) (P ➕₂ Q) = cong (ρ *) P ➕₂ (ρ *⁼) Q
+   (ρ *⁼) (P │₁ Q) = (ρ *⁼) P │₁ cong (ρ *) Q
+   (ρ *⁼) (P │₂ Q) = cong (ρ *) P │₂ (ρ *⁼) Q
    (ρ *⁼) (ν P) = ν (suc ρ *⁼) P
    (ρ *⁼) (! P) = ! (ρ *⁼) P
    -- Transitivity.
