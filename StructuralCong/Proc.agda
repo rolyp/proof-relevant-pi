@@ -24,8 +24,8 @@ module StructuralCong.Proc where
       νν-swapᵣ : ∀ P → ν (ν P) ≈ ν (ν (swap *) P)
       -- Compatibility.
       Ο : Ο ≈ Ο
-      _•∙_ : ∀ (x : Name Γ) P → x •∙ P ≈ x •∙ P
-      •_〈_〉∙_ : ∀ (x y : Name Γ) P → • x 〈 y 〉∙ P ≈ • x 〈 y 〉∙ P
+      _•∙_ : ∀ (x : Name Γ) {P P′} → P ≡ P′ → x •∙ P ≈ x •∙ P′
+      •_〈_〉∙_ : ∀ (x y : Name Γ) {P P′} → P ≡ P′ → • x 〈 y 〉∙ P ≈ • x 〈 y 〉∙ P′
       _➕₁_ : ∀ {P R} → P ≈ R → ∀ Q → P ➕ Q ≈ R ➕ Q
       _➕₂_ : ∀ {Q S} → ∀ P → Q ≈ S → P ➕ Q ≈ P ➕ S
       _│₁_ : ∀ {P R} → P ≈ R → ∀ Q → P │ Q ≈ R │ Q
@@ -43,8 +43,8 @@ module StructuralCong.Proc where
 
    ≈-refl : ∀ {Γ} → Reflexive (_≈_ {Γ})
    ≈-refl {x = Ο} = Ο
-   ≈-refl {x = x •∙ P} = x •∙ P
-   ≈-refl {x = • x 〈 y 〉∙ P} = • x 〈 y 〉∙ P
+   ≈-refl {x = x •∙ P} = x •∙ refl
+   ≈-refl {x = • x 〈 y 〉∙ P} = • x 〈 y 〉∙ refl
    ≈-refl {x = P ➕ Q} = ≈-refl ➕₁ Q
    ≈-refl {x = P │ Q} = ≈-refl │₁ Q
    ≈-refl {x = ν P} = ν ≈-refl
@@ -55,8 +55,8 @@ module StructuralCong.Proc where
    ≈-sym (νν-swapₗ P) = νν-swapᵣ P
    ≈-sym (νν-swapᵣ P) = νν-swapₗ P
    ≈-sym Ο = Ο
-   ≈-sym (x •∙ P) = x •∙ P
-   ≈-sym (• x 〈 y 〉∙ P) = • x 〈 y 〉∙ P
+   ≈-sym (x •∙ refl) = x •∙ refl
+   ≈-sym (• x 〈 y 〉∙ refl) = • x 〈 y 〉∙ refl
    ≈-sym (P ➕₁ Q) = ≈-sym P ➕₁ Q
    ≈-sym (P ➕₂ Q) = P ➕₂ ≈-sym Q
    ≈-sym (P │₁ Q) = ≈-sym P │₁ Q
@@ -67,8 +67,8 @@ module StructuralCong.Proc where
 
    ≈-sym-involutive : ∀ {Γ} {P P′ : Proc Γ} (φ : P ≈ P′) → ≈-sym (≈-sym φ) ≡ φ
    ≈-sym-involutive Ο = refl
-   ≈-sym-involutive (x •∙ P) = refl
-   ≈-sym-involutive (• x 〈 y 〉∙ φ) = refl
+   ≈-sym-involutive (x •∙ refl) = refl
+   ≈-sym-involutive (• x 〈 y 〉∙ refl) = refl
    ≈-sym-involutive (φ ➕₁ Q) = cong (flip _➕₁_ Q) (≈-sym-involutive φ)
    ≈-sym-involutive (P ➕₂ ψ) = cong (_➕₂_ P) (≈-sym-involutive ψ)
    ≈-sym-involutive (φ │₁ Q) = cong (flip _│₁_ Q) (≈-sym-involutive φ)
@@ -120,8 +120,8 @@ module StructuralCong.Proc where
    ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapᵣ ((suc (suc ρ) *) P)
    -- Compatibility.
    (ρ *⁼) Ο = Ο
-   (ρ *⁼) (x •∙ P) = (ρ *) x •∙ (suc ρ *) P
-   (ρ *⁼) (• x 〈 y 〉∙ P) = • (ρ *) x 〈 (ρ *) y 〉∙ (ρ *) P
+   (ρ *⁼) (x •∙ P) = (ρ *) x •∙ cong (suc ρ *) P
+   (ρ *⁼) (• x 〈 y 〉∙ P) = • (ρ *) x 〈 (ρ *) y 〉∙ cong (ρ *) P
    (ρ *⁼) (P ➕₁ Q) = (ρ *⁼) P ➕₁ (ρ *) Q
    (ρ *⁼) (P ➕₂ Q) = (ρ *) P ➕₂ (ρ *⁼) Q
    (ρ *⁼) (P │₁ Q) = (ρ *⁼) P │₁ (ρ *) Q
