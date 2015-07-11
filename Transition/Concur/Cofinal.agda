@@ -18,12 +18,6 @@ module Transition.Concur.Cofinal where
       using (Concur₁; module Concur₁; Concur; Delta′; Delta; module Delta′; ⊖₁; ⊖); open Concur₁
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
-   braid : ∀ {Γ} (ӓ : Action₂ Γ) → let Γ′ = Γ + inc (π₁ ӓ) + inc (π₂ ӓ) in Ren Γ′ Γ′
-   braid (_ ᵇ , _ ᵇ) = swap
-   braid (_ ᵇ , _ ᶜ) = id
-   braid (_ ᶜ , _ ᵇ) = id
-   braid (_ ᶜ , _ ᶜ) = id
-
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
    -- related by an (optional) "bound" braid, or by a "free" braid.
    ⋈[_,_,_] : ∀ Γ (ӓ : Action₂ Γ) (Δ : Cxt) →
