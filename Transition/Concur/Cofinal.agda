@@ -124,30 +124,22 @@ module Transition.Concur.Cofinal where
    ⊖₁-✓ (ν• 𝐸) = {!!} --⊖₁-✓ 𝐸
    ⊖₁-✓ (ν•ᵇ 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
    ... | _ = cong (swap *) (⊖₁-✓ 𝐸)
+   ⊖₁-✓ (ν•ᶜ 𝐸) = {!!} --⊖₁-✓ 𝐸
+   ⊖₁-✓ (νᵇᵇ_ {a = x •} {a} 𝐸) with (swap *ᵇ) (E/E′ (⊖₁ 𝐸)) | (swap *ᵇ) (E′/E (⊖₁ 𝐸))
+   ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push a =
+      cong ν_ (
+         let open EqReasoning (setoid _); S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
+         begin
+            (suc swap *) ((swap *) ((suc swap *) S))
+         ≡⟨ sym (swap∘suc-swap∘swap _) ⟩
+            (swap *) ((suc swap *) ((swap *) S))
+         ≡⟨ cong (swap *) (cong (suc swap *) (⊖₁-✓ 𝐸)) ⟩
+            (swap *) ((suc swap *) S′)
+         ∎)
 {-
 -}
    ⊖₁-✓ _ = {!!}
 {-
-   ⊖₁-✓ (ν•ᵇ 𝐸) =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      begin
-         (swap *) S
-      ≡⟨ cong (swap *) (sym (*-preserves-id _)) ⟩
-         (swap *) ((id *) S)
-      ≈⟨ (swap *⁼) (⊖₁-✓ 𝐸) ⟩
-         (swap *) S′
-      ∎
-   ⊖₁-✓ (ν•ᶜ 𝐸) = ⊖₁-✓ 𝐸
-   ⊖₁-✓ (νᵇᵇ_ {a = x •} {a} 𝐸) with (swap *ᵇ) (E/E′ (⊖₁ 𝐸)) | (swap *ᵇ) (E′/E (⊖₁ 𝐸))
-   ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push a =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      ν (begin
-         (suc swap *) ((swap *) ((suc swap *) S))
-      ≡⟨ sym (swap∘suc-swap∘swap _) ⟩
-         (swap *) ((suc swap *) ((swap *) S))
-      ≈⟨ (swap *⁼) ((suc swap *⁼) (⊖₁-✓ 𝐸)) ⟩
-         (swap *) ((suc swap *) S′)
-      ∎)
    ⊖₁-✓ (νᵇᵇ_ {a = • x} {u •} 𝐸) =
       let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
       ν (begin
