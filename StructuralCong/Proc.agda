@@ -26,10 +26,10 @@ module StructuralCong.Proc where
       Ο : Ο ≈ Ο
       _•∙_ : ∀ (x : Name Γ) {P P′} → P ≡ P′ → x •∙ P ≈ x •∙ P′
       •_〈_〉∙_ : ∀ (x y : Name Γ) {P P′} → P ≡ P′ → • x 〈 y 〉∙ P ≈ • x 〈 y 〉∙ P′
-      _➕₁_ : ∀ {P Q R S} → P ≈ R → Q ≡ S → P ➕ Q ≈ R ➕ Q
-      _➕₂_ : ∀ {P Q R S} → P ≡ R → Q ≈ S → P ➕ Q ≈ P ➕ S
-      _│₁_ : ∀ {P Q R S} → P ≈ R → Q ≡ S → P │ Q ≈ R │ Q
-      _│₂_ : ∀ {P Q R S} → P ≡ R → Q ≈ S → P │ Q ≈ P │ S
+      _➕₁_ : ∀ {P Q R S} → P ≈ R → Q ≡ S → P ➕ Q ≈ R ➕ S
+      _➕₂_ : ∀ {P Q R S} → P ≡ R → Q ≈ S → P ➕ Q ≈ R ➕ S
+      _│₁_ : ∀ {P Q R S} → P ≈ R → Q ≡ S → P │ Q ≈ R │ S
+      _│₂_ : ∀ {P Q R S} → P ≡ R → Q ≈ S → P │ Q ≈ R │ S
       ν_ : ∀ {P R} → P ≈ R → ν P ≈ ν R
       !_ : ∀ {P R} → P ≈ R → ! P ≈ ! R
       -- Symmetry and reflexivity are derivable. (Writing this as ∘ in the paper, with arguments reversed).
@@ -57,10 +57,10 @@ module StructuralCong.Proc where
    ≈-sym Ο = Ο
    ≈-sym (x •∙ refl) = x •∙ refl
    ≈-sym (• x 〈 y 〉∙ refl) = • x 〈 y 〉∙ refl
-   ≈-sym (P ➕₁ Q) = ≈-sym P ➕₁ Q
-   ≈-sym (P ➕₂ Q) = P ➕₂ ≈-sym Q
-   ≈-sym (P │₁ Q) = ≈-sym P │₁ Q
-   ≈-sym (P │₂ Q) = P │₂ ≈-sym Q
+   ≈-sym (P ➕₁ refl) = ≈-sym P ➕₁ refl
+   ≈-sym (refl ➕₂ Q) = refl ➕₂ ≈-sym Q
+   ≈-sym (P │₁ refl) = ≈-sym P │₁ refl
+   ≈-sym (refl │₂ Q) = refl │₂ ≈-sym Q
    ≈-sym (ν P) = ν ≈-sym P
    ≈-sym (! P) = ! ≈-sym P
    ≈-sym (trans P P′) = trans (≈-sym P′) (≈-sym P)
@@ -69,10 +69,10 @@ module StructuralCong.Proc where
    ≈-sym-involutive Ο = refl
    ≈-sym-involutive (x •∙ refl) = refl
    ≈-sym-involutive (• x 〈 y 〉∙ refl) = refl
-   ≈-sym-involutive (φ ➕₁ Q) = cong (flip _➕₁_ Q) (≈-sym-involutive φ)
-   ≈-sym-involutive (P ➕₂ ψ) = cong (_➕₂_ P) (≈-sym-involutive ψ)
-   ≈-sym-involutive (φ │₁ Q) = cong (flip _│₁_ Q) (≈-sym-involutive φ)
-   ≈-sym-involutive (P │₂ ψ) = cong (_│₂_ P) (≈-sym-involutive ψ)
+   ≈-sym-involutive (φ ➕₁ refl) = cong (flip _➕₁_ refl) (≈-sym-involutive φ)
+   ≈-sym-involutive (refl ➕₂ ψ) = cong (_➕₂_ refl) (≈-sym-involutive ψ)
+   ≈-sym-involutive (φ │₁ refl) = cong (flip _│₁_ refl) (≈-sym-involutive φ)
+   ≈-sym-involutive (refl │₂ ψ) = cong (_│₂_ refl) (≈-sym-involutive ψ)
    ≈-sym-involutive (νν-swapₗ P) = refl
    ≈-sym-involutive (νν-swapᵣ P) = refl
    ≈-sym-involutive (ν φ) = cong ν_ (≈-sym-involutive φ)
