@@ -67,25 +67,9 @@ module Transition.Concur.Cofinal where
       ∎) │₁ refl
    ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} 𝐸 F) with (pop y *ᶜ) (E/E′ (⊖₁ 𝐸))
    ... | pop-y*E/E′ rewrite pop∘push y a = (pop y *⁼) (⊖₁-✓ 𝐸) │₁ refl
-   ⊖₁-✓ (_ᵇ│•_ {y = y} E 𝐹) =
-      let R = target E; S = S (⊖₁ 𝐹); S′ = S′ (⊖₁ 𝐹) in
-      begin
-         (pop (push y) *) ((suc push *) R) │ S
-      ≡⟨ cong (flip _│_ S) (sym (pop∘suc-push y _)) ⟩
-         (push *) ((pop y *) R) │ S
-      ≈⟨ refl │₂ ⊖₁-✓ 𝐹 ⟩
-         (push *) ((pop y *) R) │ S′
-      ∎
+   ⊖₁-✓ (_ᵇ│•_ {y = y} E 𝐹) = sym (pop∘suc-push y _) │₂ ⊖₁-✓ 𝐹
    ⊖₁-✓ (E ᶜ│• 𝐹) = refl │₂ ⊖₁-✓ 𝐹
-   ⊖₁-✓ (𝐸 │ᵥᵇ F) =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
-      ν (begin
-            S │ (suc push *) S₁
-         ≡⟨ cong (_│_ S) (swap∘push _) ⟩
-            S │ (swap *) ((push *) S₁)
-         ≈⟨ ≈-reflexive (swap-swap (⊖₁-✓ 𝐸)) │₁ refl ⟩
-            (swap *) S′ │ (swap *) ((push *) S₁)
-         ∎)
+   ⊖₁-✓ (𝐸 │ᵥᵇ F) = ν (≈-reflexive (swap-swap (⊖₁-✓ 𝐸)) │₁ swap∘push _)
    ⊖₁-✓ (𝐸 │ᵥᶜ F) = ν (⊖₁-✓ 𝐸 │₁ refl)
    ⊖₁-✓ (_ᵇ│ᵥ_ {x = x} {𝑎 = ᵛ∇ᵛ} E 𝐹) with (push *ᵇ) E
    ... | push*E = pop-zero∘suc-push _ │₂ ⊖₁-✓ 𝐹
