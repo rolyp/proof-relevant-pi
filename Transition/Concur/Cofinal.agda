@@ -3,7 +3,7 @@ module Transition.Concur.Cofinal where
    open import SharedModules
    import Relation.Binary.EqReasoning as EqReasoning
 
-   open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ
+   open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬ⊖-✓; Action₂); open _ᴬ⌣_
    import Action.Ren
    open import Name as ᴺ using (Cxt; Name; toℕ; _+_; zero)
@@ -24,8 +24,8 @@ module Transition.Concur.Cofinal where
               let Γ′ = Γ + inc (π₁ ӓ) + inc (π₂ ӓ) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
    ⋈[_,_,_] _ (_ ᵇ , _ ᵇ) Δ P P′ = ((swap ᴿ+ Δ) *) P ≡ P′
    ⋈[_,_,_] _ (_ ᵇ , _ ᶜ) _ P P′ = P ≡ P′
-   ⋈[_,_,_] _ (_ ᶜ , _ ᵇ) Δ P P′ = P ≈ P′
-   ⋈[_,_,_] _ (_ ᶜ , _ ᶜ) Δ P P′ = P ≈ P′
+   ⋈[_,_,_] _ (_ ᶜ , _ ᵇ) Δ P P′ = P ≡ P′
+   ⋈[_,_,_] Γ (_ ᶜ , _ ᶜ) Δ P P′ = P ≈ P′
 
    -- TODO: move to a more generic location.
    swap-swap : ∀ {Γ} {P P′ : Proc (Γ + 2)} → (swap *) P ≡ P′ → P ≡ (swap *) P′
@@ -46,7 +46,7 @@ module Transition.Concur.Cofinal where
           (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈[ Γ , (a , π₁ (ᴬ⊖ 𝑎)) , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
    ⊖₁-✓ (E ᵇ│ᵇ F) = sym (cong₂ _│_ (swap∘push (target E)) (swap∘suc-push (target F)))
    ⊖₁-✓ (E ᵇ│ᶜ F) = refl
-   ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-refl
+   ⊖₁-✓ (E ᶜ│ᵇ F) = refl
    ⊖₁-✓ (E ᶜ│ᶜ F) = ≈-refl
    ⊖₁-✓ (_│•ᵇ_ {y = y} {a = a} 𝐸 F) with (pop y *ᵇ) (E/E′ (⊖₁ 𝐸))
    ... | _ rewrite pop∘push y a = cong₂ _│_ (
@@ -59,24 +59,23 @@ module Transition.Concur.Cofinal where
          (suc (pop y) *) S′
       ∎) refl
    ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} 𝐸 F) with (pop y *ᶜ) (E/E′ (⊖₁ 𝐸))
-   ... | _ rewrite pop∘push y a = (pop y *⁼) (⊖₁-✓ 𝐸) │₁ refl
+   ... | _ rewrite pop∘push y a = ≈-reflexive (cong (pop y *) (⊖₁-✓ 𝐸)) │₁ refl
    ⊖₁-✓ (_ᵇ│•_ {y = y} E 𝐹) = cong₂ _│_ (sym (pop∘suc-push y _)) (⊖₁-✓ 𝐹)
    ⊖₁-✓ (E ᶜ│• 𝐹) = refl │₂ ⊖₁-✓ 𝐹
    ⊖₁-✓ (𝐸 │ᵥᵇ F) = cong ν_ (cong₂ _│_ (swap-swap (⊖₁-✓ 𝐸)) (swap∘push _))
-   ⊖₁-✓ (𝐸 │ᵥᶜ F) = ν (⊖₁-✓ 𝐸 │₁ refl)
+   ⊖₁-✓ (𝐸 │ᵥᶜ F) = ν (≈-reflexive (⊖₁-✓ 𝐸) │₁ refl)
    ⊖₁-✓ (_ᵇ│ᵥ_ {x = x} {𝑎 = ᵛ∇ᵛ} E 𝐹) = cong₂ _│_ (pop-zero∘suc-push _) (⊖₁-✓ 𝐹)
-{-
-   ⊖₁-✓ (_ᵇ│ᵥ_ {𝑎 = ᵇ∇ᵇ} E 𝐹) rewrite swap∘push (target E) = ν (refl │₂ ≈-reflexive (swap-swap (⊖₁-✓ 𝐹)))
-   ⊖₁-✓ (E ᶜ│ᵥ 𝐹) = ν (refl │₂ ⊖₁-✓ 𝐹)
-   ⊖₁-✓ (_│ᵇᵇ_ {𝑎 = ᵛ∇ᵛ} P 𝐹) = refl │₂ ⊖₁-✓ 𝐹
+   ⊖₁-✓ (_ᵇ│ᵥ_ {𝑎 = ᵇ∇ᵇ} E 𝐹) rewrite swap∘push (target E) = cong ν_ (cong₂ _│_ refl (swap-swap (⊖₁-✓ 𝐹)))
+   ⊖₁-✓ (E ᶜ│ᵥ 𝐹) = ν (refl │₂ (≈-reflexive (⊖₁-✓ 𝐹)))
+   ⊖₁-✓ (_│ᵇᵇ_ {𝑎 = ᵛ∇ᵛ} P 𝐹) = cong₂ _│_ refl (⊖₁-✓ 𝐹)
    ⊖₁-✓ (_│ᵇᵇ_ {𝑎 = ᵇ∇ᵇ} P 𝐹) = cong₂ _│_ (swap∘push∘push P) (⊖₁-✓ 𝐹)
-   ⊖₁-✓ (P │ᵇᶜ 𝐹) = refl │₂ ⊖₁-✓ 𝐹
-   ⊖₁-✓ (P │ᶜᵇ 𝐹) = refl │₂ ⊖₁-✓ 𝐹
+   ⊖₁-✓ (P │ᵇᶜ 𝐹) = cong₂ _│_ refl (⊖₁-✓ 𝐹)
+   ⊖₁-✓ (P │ᶜᵇ 𝐹) = cong₂ _│_ refl (⊖₁-✓ 𝐹)
    ⊖₁-✓ (P │ᶜᶜ 𝐹) = refl │₂ ⊖₁-✓ 𝐹
-   ⊖₁-✓ (_ᵇᵇ│_ {𝑎 = ᵛ∇ᵛ} 𝐸 _) = ⊖₁-✓ 𝐸 │₁ refl
+   ⊖₁-✓ (_ᵇᵇ│_ {𝑎 = ᵛ∇ᵛ} 𝐸 _) = cong₂ _│_ (⊖₁-✓ 𝐸) refl
    ⊖₁-✓ (_ᵇᵇ│_ {𝑎 = ᵇ∇ᵇ} 𝐸 Q) = cong₂ _│_ (⊖₁-✓ 𝐸) (swap∘push∘push Q)
-   ⊖₁-✓ (𝐸 ᵇᶜ│ Q) = ⊖₁-✓ 𝐸 │₁ refl
-   ⊖₁-✓ (𝐸 ᶜᵇ│ Q) = ⊖₁-✓ 𝐸 │₁ refl
+   ⊖₁-✓ (𝐸 ᵇᶜ│ Q) = cong₂ _│_ (⊖₁-✓ 𝐸) refl
+   ⊖₁-✓ (𝐸 ᶜᵇ│ Q) = cong₂ _│_ (⊖₁-✓ 𝐸) refl
    ⊖₁-✓ (𝐸 ᶜᶜ│ Q) = ⊖₁-✓ 𝐸 │₁ refl
    ⊖₁-✓ (𝐸 ➕₁ Q) = ⊖₁-✓ 𝐸
    ⊖₁-✓ (_│•_ {y = y} {z = z} 𝐸 𝐹) = (
@@ -99,7 +98,7 @@ module Transition.Concur.Cofinal where
          (suc (pop y) *) ((swap *) S′₁)
       ≡⟨ suc-pop∘swap y _ ⟩
          (pop ((push *) y) *) S′₁
-      ∎) │₂ ⊖₁-✓ 𝐹)
+      ∎) │₂ ≈-reflexive (⊖₁-✓ 𝐹))
    ⊖₁-✓ (_│ᵥ•_ {y = y} 𝐸 𝐹) with (pop y *ᵇ) (E′/E (⊖₁ 𝐸))
    ... | _ =
       let open EqReasoning (setoid _); S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸) in
@@ -110,7 +109,7 @@ module Transition.Concur.Cofinal where
             (suc (pop y) *) ((swap *) S₁)
          ≡⟨ cong (suc (pop y) *) (⊖₁-✓ 𝐸) ⟩
             (suc (pop y) *) S′₁
-         ∎) │₂ ⊖₁-✓ 𝐹)
+         ∎) │₂ ≈-reflexive (⊖₁-✓ 𝐹))
    ⊖₁-✓ (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} 𝐸 𝐹) =
       let open EqReasoning (setoid _); S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸) in
       ν ((
@@ -120,11 +119,12 @@ module Transition.Concur.Cofinal where
             (pop zero *) ((swap *) S₁)
          ≡⟨ cong (pop zero *) (⊖₁-✓ 𝐸) ⟩
             (pop zero *) S′₁
-         ∎) │₂ ⊖₁-✓ 𝐹)
+         ∎) │₂ ≈-reflexive (⊖₁-✓ 𝐹))
    ⊖₁-✓ (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} 𝐸 𝐹) rewrite sym (⊖₁-✓ 𝐸) | sym (⊖₁-✓ 𝐹) = νν-swapᵣ _
-   ⊖₁-✓ (ν• 𝐸) = ⊖₁-✓ 𝐸
+   ⊖₁-✓ (ν• 𝐸) = {!!} --⊖₁-✓ 𝐸
    ⊖₁-✓ (ν•ᵇ 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
-   ... | _ = {!!}
+   ... | _ = cong (swap *) (⊖₁-✓ 𝐸)
+{-
 -}
    ⊖₁-✓ _ = {!!}
 {-
