@@ -80,17 +80,19 @@ module Transition.Concur.Cofinal where
       ≈⟨ (pop y *⁼) (⊖₁-✓ 𝐸) │₁ _ ⟩
          (pop y *) S′ │ S₁
       ∎
+   ⊖₁-✓ (_ᵇ│•_ {y = y} E 𝐹) =
+      let open ≈-Reasoning; R = target E; S = S (⊖₁ 𝐹); S′ = S′ (⊖₁ 𝐹) in
+      begin
+         (id *) ((pop (push y) *) ((suc push *) R) │ S)
+      ≡⟨ *-preserves-id _ ⟩
+         (pop (push y) *) ((suc push *) R) │ S
+      ≡⟨ cong₂ _│_ (sym (pop∘suc-push y _)) (sym (*-preserves-id _)) ⟩
+         (push *) ((pop y *) R) │ (id *) S
+      ≈⟨ _ │₂ ⊖₁-✓ 𝐹 ⟩
+         (push *) ((pop y *) R) │ S′
+      ∎
    ⊖₁-✓ _ = {!!}
 {-
-   ⊖₁-✓ (_ᵇ│•_ {y = y} E 𝐹) =
-      let R = target E in
-      (begin
-         (id *) ((pop (ᴺ.suc y) *) ((suc push *) R))
-      ≡⟨ *-preserves-id _ ⟩
-         ((pop (ᴺ.suc y) *) ((suc push *) R))
-      ≡⟨ sym (pop∘suc-push y _) ⟩
-         (push *) ((pop y *) R)
-      ∎) │ ⊖₁-✓ 𝐹
    ⊖₁-✓ (E ᶜ│• 𝐹) = ≈-reflexive (*-preserves-id _) │ (⊖₁-✓ 𝐹)
    ⊖₁-✓ (𝐸 │ᵥᵇ F) =
       let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
