@@ -93,29 +93,20 @@ module Transition.Concur.Cofinal where
       ≡⟨ cong (pop y *) (cong (suc (pop z) *) (⊖₁-✓ 𝐸)) ⟩
          (pop y *) ((suc (pop z) *) S′)
       ∎) │₂ ⊖₁-✓ 𝐹
+   ⊖₁-✓ (_│•ᵥ_ {y = y} 𝐸 𝐹) with (pop y *ᵇ) (E′/E (⊖₁ 𝐸))
+   ... | _ = ν ((
+      let open EqReasoning (setoid _); S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸) in
+      begin
+         (suc (pop y) *) S₁
+      ≡⟨ cong (suc (pop y) *) (sym (swap-involutive _ )) ⟩
+         (suc (pop y) *) ((swap *) ((swap *) S₁))
+      ≡⟨ cong (suc (pop y) *) (cong (swap *) (⊖₁-✓ 𝐸)) ⟩
+         (suc (pop y) *) ((swap *) S′₁)
+      ≡⟨ suc-pop∘swap y _ ⟩
+         (pop ((push *) y) *) S′₁
+      ∎) │₂ ⊖₁-✓ 𝐹)
    ⊖₁-✓ _ = {!!}
 {-
-   ⊖₁-✓ (_│•ᵥ_ {y = y} 𝐸 𝐹) =
-      let S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸); S₂ = S (⊖₁ 𝐹); S′₂ = S′ (⊖₁ 𝐹) in
-      ν ((
-         begin
-            (suc id *) ((suc (pop y) *) S₁)
-         ≡⟨ +-id-elim 1 _ ⟩
-            (suc (pop y) *) S₁
-         ≡⟨ cong (suc (pop y) *) (sym (swap-involutive _ )) ⟩
-            (suc (pop y) *) ((swap *) ((swap *) S₁))
-         ≈⟨ (suc (pop y) *⁼) ((swap *⁼) (⊖₁-✓ 𝐸)) ⟩
-            (suc (pop y) *) ((swap *) S′₁)
-         ≡⟨ suc-pop∘swap y _ ⟩
-            (pop ((push *) y) *) S′₁
-         ∎) │ (
-         begin
-            (suc id *) S₂
-         ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
-            (id *) S₂
-         ≈⟨ ⊖₁-✓ 𝐹 ⟩
-            S′₂
-         ∎))
    ⊖₁-✓ (_│ᵥ•_ {y = y} 𝐸 𝐹) =
       let S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸); S₂ = S (⊖₁ 𝐹); S′₂ = S′ (⊖₁ 𝐹) in
       ν ((
