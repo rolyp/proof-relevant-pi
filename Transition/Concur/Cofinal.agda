@@ -73,20 +73,16 @@ module Transition.Concur.Cofinal where
    ... | pop-y*E/E′ rewrite pop∘push y a = (pop y *⁼) (⊖₁-✓ 𝐸) │₁ _
    ⊖₁-✓ (_ᵇ│•_ {y = y} E 𝐹) =
       let open ≈-Reasoning; R = target E; S = S (⊖₁ 𝐹); S′ = S′ (⊖₁ 𝐹) in
-      {!!}
-{-
       begin
          (pop (push y) *) ((suc push *) R) │ S
-      ≡⟨ cong₂ _│_ (sym (pop∘suc-push y _)) (sym (*-preserves-id _)) ⟩
-         (push *) ((pop y *) R) │ (id *) S
+      ≡⟨ cong (flip _│_ S) (sym (pop∘suc-push y _)) ⟩
+         (push *) ((pop y *) R) │ S
       ≈⟨ _ │₂ ⊖₁-✓ 𝐹 ⟩
          (push *) ((pop y *) R) │ S′
       ∎
--}
-   ⊖₁-✓ (E ᶜ│• 𝐹) = {!!}
+   ⊖₁-✓ (E ᶜ│• 𝐹) = _ │₂ ⊖₁-✓ 𝐹
    ⊖₁-✓ _ = {!!}
 {-
-   ⊖₁-✓ (E ᶜ│• 𝐹) = ≈-reflexive (*-preserves-id _) │ (⊖₁-✓ 𝐹)
    ⊖₁-✓ (𝐸 │ᵥᵇ F) =
       let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
       ν ((
