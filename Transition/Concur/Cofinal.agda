@@ -159,30 +159,8 @@ module Transition.Concur.Cofinal where
    ... | _ rewrite swap∘push∘push a′ = cong ν_ (cong (swap *) (⊖₁-✓ 𝐸))
    ⊖₁-✓ (νᶜᵇ_ {a = a} 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
    ... | _ rewrite swap∘push∘push a = cong ν_ (cong (swap *) (⊖₁-✓ 𝐸))
-   ⊖₁-✓ _ = {!!}
-{-
-   ⊖₁-✓ (νᶜᶜ 𝐸) =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      ν (begin
-         (suc id *) S
-      ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
-         (id *) S
-      ≈⟨ ⊖₁-✓ 𝐸 ⟩
-         S′
-      ∎)
+   ⊖₁-✓ (νᶜᶜ 𝐸) = ν ⊖₁-✓ 𝐸
    ⊖₁-✓ (! 𝐸) = ⊖₁-✓ 𝐸
-
-   symmetrise : ∀ {Γ} {S S′ : Proc Γ} → (id *) S ≈ S′ → (id *) S′ ≈ S
-   symmetrise {S = S} {S′} id*S≈S′ =
-      begin
-         (id *) S′
-      ≡⟨ *-preserves-id _ ⟩
-         S′
-      ≈⟨ ≈-sym id*S≈S′ ⟩
-         (id *) S
-      ≡⟨ *-preserves-id _ ⟩
-         S
-      ∎
 
    -- Now symmetrise.
    ⊖-✓ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
@@ -190,17 +168,16 @@ module Transition.Concur.Cofinal where
          ⋈[ Γ , (a , π₁ (ᴬ⊖ 𝑎)) , zero ] (S (⊖ 𝐸)) (subst Proc (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖ 𝐸)))
    ⊖-✓ (inj₁ 𝐸) = ⊖₁-✓ 𝐸
    ⊖-✓ (inj₂ 𝐸′) with ⊖₁ 𝐸′ | ⊖₁-✓ 𝐸′
-   ⊖-✓ {𝑎 = ᵛ∇ᵛ} (inj₂ 𝐸′) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
-   ⊖-✓ {𝑎 = ᵇ∇ᵇ} (inj₂ 𝐸′) | E′/E ᵀΔ E/E′ | swap*S≈S′ =
-      let S = target E′/E; S′ = target E/E′ in
+   ⊖-✓ {𝑎 = ᵛ∇ᵛ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≡S′ = sym S≡S′
+   ⊖-✓ {𝑎 = ᵇ∇ᵇ} (inj₂ 𝐸′) | E′/E ᵀΔ E/E′ | swap*S≡S′ =
+      let open EqReasoning (setoid _); S = target E′/E; S′ = target E/E′ in
       begin
          (swap *) S′
-      ≈⟨ (swap *⁼) (≈-sym swap*S≈S′) ⟩
+      ≡⟨ cong (swap *) (sym swap*S≡S′) ⟩
          (swap *) ((swap *) S)
       ≡⟨ swap-involutive _ ⟩
          S
       ∎
-   ⊖-✓ {𝑎 = ᵇ∇ᶜ} (inj₂ 𝐸′) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
-   ⊖-✓ {𝑎 = ᶜ∇ᵇ} (inj₂ 𝐸′) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
-   ⊖-✓ {𝑎 = ᶜ∇ᶜ} (inj₂ 𝐸′) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
--}
+   ⊖-✓ {𝑎 = ᵇ∇ᶜ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≡S′ = sym S≡S′
+   ⊖-✓ {𝑎 = ᶜ∇ᵇ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≡S′ = sym S≡S′
+   ⊖-✓ {𝑎 = ᶜ∇ᶜ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≈S′ = ≈-sym S≈S′
