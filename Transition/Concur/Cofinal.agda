@@ -1,6 +1,7 @@
 module Transition.Concur.Cofinal where
 
    open import SharedModules
+   import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬ⊖-✓; Action₂); open _ᴬ⌣_
@@ -29,41 +30,41 @@ module Transition.Concur.Cofinal where
               let Γ′ = Γ + inc (π₁ ӓ) + inc (π₂ ӓ) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
    ⋈[ Γ , ӓ , Δ ] P P′ = ((braid ӓ ᴿ+ Δ) *) P ≈ P′
 
-   open ≈-Reasoning
    open Delta′
 
    -- Called 'cofin' in the paper. Use ≈-Reasoning for maximum clarity.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
           (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈[ Γ , (a , π₁ (ᴬ⊖ 𝑎)) , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
-   ⊖₁-✓ (E ᵇ│ᵇ F) =
-      let R = target E; S = target F in
-      (begin
-         (swap *) ((push *) R)
-      ≡⟨ sym (swap∘push _) ⟩
-         (suc push *) R
-      ∎) │
-      (begin
-         (swap *) ((suc push *) S)
-      ≡⟨ sym (swap∘suc-push _) ⟩
-         (push *) S
-      ∎)
-   ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-reflexive (*-preserves-id _) │ ≈-reflexive (*-preserves-id _)
-   ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-reflexive (*-preserves-id _) │ ≈-reflexive (*-preserves-id _)
-   ⊖₁-✓ (E ᶜ│ᶜ F) = ≈-reflexive (*-preserves-id _) │ ≈-reflexive (*-preserves-id _)
+   ⊖₁-✓ (E ᵇ│ᵇ F) rewrite swap∘push (target E) | swap∘suc-push (target F) = ≈-refl
+   ⊖₁-✓ (E ᵇ│ᶜ F) rewrite *-preserves-id (target E) | *-preserves-id ((ᴺ.suc *) (target F)) = ≈-refl
+   ⊖₁-✓ (E ᶜ│ᵇ F) rewrite *-preserves-id ((ᴺ.suc *) (target E)) | *-preserves-id (target F) = ≈-refl
+   ⊖₁-✓ (E ᶜ│ᶜ F) rewrite *-preserves-id (target F) = ≈-reflexive (*-preserves-id _) │₁ target F
    ⊖₁-✓ (_│•ᵇ_ {y = y} {a = a} 𝐸 F) with (pop y *ᵇ) (E/E′ (⊖₁ 𝐸))
    ... | pop-y*E/E′ rewrite pop∘push y a =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      (begin
-         (id *) ((pop ((push *) y) *) S)
+      let open ≈-Reasoning; S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
+      begin
+         (id *) ((pop (push y) *) S │ (push *) S₁)
       ≡⟨ *-preserves-id _ ⟩
-         (pop ((push *) y) *) S
-      ≡⟨ cong (pop ((push *) y) *) (sym (swap-involutive _)) ⟩
-         (pop ((push *) y) *) ((swap *) ((swap *) S))
-      ≈⟨ (pop ((push *) y) *⁼) ((swap *⁼) (⊖₁-✓ 𝐸)) ⟩
-         (pop ((push *) y) *) ((swap *) S′)
-      ≡⟨ sym (pop∘swap y _) ⟩
-         (suc (pop y) *) S′
-      ∎) │ ≈-reflexive (*-preserves-id _)
+         (pop (push y) *) S │ (push *) S₁
+      ≈⟨ (
+         begin
+            (pop (push y) *) S
+         ≈⟨ (pop (push y) *⁼) (
+               begin
+                  S
+               ≡⟨ sym (swap-involutive _) ⟩
+                  (swap *) ((swap *) S)
+               ≈⟨ (swap *⁼) (⊖₁-✓ 𝐸) ⟩
+                  (swap *) S′
+               ∎) ⟩
+            (pop (push y) *) ((swap *) S′)
+         ≡⟨ sym (pop∘swap y _) ⟩
+            (suc (pop y) *) S′
+         ∎) │₁ _ ⟩
+         (suc (pop y) *) S′ │ (push *) S₁
+      ∎
+   ⊖₁-✓ _ = {!!}
+{-
    ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} 𝐸 F) with (pop y *ᶜ) (E/E′ (⊖₁ 𝐸))
    ... | pop-y*E/E′ rewrite pop∘push y a =
       let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
@@ -366,3 +367,4 @@ module Transition.Concur.Cofinal where
    ⊖-✓ {𝑎 = ᵇ∇ᶜ} (inj₂ 𝐸′) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
    ⊖-✓ {𝑎 = ᶜ∇ᵇ} (inj₂ 𝐸′) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
    ⊖-✓ {𝑎 = ᶜ∇ᶜ} (inj₂ 𝐸′) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
+-}

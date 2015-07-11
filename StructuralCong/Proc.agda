@@ -16,7 +16,7 @@ module StructuralCong.Proc where
    -- Synactic equivalence "modulo" a single transposition of adjacent binders. In the de Bruijn setting
    -- this means equating ν (ν P) with ν (ν (swap * P)). Not a congruence, in contrast to the LFMTP 2015 setup.
    infix 4 _≈_
-   infixl 6 _➕₁_ _➕₂_ _│₁_
+   infixl 6 _➕₁_ _➕₂_ _│₁_ _│₂_
    data _≈_ {Γ} : Proc Γ → Proc Γ → Set where
       -- Braidings. We need left and right versions of the rule to prove the lattice isos, although symmetry is
       -- derivable without them. TODO: revert to a single version of the rule.
