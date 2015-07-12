@@ -17,11 +17,9 @@ module Braiding.Proc where
    infix 4 _≈_
    infixl 6 _➕₁_ _➕₂_ _│₁_ _│₂_
    data _≈_ {Γ} : Proc Γ → Proc Γ → Set where
-      -- Braidings. We need left and right versions of the rule to prove the lattice isos, although symmetry is
-      -- derivable without them. TODO: revert to a single version of the rule.
-      νν-swapₗ : ∀ P → ν (ν (swap *) P) ≈ ν (ν P)
+      -- Braiding case.
       νν-swapᵣ : ∀ P → ν (ν P) ≈ ν (ν (swap *) P)
-      -- Compatibility.
+      -- Propagate.
       Ο : Ο ≈ Ο
       _•∙_ : ∀ (x : Name Γ) {P P′} → P ≡ P′ → x •∙ P ≈ x •∙ P′
       •_〈_〉∙_ : ∀ (x y : Name Γ) {P P′} → P ≡ P′ → • x 〈 y 〉∙ P ≈ • x 〈 y 〉∙ P′
@@ -49,10 +47,8 @@ module Braiding.Proc where
    ≈-refl {x = ν P} = ν ≈-refl
    ≈-refl {x = ! P} = ! ≈-refl
 
-   -- Note that symmetry is not sufficient for structural congruence to be an isomorphism.
    ≈-sym : ∀ {Γ} → Symmetric (_≈_ {Γ})
-   ≈-sym (νν-swapₗ P) = νν-swapᵣ P
-   ≈-sym (νν-swapᵣ P) = νν-swapₗ P
+   ≈-sym (νν-swapᵣ P) = subst (λ P′ → ν (ν (swap *) P) ≈ ν (ν P′)) (swap-involutive P) (νν-swapᵣ ((swap *) P))
    ≈-sym Ο = Ο
    ≈-sym (x •∙ refl) = x •∙ refl
    ≈-sym (• x 〈 y 〉∙ refl) = • x 〈 y 〉∙ refl
@@ -72,8 +68,7 @@ module Braiding.Proc where
    ≈-sym-involutive (refl ➕₂ ψ) = cong (_➕₂_ refl) (≈-sym-involutive ψ)
    ≈-sym-involutive (φ │₁ refl) = cong (flip _│₁_ refl) (≈-sym-involutive φ)
    ≈-sym-involutive (refl │₂ ψ) = cong (_│₂_ refl) (≈-sym-involutive ψ)
-   ≈-sym-involutive (νν-swapₗ P) = refl
-   ≈-sym-involutive (νν-swapᵣ P) = refl
+   ≈-sym-involutive (νν-swapᵣ P) = {!!} --refl
    ≈-sym-involutive (ν φ) = cong ν_ (≈-sym-involutive φ)
    ≈-sym-involutive (! φ) = cong !_ (≈-sym-involutive φ)
    ≈-sym-involutive (trans φ φ′) = cong₂ trans (≈-sym-involutive φ) (≈-sym-involutive φ′)
@@ -113,8 +108,6 @@ module Braiding.Proc where
    -- Renaming commutes with ≈. This isn't a Renameable (i.e. functor from Ren), but rather
    -- the action of such a functor on a 2-cell.
    _*⁼ : ∀ {Γ Γ′ P R} (ρ : Ren Γ Γ′) → P ≈ R → (ρ *) P ≈ (ρ *) R
-   (ρ *⁼) (νν-swapₗ P) with ᴾ.ν (ν (swap *) ((suc (suc ρ) *) P))
-   ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapₗ ((suc (suc ρ) *) P)
    (ρ *⁼) (νν-swapᵣ P) with ᴾ.ν (ν (swap *) ((suc (suc ρ) *) P))
    ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapᵣ ((suc (suc ρ) *) P)
    -- Compatibility.
