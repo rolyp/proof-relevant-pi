@@ -6,7 +6,7 @@ module Transition.Concur.Cofinal where
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬ⊖-✓; Action₂); open _ᴬ⌣_
    import Action.Ren
-   open import Braiding.Proc using (_≈_; module _≈_; ≈-refl; ≈-reflexive; ≈-sym; _*⁼; module ≈-Reasoning);
+   open import Braiding.Proc using (_≈_; module _≈_; ≈-refl; ≈-sym; _*⁼; module ≈-Reasoning);
       open _≈_ renaming (trans to ≈-trans)
    open import Name as ᴺ using (Cxt; Name; toℕ; _+_; zero)
    open import Proc using (Proc); open Proc
@@ -124,7 +124,7 @@ module Transition.Concur.Cofinal where
          ≡⟨ cong (pop zero *) (⊖₁-✓ 𝐸) ⟩
             (pop zero *) S′₁
          ∎) (⊖₁-✓ 𝐹))
---   ⊖₁-✓ (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} 𝐸 𝐹) rewrite sym (⊖₁-✓ 𝐸) | sym (⊖₁-✓ 𝐹) = νν-swapᵣ _
+   ⊖₁-✓ (𝐸 │ᵥ′ 𝐹) rewrite sym (⊖₁-✓ 𝐸) | sym (⊖₁-✓ 𝐹) = νν-swapᵣ _
    ⊖₁-✓ (ν• 𝐸) = ⊖₁-✓ 𝐸
    ⊖₁-✓ (ν•ᵇ 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
    ... | _ = cong (swap *) (⊖₁-✓ 𝐸)
