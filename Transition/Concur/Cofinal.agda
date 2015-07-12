@@ -164,6 +164,7 @@ module Transition.Concur.Cofinal where
    ⊖₁-✓ (νᶜᵇ_ {a = a} 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
    ... | _ rewrite swap∘push∘push a = cong ν_ (cong (swap *) (⊖₁-✓ 𝐸))
    ⊖₁-✓ (νᶜᶜ 𝐸) = cong ν_ (⊖₁-✓ 𝐸)
+   ⊖₁-✓ (νᵛᵛ 𝐸) = ν (⊖₁-✓ 𝐸)
    ⊖₁-✓ (! 𝐸) = ⊖₁-✓ 𝐸
 
    -- Now symmetrise.
