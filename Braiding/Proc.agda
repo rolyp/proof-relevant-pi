@@ -57,22 +57,8 @@ module Braiding.Proc where
    ⋈-sym-involutive (ν φ) = cong ν_ (⋈-sym-involutive φ)
    ⋈-sym-involutive (! φ) = cong !_ (⋈-sym-involutive φ)
 
-   -- Renaming commutes with ⋈. This isn't a Renameable (i.e. functor from Ren), but rather
-   -- the action of such a functor on a 2-cell.
-   _*⁼ : ∀ {Γ Γ′ P R} (ρ : Ren Γ Γ′) → P ⋈ R → (ρ *) P ⋈ (ρ *) R
-   (ρ *⁼) (νν-swapᵣ P) with ᴾ.ν (ν (swap *) ((suc (suc ρ) *) P))
-   ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapᵣ ((suc (suc ρ) *) P)
-   (ρ *⁼) (νν-swapₗ P) with ᴾ.ν (ν (swap *) ((suc (suc ρ) *) P))
-   ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapₗ ((suc (suc ρ) *) P)
-   -- Propagate.
-   (ρ *⁼) (P ➕₁ Q) = (ρ *⁼) P ➕₁ cong (ρ *) Q
-   (ρ *⁼) (P ➕₂ Q) = cong (ρ *) P ➕₂ (ρ *⁼) Q
-   (ρ *⁼) (P │₁ Q) = (ρ *⁼) P │₁ cong (ρ *) Q
-   (ρ *⁼) (P │₂ Q) = cong (ρ *) P │₂ (ρ *⁼) Q
-   (ρ *⁼) (ν P) = ν (suc ρ *⁼) P
-   (ρ *⁼) (! P) = ! (ρ *⁼) P
-
-   -- Reflexive closure of ⋈. Best defined explicitly so that it is a congruence by definition.
+   -- Reflexive closure of ⋈, representing at most (rather than exactly) one braid.
+   -- Defined explicitly so we have (a suitably "affine" notion of) compatibility by definition.
    infix 4 _⋉_
    data _⋉_ {Γ} : Proc Γ → Proc Γ → Set where
       -- Braiding cases.
@@ -85,7 +71,7 @@ module Braiding.Proc where
       _│₂_ : ∀ {P Q R S} → P ≡ R → Q ⋉ S → P │ Q ⋉ R │ S
       ν_ : ∀ {P R} → P ⋉ R → ν P ⋉ ν R
       !_ : ∀ {P R} → P ⋉ R → ! P ⋉ ! R
-      -- Closure under additional process constructors for reflexivity.
+      -- Close under additional process constructors for reflexivity.
       Ο : Ο ⋉ Ο
       _•∙_ : ∀ x {P P′} → P ≡ P′ → x •∙ P ⋉ x •∙ P′
       •_〈_〉∙_ : ∀ x y {P P′} → P ≡ P′ → • x 〈 y 〉∙ P ⋉ • x 〈 y 〉∙ P′
@@ -98,3 +84,21 @@ module Braiding.Proc where
    ⋉-refl {x = P │ Q} = ⋉-refl │₁ refl
    ⋉-refl {x = ν P} = ν ⋉-refl
    ⋉-refl {x = ! P} = ! ⋉-refl
+
+   -- Renaming commutes with ⋉. This isn't a Renameable (i.e. a functor from Ren), but rather
+   -- the action of such a functor on a 2-cell.
+   _*⁼ : ∀ {Γ Γ′ P R} (ρ : Ren Γ Γ′) → P ⋉ R → (ρ *) P ⋉ (ρ *) R
+   (ρ *⁼) (νν-swapₗ P) with ᴾ.ν (ν (swap *) ((suc (suc ρ) *) P))
+   ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapₗ ((suc (suc ρ) *) P)
+   (ρ *⁼) (νν-swapᵣ P) with ᴾ.ν (ν (swap *) ((suc (suc ρ) *) P))
+   ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapᵣ ((suc (suc ρ) *) P)
+   -- Compatibility.
+   (ρ *⁼) Ο = Ο
+   (ρ *⁼) (x •∙ P) = (ρ *) x •∙ cong (suc ρ *) P
+   (ρ *⁼) (• x 〈 y 〉∙ P) = • (ρ *) x 〈 (ρ *) y 〉∙ cong (ρ *) P
+   (ρ *⁼) (P ➕₁ Q) = (ρ *⁼) P ➕₁ cong (ρ *) Q
+   (ρ *⁼) (P ➕₂ Q) = cong (ρ *) P ➕₂ (ρ *⁼) Q
+   (ρ *⁼) (P │₁ Q) = (ρ *⁼) P │₁ cong (ρ *) Q
+   (ρ *⁼) (P │₂ Q) = cong (ρ *) P │₂ (ρ *⁼) Q
+   (ρ *⁼) (ν P) = ν (suc ρ *⁼) P
+   (ρ *⁼) (! P) = ! (ρ *⁼) P
