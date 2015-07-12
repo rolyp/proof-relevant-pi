@@ -18,15 +18,15 @@ module Transition.Concur.Cofinal where
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
-   -- related by an (optional) "bound" braid, or by a "free" braid.
+   -- related by a "bound" braid, by a "free" braid, or by identity.
    ⋈[_,_,_] : ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
                let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
    ⋈[ Γ , ˣ∇ˣ , Δ ] P P′ = P ≡ P′
-   ⋈[ Γ , ᵇ∇ᵇ , Δ ] P P′ = ((swap ᴿ+ Δ) *) P ≡ P′
+   ⋈[ Γ , ᵇ∇ᵇ , Δ ] P P′ = ((swap ᴿ+ Δ) *) P ≡ P′ -- free braid
    ⋈[ Γ , ᵇ∇ᶜ , Δ ] P P′ = P ≡ P′
    ⋈[ Γ , ᶜ∇ᵇ , Δ ] P P′ = P ≡ P′
    ⋈[ Γ , ᶜ∇ᶜ , Δ ] P P′ = P ≡ P′
-   ⋈[ Γ , ᵛ∇ᵛ , Δ ] P P′ = P ≈ P′
+   ⋈[ Γ , ᵛ∇ᵛ , Δ ] P P′ = P ≈ P′                 -- bound braid
 
    -- TODO: move to a more generic location.
    swap-swap : ∀ {Γ} {P P′ : Proc (Γ + 2)} → (swap *) P ≡ P′ → P ≡ (swap *) P′
