@@ -19,6 +19,7 @@ module Transition.Concur.Ren where
    (ρ *ᴬ⌣) ᵇ∇ᶜ = ᵇ∇ᶜ
    (ρ *ᴬ⌣) ᶜ∇ᵇ = ᶜ∇ᵇ
    (ρ *ᴬ⌣) ᶜ∇ᶜ = ᶜ∇ᶜ
+   (ρ *ᴬ⌣) ᵛ∇ᵛ = ᵛ∇ᵛ
 
    _*ᵇᵇ⌣ : ∀ {Γ Γ′} {P : Proc Γ} {a a′ R R′} {a⌣a′ : a ᵇ ᴬ⌣ a′ ᵇ} {E : P —[ a ᵇ - _ ]→ R} {E′ : P —[ a′ ᵇ - _ ]→ R′}
           (ρ : Ren Γ Γ′) → E ⌣₁[ a⌣a′ ] E′ → (ρ *ᵇ) E ⌣₁[ (ρ *ᴬ⌣) a⌣a′ ] (ρ *ᵇ) E′
@@ -39,9 +40,9 @@ module Transition.Concur.Ren where
    (ρ *ᵇᵇ⌣) (νᵇᵇ_ {R = R} {R′} {a} {a′} {E} {E′} E⌣E′) with (suc ρ *ᵇ) E | (suc ρ *ᵇ) E′ | (suc ρ *ᵇᵇ⌣) E⌣E′
    ... | _ | _ | suc-ρ*E⌣E′
       rewrite ᴿ+-comm 1 ρ a | sym (swap-suc-suc ρ R) | ᴿ+-comm 1 ρ a′ | sym (swap-suc-suc ρ R′) = νᵇᵇ suc-ρ*E⌣E′
-   (ρ *ᵇᵇ⌣) (νᵛᵛ_ {R = R} {R′} {x} {u} {E} {E′} E⌣E′) with (suc ρ *ᵇ) E | (suc ρ *ᵇ) E′ | (suc ρ *ᵇᵇ⌣) E⌣E′
+   (ρ *ᵇᵇ⌣) (νˣˣ_ {R = R} {R′} {x} {u} {E} {E′} E⌣E′) with (suc ρ *ᵇ) E | (suc ρ *ᵇ) E′ | (suc ρ *ᵇᵇ⌣) E⌣E′
    ... | _ | _ | suc-ρ*E⌣E′
-      rewrite ᴿ+-comm 1 ρ (• x) | sym (swap-suc-suc ρ R) | ᴿ+-comm 1 ρ (• u) | sym (swap-suc-suc ρ R′) = νᵛᵛ suc-ρ*E⌣E′
+      rewrite ᴿ+-comm 1 ρ (• x) | sym (swap-suc-suc ρ R) | ᴿ+-comm 1 ρ (• u) | sym (swap-suc-suc ρ R′) = νˣˣ suc-ρ*E⌣E′
    (ρ *ᵇᵇ⌣) (! E⌣E′) = ! (ρ *ᵇᵇ⌣) E⌣E′
 
    (ρ *ᶜᵇ⌣) (_ᶜ│ᵇ_ {P = P} E F) rewrite ᴿ+-comm 1 ρ P = (ρ *ᶜ) E ᶜ│ᵇ (ρ *ᵇ) F
@@ -73,7 +74,9 @@ module Transition.Concur.Ren where
    (ρ *ᶜᶜ⌣) (E ᶜ│ᵥ F⌣F′) = (ρ *ᵇ) E ᶜ│ᵥ (ρ *ᶜᵇ⌣) F⌣F′
    (ρ *ᶜᶜ⌣) (E⌣E′ ➕₁ Q) = (ρ *ᶜᶜ⌣) E⌣E′ ➕₁ (ρ *) Q
    (ρ *ᶜᶜ⌣) (P │ᶜᶜ F⌣F′) = (ρ *) P │ᶜᶜ (ρ *ᶜᶜ⌣) F⌣F′
+   (ρ *ᶜᶜ⌣) (P │ᵛᵛ F⌣F′) = (ρ *) P │ᵛᵛ (ρ *ᶜᶜ⌣) F⌣F′
    (ρ *ᶜᶜ⌣) (E⌣E′ ᶜᶜ│ Q) = (ρ *ᶜᶜ⌣) E⌣E′ ᶜᶜ│ (ρ *) Q
+   (ρ *ᶜᶜ⌣) (E⌣E′ ᵛᵛ│ Q) = (ρ *ᶜᶜ⌣) E⌣E′ ᵛᵛ│ (ρ *) Q
    (ρ *ᶜᶜ⌣) (_│•_ {y = y} {z = z} {R = R} {R′} E⌣E′ F⌣F′) rewrite pop-comm ρ y R | pop-comm ρ z R′ =
       (ρ *ᵇᵇ⌣) E⌣E′ │• (ρ *ᶜᶜ⌣) F⌣F′
    (ρ *ᶜᶜ⌣) (_│•ᵥ_ {y = y} {R = R} E⌣E′ F⌣F′) rewrite pop-comm ρ y R = (ρ *ᵇᵇ⌣) E⌣E′ │•ᵥ (ρ *ᶜᵇ⌣) F⌣F′
