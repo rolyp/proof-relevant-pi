@@ -13,16 +13,16 @@ module Braiding.Proc where
       open Renameable ⦃...⦄
    open import Ren.Properties
 
-   -- Synactic equivalence "modulo" a single transposition of adjacent binders. In the de Bruijn setting
-   -- this means equating ν (ν P) with ν (ν (swap * P)). Not a congruence, in contrast to the LFMTP 2015 setup.
+   -- Symmetric relation that relates two processes that differ by exactly one transposition of adjacent binders.
+   -- In the de Bruijn setting, this means relating to ν (ν P) with ν (ν (swap * P)). Not a congruence, in contrast
+   -- to the LFMTP 2015 setup.
    infix 4 _≈_
    infixl 6 _➕₁_ _➕₂_ _│₁_ _│₂_
    data _≈_ {Γ} : Proc Γ → Proc Γ → Set where
-      -- Braiding case. Can derive the symmetric version, but found it hard to prove involutivity.
+      -- Braiding case. Can derive the symmetric version but found it hard to prove involutivity.
       νν-swapᵣ : ∀ P → ν (ν P) ≈ ν (ν (swap *) P)
       νν-swapₗ : ∀ P → ν (ν (swap *) P) ≈ ν (ν P)
       -- Propagate.
-      Ο : Ο ≈ Ο
       _•∙_ : ∀ (x : Name Γ) {P P′} → P ≡ P′ → x •∙ P ≈ x •∙ P′
       •_〈_〉∙_ : ∀ (x y : Name Γ) {P P′} → P ≡ P′ → • x 〈 y 〉∙ P ≈ • x 〈 y 〉∙ P′
       _➕₁_ : ∀ {P Q R S} → P ≈ R → Q ≡ S → P ➕ Q ≈ R ➕ S
@@ -38,10 +38,18 @@ module Braiding.Proc where
    target : ∀ {Γ} {P P′ : Proc Γ} → P ≈ P′ → Proc Γ
    target {P′ = P′} _ = P′
 
+   ≈-refl : ∀ {Γ} → Reflexive (_≈_ {Γ})
+   ≈-refl {x = Ο} = Ο
+   ≈-refl {x = x •∙ P} = x •∙ refl
+   ≈-refl {x = • x 〈 y 〉∙ P} = • x 〈 y 〉∙ refl
+   ≈-refl {x = P ➕ Q} = ≈-refl ➕₁ refl
+   ≈-refl {x = P │ Q} = ≈-refl │₁ refl
+   ≈-refl {x = ν P} = ν ≈-refl
+   ≈-refl {x = ! P} = ! ≈-refl
+
    ≈-sym : ∀ {Γ} → Symmetric (_≈_ {Γ})
    ≈-sym (νν-swapᵣ P) = νν-swapₗ P
    ≈-sym (νν-swapₗ P) = νν-swapᵣ P
-   ≈-sym Ο = Ο
    ≈-sym (x •∙ refl) = x •∙ refl
    ≈-sym (• x 〈 y 〉∙ refl) = • x 〈 y 〉∙ refl
    ≈-sym (P ➕₁ refl) = ≈-sym P ➕₁ refl
@@ -52,7 +60,6 @@ module Braiding.Proc where
    ≈-sym (! P) = ! ≈-sym P
 
    ≈-sym-involutive : ∀ {Γ} {P P′ : Proc Γ} (φ : P ≈ P′) → ≈-sym (≈-sym φ) ≡ φ
-   ≈-sym-involutive Ο = refl
    ≈-sym-involutive (x •∙ refl) = refl
    ≈-sym-involutive (• x 〈 y 〉∙ refl) = refl
    ≈-sym-involutive (φ ➕₁ refl) = cong (flip _➕₁_ refl) (≈-sym-involutive φ)
@@ -72,7 +79,6 @@ module Braiding.Proc where
    (ρ *⁼) (νν-swapₗ P) with ᴾ.ν (ν (swap *) ((suc (suc ρ) *) P))
    ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapₗ ((suc (suc ρ) *) P)
    -- Propagate.
-   (ρ *⁼) Ο = Ο
    (ρ *⁼) (x •∙ P) = (ρ *) x •∙ cong (suc ρ *) P
    (ρ *⁼) (• x 〈 y 〉∙ P) = • (ρ *) x 〈 (ρ *) y 〉∙ cong (ρ *) P
    (ρ *⁼) (P ➕₁ Q) = (ρ *⁼) P ➕₁ cong (ρ *) Q
