@@ -199,6 +199,7 @@ module Transition.Concur where
    ⊖ {𝑎 = ᵇ∇ᶜ} (inj₂ 𝐸′) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
    ⊖ {𝑎 = ᶜ∇ᵇ} (inj₂ 𝐸′) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
    ⊖ {𝑎 = ᶜ∇ᶜ} (inj₂ 𝐸′) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
+   ⊖ {𝑎 = ᵛ∇ᵛ} (inj₂ 𝐸′) | E/E′ ᵀΔ E′/E = E′/E ᵀΔ E/E′
 
    -- Running out of enthusiasm for heterogeneous equality.
    module Properties {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}

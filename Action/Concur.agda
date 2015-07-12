@@ -7,7 +7,8 @@ module Action.Concur where
    open import Name as ᴺ using (Cxt; Name; _+_; zero)
    open import Ren as ᴿ using (push); open ᴿ.Renameable ⦃...⦄
 
-   -- The 6 kinds of concurrent action. The ˣ∇ˣ and ᵛ∇ᵛ cases are the interesting ones.
+   -- The 6 kinds of concurrent action. The ˣ∇ˣ and ᵛ∇ᵛ cases are the interesting ones; the former represents
+   -- two extrusions of the same binder, and the latter two extrusion rendezvous.
    infix 4 _ᴬ⌣_
    data _ᴬ⌣_ {Γ} : (a a′ : Action Γ) → Set where
       ˣ∇ˣ : {x u : Name Γ} → (• x) ᵇ ᴬ⌣ (• u) ᵇ
