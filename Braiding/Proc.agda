@@ -49,7 +49,8 @@ module Braiding.Proc where
    ≈-refl {x = ! P} = ! ≈-refl
 
    ≈-sym : ∀ {Γ} → Symmetric (_≈_ {Γ})
-   ≈-sym (νν-swapᵣ P) = subst (λ P′ → ν (ν (swap *) P) ≈ ν (ν P′)) (swap-involutive P) (νν-swapᵣ ((swap *) P))
+   ≈-sym (νν-swapᵣ P) with νν-swapᵣ ((swap *) P)
+   ... | νν-swap*P≈ννP rewrite swap-involutive P = νν-swap*P≈ννP
    ≈-sym Ο = Ο
    ≈-sym (x •∙ refl) = x •∙ refl
    ≈-sym (• x 〈 y 〉∙ refl) = • x 〈 y 〉∙ refl
@@ -69,7 +70,7 @@ module Braiding.Proc where
    ≈-sym-involutive (refl ➕₂ ψ) = cong (_➕₂_ refl) (≈-sym-involutive ψ)
    ≈-sym-involutive (φ │₁ refl) = cong (flip _│₁_ refl) (≈-sym-involutive φ)
    ≈-sym-involutive (refl │₂ ψ) = cong (_│₂_ refl) (≈-sym-involutive ψ)
-   ≈-sym-involutive (νν-swapᵣ P) = ?
+   ≈-sym-involutive (νν-swapᵣ P) = {!!}
    ≈-sym-involutive (ν φ) = cong ν_ (≈-sym-involutive φ)
    ≈-sym-involutive (! φ) = cong !_ (≈-sym-involutive φ)
    ≈-sym-involutive (trans φ φ′) = cong₂ trans (≈-sym-involutive φ) (≈-sym-involutive φ′)
