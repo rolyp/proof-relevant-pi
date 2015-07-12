@@ -25,7 +25,6 @@ module Braiding.Transition where
 
    -- The symmetric residual. TODO: make infix.
    ⊖ : ∀ {ι Γ P P′} {a : Action Γ} {R} (E : P —[ a - ι ]→ R) (φ : P ⋈ P′) → E Δ⁼ φ
-
    ⊖ (ν•_ {x = x} (νᶜ E)) (νν-swapₗ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap-involutive P = {!!} Δ (νᵇ (ν• swap*E)) -- ν ≈-reflexive (sym (swap-involutive _))
    ⊖ (νᵇ_ {a = • x} (ν• E)) (νν-swapₗ P) with (swap *ᶜ) E
@@ -47,7 +46,7 @@ module Braiding.Transition where
       {!!} Δ νᵇ (νᵇ swap*E) --≈-trans (νν-swapᵣ _) (ν (ν ≈-reflexive (swap∘suc-swap∘swap _)))
    ⊖ (νᵇ_ {a = • x} (νᵇ E)) (νν-swapᵣ P) with (swap *ᵇ) E
    ... | swap*E {- rewrite swap∘push∘push x-} =
-      {!!} --≈-trans (νν-swapᵣ _) (ν (ν ≈-reflexive (swap∘suc-swap∘swap _))) Δ νᵇ (νᵇ swap*E)
+      {!!}  Δ νᵇ (νᵇ swap*E) --≈-trans (νν-swapᵣ _) (ν (ν ≈-reflexive (swap∘suc-swap∘swap _)))
    ⊖ (νᶜ_ {a = a} (νᶜ E)) (νν-swapᵣ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap∘push∘push a = νν-swapᵣ _ Δ νᶜ (νᶜ swap*E)
    ⊖ (E ➕₁ Q) (φ ➕₁ refl) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ (E/φ ➕₁ Q)
@@ -67,6 +66,6 @@ module Braiding.Transition where
    ⊖ (ν• E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ ν• E/φ
    ⊖ (νᵇ E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in ν ((swap *⁼) φ/E) Δ νᵇ E/φ
    ⊖ (νᶜ E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in ν φ/E Δ νᶜ E/φ
-   ⊖ (! E) (! φ) = let φ/E Δ E/φ = ⊖ E (φ │₁ refl) in φ/E Δ {!!} -- φ/E Δ ! E/φ
+   ⊖ (! E) (! φ) = let φ/E Δ E/φ = ⊖ E (φ │₁ refl) in φ/E Δ {!!} -- ! E/φ
    -- Transitivity. Currently writing this in the paper as ∘ (and reversing the argument order).
 --   ⊖ E (≈-trans φ φ′) = let φ/E Δ E/φ = ⊖ E φ; φ′/E/φ Δ E/φ/φ′ = ⊖ E/φ φ′ in ≈-trans φ/E φ′/E/φ Δ E/φ/φ′
