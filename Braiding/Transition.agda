@@ -3,7 +3,7 @@ module Braiding.Transition where
    open import SharedModules
 
    open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
-   open import Braiding.Proc as ᴾ⁼ using (_⋈_; _*⁼; ⋈-sym; _⋉_); open ᴾ⁼._⋈_; open ᴾ⁼._⋉_
+   open import Braiding.Proc as ᴾ⁼ using (_⋈_; _*⁼; ⋈-sym; _⋉_; ⋉-refl); open ᴾ⁼._⋈_; open ᴾ⁼._⋉_
    open import Action.Ren
    open import Proc.Ren
    open import Ren as ᴿ using (suc; push; pop; swap; ᴺren; module Renameable); open Renameable ⦃...⦄
@@ -37,7 +37,7 @@ module Braiding.Transition where
    ⊖ (ν•_ {x = x} (νᶜ E)) (νν-swapᵣ P) with (swap *ᶜ) E
    ... | swap*E = ν {!!} {-(sym (swap-involutive _))-} Δ νᵇ (ν• swap*E)
    ⊖ (νᵇ_ {a = • x} (ν• E)) (νν-swapᵣ P) with (swap *ᶜ) E
-   ... | swap*E = {!!} {- refl -} Δ ν• (νᶜ swap*E)
+   ... | swap*E = ⋉-refl Δ ν• (νᶜ swap*E)
    ⊖ (νᵇ_ {a = x •} (νᵇ E)) (νν-swapᵣ P) with (swap *ᵇ) E | νν-swapᵣ ((suc swap *) ((swap *) (target E)))
    ... | swap*E | νν rewrite swap∘suc-swap∘swap (target E) = νν Δ {!!} -- νᵇ (νᵇ swap*E)
    ⊖ (νᵇ_ {a = • x} (νᵇ E)) (νν-swapᵣ P) with (swap *ᵇ) E | νν-swapᵣ ((suc swap *) ((swap *) (target E)))
@@ -45,10 +45,10 @@ module Braiding.Transition where
    ⊖ (νᶜ_ {a = a} (νᶜ E)) (νν-swapᵣ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap∘push∘push a = νν-swapᵣ _ Δ νᶜ (νᶜ swap*E)
    ⊖ (E ➕₁ Q) (φ ➕₁ refl) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ (E/φ ➕₁ Q)
-   ⊖ (E ➕₁ Q) (refl ➕₂ ψ) = {!!} {-refl-} Δ (E ➕₁ ᴾ⁼.target ψ)
+   ⊖ (E ➕₁ Q) (refl ➕₂ ψ) = ⋉-refl Δ (E ➕₁ ᴾ⁼.target ψ)
    ⊖ (E ᵇ│ Q) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in {!!} {-(φ/E │₁ refl)-} Δ (E/φ ᵇ│ Q)
    ⊖ (E ᶜ│ Q) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in {!!} {-(φ/E │₁ refl)-} Δ (E/φ ᶜ│ Q)
-   ⊖ (P │ᵇ F) (φ │₁ refl) = {!!} {-((push *⁼) φ │₁ refl)-} Δ (ᴾ⁼.target φ │ᵇ F)
+   ⊖ (P │ᵇ F) (φ │₁ refl) = ({!!} │₁ refl) {-((push *⁼) φ -} Δ (ᴾ⁼.target φ │ᵇ F)
    ⊖ (P │ᶜ F) (φ │₁ refl) = {!!} {-(φ │₁ refl)-} Δ (ᴾ⁼.target φ │ᶜ F)
    ⊖ (E ᵇ│ Q) (refl │₂ ψ) = {!!} {-(refl │₂ (push *⁼) ψ)-} Δ (E ᵇ│ ᴾ⁼.target ψ)
    ⊖ (E ᶜ│ Q) (refl │₂ ψ) = {!!} {-(refl │₂ ψ)-} Δ (E ᶜ│ ᴾ⁼.target ψ)

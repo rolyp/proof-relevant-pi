@@ -90,11 +90,11 @@ module Braiding.Proc where
       _•∙_ : ∀ x {P P′} → P ≡ P′ → x •∙ P ⋉ x •∙ P′
       •_〈_〉∙_ : ∀ x y {P P′} → P ≡ P′ → • x 〈 y 〉∙ P ⋉ • x 〈 y 〉∙ P′
 
-   ≈-refl : ∀ {Γ} → Reflexive (_⋉_ {Γ})
-   ≈-refl {x = Ο} = Ο
-   ≈-refl {x = x •∙ P} = x •∙ refl
-   ≈-refl {x = • x 〈 y 〉∙ P} = • x 〈 y 〉∙ refl
-   ≈-refl {x = P ➕ Q} = ≈-refl ➕₁ refl
-   ≈-refl {x = P │ Q} = ≈-refl │₁ refl
-   ≈-refl {x = ν P} = ν ≈-refl
-   ≈-refl {x = ! P} = ! ≈-refl
+   ⋉-refl : ∀ {Γ} → Reflexive (_⋉_ {Γ})
+   ⋉-refl {x = Ο} = Ο
+   ⋉-refl {x = x •∙ P} = x •∙ refl
+   ⋉-refl {x = • x 〈 y 〉∙ P} = • x 〈 y 〉∙ refl
+   ⋉-refl {x = P ➕ Q} = ⋉-refl ➕₁ refl
+   ⋉-refl {x = P │ Q} = ⋉-refl │₁ refl
+   ⋉-refl {x = ν P} = ν ⋉-refl
+   ⋉-refl {x = ! P} = ! ⋉-refl
