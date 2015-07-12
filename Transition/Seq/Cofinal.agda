@@ -122,7 +122,7 @@ module Transition.Seq.Cofinal where
                     let _ Δ E′⋆/γ = ⊖⋆[ (a ᵇ , (push *) a′ ᵇ) , 0 ] E′⋆ (⊖-✓ E⌣E′) in
                     E ᵇ∷ E′/E ᵇ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᵇ∷ E′⋆/γ
       _ᵛ∶⇋∶ᵛ_[_]∷_ : ∀ {x u} {R R′} (E : P —[ (• x) ᵇ - _ ]→ R) (E′ : P —[ (• u) ᵇ - _ ]→ R′) →
-                    (E⌣E′ : E ⌣[ ᵛ∇ᵛ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
+                    (E⌣E′ : E ⌣[ ˣ∇ˣ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
                     ∀ {a⋆ S} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a⋆ ]→⋆ S} → E⋆ ≃ E′⋆ →
                     let _ Δ E′⋆/γ = ⊖⋆[ ((• x) ᵇ , • ᴺ.suc u 〈 zero 〉 ᶜ) , 0 ] E′⋆ (⊖-✓ E⌣E′) in
                     E ᵇ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᶜ∷ E′⋆/γ

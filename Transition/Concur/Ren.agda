@@ -14,7 +14,7 @@ module Transition.Concur.Ren where
 
    -- Concurrent actions are preserved by renamings.
    _*ᴬ⌣ : ∀ {Γ Γ′} {a a′ : Action Γ} (ρ : Ren Γ Γ′) (a⌣a′ : a ᴬ⌣ a′) → (ρ *) a ᴬ⌣ (ρ *) a′
-   (ρ *ᴬ⌣) ᵛ∇ᵛ = ᵛ∇ᵛ
+   (ρ *ᴬ⌣) ˣ∇ˣ = ˣ∇ˣ
    (ρ *ᴬ⌣) ᵇ∇ᵇ = ᵇ∇ᵇ
    (ρ *ᴬ⌣) ᵇ∇ᶜ = ᵇ∇ᶜ
    (ρ *ᴬ⌣) ᶜ∇ᵇ = ᶜ∇ᵇ
