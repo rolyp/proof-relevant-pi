@@ -17,10 +17,9 @@ module Transition.Concur where
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Whether two coinitial evaluation contexts are concurrent; define asymmetrically and then close under symmetry.
-   -- However, this is _not_ the "symmetric reduction" of the symmetric version; when proving preservation of
-   -- concurrency by residuation, it's useful to include the symmetrisation of some rules in this definition. In
-   -- particular the │ᶜᵇ, ᶜᵇ│, │•ᵥ and νᶜᵇ cases are all implied by symmetry, but nevertheless defined here.
-   -- Convenient to have this indexed by the kind of action residual. TODO: cases for •│ and ᵥ│.
+   -- This is _not_ the "symmetric reduction" of the symmetric version; when proving preservation of concurrency
+   -- by residuation, it's useful to include the symmetrisation of some rules in this definition. In particular
+   -- the │ᶜᵇ, ᶜᵇ│, │•ᵥ and νᶜᵇ cases are all implied by symmetry, but still defined here. TODO: cases for •│ and ᵥ│.
    syntax Concur₁ E E′ a′/a = E ⌣₁[ a′/a ] E′
    infix 4 Concur₁
 
@@ -118,11 +117,10 @@ module Transition.Concur where
       constructor Delta
       a′/a = π₁ (ᴬ⊖ 𝑎)
       a/a′ = π₂ (ᴬ⊖ 𝑎)
---    Γ′ = Γ + inc a + inc a′/a  -- TODO: now make this part of ⊖-✓
       field
          {S S′} : _
          E′/E : R —[ a′/a - _ ]→ S
-         E/E′ : R′ —[ a/a′ - _ ]→ S′ --subst Proc (ᴬ⊖-✓ 𝑎) S′
+         E/E′ : R′ —[ a/a′ - _ ]→ S′
 
    infixl 5 Delta
    syntax Delta E E′ = E ᵀΔ E′
