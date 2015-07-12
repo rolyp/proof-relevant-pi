@@ -44,7 +44,7 @@ module Braiding.Transition where
    ... | swap*E = {!!} Δ ν• (νᶜ swap*E) --≈-refl
    ⊖ (νᵇ_ {a = x •} (νᵇ E)) (νν-swapᵣ P) with (swap *ᵇ) E
    ... | swap*E {-rewrite swap∘push∘push x-} =
-      {!!} --≈-trans (νν-swapᵣ _) (ν (ν ≈-reflexive (swap∘suc-swap∘swap _))) Δ νᵇ (νᵇ swap*E)
+      {!!} Δ νᵇ (νᵇ swap*E) --≈-trans (νν-swapᵣ _) (ν (ν ≈-reflexive (swap∘suc-swap∘swap _)))
    ⊖ (νᵇ_ {a = • x} (νᵇ E)) (νν-swapᵣ P) with (swap *ᵇ) E
    ... | swap*E {- rewrite swap∘push∘push x-} =
       {!!} --≈-trans (νν-swapᵣ _) (ν (ν ≈-reflexive (swap∘suc-swap∘swap _))) Δ νᵇ (νᵇ swap*E)
