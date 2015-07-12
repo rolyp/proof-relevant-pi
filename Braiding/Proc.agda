@@ -72,12 +72,7 @@ module Braiding.Proc where
    (ρ *⁼) (ν P) = ν (suc ρ *⁼) P
    (ρ *⁼) (! P) = ! (ρ *⁼) P
 
-   -- Reflexive closure of ⋈.
-{-
-   data _⋉_ {Γ} : Proc Γ → Proc Γ → Set where
-      eq : ∀ {P P′} → P ≡ P′ → P ⋉ P′
-      neq : ∀ {P P′} → P ⋈ P′ → P ⋉ P′
--}
+   -- Reflexive closure of ⋈. Best defined explicitly so that it is a congruence by definition.
    infix 4 _⋉_
    data _⋉_ {Γ} : Proc Γ → Proc Γ → Set where
       -- Braiding cases.
@@ -94,3 +89,12 @@ module Braiding.Proc where
       Ο : Ο ⋉ Ο
       _•∙_ : ∀ x {P P′} → P ≡ P′ → x •∙ P ⋉ x •∙ P′
       •_〈_〉∙_ : ∀ x y {P P′} → P ≡ P′ → • x 〈 y 〉∙ P ⋉ • x 〈 y 〉∙ P′
+
+   ≈-refl : ∀ {Γ} → Reflexive (_⋉_ {Γ})
+   ≈-refl {x = Ο} = Ο
+   ≈-refl {x = x •∙ P} = x •∙ refl
+   ≈-refl {x = • x 〈 y 〉∙ P} = • x 〈 y 〉∙ refl
+   ≈-refl {x = P ➕ Q} = ≈-refl ➕₁ refl
+   ≈-refl {x = P │ Q} = ≈-refl │₁ refl
+   ≈-refl {x = ν P} = ν ≈-refl
+   ≈-refl {x = ! P} = ! ≈-refl
