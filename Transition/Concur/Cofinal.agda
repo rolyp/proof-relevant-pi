@@ -6,7 +6,7 @@ module Transition.Concur.Cofinal where
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬ⊖-✓; Action₂); open _ᴬ⌣_
    import Action.Ren
-   open import Braiding.Proc using (_≈_; module _≈_; ≈-sym; _*⁼; module ≈-Reasoning);
+   open import Braiding.Proc using (_≈_; module _≈_; ≈-sym; _*⁼);
       open _≈_ renaming (trans to ≈-trans)
    open import Name as ᴺ using (Cxt; Name; toℕ; _+_; zero)
    open import Proc using (Proc); open Proc
@@ -43,7 +43,7 @@ module Transition.Concur.Cofinal where
 
    open Delta′
 
-   -- Called 'cofin' in the paper. Use ≈-Reasoning for maximum clarity.
+   -- Called 'cofin' in the paper.
    ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
           (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈[ Γ , 𝑎 , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
    ⊖₁-✓ (E ᵇ│ᵇ F) = sym (cong₂ _│_ (swap∘push (target E)) (swap∘suc-push (target F)))
