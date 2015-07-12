@@ -52,13 +52,13 @@ module Braiding.Transition where
    ⊖ (P │ᶜ F) (φ │₁ refl) = ({!!} │₁ refl) {-φ-} Δ (ᴾ⁼.target φ │ᶜ F)
    ⊖ (E ᵇ│ Q) (refl │₂ ψ) = (refl │₂ {!!}) {-(push *⁼) ψ-} Δ (E ᵇ│ ᴾ⁼.target ψ)
    ⊖ (E ᶜ│ Q) (refl │₂ ψ) = (refl │₂ {!!}) {-ψ-} Δ (E ᶜ│ ᴾ⁼.target ψ)
-   ⊖ (P │ᵇ F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in {!!} {-(refl │₂ ψ/F)-} Δ (P │ᵇ F/ψ)
-   ⊖ (P │ᶜ F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in {!!} {-(refl │₂ ψ/F)-} Δ (P │ᶜ F/ψ)
-   ⊖ (_│•_ {y = y} E F) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in {!!} {-((pop y *⁼) φ/E │₁ refl)-} Δ (E/φ │• F)
-   ⊖ (E │• F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in {!!} {-(refl │₂ ψ/F)-} Δ (E │• F/ψ)
-   ⊖ (E │ᵥ F) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in {!!} {-(ν (φ/E │₁ refl))-} Δ (E/φ │ᵥ F)
-   ⊖ (E │ᵥ F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in {!!} {- (ν (refl │₂ ψ/F))-} Δ (E │ᵥ F/ψ)
+   ⊖ (P │ᵇ F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in (refl │₂ ψ/F) Δ (P │ᵇ F/ψ)
+   ⊖ (P │ᶜ F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in (refl │₂ ψ/F) Δ (P │ᶜ F/ψ)
+   ⊖ (_│•_ {y = y} E F) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in ((pop y *⁼) φ/E │₁ refl) Δ (E/φ │• F)
+   ⊖ (E │• F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in (refl │₂ ψ/F) Δ (E │• F/ψ)
+   ⊖ (E │ᵥ F) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in ν (φ/E │₁ refl) Δ (E/φ │ᵥ F)
+   ⊖ (E │ᵥ F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in ν (refl │₂ ψ/F) Δ (E │ᵥ F/ψ)
    ⊖ (ν• E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ ν• E/φ
-   ⊖ (νᵇ E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in {!ν ?!} {-ν ((swap *⁼) φ/E)-} Δ νᵇ E/φ
+   ⊖ (νᵇ E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in ν (swap *⁼) φ/E Δ νᵇ E/φ
    ⊖ (νᶜ E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in ν φ/E Δ νᶜ E/φ
    ⊖ (! E) (! φ) = let φ/E Δ E/φ = ⊖ E (φ │₁ refl) in φ/E Δ {!!} -- ! E/φ
