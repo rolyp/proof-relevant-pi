@@ -32,13 +32,13 @@ structure.
 
 # Design notes
 
-## 0.1
+## 0.1 LFMTP final version
 
 Wasted a solid week trying to prove a version of `/-preserves-⌣` for a
-symmetric version of the relation. If I set up ⌣ so it is a congruence
+symmetric version of the relation. If I redefine ⌣ so it is a congruence
 by definition (with a symmetric variant of each rule), then the proof
-(essentially the definition of a two-dimensional residual) grows to
-~2.5k LOC and Agda runs out of memory compiling it. It might be possible
-to prove it for the version explicitly closed under symmetry, which is
-not a congruence by definition, but would first need to show that ⌣ is a
-congruence.
+(essentially the definition of a two-dimensional residual) becomes
+enormous (many thousands of LOC) and Agda runs out of memory compiling
+even a small portion of it. It might be possible to prove it for the
+version of ⌣ explicitly closed under symmetry, which is not a congruence
+by definition, but would first need to show that ⌣ is a congruence.

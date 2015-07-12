@@ -5,10 +5,10 @@ module Transition.Concur.Cofinal.Transition where
    open import Action as ᴬ using (inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (Action₂)
    open import Action.Ren using (ren-preserves-inc-assoc)
+   open import Braiding.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Name using (_+_; +-assoc)
    open import Ren as ᴿ using (_ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import Proc using (Proc; Proc↱)
-   open import StructuralCong.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Transition using (_—[_-_]→_)
    open import Transition.Concur.Cofinal using (⋈[_,_,_]; braid)
    open import Transition.Ren using (_*′)

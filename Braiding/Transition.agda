@@ -1,14 +1,14 @@
-module StructuralCong.Transition where
+module Braiding.Transition where
 
    open import SharedModules
    import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
+   open import Braiding.Proc as ᴾ⁼ using (_≈_; module _≈_; _*⁼; ≈-sym; ≈-refl; ≈-reflexive);
+      open _≈_ renaming (trans to ≈-trans)
    open import Action.Ren
    open import Name as ᴺ using (Name; shift)
    open import Proc using (Proc); open Proc
-   open import StructuralCong.Proc as ᴾ⁼ using (_≈_; module _≈_; _*⁼; ≈-sym; ≈-refl; ≈-reflexive);
-      open _≈_ renaming (trans to ≈-trans)
    open import Proc.Ren
    open import Ren as ᴿ using (suc; push; pop; swap; ᴺren; module Renameable); open Renameable ⦃...⦄
    open import Ren.Properties
@@ -54,7 +54,7 @@ module StructuralCong.Transition where
    ⊖ (x •∙ P) (.x •∙ refl) = ≈-refl Δ (x •∙ P)
    ⊖ (• x 〈 y 〉∙ P) (• .x 〈 .y 〉∙ refl) = ≈-refl Δ (• x 〈 y 〉∙ P)
    ⊖ (E ➕₁ Q) (φ ➕₁ refl) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ (E/φ ➕₁ Q)
-   ⊖ (E ➕₁ Q) (P ➕₂ ψ) = ≈-refl Δ (E ➕₁ ᴾ⁼.target ψ)
+   ⊖ (E ➕₁ Q) (refl ➕₂ ψ) = ≈-refl Δ (E ➕₁ ᴾ⁼.target ψ)
    ⊖ (E ᵇ│ Q) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in (φ/E │₁ refl) Δ (E/φ ᵇ│ Q)
    ⊖ (E ᶜ│ Q) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in (φ/E │₁ refl) Δ (E/φ ᶜ│ Q)
    ⊖ (P │ᵇ F) (φ │₁ refl) = ((push *⁼) φ │₁ refl) Δ (ᴾ⁼.target φ │ᵇ F)

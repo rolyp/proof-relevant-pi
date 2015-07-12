@@ -7,10 +7,10 @@ module Transition.Seq.Cofinal where
    open import Action.Ren using (ren-preserves-inc-assoc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
    open import Action.Seq.Ren using (ren-preserves-inc⋆-assoc)
+   open import Braiding.Proc using (_≈_)
    open import Name as ᴺ using (_+_; +-assoc; zero)
    open import Ren as ᴿ using (Ren; _ᴿ+_; push); open ᴿ.Renameable ⦃...⦄
    open import Proc using (Proc; Proc↱; Proc↲)
-   open import StructuralCong.Proc using (_≈_)
    open import Transition using (_—[_-_]→_; source; target)
    open import Transition.Concur using (Concur; module Delta′; ⊖; ⌣-sym; module Properties)
    open import Transition.Concur.Cofinal using (⋈[_,_,_]; braid; ⊖-✓)
