@@ -80,7 +80,7 @@ module Transition.Concur where
              E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ ᵇ∇ᶜ ] F′ → E │ᵥ F ⌣₁[ ᶜ∇ᶜ ] E′ │• F′
       _│ᵥ_ : ∀ {x u P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {•x⌣•u} {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
-             E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ •x⌣•u ] F′ → E │ᵥ F ⌣₁[ ᶜ∇ᶜ ] E′ │ᵥ F′
+             E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ •x⌣•u ] F′ → E │ᵥ F ⌣₁[ ᵛ∇ᵛ ] E′ │ᵥ F′
       ν•_ : ∀ {x u P R R′} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ • ᴺ.suc u 〈 zero 〉 ᶜ - _ ]→ R′} →
             E ⌣₁[ ᶜ∇ᶜ ] E′ → ν• E ⌣₁[ ˣ∇ˣ ] ν• E′
       ν•ᵇ_ : ∀ {x P R R′} {a : Actionᵇ Γ} {E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - _ ]→ R} {E′ : P —[ (push *) a ᵇ - _ ]→ R′} →
