@@ -24,6 +24,7 @@ structure.
 * Vertical composition of braidings
 * Several examples of causal equivalence (trickier than it should be)
 * Residuation-preserves-concurrency for *symmetric* version of concurrency (also tricky)
+* Proof of ⊖-preserves-sym
 * Proof of Theorem 3 from paper (cubical transition)
 * Tighten connection to paper, e.g. key theorems, naming conventions
 * Should a braiding be determined by a pair of composable actions, or
