@@ -1,7 +1,6 @@
 module Transition.Concur where
 
    open import SharedModules hiding ([_])
-
    open import Ext
 
    open import Action as ᴬ

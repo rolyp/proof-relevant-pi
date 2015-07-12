@@ -1,3 +1,7 @@
+-- Symmetric, irreflexive relation that relates processes that differ by exactly one transposition of
+-- adjacent binders, without proceeding under prefixes. In the de Bruijn setting, this means relating ν (ν P)
+-- to ν (ν (swap * P)), and then closing under constructors other than 0, input and output. Was a congruence
+-- in the LFMTP 2015 paper.
 module Braiding.Proc where
 
    open import SharedModules hiding ([_]; preorder) renaming (sym to ≡-sym; trans to ≡-trans)
@@ -13,9 +17,6 @@ module Braiding.Proc where
       open Renameable ⦃...⦄
    open import Ren.Properties
 
-   -- Symmetric relation that relates two processes that differ by exactly one transposition of adjacent binders,
-   -- without proceeding under prefixes. In the de Bruijn setting, this means relating to ν (ν P) with ν (ν (swap * P)),
-   -- and then closing under constructors other than 0, input and output. Was a congruence in the LFMTP 2015 paper.
    infix 4 _⋈_
    infixl 6 _➕₁_ _➕₂_ _│₁_ _│₂_
    data _⋈_ {Γ} : Proc Γ → Proc Γ → Set where
@@ -70,3 +71,7 @@ module Braiding.Proc where
    (ρ *⁼) (P │₂ Q) = cong (ρ *) P │₂ (ρ *⁼) Q
    (ρ *⁼) (ν P) = ν (suc ρ *⁼) P
    (ρ *⁼) (! P) = ! (ρ *⁼) P
+
+   data _⋉_ {Γ} : Proc Γ → Proc Γ → Set where
+      eq : ∀ {P P′} → P ≡ P′ → P ⋉ P′
+      neq : ∀ {P P′} → P ⋈ P′ → P ⋉ P′

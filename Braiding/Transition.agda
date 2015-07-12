@@ -1,13 +1,10 @@
 module Braiding.Transition where
 
    open import SharedModules
-   import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
-   open import Braiding.Proc as ᴾ⁼ using (_⋈_; module _⋈_; _*⁼; ⋈-sym); open _⋈_
+   open import Braiding.Proc as ᴾ⁼ using (_⋈_; _*⁼; ⋈-sym); open ᴾ⁼._⋈_
    open import Action.Ren
-   open import Name as ᴺ using (Name; shift)
-   open import Proc using (Proc); open Proc
    open import Proc.Ren
    open import Ren as ᴿ using (suc; push; pop; swap; ᴺren; module Renameable); open Renameable ⦃...⦄
    open import Ren.Properties
@@ -25,7 +22,7 @@ module Braiding.Transition where
 
    -- The symmetric residual. TODO: make infix.
    ⊖ : ∀ {ι Γ P P′} {a : Action Γ} {R} (E : P —[ a - ι ]→ R) (φ : P ⋈ P′) → E Δ⁼ φ
-   ⊖ (ν•_ {x = x} (νᶜ E)) (νν-swapₗ P) with (swap *ᶜ) E
+   ⊖ (ν• (νᶜ E)) (νν-swapₗ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap-involutive P = {!!} Δ (νᵇ (ν• swap*E)) -- ν ≈-reflexive (sym (swap-involutive _))
    ⊖ (νᵇ_ {a = • x} (ν• E)) (νν-swapₗ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap-involutive P = {!!} Δ ν• (νᶜ swap*E) -- ≈-refl
