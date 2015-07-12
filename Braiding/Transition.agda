@@ -66,5 +66,3 @@ module Braiding.Transition where
    ⊖ (νᵇ E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in ν ((swap *⁼) φ/E) Δ νᵇ E/φ
    ⊖ (νᶜ E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in ν φ/E Δ νᶜ E/φ
    ⊖ (! E) (! φ) = let φ/E Δ E/φ = ⊖ E (φ │₁ refl) in φ/E Δ {!!} -- ! E/φ
-   -- Transitivity. Currently writing this in the paper as ∘ (and reversing the argument order).
---   ⊖ E (≈-trans φ φ′) = let φ/E Δ E/φ = ⊖ E φ; φ′/E/φ Δ E/φ/φ′ = ⊖ E/φ φ′ in ≈-trans φ/E φ′/E/φ Δ E/φ/φ′
