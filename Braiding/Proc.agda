@@ -72,7 +72,7 @@ module Braiding.Proc where
    ≈-sym-involutive (φ │₁ refl) = cong (flip _│₁_ refl) (≈-sym-involutive φ)
    ≈-sym-involutive (refl │₂ ψ) = cong (_│₂_ refl) (≈-sym-involutive ψ)
    ≈-sym-involutive (νν-swapᵣ P) = refl
-   ≈-sym-involutive (νν-swapₗ P) = {!refl!}
+   ≈-sym-involutive (νν-swapₗ P) = refl
    ≈-sym-involutive (ν φ) = cong ν_ (≈-sym-involutive φ)
    ≈-sym-involutive (! φ) = cong !_ (≈-sym-involutive φ)
    ≈-sym-involutive (trans φ φ′) = cong₂ trans (≈-sym-involutive φ) (≈-sym-involutive φ′)
