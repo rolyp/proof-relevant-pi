@@ -6,7 +6,7 @@ module Transition.Concur.Cofinal where
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬ⊖-✓; Action₂); open _ᴬ⌣_
    import Action.Ren
-   open import Braiding.Proc using (_≈_; module _≈_; ≈-sym; _*⁼); open _≈_
+   open import Braiding.Proc using (_⋈_; module _⋈_; ⋈-sym; _*⁼); open _⋈_
    open import Name as ᴺ using (Cxt; Name; toℕ; _+_; zero)
    open import Proc using (Proc); open Proc
    import Proc.Ren
@@ -26,7 +26,7 @@ module Transition.Concur.Cofinal where
    ⋈[ Γ , ᵇ∇ᶜ , Δ ] P P′ = P ≡ P′
    ⋈[ Γ , ᶜ∇ᵇ , Δ ] P P′ = P ≡ P′
    ⋈[ Γ , ᶜ∇ᶜ , Δ ] P P′ = P ≡ P′
-   ⋈[ Γ , ᵛ∇ᵛ , Δ ] P P′ = P ≈ P′ -- bound braid
+   ⋈[ Γ , ᵛ∇ᵛ , Δ ] P P′ = P ⋈ P′ -- bound braid
 
    -- TODO: move to a more generic location.
    swap-swap : ∀ {Γ} {P P′ : Proc (Γ + 2)} → (swap *) P ≡ P′ → P ≡ (swap *) P′
@@ -184,4 +184,4 @@ module Transition.Concur.Cofinal where
    ⊖-✓ {𝑎 = ᵇ∇ᶜ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≡S′ = sym S≡S′
    ⊖-✓ {𝑎 = ᶜ∇ᵇ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≡S′ = sym S≡S′
    ⊖-✓ {𝑎 = ᶜ∇ᶜ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≡S′ = sym S≡S′
-   ⊖-✓ {𝑎 = ᵛ∇ᵛ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≈S′ = ≈-sym S≈S′
+   ⊖-✓ {𝑎 = ᵛ∇ᵛ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≈S′ = ⋈-sym S≈S′
