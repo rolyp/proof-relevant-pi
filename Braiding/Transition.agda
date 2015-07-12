@@ -42,10 +42,10 @@ module Braiding.Transition where
    ⊖ (νᵇ_ {a = • x} (ν• E)) (νν-swapᵣ P) with (swap *ᶜ) E
    ... | swap*E = {!!} Δ ν• (νᶜ swap*E) --≈-refl
    ⊖ (νᵇ_ {a = x •} (νᵇ E)) (νν-swapᵣ P) with (swap *ᵇ) E | νν-swapᵣ ((suc swap *) ((swap *) (target E)))
-   ... | swap*E | q rewrite swap∘suc-swap∘swap (target E) = q Δ νᵇ (νᵇ swap*E)
-   ⊖ (νᵇ_ {a = • x} (νᵇ E)) (νν-swapᵣ P) with (swap *ᵇ) E
-   ... | swap*E {- rewrite swap∘push∘push x-} =
-      {!!}  Δ νᵇ (νᵇ swap*E) --≈-trans (νν-swapᵣ _) (ν (ν ≈-reflexive (swap∘suc-swap∘swap _)))
+   ... | swap*E | νν rewrite swap∘suc-swap∘swap (target E) = νν Δ νᵇ (νᵇ swap*E)
+   ⊖ (νᵇ_ {a = • x} (νᵇ E)) (νν-swapᵣ P) with (swap *ᵇ) E | νν-swapᵣ ((suc swap *) ((swap *) (target E)))
+   ... | swap*E | νν rewrite swap∘suc-swap∘swap (target E) =
+      νν Δ νᵇ (νᵇ swap*E)
    ⊖ (νᶜ_ {a = a} (νᶜ E)) (νν-swapᵣ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap∘push∘push a = νν-swapᵣ _ Δ νᶜ (νᶜ swap*E)
    ⊖ (E ➕₁ Q) (φ ➕₁ refl) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ (E/φ ➕₁ Q)
