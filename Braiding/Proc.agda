@@ -20,7 +20,7 @@ module Braiding.Proc where
    infix 4 _⋈_
    infixl 6 _➕₁_ _➕₂_ _│₁_ _│₂_
    data _⋈_ {Γ} : Proc Γ → Proc Γ → Set where
-      -- Braiding case. Can derive the symmetric version but found it hard to prove involutivity.
+      -- Braiding cases. Can derive the symmetric version but found it hard to prove involutivity.
       νν-swapᵣ : ∀ P → ν (ν P) ⋈ ν (ν (swap *) P)
       νν-swapₗ : ∀ P → ν (ν (swap *) P) ⋈ ν (ν P)
       -- Propagate.
@@ -72,6 +72,25 @@ module Braiding.Proc where
    (ρ *⁼) (ν P) = ν (suc ρ *⁼) P
    (ρ *⁼) (! P) = ! (ρ *⁼) P
 
+   -- Reflexive closure of ⋈.
+{-
    data _⋉_ {Γ} : Proc Γ → Proc Γ → Set where
       eq : ∀ {P P′} → P ≡ P′ → P ⋉ P′
       neq : ∀ {P P′} → P ⋈ P′ → P ⋉ P′
+-}
+   infix 4 _⋉_
+   data _⋉_ {Γ} : Proc Γ → Proc Γ → Set where
+      -- Braiding cases.
+      νν-swapᵣ : ∀ P → ν (ν P) ⋉ ν (ν (swap *) P)
+      νν-swapₗ : ∀ P → ν (ν (swap *) P) ⋉ ν (ν P)
+      -- Propagate.
+      _➕₁_ : ∀ {P Q R S} → P ⋉ R → Q ≡ S → P ➕ Q ⋉ R ➕ S
+      _➕₂_ : ∀ {P Q R S} → P ≡ R → Q ⋉ S → P ➕ Q ⋉ R ➕ S
+      _│₁_ : ∀ {P Q R S} → P ⋉ R → Q ≡ S → P │ Q ⋉ R │ S
+      _│₂_ : ∀ {P Q R S} → P ≡ R → Q ⋉ S → P │ Q ⋉ R │ S
+      ν_ : ∀ {P R} → P ⋉ R → ν P ⋉ ν R
+      !_ : ∀ {P R} → P ⋉ R → ! P ⋉ ! R
+      -- Closure under additional process constructors for reflexivity.
+      Ο : Ο ⋉ Ο
+      _•∙_ : ∀ x {P P′} → P ≡ P′ → x •∙ P ⋉ x •∙ P′
+      •_〈_〉∙_ : ∀ x y {P P′} → P ≡ P′ → • x 〈 y 〉∙ P ⋉ • x 〈 y 〉∙ P′
