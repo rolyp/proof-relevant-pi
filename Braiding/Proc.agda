@@ -31,8 +31,6 @@ module Braiding.Proc where
       _│₂_ : ∀ {P Q R S} → P ≡ R → Q ≈ S → P │ Q ≈ R │ S
       ν_ : ∀ {P R} → P ≈ R → ν P ≈ ν R
       !_ : ∀ {P R} → P ≈ R → ! P ≈ ! R
-      -- Symmetry and reflexivity are derivable. (Writing this as ∘ in the paper, with arguments reversed).
-      trans : ∀ {P R S} → P ≈ R → R ≈ S → P ≈ S
 
    source : ∀ {Γ} {P P′ : Proc Γ} → P ≈ P′ → Proc Γ
    source {P = P} _ = P
@@ -61,7 +59,6 @@ module Braiding.Proc where
    ≈-sym (refl │₂ Q) = refl │₂ ≈-sym Q
    ≈-sym (ν P) = ν ≈-sym P
    ≈-sym (! P) = ! ≈-sym P
-   ≈-sym (trans P P′) = trans (≈-sym P′) (≈-sym P)
 
    ≈-sym-involutive : ∀ {Γ} {P P′ : Proc Γ} (φ : P ≈ P′) → ≈-sym (≈-sym φ) ≡ φ
    ≈-sym-involutive Ο = refl
@@ -75,7 +72,6 @@ module Braiding.Proc where
    ≈-sym-involutive (νν-swapₗ P) = refl
    ≈-sym-involutive (ν φ) = cong ν_ (≈-sym-involutive φ)
    ≈-sym-involutive (! φ) = cong !_ (≈-sym-involutive φ)
-   ≈-sym-involutive (trans φ φ′) = cong₂ trans (≈-sym-involutive φ) (≈-sym-involutive φ′)
 
    ≈-sym-refl : ∀ {Γ} (P : Proc Γ) → ≈-sym (≈-refl {x = P}) ≡ ≈-refl
    ≈-sym-refl Ο = refl
@@ -86,25 +82,6 @@ module Braiding.Proc where
    ≈-sym-refl (ν P) = cong (λ P → ν P) (≈-sym-refl P)
    ≈-sym-refl (! P) = cong (λ P → ! P) (≈-sym-refl P)
 
-   ≈-equiv : ∀ {Γ} → IsEquivalence (_≈_ {Γ})
-   ≈-equiv = record { refl = ≈-refl ; sym = ≈-sym ; trans = trans }
-
-   private
-      open module IsEquivalence′ {Γ} = IsEquivalence (≈-equiv {Γ}) public
-         hiding (sym; refl) renaming (trans to ≈-trans; reflexive to ≈-reflexive)
-
-   preorder : ∀ {Γ} → Preorder _ _ _
-   preorder {Γ} = record {
-         Carrier = Proc Γ;
-         _≈_ = _≡_;
-         _∼_ = _≈_ {Γ};
-         isPreorder = record {
-            isEquivalence = isEquivalence;
-            reflexive = λ { {i} {.i} refl → ≈-refl };
-            trans = ≈-trans
-         }
-      }
-
    -- Renaming commutes with ≈. This isn't a Renameable (i.e. functor from Ren), but rather
    -- the action of such a functor on a 2-cell.
    _*⁼ : ∀ {Γ Γ′ P R} (ρ : Ren Γ Γ′) → P ≈ R → (ρ *) P ≈ (ρ *) R
@@ -112,7 +89,7 @@ module Braiding.Proc where
    ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapᵣ ((suc (suc ρ) *) P)
    (ρ *⁼) (νν-swapₗ P) with ᴾ.ν (ν (swap *) ((suc (suc ρ) *) P))
    ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapₗ ((suc (suc ρ) *) P)
-   -- Compatibility.
+   -- Propagate.
    (ρ *⁼) Ο = Ο
    (ρ *⁼) (x •∙ P) = (ρ *) x •∙ cong (suc ρ *) P
    (ρ *⁼) (• x 〈 y 〉∙ P) = • (ρ *) x 〈 (ρ *) y 〉∙ cong (ρ *) P
@@ -122,5 +99,3 @@ module Braiding.Proc where
    (ρ *⁼) (P │₂ Q) = cong (ρ *) P │₂ (ρ *⁼) Q
    (ρ *⁼) (ν P) = ν (suc ρ *⁼) P
    (ρ *⁼) (! P) = ! (ρ *⁼) P
-   -- Transitivity.
-   (ρ *⁼) (trans P R) = trans ((ρ *⁼) P) ((ρ *⁼) R)
