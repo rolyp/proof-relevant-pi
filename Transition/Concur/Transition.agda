@@ -1,6 +1,4 @@
--- The "residual" of a concurrent pair after a third concurrent transition. To define this for ⌣ rather than ⌣₁ will
--- need to first show that ⌣ is a congruence. If I set up ⌣ so it is a congruence by definition (with a symmetric
--- variant of each rule), then the definition of this residual is huge and Agda runs out of memory compiling it.
+-- The "residual" of a concurrent pair after a third concurrent transition. See 0.6.14 release notes.
 module Transition.Concur.Transition where
 
    open import SharedModules
