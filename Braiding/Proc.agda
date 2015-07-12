@@ -31,12 +31,6 @@ module Braiding.Proc where
       ν_ : ∀ {P R} → P ⋈ R → ν P ⋈ ν R
       !_ : ∀ {P R} → P ⋈ R → ! P ⋈ ! R
 
-   source : ∀ {Γ} {P P′ : Proc Γ} → P ⋈ P′ → Proc Γ
-   source {P = P} _ = P
-
-   target : ∀ {Γ} {P P′ : Proc Γ} → P ⋈ P′ → Proc Γ
-   target {P′ = P′} _ = P′
-
    ⋈-sym : ∀ {Γ} → Symmetric (_⋈_ {Γ})
    ⋈-sym (νν-swapᵣ P) = νν-swapₗ P
    ⋈-sym (νν-swapₗ P) = νν-swapᵣ P
@@ -75,6 +69,12 @@ module Braiding.Proc where
       Ο : Ο ⋉ Ο
       _•∙_ : ∀ x {P P′} → P ≡ P′ → x •∙ P ⋉ x •∙ P′
       •_〈_〉∙_ : ∀ x y {P P′} → P ≡ P′ → • x 〈 y 〉∙ P ⋉ • x 〈 y 〉∙ P′
+
+   source : ∀ {Γ} {P P′ : Proc Γ} → P ⋉ P′ → Proc Γ
+   source {P = P} _ = P
+
+   target : ∀ {Γ} {P P′ : Proc Γ} → P ⋉ P′ → Proc Γ
+   target {P′ = P′} _ = P′
 
    ⋉-refl : ∀ {Γ} → Reflexive (_⋉_ {Γ})
    ⋉-refl {x = Ο} = Ο

@@ -13,7 +13,7 @@ module Braiding.Transition where
 
    -- The type of the symmetric residual (φ/E , E/φ) for a single transition.
    infixl 5 _Δ⁼_
-   record _Δ⁼_ {ι Γ P P′} {a : Action Γ} {R} (E : P —[ a - ι ]→ R) (φ : P ⋈ P′) : Set where
+   record _Δ⁼_ {ι Γ P P′} {a : Action Γ} {R} (E : P —[ a - ι ]→ R) (φ : P ⋉ P′) : Set where
       constructor _Δ_
       field
          {R′} : _
@@ -21,7 +21,7 @@ module Braiding.Transition where
          E/φ : P′ —[ a - ι ]→ R′
 
    -- The symmetric residual. TODO: make infix.
-   ⊖ : ∀ {ι Γ P P′} {a : Action Γ} {R} (E : P —[ a - ι ]→ R) (φ : P ⋈ P′) → E Δ⁼ φ
+   ⊖ : ∀ {ι Γ P P′} {a : Action Γ} {R} (E : P —[ a - ι ]→ R) (φ : P ⋉ P′) → E Δ⁼ φ
    ⊖ (ν• (νᶜ E)) (νν-swapₗ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap-involutive P = ν {!!} {-(sym (swap-involutive _))-} Δ (νᵇ (ν• swap*E))
    ⊖ (νᵇ_ {a = • x} (ν• E)) (νν-swapₗ P) with (swap *ᶜ) E
@@ -44,6 +44,8 @@ module Braiding.Transition where
    ... | swap*E | νν rewrite swap∘suc-swap∘swap (target E) = νν Δ {!!} -- νᵇ (νᵇ swap*E)
    ⊖ (νᶜ_ {a = a} (νᶜ E)) (νν-swapᵣ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap∘push∘push a = νν-swapᵣ _ Δ νᶜ (νᶜ swap*E)
+   ⊖ (x •∙ P) (.x •∙ refl) = ⋉-refl Δ (x •∙ P)
+   ⊖ (• x 〈 y 〉∙ P) (• .x 〈 .y 〉∙ refl) = ⋉-refl Δ (• x 〈 y 〉∙ P)
    ⊖ (E ➕₁ Q) (φ ➕₁ refl) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ (E/φ ➕₁ Q)
    ⊖ (E ➕₁ Q) (refl ➕₂ ψ) = ⋉-refl Δ (E ➕₁ ᴾ⁼.target ψ)
    ⊖ (E ᵇ│ Q) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in (φ/E │₁ refl) Δ (E/φ ᵇ│ Q)
