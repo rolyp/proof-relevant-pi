@@ -38,15 +38,6 @@ module Braiding.Proc where
    target : ∀ {Γ} {P P′ : Proc Γ} → P ≈ P′ → Proc Γ
    target {P′ = P′} _ = P′
 
-   ≈-refl : ∀ {Γ} → Reflexive (_≈_ {Γ})
-   ≈-refl {x = Ο} = Ο
-   ≈-refl {x = x •∙ P} = x •∙ refl
-   ≈-refl {x = • x 〈 y 〉∙ P} = • x 〈 y 〉∙ refl
-   ≈-refl {x = P ➕ Q} = ≈-refl ➕₁ refl
-   ≈-refl {x = P │ Q} = ≈-refl │₁ refl
-   ≈-refl {x = ν P} = ν ≈-refl
-   ≈-refl {x = ! P} = ! ≈-refl
-
    ≈-sym : ∀ {Γ} → Symmetric (_≈_ {Γ})
    ≈-sym (νν-swapᵣ P) = νν-swapₗ P
    ≈-sym (νν-swapₗ P) = νν-swapᵣ P
@@ -72,15 +63,6 @@ module Braiding.Proc where
    ≈-sym-involutive (νν-swapₗ P) = refl
    ≈-sym-involutive (ν φ) = cong ν_ (≈-sym-involutive φ)
    ≈-sym-involutive (! φ) = cong !_ (≈-sym-involutive φ)
-
-   ≈-sym-refl : ∀ {Γ} (P : Proc Γ) → ≈-sym (≈-refl {x = P}) ≡ ≈-refl
-   ≈-sym-refl Ο = refl
-   ≈-sym-refl (x •∙ P) = refl
-   ≈-sym-refl (• x 〈 y 〉∙ P) = refl
-   ≈-sym-refl (P ➕ Q) = cong (flip _➕₁_ refl) (≈-sym-refl P)
-   ≈-sym-refl (P │ Q) = cong (flip _│₁_ refl) (≈-sym-refl P)
-   ≈-sym-refl (ν P) = cong (λ P → ν P) (≈-sym-refl P)
-   ≈-sym-refl (! P) = cong (λ P → ! P) (≈-sym-refl P)
 
    -- Renaming commutes with ≈. This isn't a Renameable (i.e. functor from Ren), but rather
    -- the action of such a functor on a 2-cell.
