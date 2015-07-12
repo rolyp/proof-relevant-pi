@@ -27,8 +27,8 @@ module Braiding.Transition where
    ⊖ (νᵇ_ {a = • x} (ν• E)) (νν-swapₗ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap-involutive P = ⋉-refl Δ ν• (νᶜ swap*E)
    ⊖ (νᵇ_ {a = x •} (νᵇ E)) (νν-swapₗ P) with (swap *ᵇ) E | νν-swapᵣ ((suc swap *) ((swap *) (target E)))
-   ... | swap*E | νν rewrite swap-involutive P | swap∘suc-swap∘swap (target E) =
-      νν Δ {!!} -- νᵇ (νᵇ swap*E)
+   ... | swap*E | νν rewrite swap∘suc-swap∘swap (target E) =
+      νν Δ {!νᵇ ?!} -- νᵇ (νᵇ swap*E)
    ⊖ (νᵇ_ {a = • x} (νᵇ E)) (νν-swapₗ P) with (swap *ᵇ) E | νν-swapᵣ ((suc swap *) ((swap *) (target E)))
    ... | swap*E | νν rewrite swap-involutive P | swap∘suc-swap∘swap (target E) =
       νν Δ {!!} --νᵇ (νᵇ swap*E)
