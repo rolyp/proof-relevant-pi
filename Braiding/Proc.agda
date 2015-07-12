@@ -105,10 +105,6 @@ module Braiding.Proc where
          }
       }
 
-   module ≈-Reasoning {Γ} where
-      module _ where
-         open Relation.Binary.PreorderReasoning (preorder {Γ}) public renaming (_∼⟨_⟩_ to _≈⟨_⟩_; _≈⟨_⟩_ to _≡⟨_⟩_)
-
    -- Renaming commutes with ≈. This isn't a Renameable (i.e. functor from Ren), but rather
    -- the action of such a functor on a 2-cell.
    _*⁼ : ∀ {Γ Γ′ P R} (ρ : Ren Γ Γ′) → P ≈ R → (ρ *) P ≈ (ρ *) R

@@ -26,7 +26,7 @@ module Transition.Concur.Cofinal where
    ⋈[ Γ , ᵇ∇ᶜ , Δ ] P P′ = P ≡ P′
    ⋈[ Γ , ᶜ∇ᵇ , Δ ] P P′ = P ≡ P′
    ⋈[ Γ , ᶜ∇ᶜ , Δ ] P P′ = P ≡ P′
-   ⋈[ Γ , ᵛ∇ᵛ , Δ ] P P′ = P ≈ P′                 -- bound braid
+   ⋈[ Γ , ᵛ∇ᵛ , Δ ] P P′ = P ≈ P′ -- bound braid
 
    -- TODO: move to a more generic location.
    swap-swap : ∀ {Γ} {P P′ : Proc (Γ + 2)} → (swap *) P ≡ P′ → P ≡ (swap *) P′
