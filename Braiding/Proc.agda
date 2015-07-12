@@ -18,8 +18,9 @@ module Braiding.Proc where
    infix 4 _≈_
    infixl 6 _➕₁_ _➕₂_ _│₁_ _│₂_
    data _≈_ {Γ} : Proc Γ → Proc Γ → Set where
-      -- Braiding case.
+      -- Braiding case. Can derive the symmetric version, but found it hard to prove involutivity.
       νν-swapᵣ : ∀ P → ν (ν P) ≈ ν (ν (swap *) P)
+      νν-swapₗ : ∀ P → ν (ν (swap *) P) ≈ ν (ν P)
       -- Propagate.
       Ο : Ο ≈ Ο
       _•∙_ : ∀ (x : Name Γ) {P P′} → P ≡ P′ → x •∙ P ≈ x •∙ P′
@@ -49,8 +50,8 @@ module Braiding.Proc where
    ≈-refl {x = ! P} = ! ≈-refl
 
    ≈-sym : ∀ {Γ} → Symmetric (_≈_ {Γ})
-   ≈-sym (νν-swapᵣ P) with νν-swapᵣ ((swap *) P)
-   ... | νν-swap*P≈ννP rewrite swap-involutive P = νν-swap*P≈ννP
+   ≈-sym (νν-swapᵣ P) = νν-swapₗ P
+   ≈-sym (νν-swapₗ P) = νν-swapᵣ P
    ≈-sym Ο = Ο
    ≈-sym (x •∙ refl) = x •∙ refl
    ≈-sym (• x 〈 y 〉∙ refl) = • x 〈 y 〉∙ refl
@@ -70,7 +71,8 @@ module Braiding.Proc where
    ≈-sym-involutive (refl ➕₂ ψ) = cong (_➕₂_ refl) (≈-sym-involutive ψ)
    ≈-sym-involutive (φ │₁ refl) = cong (flip _│₁_ refl) (≈-sym-involutive φ)
    ≈-sym-involutive (refl │₂ ψ) = cong (_│₂_ refl) (≈-sym-involutive ψ)
-   ≈-sym-involutive (νν-swapᵣ P) = {!!}
+   ≈-sym-involutive (νν-swapᵣ P) = refl
+   ≈-sym-involutive (νν-swapₗ P) = {!refl!}
    ≈-sym-involutive (ν φ) = cong ν_ (≈-sym-involutive φ)
    ≈-sym-involutive (! φ) = cong !_ (≈-sym-involutive φ)
    ≈-sym-involutive (trans φ φ′) = cong₂ trans (≈-sym-involutive φ) (≈-sym-involutive φ′)
@@ -112,6 +114,8 @@ module Braiding.Proc where
    _*⁼ : ∀ {Γ Γ′ P R} (ρ : Ren Γ Γ′) → P ≈ R → (ρ *) P ≈ (ρ *) R
    (ρ *⁼) (νν-swapᵣ P) with ᴾ.ν (ν (swap *) ((suc (suc ρ) *) P))
    ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapᵣ ((suc (suc ρ) *) P)
+   (ρ *⁼) (νν-swapₗ P) with ᴾ.ν (ν (swap *) ((suc (suc ρ) *) P))
+   ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapₗ ((suc (suc ρ) *) P)
    -- Compatibility.
    (ρ *⁼) Ο = Ο
    (ρ *⁼) (x •∙ P) = (ρ *) x •∙ cong (suc ρ *) P
