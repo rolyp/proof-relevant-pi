@@ -3,7 +3,7 @@ module Braiding.Transition where
    open import SharedModules
 
    open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
-   open import Braiding.Proc as ᴾ⁼ using (_⋈_; _*⁼; ⋈-sym; _⋉_; ⋉-refl; ⋉-reflexive); open ᴾ⁼._⋈_; open ᴾ⁼._⋉_
+   open import Braiding.Proc as ᴾ⁼ using (_*⁼; ⋈-sym; _⋉_; ⋉-refl; ⋉-reflexive); open ᴾ⁼._⋉_
    open import Action.Ren
    open import Proc.Ren
    open import Ren as ᴿ using (suc; push; pop; swap; ᴺren; module Renameable); open Renameable ⦃...⦄
@@ -27,11 +27,11 @@ module Braiding.Transition where
    ⊖ (νᵇ_ {a = • x} (ν• E)) (νν-swapₗ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap-involutive P = ⋉-refl Δ ν• (νᶜ swap*E)
    ⊖ (νᵇ_ {a = x •} (νᵇ E)) (νν-swapₗ P) with (swap *ᵇ) E | νν-swapᵣ ((suc swap *) ((swap *) (target E)))
-   ... | swap*E | νν rewrite swap∘suc-swap∘swap (target E) =
-      νν Δ {!νᵇ ?!} -- νᵇ (νᵇ swap*E)
+   ... | swap*E | νν rewrite swap-involutive P | swap∘suc-swap∘swap (target E) =
+      νν Δ νᵇ (νᵇ swap*E)
    ⊖ (νᵇ_ {a = • x} (νᵇ E)) (νν-swapₗ P) with (swap *ᵇ) E | νν-swapᵣ ((suc swap *) ((swap *) (target E)))
    ... | swap*E | νν rewrite swap-involutive P | swap∘suc-swap∘swap (target E) =
-      νν Δ {!!} --νᵇ (νᵇ swap*E)
+      νν Δ νᵇ (νᵇ swap*E)
    ⊖ (νᶜ_ {a = a} (νᶜ E)) (νν-swapₗ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap-involutive P | swap∘push∘push a = νν-swapᵣ _ Δ νᶜ (νᶜ swap*E)
    ⊖ (ν•_ {x = x} (νᶜ E)) (νν-swapᵣ P) with (swap *ᶜ) E
@@ -39,9 +39,9 @@ module Braiding.Transition where
    ⊖ (νᵇ_ {a = • x} (ν• E)) (νν-swapᵣ P) with (swap *ᶜ) E
    ... | swap*E = ⋉-refl Δ ν• (νᶜ swap*E)
    ⊖ (νᵇ_ {a = x •} (νᵇ E)) (νν-swapᵣ P) with (swap *ᵇ) E | νν-swapᵣ ((suc swap *) ((swap *) (target E)))
-   ... | swap*E | νν rewrite swap∘suc-swap∘swap (target E) = νν Δ {!!} -- νᵇ (νᵇ swap*E)
+   ... | swap*E | νν rewrite swap∘suc-swap∘swap (target E) = νν Δ νᵇ (νᵇ swap*E)
    ⊖ (νᵇ_ {a = • x} (νᵇ E)) (νν-swapᵣ P) with (swap *ᵇ) E | νν-swapᵣ ((suc swap *) ((swap *) (target E)))
-   ... | swap*E | νν rewrite swap∘suc-swap∘swap (target E) = νν Δ {!!} -- νᵇ (νᵇ swap*E)
+   ... | swap*E | νν rewrite swap∘suc-swap∘swap (target E) = νν Δ νᵇ (νᵇ swap*E)
    ⊖ (νᶜ_ {a = a} (νᶜ E)) (νν-swapᵣ P) with (swap *ᶜ) E
    ... | swap*E rewrite swap∘push∘push a = νν-swapᵣ _ Δ νᶜ (νᶜ swap*E)
    ⊖ (x •∙ P) (.x •∙ refl) = ⋉-refl Δ (x •∙ P)
