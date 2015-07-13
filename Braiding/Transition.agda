@@ -48,19 +48,13 @@ module Braiding.Transition where
    ⊖ (• x 〈 y 〉∙ P) (• .x 〈 .y 〉∙ refl) = ⋉-refl Δ (• x 〈 y 〉∙ P)
    ⊖ (E ➕₁ Q) (φ ➕₁ refl) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ (E/φ ➕₁ Q)
    ⊖ (E ➕₁ Q) (refl ➕₂ ψ) = ⋉-refl Δ (E ➕₁ ᴾ⁼.target ψ)
-   ⊖ (E ᵇ│ Q) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in (φ/E │₁ refl) Δ (E/φ ᵇ│ Q)
-   ⊖ (E ᶜ│ Q) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in (φ/E │₁ refl) Δ (E/φ ᶜ│ Q)
-   ⊖ (P │ᵇ F) (φ │₁ refl) = ((push *⁼) φ │₁ refl) Δ (ᴾ⁼.target φ │ᵇ F)
-   ⊖ (P │ᶜ F) (φ │₁ refl) = (φ │₁ refl) Δ (ᴾ⁼.target φ │ᶜ F)
-   ⊖ (E ᵇ│ Q) (refl │₂ ψ) = (refl │₂ (push *⁼) ψ) Δ (E ᵇ│ ᴾ⁼.target ψ)
-   ⊖ (E ᶜ│ Q) (refl │₂ ψ) = (refl │₂ ψ) Δ (E ᶜ│ ᴾ⁼.target ψ)
-   ⊖ (P │ᵇ F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in (refl │₂ ψ/F) Δ (P │ᵇ F/ψ)
-   ⊖ (P │ᶜ F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in (refl │₂ ψ/F) Δ (P │ᶜ F/ψ)
-   ⊖ (_│•_ {y = y} E F) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in ((pop y *⁼) φ/E │₁ refl) Δ (E/φ │• F)
-   ⊖ (E │• F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in (refl │₂ ψ/F) Δ (E │• F/ψ)
-   ⊖ (E │ᵥ F) (φ │₁ refl) = let φ/E Δ E/φ = ⊖ E φ in ν (φ/E │₁ refl) Δ (E/φ │ᵥ F)
-   ⊖ (E │ᵥ F) (refl │₂ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in ν (refl │₂ ψ/F) Δ (E │ᵥ F/ψ)
+   ⊖ (E ᵇ│ Q) (φ │ ψ) = let φ/E Δ E/φ = ⊖ E φ in (φ/E │ (push *⁼) ψ) Δ (E/φ ᵇ│ ᴾ⁼.target ψ)
+   ⊖ (E ᶜ│ Q) (φ │ ψ) = let φ/E Δ E/φ = ⊖ E φ in (φ/E │ ψ) Δ (E/φ ᶜ│ ᴾ⁼.target ψ)
+   ⊖ (P │ᵇ F) (φ │ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in ((push *⁼) φ │ ψ/F) Δ (ᴾ⁼.target φ │ᵇ F/ψ)
+   ⊖ (P │ᶜ F) (φ │ ψ) = let ψ/F Δ F/ψ = ⊖ F ψ in (φ │ ψ/F) Δ (ᴾ⁼.target φ │ᶜ F/ψ)
+   ⊖ (_│•_ {y = y} E F) (φ │ ψ) = let φ/E Δ E/φ = ⊖ E φ; ψ/F Δ F/ψ = ⊖ F ψ in ((pop y *⁼) φ/E │ ψ/F) Δ (E/φ │• F/ψ)
+   ⊖ (E │ᵥ F) (φ │ ψ) = let φ/E Δ E/φ = ⊖ E φ; ψ/F Δ F/ψ = ⊖ F ψ in ν (φ/E │ ψ/F) Δ (E/φ │ᵥ F/ψ)
    ⊖ (ν• E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ ν• E/φ
    ⊖ (νᵇ E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in ν (swap *⁼) φ/E Δ νᵇ E/φ
    ⊖ (νᶜ E) (ν φ) = let φ/E Δ E/φ = ⊖ E φ in ν φ/E Δ νᶜ E/φ
-   ⊖ (! E) (! φ) = let φ/E Δ E/φ = ⊖ E (φ │₁ refl) in φ/E Δ {!!} -- ! E/φ
+   ⊖ (! E) (! φ) = let φ/E Δ E/φ = ⊖ E (φ │ ! φ) in φ/E Δ ! E/φ

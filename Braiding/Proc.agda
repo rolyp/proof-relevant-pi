@@ -61,8 +61,7 @@ module Braiding.Proc where
       -- Propagate.
       _➕₁_ : ∀ {P Q R S} → P ⋉ R → Q ≡ S → P ➕ Q ⋉ R ➕ S
       _➕₂_ : ∀ {P Q R S} → P ≡ R → Q ⋉ S → P ➕ Q ⋉ R ➕ S
-      _│₁_ : ∀ {P Q R S} → P ⋉ R → Q ≡ S → P │ Q ⋉ R │ S
-      _│₂_ : ∀ {P Q R S} → P ≡ R → Q ⋉ S → P │ Q ⋉ R │ S
+      _│_ : ∀ {P Q R S} → P ⋉ R → Q ⋉ S → P │ Q ⋉ R │ S
       ν_ : ∀ {P R} → P ⋉ R → ν P ⋉ ν R
       !_ : ∀ {P R} → P ⋉ R → ! P ⋉ ! R
       -- Close under additional process constructors for reflexivity.
@@ -81,7 +80,7 @@ module Braiding.Proc where
    ⋉-refl {x = x •∙ P} = x •∙ refl
    ⋉-refl {x = • x 〈 y 〉∙ P} = • x 〈 y 〉∙ refl
    ⋉-refl {x = P ➕ Q} = ⋉-refl ➕₁ refl
-   ⋉-refl {x = P │ Q} = ⋉-refl │₁ refl
+   ⋉-refl {x = P │ Q} = ⋉-refl │ ⋉-refl
    ⋉-refl {x = ν P} = ν ⋉-refl
    ⋉-refl {x = ! P} = ! ⋉-refl
 
@@ -101,7 +100,6 @@ module Braiding.Proc where
    (ρ *⁼) (• x 〈 y 〉∙ P) = • (ρ *) x 〈 (ρ *) y 〉∙ cong (ρ *) P
    (ρ *⁼) (P ➕₁ Q) = (ρ *⁼) P ➕₁ cong (ρ *) Q
    (ρ *⁼) (P ➕₂ Q) = cong (ρ *) P ➕₂ (ρ *⁼) Q
-   (ρ *⁼) (P │₁ Q) = (ρ *⁼) P │₁ cong (ρ *) Q
-   (ρ *⁼) (P │₂ Q) = cong (ρ *) P │₂ (ρ *⁼) Q
+   (ρ *⁼) (P │ Q) = (ρ *⁼) P │ (ρ *⁼) Q
    (ρ *⁼) (ν P) = ν (suc ρ *⁼) P
    (ρ *⁼) (! P) = ! (ρ *⁼) P
