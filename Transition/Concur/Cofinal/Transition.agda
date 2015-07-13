@@ -10,7 +10,7 @@ module Transition.Concur.Cofinal.Transition where
    open import Ren as ᴿ using (_ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import Proc using (Proc; Proc↱)
    open import Transition using (_—[_-_]→_)
-   open import Transition.Concur.Cofinal using (⋈[_,_,_]; braid)
+   open import Transition.Concur.Cofinal using (⋈[_,_,_])
    open import Transition.Ren using (_*′)
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
