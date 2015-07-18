@@ -28,6 +28,12 @@ module Transition.Concur.Cofinal where
    ⋈[ Γ , ᶜ∇ᶜ , Δ ] P P′ = P ≡ P′
    ⋈[ Γ , ᵛ∇ᵛ , Δ ] P P′ = P ⋈ P′ -- bound braid
 
+   postulate
+      -- This may be a theorem, but could take some effort to prove. Needs several lemmas, including P → R ⇒ P ≠ R.
+      ⊖-unique : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
+                (𝐸 : E ⌣₁[ 𝑎 ] E′) {S S′} (G : R —[ _ - _ ]→ S) (G′ : R′ —[ _ - _ ]→ S′) →
+                ⋈[ Γ , 𝑎 , zero ] S (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) S′) → ⊖₁ 𝐸 ≡ G ᵀΔ G′
+
    -- TODO: move to a more generic location.
    swap-swap : ∀ {Γ} {P P′ : Proc (Γ + 2)} → (swap *) P ≡ P′ → P ≡ (swap *) P′
    swap-swap {P = P} {P′} swap*P≡P′ =
