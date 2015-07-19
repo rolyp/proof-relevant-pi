@@ -27,9 +27,8 @@ structure.
 * Proof of ⊖-preserves-sym
 * Proof of Theorem 3 from paper (cubical transition)
 * Tighten connection to paper, e.g. key theorems, naming conventions
-* Should a braiding be determined by a pair of composable actions, or
-  simply by an element of 3?
-* Typeclass for residuals (improve overloading mess somehow)
+* Typeclass for residuals (improve overloading mess somehow, and problem
+  with use of Δ as type, constructor and meta-variable)
 
 # Design notes
 

@@ -4,7 +4,7 @@ module Transition.Concur.Cofinal.Transition where
 
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖); open _ᴬ⌣_
-   open import Action.Ren using (ren-preserves-inc-assoc)
+   open import Action.Ren using (ren-preserves-inc)
    open import Braiding.Transition using (_Δ_) renaming (⊖ to ⊖†)
    open import Name using (_+_; +-assoc)
    open import Ren as ᴿ using (swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
@@ -15,12 +15,21 @@ module Transition.Concur.Cofinal.Transition where
 
    blah : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ → let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in
           (a† : Action (Γ′ + Δ′)) → Action (Γ′ + Δ′)
-   blah ˣ∇ˣ _ a = a
-   blah ᵇ∇ᵇ Γ′ a = ((swap ᴿ+ Γ′) *) a
-   blah ᵇ∇ᶜ _ a = a
-   blah ᶜ∇ᵇ _ a = a
-   blah ᶜ∇ᶜ _ a = a
-   blah ᵛ∇ᵛ _ a = a
+   blah ˣ∇ˣ _ = id
+   blah ᵇ∇ᵇ Δ′ = (swap ᴿ+ Δ′) *
+   blah ᵇ∇ᶜ _ = id
+   blah ᶜ∇ᵇ _ = id
+   blah ᶜ∇ᶜ _ = id
+   blah ᵛ∇ᵛ _ = id
+
+   blah-preserves-inc : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ → let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in
+                        inc ≃ₑ inc ∘ blah 𝑎 Δ′
+   blah-preserves-inc ˣ∇ˣ _ _ = refl
+   blah-preserves-inc ᵇ∇ᵇ Δ′ = ren-preserves-inc (swap ᴿ+ Δ′)
+   blah-preserves-inc ᵇ∇ᶜ _ _ = refl
+   blah-preserves-inc ᶜ∇ᵇ _ _ = refl
+   blah-preserves-inc ᶜ∇ᶜ _ _ = refl
+   blah-preserves-inc ᵛ∇ᵛ _ _ = refl
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
