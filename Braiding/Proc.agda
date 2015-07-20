@@ -87,6 +87,16 @@ module Braiding.Proc where
    ⋉-reflexive : ∀ {Γ} → _≡_ ⇒ _⋉_ {Γ}
    ⋉-reflexive refl = ⋉-refl
 
+   ⋈-to-⋉ : ∀ {Γ} → _⋈_ {Γ} ⇒ _⋉_
+   ⋈-to-⋉ (νν-swapᵣ P) = νν-swapᵣ P
+   ⋈-to-⋉ (νν-swapₗ P) = νν-swapₗ P
+   ⋈-to-⋉ (φ ➕₁ Q) = ⋈-to-⋉ φ ➕₁ Q
+   ⋈-to-⋉ (P ➕₂ ψ) = P ➕₂ ⋈-to-⋉ ψ
+   ⋈-to-⋉ (φ │₁ Q) = ⋈-to-⋉ φ │ ⋉-reflexive Q
+   ⋈-to-⋉ (P │₂ ψ) = ⋉-reflexive P │ ⋈-to-⋉ ψ
+   ⋈-to-⋉ (ν φ) = ν ⋈-to-⋉ φ
+   ⋈-to-⋉ (! φ) = ! ⋈-to-⋉ φ
+
    -- Renaming commutes with ⋉. This isn't a Renameable (i.e. a functor from Ren), but rather
    -- the action of such a functor on a 2-cell.
    _*⁼ : ∀ {Γ Γ′ P R} (ρ : Ren Γ Γ′) → P ⋉ R → (ρ *) P ⋉ (ρ *) R
