@@ -8,8 +8,9 @@ module Transition.Concur.Cofinal.Transition where
    open import Action.Ren using (ren-preserves-inc; ren-preserves-target)
    open import Braiding.Proc using (⋈-to-⋉)
    open import Braiding.Transition using (_Δ_; ⊖)
-   open import Name as ᴺ using (zero; _+_; +-assoc)
-   open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
+   open import Name as ᴺ using (_+_; +-assoc)
+   open import Ren as ᴿ using (swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
+   open import Ren.Properties
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Transition using (_—[_-_]→_)
    open import Transition.Concur.Cofinal using (⋈[_,_,_])
@@ -63,11 +64,6 @@ module Transition.Concur.Cofinal.Transition where
       ≅-trans (Proc↲ (blah-preserves-inc-assoc 𝑎 Γ′ a) _)
               (Proc↲ (+-assoc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎))) Γ′ (inc a)) R))
 
-   postulate
-      -- Associativity of tensor product (+). Haven't had time to prove this.
-      wibble : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) Γ″ Δ′ (P : Proc (Γ + Γ″ + Δ′)) →
-               ((ρ ᴿ+ Γ″ ᴿ+ Δ′) *) P ≅ ((ρ ᴿ+ (Γ″ + Δ′)) *) (subst Proc (+-assoc Γ Γ″ Δ′) P)
-
    -- Heterogeneity quagmire. Starting to be a familiar pattern.
    ⊖′[_,_] : ∀ {ι Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Γ′ {P P′ : Proc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) + Γ′)} {a R}
             (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , 𝑎 , Γ′ ] P P′) → _Δ′_ {𝑎 = 𝑎} E γ
@@ -80,7 +76,7 @@ module Transition.Concur.Cofinal.Transition where
             Proc↱ (ren-preserves-target (swap ᴿ+ Γ′) a) (((swap ᴿ+ Γ′ ᴿ+ inc a) *) R)
          ≅⟨ Proc↲ (ren-preserves-target (swap ᴿ+ Γ′) a) _ ⟩
             ((swap ᴿ+ Γ′ ᴿ+ inc a) *) R
-         ≅⟨ wibble swap Γ′ (inc a) R ⟩
+         ≅⟨ ᴿ+-assoc swap Γ′ (inc a) R ⟩
             ((swap ᴿ+ (Γ′ + inc a)) *) (Proc↱ (+-assoc _ Γ′ (inc a)) R)
          ≅⟨ ≅-sym (Proc↲ (blah-preserves-inc-assoc (ᵇ∇ᵇ {a = a₀} {a₀′}) Γ′ a) _) ⟩
             Proc↱ (blah-preserves-inc-assoc (ᵇ∇ᵇ {a = a₀} {a₀′}) Γ′ a)
