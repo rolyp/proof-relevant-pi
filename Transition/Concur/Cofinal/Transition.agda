@@ -6,14 +6,14 @@ module Transition.Concur.Cofinal.Transition where
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖); open _ᴬ⌣_
    open import Action.Ren using (ren-preserves-inc; ren-preserves-target)
-   open import Braiding.Proc using (⋈-to-⋉)
+   open import Braiding.Proc using (_⋈_; ⋈-to-⋉)
    open import Braiding.Transition using (_Δ_; ⊖)
    open import Name as ᴺ using (_+_; +-assoc)
    open import Ren as ᴿ using (swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Transition using (_—[_-_]→_)
-   open import Transition.Concur.Cofinal using (⋈[_,_,_])
+   open import Transition.Concur.Cofinal using (﹙_,_,_,_﹚)
    open import Transition.Ren using (_*′)
 
    -- TODO: sort naming.
@@ -50,11 +50,11 @@ module Transition.Concur.Cofinal.Transition where
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
    record _Δ′_ {ι Γ} {a₀ a₀′ : Action Γ} {𝑎 : a₀ ᴬ⌣ a₀′} {Γ′} {P P′ : Proc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) + Γ′)} {a R}
-          (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , 𝑎 , Γ′ ] P P′) : Set where
+          (E : P —[ a - ι ]→ R) (γ : ﹙ _⋈_ , Γ , 𝑎 , Γ′ ﹚ P P′) : Set where
       constructor _Δ_
       field
          {R′} : Proc _
-         γ/E : ⋈[ Γ , 𝑎 , Γ′ + inc a ] (Proc↱ (+-assoc _ Γ′ (inc a)) R) R′
+         γ/E : ﹙ _⋈_ , Γ , 𝑎 , Γ′ + inc a ﹚ (Proc↱ (+-assoc _ Γ′ (inc a)) R) R′
          E/γ : P′ —[ blah 𝑎 Γ′ a - ι ]→ Proc↱ (blah-preserves-inc-assoc 𝑎 Γ′ a) R′
 
    -- E can be the value of E/γ.
@@ -66,7 +66,7 @@ module Transition.Concur.Cofinal.Transition where
 
    -- Heterogeneity quagmire. Starting to be a familiar pattern.
    ⊖′[_,_] : ∀ {ι Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Γ′ {P P′ : Proc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) + Γ′)} {a R}
-            (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , 𝑎 , Γ′ ] P P′) → _Δ′_ {𝑎 = 𝑎} E γ
+            (E : P —[ a - ι ]→ R) (γ : ﹙ _⋈_ , Γ , 𝑎 , Γ′ ﹚ P P′) → _Δ′_ {𝑎 = 𝑎} E γ
    ⊖′[ ˣ∇ˣ {x = x} {u = u} , Γ′ ] {P = P} {a = a} E refl =
       refl Δ subst (λ R → P —[ a - _ ]→ R) (≅-to-≡ (bibble (ˣ∇ˣ {x = x} {u = u}) Γ′ a _)) E
    ⊖′[ ᵇ∇ᵇ {a = a₀} {a₀′} , Γ′ ] {P = P} {a = a} {R} E refl =
