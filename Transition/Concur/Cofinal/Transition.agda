@@ -57,13 +57,6 @@ module Transition.Concur.Cofinal.Transition where
          γ/E : ﹙ _⋉_ , Γ , 𝑎 , Γ′ + inc a ﹚ (Proc↱ (+-assoc _ Γ′ (inc a)) R) R′
          E/γ : P′ —[ blah 𝑎 Γ′ a - ι ]→ Proc↱ (blah-preserves-inc-assoc 𝑎 Γ′ a) R′
 
-   -- E can be the value of E/γ.
-   bibble : ∀ {Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Γ′ a R →
-            R ≅ Proc↱ (blah-preserves-inc-assoc 𝑎 Γ′ a) (Proc↱ (+-assoc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎))) Γ′ (inc a)) R)
-   bibble {Γ} {a₀} 𝑎 Γ′ a R = ≅-sym (
-      ≅-trans (Proc↲ (blah-preserves-inc-assoc 𝑎 Γ′ a) _)
-              (Proc↲ (+-assoc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎))) Γ′ (inc a)) R))
-
    -- Heterogeneity juggling in the ᵇ∇ᵇ case.
    ⊖′[_,_] : ∀ {ι Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Γ′ {P P′ : Proc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) + Γ′)} {a R}
             (E : P —[ a - ι ]→ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Γ′ ﹚ P P′) → _Δ′_ {𝑎 = 𝑎} E γ
@@ -83,14 +76,11 @@ module Transition.Concur.Cofinal.Transition where
                   (((swap ᴿ+ (Γ′ + inc a)) *) (Proc↱ (+-assoc _ Γ′ (inc a)) R))
          ∎
          )) (((swap ᴿ+ Γ′) *′) E)
-   ⊖′[_,_] ᵇ∇ᶜ Γ′ {a = x ᵇ} E refl = refl Δ E
-   ⊖′[_,_] ᵇ∇ᶜ Γ′ {a = x ᶜ} E refl = refl Δ E
---      refl Δ subst (λ R → P —[ a - _ ]→ R) (≅-to-≡ (bibble (ᵇ∇ᶜ {a = a₀} {a₀′}) Γ′ a _)) E
-   ⊖′[ ᶜ∇ᵇ {a = a₀} {a₀′} , Γ′ ] {P = P} {a = a} E refl =
-      refl Δ subst (λ R → P —[ a - _ ]→ R) (≅-to-≡ (bibble (ᶜ∇ᵇ {a = a₀} {a₀′}) Γ′ a _)) E
-   ⊖′[ ᶜ∇ᶜ {a = a₀} {a₀′} , Γ′ ] {P = P} {a = a} E refl =
-      refl Δ subst (λ R → P —[ a - _ ]→ R) (≅-to-≡ (bibble (ᶜ∇ᶜ {a = a₀} {a₀′}) Γ′ a _)) E
-   ⊖′[_,_] ᵛ∇ᵛ Γ′ {a = (_ •) ᵇ} E φ = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ E/φ
-   ⊖′[_,_] ᵛ∇ᵛ Γ′ {a = (• _) ᵇ} E φ = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ E/φ
-   ⊖′[_,_] ᵛ∇ᵛ Γ′ {a = • _ 〈 _ 〉 ᶜ} E φ = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ E/φ
-   ⊖′[_,_] ᵛ∇ᵛ Γ′ {a = τ ᶜ} E φ = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ E/φ
+   ⊖′[_,_] ᵇ∇ᶜ _ {a = _ ᵇ} E refl = refl Δ E
+   ⊖′[_,_] ᵇ∇ᶜ _ {a = _ ᶜ} E refl = refl Δ E
+   ⊖′[_,_] ᶜ∇ᵇ _ {a = _ ᵇ} E refl = refl Δ E
+   ⊖′[_,_] ᶜ∇ᵇ _ {a = _ ᶜ} E refl = refl Δ E
+   ⊖′[_,_] ᶜ∇ᶜ _ {a = _ ᵇ} E refl = refl Δ E
+   ⊖′[_,_] ᶜ∇ᶜ _ {a = _ ᶜ} E refl = refl Δ E
+   ⊖′[_,_] ᵛ∇ᵛ _ {a = _ ᵇ} E φ = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ E/φ
+   ⊖′[_,_] ᵛ∇ᵛ _ {a = _ ᶜ} E φ = let φ/E Δ E/φ = ⊖ E φ in φ/E Δ E/φ
