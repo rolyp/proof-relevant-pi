@@ -18,7 +18,7 @@ module Transition.Concur.Cofinal where
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
-   -- related by a "bound" braid, by a "free" braid, or by identity.
+   -- related by a "bound" braid, by a "free" braid, or by identity. Parametric in the underlying notion of braid.
    ﹙_,_,_,_﹚ : (∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
                let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
    ﹙ _ , Γ , ˣ∇ˣ , Δ ﹚ P P′ = P ≡ P′
@@ -33,18 +33,6 @@ module Transition.Concur.Cofinal where
       ⊖-unique : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
                 (𝐸 : E ⌣₁[ 𝑎 ] E′) {S S′} (G : R —[ _ - _ ]→ S) (G′ : R′ —[ _ - _ ]→ S′) →
                 ﹙ _⋈_ , Γ , 𝑎 , zero ﹚ S (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) S′) → ⊖₁ 𝐸 ≡ G ᵀΔ G′
-
-   -- TODO: move to a more generic location.
-   swap-swap : ∀ {Γ} {P P′ : Proc (Γ + 2)} → (swap *) P ≡ P′ → P ≡ (swap *) P′
-   swap-swap {P = P} {P′} swap*P≡P′ =
-      let open EqReasoning (setoid _) in
-      begin
-         P
-      ≡⟨ sym (swap-involutive _) ⟩
-         (swap *) ((swap *) P)
-      ≡⟨ cong (swap *) swap*P≡P′ ⟩
-         (swap *) P′
-      ∎
 
    open Delta′
 
