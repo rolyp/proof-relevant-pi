@@ -62,20 +62,16 @@ module Transition.Concur.Cofinal.Transition where
             (E : P —[ a - ι ]→ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Γ′ ﹚ P P′) → _Δ′_ {𝑎 = 𝑎} E γ
    ⊖′[_,_] ˣ∇ˣ Γ′ {a = _ ᵇ} E refl = refl Δ E
    ⊖′[_,_] ˣ∇ˣ Γ′ {a = _ ᶜ} E refl = refl Δ E
-   ⊖′[ ᵇ∇ᵇ {a = a₀} {a₀′} , Γ′ ] {P = P} {a = a} {R} E refl =
-      refl Δ subst (λ R → ((swap ᴿ+ Γ′) *) P —[ ((swap ᴿ+ Γ′) *) a - _ ]→ R) (≅-to-≡ (
-         let open ≅-Reasoning in
-         begin
-            Proc↱ (ren-preserves-target (swap ᴿ+ Γ′) a) (((swap ᴿ+ Γ′ ᴿ+ inc a) *) R)
-         ≅⟨ Proc↲ (ren-preserves-target (swap ᴿ+ Γ′) a) _ ⟩
-            ((swap ᴿ+ Γ′ ᴿ+ inc a) *) R
-         ≅⟨ ᴿ+-assoc swap Γ′ (inc a) R ⟩
-            ((swap ᴿ+ (Γ′ + inc a)) *) (Proc↱ (+-assoc _ Γ′ (inc a)) R)
-         ≅⟨ ≅-sym (Proc↲ (blah-preserves-inc-assoc (ᵇ∇ᵇ {a = a₀} {a₀′}) Γ′ a) _) ⟩
-            Proc↱ (blah-preserves-inc-assoc (ᵇ∇ᵇ {a = a₀} {a₀′}) Γ′ a)
-                  (((swap ᴿ+ (Γ′ + inc a)) *) (Proc↱ (+-assoc _ Γ′ (inc a)) R))
-         ∎
-         )) (((swap ᴿ+ Γ′) *′) E)
+   ⊖′[_,_] {a₀ = a₀ ᵇ} {a₀′ ᵇ} ᵇ∇ᵇ Γ′ {P = P} {a = a ᵇ} {R} E refl =
+      refl Δ subst (λ R → ((swap ᴿ+ Γ′) *) P —[ ((swap ᴿ+ Γ′) *) a ᵇ - _ ]→ R) (≅-to-≡ (
+         ≅-trans (Proc↲ (ren-preserves-target (swap ᴿ+ Γ′) (a ᵇ)) (((swap ᴿ+ (Γ′ + 1)) *) R))
+                 (≅-sym (Proc↲ (blah-preserves-inc-assoc (ᵇ∇ᵇ {a = a₀} {a₀′}) Γ′ (a ᵇ)) (((swap ᴿ+ (Γ′ + 1)) *) R)))
+      )) (((swap ᴿ+ Γ′) *′) E)
+   ⊖′[_,_] {a₀ = a₀ ᵇ} {a₀′ ᵇ} ᵇ∇ᵇ Γ′ {P = P} {a = a ᶜ} {R} E refl =
+      refl Δ subst (λ R → ((swap ᴿ+ Γ′) *) P —[ ((swap ᴿ+ Γ′) *) a ᶜ - _ ]→ R) (≅-to-≡ (
+         ≅-trans (Proc↲ (ren-preserves-target (swap ᴿ+ Γ′) (a ᶜ)) (((swap ᴿ+ Γ′) *) R))
+                 (≅-sym (Proc↲ (blah-preserves-inc-assoc (ᵇ∇ᵇ {a = a₀} {a₀′}) Γ′ (a ᶜ)) _))
+      )) (((swap ᴿ+ Γ′) *′) E)
    ⊖′[_,_] ᵇ∇ᶜ _ {a = _ ᵇ} E refl = refl Δ E
    ⊖′[_,_] ᵇ∇ᶜ _ {a = _ ᶜ} E refl = refl Δ E
    ⊖′[_,_] ᶜ∇ᵇ _ {a = _ ᵇ} E refl = refl Δ E
