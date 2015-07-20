@@ -12,7 +12,8 @@ Compiles with:
 * agda-stdlib-0.9 (with
   [postulates accompanying BUILTINs for sized types removed]
   (https://hackage.haskell.org/package/Agda-2.4.2.3/changelog.txt))
-* agda-stdlib-ext library, version [0.0.2](https://github.com/rolyp/agda-stdlib-ext/releases/tag/0.0.2)
+* agda-stdlib-ext library, version
+  [0.0.2](https://github.com/rolyp/agda-stdlib-ext/releases/tag/0.0.2)
 
 See the appendix of the accompanying paper for notes on module
 structure.
@@ -23,7 +24,8 @@ structure.
 * Proof of symmetry for causal equivalence
 * Vertical composition of braidings
 * Several examples of causal equivalence (trickier than it should be)
-* Residuation-preserves-concurrency for *symmetric* version of concurrency (also tricky)
+* Residuation-preserves-concurrency for *symmetric* version of
+  concurrency (also tricky)
 * Proof of ⊖-preserves-sym
 * Proof of Theorem 3 from paper (cubical transition)
 * Tighten connection to paper, e.g. key theorems, naming conventions
@@ -31,6 +33,8 @@ structure.
   with use of Δ as type, constructor and meta-variable)
 
 # Design notes
+
+## 0.1.1 Precise cofinality
 
 ## 0.1 LFMTP final version
 
