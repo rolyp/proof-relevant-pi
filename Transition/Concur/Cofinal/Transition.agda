@@ -67,10 +67,8 @@ module Transition.Concur.Cofinal.Transition where
    -- Heterogeneity juggling in the ᵇ∇ᵇ case.
    ⊖′[_,_] : ∀ {ι Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Γ′ {P P′ : Proc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) + Γ′)} {a R}
             (E : P —[ a - ι ]→ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Γ′ ﹚ P P′) → _Δ′_ {𝑎 = 𝑎} E γ
-   ⊖′[_,_] ˣ∇ˣ Γ′ {a = (_ •) ᵇ} E refl = refl Δ E
-   ⊖′[_,_] ˣ∇ˣ Γ′ {a = (• _) ᵇ} E refl = refl Δ E
-   ⊖′[_,_] ˣ∇ˣ Γ′ {a = • _ 〈 _ 〉 ᶜ} E refl = refl Δ E
-   ⊖′[_,_] ˣ∇ˣ Γ′ {a = τ ᶜ} E refl = refl Δ E
+   ⊖′[_,_] ˣ∇ˣ Γ′ {a = _ ᵇ} E refl = refl Δ E
+   ⊖′[_,_] ˣ∇ˣ Γ′ {a = _ ᶜ} E refl = refl Δ E
    ⊖′[ ᵇ∇ᵇ {a = a₀} {a₀′} , Γ′ ] {P = P} {a = a} {R} E refl =
       refl Δ subst (λ R → ((swap ᴿ+ Γ′) *) P —[ ((swap ᴿ+ Γ′) *) a - _ ]→ R) (≅-to-≡ (
          let open ≅-Reasoning in
@@ -85,7 +83,8 @@ module Transition.Concur.Cofinal.Transition where
                   (((swap ᴿ+ (Γ′ + inc a)) *) (Proc↱ (+-assoc _ Γ′ (inc a)) R))
          ∎
          )) (((swap ᴿ+ Γ′) *′) E)
-   ⊖′[ ᵇ∇ᶜ {a = a₀} {a₀′} , Γ′ ] {P = P} {a = a} E refl = ?
+   ⊖′[_,_] ᵇ∇ᶜ Γ′ {a = x ᵇ} E refl = refl Δ E
+   ⊖′[_,_] ᵇ∇ᶜ Γ′ {a = x ᶜ} E refl = refl Δ E
 --      refl Δ subst (λ R → P —[ a - _ ]→ R) (≅-to-≡ (bibble (ᵇ∇ᶜ {a = a₀} {a₀′}) Γ′ a _)) E
    ⊖′[ ᶜ∇ᵇ {a = a₀} {a₀′} , Γ′ ] {P = P} {a = a} E refl =
       refl Δ subst (λ R → P —[ a - _ ]→ R) (≅-to-≡ (bibble (ᶜ∇ᵇ {a = a₀} {a₀′}) Γ′ a _)) E
