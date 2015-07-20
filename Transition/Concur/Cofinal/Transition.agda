@@ -6,7 +6,7 @@ module Transition.Concur.Cofinal.Transition where
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖); open _ᴬ⌣_
    open import Action.Ren using (ren-preserves-inc)
-   open import Braiding.Transition using (_Δ_) renaming (⊖ to ⊖†)
+   open import Braiding.Transition using (_Δ_; ⊖)
    open import Name using (_+_; +-assoc)
    open import Ren as ᴿ using (swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import Proc using (Proc; Proc↱)
@@ -47,13 +47,22 @@ module Transition.Concur.Cofinal.Transition where
 
    -- The type of the symmetric residual (γ/E , E/γ) for a single transition.
    infixl 5 _Δ′_
-   record _Δ′_ {ι Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) {Γ′} {P P′ : Proc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) + Γ′)} {a R}
+   record _Δ′_ {ι Γ} {a₀ a₀′ : Action Γ} {𝑎 : a₀ ᴬ⌣ a₀′} {Γ′} {P P′ : Proc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) + Γ′)} {a R}
           (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , 𝑎 , Γ′ ] P P′) : Set where
       constructor _Δ_
       field
          {R′} : Proc _
          γ/E : ⋈[ Γ , 𝑎 , Γ′ + inc a ] (Proc↱ (+-assoc _ Γ′ (inc a)) R) R′
          E/γ : P′ —[ blah 𝑎 Γ′ a - ι ]→ Proc↱ (blah-preserves-inc-assoc 𝑎 Γ′ a) R′
+
+   ⊖′[_,_] : ∀ {ι Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Γ′ {P P′ : Proc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) + Γ′)} {a R}
+            (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , 𝑎 , Γ′ ] P P′) → _Δ′_ {𝑎 = 𝑎} {Γ′ = Γ′} E γ
+   ⊖′[_,_] ˣ∇ˣ Γ′ E refl = refl Δ {!!}
+   ⊖′[_,_] ᵇ∇ᵇ Γ′ E γ = {!!}
+   ⊖′[_,_] ᵇ∇ᶜ Γ′ E refl = refl Δ {!!}
+   ⊖′[_,_] ᶜ∇ᵇ Γ′ E refl = refl Δ {!!}
+   ⊖′[ ᶜ∇ᶜ , Γ′ ] E refl = refl Δ {!!}
+   ⊖′[_,_] ᵛ∇ᵛ Γ′ E φ = let φ/E Δ E/φ = ⊖ E φ in {!!} Δ {!!}
 {-
    -- Hoped Agda would be able to infer ӓ and Γ′ from γ, but apparently not.
    ⊖′[_,_] : ∀ {ι Γ} (ӓ : Action₂ Γ) Γ′ {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + Γ′)} {a R}
