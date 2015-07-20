@@ -1,4 +1,4 @@
-open import Name as ᴺ using (Cxt)
+open import Name as ᴺ using (Cxt; +-assoc)
 open import Ren as ᴿ using (Renameable; Ren)
 
 -- Agda can't infer the renaming arguments in many cases; these wrappers make them more explicit.
@@ -14,6 +14,11 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
 
    module Renameable′ = Renameable {A = A}; open Renameable′ ⦃...⦄ -- fix A for all uses of *
    open Renameable ⦃...⦄ using () renaming (_* to _*′)
+
+   postulate
+      -- Associativity of tensor product. Haven't had time to prove this, but it's "obviously" true :-o
+      ᴿ+-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) Γ″ Δ′ (P : A (Γ + Γ″ + Δ′)) →
+                ((ρ ᴿ+ Γ″ ᴿ+ Δ′) *) P ≅ ((ρ ᴿ+ (Γ″ + Δ′)) *) (subst A (+-assoc Γ Γ″ Δ′) P)
 
    +-id-elim : ∀ {Γ} n → (id ᴿ+ n) * ≃ₑ id {A = A (Γ + n)}
    +-id-elim n a =

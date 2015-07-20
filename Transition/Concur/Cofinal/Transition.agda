@@ -5,11 +5,11 @@ module Transition.Concur.Cofinal.Transition where
 
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖); open _ᴬ⌣_
-   open import Action.Ren using (ren-preserves-inc)
+   open import Action.Ren using (ren-preserves-inc; ren-preserves-target)
    open import Braiding.Proc using (⋈-to-⋉)
    open import Braiding.Transition using (_Δ_; ⊖)
    open import Name as ᴺ using (zero; _+_; +-assoc)
-   open import Ren as ᴿ using (swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Transition using (_—[_-_]→_)
    open import Transition.Concur.Cofinal using (⋈[_,_,_])
@@ -59,17 +59,40 @@ module Transition.Concur.Cofinal.Transition where
    -- E can be the value of E/γ.
    bibble : ∀ {Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Γ′ a R →
             R ≅ Proc↱ (blah-preserves-inc-assoc 𝑎 Γ′ a) (Proc↱ (+-assoc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎))) Γ′ (inc a)) R)
-   bibble {Γ} {a₀} 𝑎 Γ′ a R =
-      ≅-trans (≅-sym (Proc↲ (+-assoc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎))) Γ′ (inc a)) R))
-              (≅-sym (Proc↲ (blah-preserves-inc-assoc 𝑎 Γ′ a) _))
+   bibble {Γ} {a₀} 𝑎 Γ′ a R = ≅-sym (
+      ≅-trans (Proc↲ (blah-preserves-inc-assoc 𝑎 Γ′ a) _)
+              (Proc↲ (+-assoc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎))) Γ′ (inc a)) R))
 
+   postulate
+      -- Associativity of tensor product (+). Haven't had time to prove this.
+      wibble : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) Γ″ Δ′ (P : Proc (Γ + Γ″ + Δ′)) →
+               ((ρ ᴿ+ Γ″ ᴿ+ Δ′) *) P ≅ ((ρ ᴿ+ (Γ″ + Δ′)) *) (subst Proc (+-assoc Γ Γ″ Δ′) P)
+
+   -- Heterogeneity quagmire. Starting to be a familiar pattern.
    ⊖′[_,_] : ∀ {ι Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Γ′ {P P′ : Proc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) + Γ′)} {a R}
             (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , 𝑎 , Γ′ ] P P′) → _Δ′_ {𝑎 = 𝑎} E γ
-   ⊖′[ ˣ∇ˣ , Γ′ ] {P = P} {a = a} E refl = refl Δ subst (λ R → P —[ id a - _ ]→ R) (≅-to-≡ (bibble ˣ∇ˣ Γ′ a _)) E
-   ⊖′[ ᵇ∇ᵇ , Γ′ ] E refl = {!!} Δ {!!}
-   ⊖′[ ᵇ∇ᶜ , Γ′ ] E refl = refl Δ {!!}
-   ⊖′[ ᶜ∇ᵇ , Γ′ ] E refl = refl Δ {!!}
-   ⊖′[ ᶜ∇ᶜ , Γ′ ] E refl = refl Δ {!!}
+   ⊖′[ ˣ∇ˣ {x = x} {u = u} , Γ′ ] {P = P} {a = a} E refl =
+      refl Δ subst (λ R → P —[ a - _ ]→ R) (≅-to-≡ (bibble (ˣ∇ˣ {x = x} {u = u}) Γ′ a _)) E
+   ⊖′[ ᵇ∇ᵇ {a = a₀} {a₀′} , Γ′ ] {P = P} {a = a} {R} E refl =
+      refl Δ subst (λ R → ((swap ᴿ+ Γ′) *) P —[ ((swap ᴿ+ Γ′) *) a - _ ]→ R) (≅-to-≡ (
+         let open ≅-Reasoning in
+         begin
+            Proc↱ (ren-preserves-target (swap ᴿ+ Γ′) a) (((swap ᴿ+ Γ′ ᴿ+ inc a) *) R)
+         ≅⟨ Proc↲ (ren-preserves-target (swap ᴿ+ Γ′) a) _ ⟩
+            ((swap ᴿ+ Γ′ ᴿ+ inc a) *) R
+         ≅⟨ wibble swap Γ′ (inc a) R ⟩
+            ((swap ᴿ+ (Γ′ + inc a)) *) (Proc↱ (+-assoc _ Γ′ (inc a)) R)
+         ≅⟨ ≅-sym (Proc↲ (blah-preserves-inc-assoc (ᵇ∇ᵇ {a = a₀} {a₀′}) Γ′ a) _) ⟩
+            Proc↱ (blah-preserves-inc-assoc (ᵇ∇ᵇ {a = a₀} {a₀′}) Γ′ a)
+                  (((swap ᴿ+ (Γ′ + inc a)) *) (Proc↱ (+-assoc _ Γ′ (inc a)) R))
+         ∎
+         )) (((swap ᴿ+ Γ′) *′) E)
+   ⊖′[ ᵇ∇ᶜ {a = a₀} {a₀′} , Γ′ ] {P = P} {a = a} E refl =
+      refl Δ subst (λ R → P —[ a - _ ]→ R) (≅-to-≡ (bibble (ᵇ∇ᶜ {a = a₀} {a₀′}) Γ′ a _)) E
+   ⊖′[ ᶜ∇ᵇ {a = a₀} {a₀′} , Γ′ ] {P = P} {a = a} E refl =
+      refl Δ subst (λ R → P —[ a - _ ]→ R) (≅-to-≡ (bibble (ᶜ∇ᵇ {a = a₀} {a₀′}) Γ′ a _)) E
+   ⊖′[ ᶜ∇ᶜ {a = a₀} {a₀′} , Γ′ ] {P = P} {a = a} E refl =
+      refl Δ subst (λ R → P —[ a - _ ]→ R) (≅-to-≡ (bibble (ᶜ∇ᶜ {a = a₀} {a₀′}) Γ′ a _)) E
    ⊖′[ ᵛ∇ᵛ , Γ′ ] E φ = let φ/E Δ E/φ = ⊖ E (⋈-to-⋉ φ) in {!!} Δ {!!}
 {-
    -- Hoped Agda would be able to infer ӓ and Γ′ from γ, but apparently not.

@@ -9,6 +9,7 @@ module Action.Concur where
 
    -- The 6 kinds of concurrent action. The ˣ∇ˣ and ᵛ∇ᵛ cases are the interesting ones; the former represents
    -- concurrent extrusions of the same binder, and the latter concurrent extrusion rendezvous.
+   -- TODO: make the component actions explicit, as per the paper?
    infix 4 _ᴬ⌣_
    data _ᴬ⌣_ {Γ} : (a a′ : Action Γ) → Set where
       ˣ∇ˣ : {x u : Name Γ} → (• x) ᵇ ᴬ⌣ (• u) ᵇ
