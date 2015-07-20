@@ -8,9 +8,9 @@ module Transition.Concur.Cofinal.Transition where
    open import Action.Ren using (ren-preserves-inc)
    open import Braiding.Proc using (⋈-to-⋉)
    open import Braiding.Transition using (_Δ_; ⊖)
-   open import Name using (_+_; +-assoc)
+   open import Name as ᴺ using (zero; _+_; +-assoc)
    open import Ren as ᴿ using (swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
-   open import Proc using (Proc; Proc↱)
+   open import Proc using (Proc; Proc↱; Proc↲)
    open import Transition using (_—[_-_]→_)
    open import Transition.Concur.Cofinal using (⋈[_,_,_])
    open import Transition.Ren using (_*′)
@@ -56,9 +56,16 @@ module Transition.Concur.Cofinal.Transition where
          γ/E : ⋈[ Γ , 𝑎 , Γ′ + inc a ] (Proc↱ (+-assoc _ Γ′ (inc a)) R) R′
          E/γ : P′ —[ blah 𝑎 Γ′ a - ι ]→ Proc↱ (blah-preserves-inc-assoc 𝑎 Γ′ a) R′
 
+   -- E can be the value of E/γ.
+   bibble : ∀ {Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Γ′ a R →
+            R ≅ Proc↱ (blah-preserves-inc-assoc 𝑎 Γ′ a) (Proc↱ (+-assoc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎))) Γ′ (inc a)) R)
+   bibble {Γ} {a₀} 𝑎 Γ′ a R =
+      ≅-trans (≅-sym (Proc↲ (+-assoc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎))) Γ′ (inc a)) R))
+              (≅-sym (Proc↲ (blah-preserves-inc-assoc 𝑎 Γ′ a) _))
+
    ⊖′[_,_] : ∀ {ι Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Γ′ {P P′ : Proc (Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) + Γ′)} {a R}
             (E : P —[ a - ι ]→ R) (γ : ⋈[ Γ , 𝑎 , Γ′ ] P P′) → _Δ′_ {𝑎 = 𝑎} E γ
-   ⊖′[ ˣ∇ˣ , Γ′ ] E refl = refl Δ {!!}
+   ⊖′[ ˣ∇ˣ , Γ′ ] {P = P} {a = a} E refl = refl Δ subst (λ R → P —[ id a - _ ]→ R) (≅-to-≡ (bibble ˣ∇ˣ Γ′ a _)) E
    ⊖′[ ᵇ∇ᵇ , Γ′ ] E refl = {!!} Δ {!!}
    ⊖′[ ᵇ∇ᶜ , Γ′ ] E refl = refl Δ {!!}
    ⊖′[ ᶜ∇ᵇ , Γ′ ] E refl = refl Δ {!!}
