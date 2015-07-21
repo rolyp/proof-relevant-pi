@@ -83,7 +83,7 @@ module Transition.Concur where
       _│ᵥ_ : ∀ {x u P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
              E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ ˣ∇ˣ ] F′ → E │ᵥ F ⌣₁[ ᶜ∇ᶜ ] E′ │ᵥ F′
-      -- TODO: give this a better name.
+      -- TODO: find a better name.
       _│ᵥ′_ : ∀ {x u P Q R R′ S S′} {E : P —[ x • ᵇ - _ ]→ R} {E′ : P —[ u • ᵇ - _ ]→ R′}
              {F : Q —[ (• x) ᵇ - _ ]→ S} {F′ : Q —[ (• u) ᵇ - _ ]→ S′} →
              E ⌣₁[ ᵇ∇ᵇ ] E′ → F ⌣₁[ ᵇ∇ᵇ ] F′ → E │ᵥ F ⌣₁[ ᵛ∇ᵛ ] E′ │ᵥ F′
