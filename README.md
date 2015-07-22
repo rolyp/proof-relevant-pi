@@ -1,8 +1,9 @@
 # Proof-relevant pi calculus
 
-This the Agda development accompanying the paper ***Proof-relevant pi
-calculus*** (http://eptcs.web.cse.unsw.edu.au/paper.cgi?LFMTP15:6), to
-be presented at [LFMTP 2015](http://lfmtp.org/workshops/2015/).
+This the Agda development accompanying the paper
+[Proof-relevant pi calculus]
+(http://eptcs.web.cse.unsw.edu.au/paper.cgi?LFMTP15:6), to be presented
+at [LFMTP 2015](http://lfmtp.org/workshops/2015/).
 
 # Build instructions
 
