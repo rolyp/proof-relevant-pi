@@ -1,4 +1,4 @@
-module StructuralCong.Proc where
+module Braiding.Proc where
 
    open import SharedModules hiding ([_]; preorder) renaming (sym to ≡-sym; trans to ≡-trans)
    import Relation.Binary.PreorderReasoning

@@ -1,14 +1,14 @@
-module StructuralCong.Transition where
+module Braiding.Transition where
 
    open import SharedModules
    import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Ren
+   open import Braiding.Proc as ᴾ⁼ using (_≈_; module _≈_; _*⁼; ≈-sym; ≈-refl; ≈-reflexive);
+      open _≈_ renaming (trans to ≈-trans)
    open import Name as ᴺ using (Name; shift)
    open import Proc using (Proc); open Proc
-   open import StructuralCong.Proc as ᴾ⁼ using (_≈_; module _≈_; _*⁼; ≈-sym; ≈-refl; ≈-reflexive);
-      open _≈_ renaming (trans to ≈-trans)
    open import Proc.Ren
    open import Ren as ᴿ using (suc; push; pop; swap; ᴺren; module Renameable); open Renameable ⦃...⦄
    open import Ren.Properties

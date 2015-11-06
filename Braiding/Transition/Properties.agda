@@ -1,12 +1,12 @@
 -- Expand some equation-like rules into true equalities by pattern-matching. Agda mostly sucks at this.
-module StructuralCong.Transition.Properties where
+module Braiding.Transition.Properties where
 
    open import SharedModules hiding (trans)
 
    open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
+   open import Braiding.Proc as ᴾ⁼ using (_≈_); open ᴾ⁼._≈_
+   open import Braiding.Transition using (⊖; _Δ_)
    open import Name as ᴺ using (Name; zero)
-   open import StructuralCong.Proc as ᴾ⁼ using (_≈_); open ᴾ⁼._≈_
-   open import StructuralCong.Transition using (⊖; _Δ_)
    open import Transition as ᵀ using (_—[_-_]→_); open ᵀ._—[_-_]→_
 
    ⊖-ν•-ν : ∀ {ι Γ P P′ R} {x : Name Γ} (E : P —[ • ᴺ.suc x 〈 zero 〉 ᶜ - ι ]→ R) {φ : P ≈ P′} →
