@@ -5,7 +5,7 @@ module Transition.Seq.Cofinal where
    open import Action as ᴬ using (inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (Action₂; module _ᴬ⌣_); open _ᴬ⌣_
    open import Action.Ren using (ren-preserves-inc-assoc)
-   open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆); open ᴬ⋆.Action⋆
+   open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
    open import Action.Seq.Ren using (ren-preserves-inc⋆-assoc)
    open import Braiding.Proc using (_≈_)
    open import Name as ᴺ using (_+_; +-assoc; zero)
@@ -162,7 +162,7 @@ module Transition.Seq.Cofinal where
    EquivFrom _ (_ , _ , E⋆) (_ , _ , E′⋆) = E⋆ ≃ E′⋆
 
    ≃-sym : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
-   ≃-sym {a⋆ = a ᴬ⋆.ᶜ∷ a′ ᴬ⋆.ᶜ∷ a⋆} {E⋆ = ._ ᶜ∷ (._ ᶜ∷ E⋆)} {-._ ᶜ∷ ._ ᶜ∷ E⋆-} (E ᶜ∶⇋∶ᶜ E′ [ E⌣E′ ]∷ E⋆≃E′⋆) =
+   ≃-sym {a⋆ = a ᴬ⋆.ᶜ∷ a′ ᴬ⋆.ᶜ∷ a⋆} {E⋆ = ._ ᶜ∷ (._ ᶜ∷ E⋆)} (E ᶜ∶⇋∶ᶜ E′ [ E⌣E′ ]∷ E⋆≃E′⋆) =
       let E′⋆≃E⋆ = ≃-sym E⋆≃E′⋆
           E⋆/γ = ⊖⋆[ (a ᶜ , a′ ᶜ) , 0 ] E⋆ (⊖-✓ E⌣E′)
           S′ = Proc↱ (ren-preserves-inc⋆-assoc id 0 a⋆) (_Δ⋆_.R′ E⋆/γ)
