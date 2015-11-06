@@ -5,7 +5,7 @@ module Transition.Seq.Cofinal where
    open import Action as ᴬ using (inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (Action₂; module _ᴬ⌣_); open _ᴬ⌣_
    open import Action.Ren using (ren-preserves-inc-assoc)
-   open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
+   open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆); open ᴬ⋆.Action⋆
    open import Action.Seq.Ren using (ren-preserves-inc⋆-assoc)
    open import Braiding.Proc using (_≈_)
    open import Name as ᴺ using (_+_; +-assoc; zero)
@@ -150,9 +150,9 @@ module Transition.Seq.Cofinal where
    open Delta′
    open Properties
 
-   postulate
+--   postulate
       -- Not trivial to prove, so come back to this.
-      ≃-sym : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
+--      ≃-sym : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
 
    -- Existentially quantified version so we can state isEquivalence.
    TraceFrom : ∀ {Γ} (P : Proc Γ) → Set
@@ -160,6 +160,26 @@ module Transition.Seq.Cofinal where
 
    EquivFrom : ∀ {Γ} (P : Proc Γ) → TraceFrom P → TraceFrom P → Set
    EquivFrom _ (_ , _ , E⋆) (_ , _ , E′⋆) = E⋆ ≃ E′⋆
+
+   ≃-sym : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
+   ≃-sym {a⋆ = a ᴬ⋆.ᶜ∷ a′ ᴬ⋆.ᶜ∷ a⋆} {E⋆ = ._ ᶜ∷ (._ ᶜ∷ E⋆)} {-._ ᶜ∷ ._ ᶜ∷ E⋆-} (E ᶜ∶⇋∶ᶜ E′ [ E⌣E′ ]∷ E⋆≃E′⋆) =
+      let E′⋆≃E⋆ = ≃-sym E⋆≃E′⋆
+          E⋆/γ = ⊖⋆[ (a ᶜ , a′ ᶜ) , 0 ] E⋆ (⊖-✓ E⌣E′)
+          S′ = Proc↱ (ren-preserves-inc⋆-assoc id 0 a⋆) (_Δ⋆_.R′ E⋆/γ)
+          E′⋆ : S (⊖ (⌣-sym E⌣E′)) —[ (id *) a⋆ ]→⋆ S′
+          E′⋆ = subst (λ S → S —[ (id *) a⋆ ]→⋆ S′) (⊖-preserves-sym′ E⌣E′) (_Δ⋆_.E⋆/γ E⋆/γ)
+          result′ : E′ ᶜ∷ (E′/E (⊖ (⌣-sym E⌣E′)) ᶜ∷ E′⋆) ≃ E ᶜ∷ (E/E′ (⊖ (⌣-sym E⌣E′)) ᶜ∷ {!!})
+          result′ = E′ ᶜ∶⇋∶ᶜ E [ ⌣-sym E⌣E′ ]∷ {!!}
+          result : E′ ᶜ∷ (E/E′ (⊖ E⌣E′) ᶜ∷ (_Δ⋆_.E⋆/γ E⋆/γ)) ≃ E ᶜ∷ (E′/E (⊖ E⌣E′) ᶜ∷ E⋆)
+          result = {!!}
+      in {!!}
+   ≃-sym (E ᶜ∶⇋∶ᵇ E′ [ _ ]∷ E⋆) = {!!}
+   ≃-sym (E ᵇ∶⇋∶ᵇ E′ [ _ ]∷ E⋆) = {!!}
+   ≃-sym (E ᵛ∶⇋∶ᵛ E′ [ _ ]∷ E⋆) = {!!}
+   ≃-sym [] = []
+   ≃-sym (E ᵇ∷ E⋆) = E ᵇ∷ ≃-sym E⋆
+   ≃-sym (E ᶜ∷ E⋆) = E ᶜ∷ ≃-sym E⋆
+   ≃-sym (≃-trans T T′) = ≃-trans (≃-sym T′) (≃-sym T)
 
    ≃-isEquivalence : ∀ {Γ} {P : Proc Γ} → IsEquivalence (EquivFrom P)
    ≃-isEquivalence = record {
