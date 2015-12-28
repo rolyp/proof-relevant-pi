@@ -18,7 +18,7 @@ module Transition.Concur.Cofinal where
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
-   -- structurally congruent, or structurally congruent with each other's swap image.
+   -- braiding-congruent, or braiding-congruent with each other's swap image.
    braid : ∀ {Γ} (ӓ : Action₂ Γ) → let Γ′ = Γ + inc (π₁ ӓ) + inc (π₂ ӓ) in Ren Γ′ Γ′
    braid (_ ᵇ , _ ᵇ) = swap
    braid (_ ᵇ , _ ᶜ) = id
