@@ -4,7 +4,6 @@ module Transition.Seq.Cofinal where
 
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖); open _ᴬ⌣_
-   open import Action.Ren using (ren-preserves-inc-assoc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
    open import Action.Seq.Ren using (ren-preserves-inc⋆-assoc)
 --   open import Braiding.Proc using (_≈_)
@@ -25,7 +24,7 @@ module Transition.Seq.Cofinal where
       field
          {R′} : _
          γ/E⋆ : ⋈[ Γ , 𝑎 , Δ′ + inc⋆ a⋆ ] (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ ((braid 𝑎 ᴿ+ Δ′) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid 𝑎) Δ′ a⋆) R′
+         E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ Proc↱ {!!}{-(ren-preserves-inc⋆-assoc (braid 𝑎) Δ′ a⋆)-} R′
 {-
    -- Hetereogeneously equate braidings up to associativity of + on contexts.
    braid-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
