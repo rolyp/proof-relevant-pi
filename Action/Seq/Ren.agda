@@ -51,8 +51,3 @@ module Action.Seq.Ren where
    ren-preserves-inc⋆ ρ [] = refl
    ren-preserves-inc⋆ ρ (a ᵇ∷ a⋆) rewrite ren-preserves-inc⋆ (suc ρ) a⋆ = refl
    ren-preserves-inc⋆ ρ (a ᶜ∷ a⋆) rewrite ren-preserves-inc⋆ ρ a⋆ = refl
-
-   ren-preserves-inc⋆-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → ∀ Δ′ (a⋆ : Action⋆ (Γ + Δ′)) →
-                              Γ + (Δ′ + inc⋆ a⋆) ≡ Γ + Δ′ + inc⋆ (((ρ ᴿ+ Δ′) *′) a⋆)
-   ren-preserves-inc⋆-assoc {Γ} ρ Δ′ a⋆ =
-      trans (sym (+-assoc Γ Δ′ (inc⋆ a⋆))) (cong (_+_ (Γ + Δ′)) (ren-preserves-inc⋆ (ρ ᴿ+ Δ′) a⋆))

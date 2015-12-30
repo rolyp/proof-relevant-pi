@@ -37,7 +37,7 @@ module Transition.Concur.Cofinal.Transition where
    braid-preserves-inc ᵛ∇ᵛ _ _ = refl
 
    braid-preserves-inc-assoc : ∀ {Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Δ′ → let Γ′ = Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) in
-                              (a : Action (Γ′ + Δ′)) → Γ′ + (Δ′ + inc a) ≡  Γ′ + Δ′ + inc (braid 𝑎 Δ′ a)
+                               (a : Action (Γ′ + Δ′)) → Γ′ + (Δ′ + inc a) ≡ Γ′ + Δ′ + inc (braid 𝑎 Δ′ a)
    braid-preserves-inc-assoc {Γ} {a₀} 𝑎 Δ′ a =
       let Γ′ = Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)); open EqReasoning (setoid _) in
       begin

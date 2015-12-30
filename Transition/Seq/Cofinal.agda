@@ -1,20 +1,43 @@
 module Transition.Seq.Cofinal where
 
    open import SharedModules
+   import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖); open _ᴬ⌣_
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
-   open import Action.Seq.Ren using (ren-preserves-inc⋆-assoc)
+   open import Action.Seq.Ren using (ren-preserves-inc⋆)
 --   open import Braiding.Proc using (_≈_)
    open import Name as ᴺ using (_+_; +-assoc; zero)
-   open import Ren as ᴿ using (Ren; _ᴿ+_; push); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; _ᴿ+_; push; swap); open ᴿ.Renameable ⦃...⦄
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Transition using (_—[_-_]→_; source; target)
    open import Transition.Concur using (Concur; module Delta′; ⊖; ⌣-sym; module Properties)
    open import Transition.Concur.Cofinal using (⋈[_,_,_]; ⊖-✓)
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid)
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; target⋆); open ᵀ⋆._—[_]→⋆_
+
+   -- TODO: consolidate with similar lemmas for inc.
+   braid-preserves-inc⋆ : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ → let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in
+                        inc⋆ ≃ₑ inc⋆ ∘ braid 𝑎 Δ′
+   braid-preserves-inc⋆ ˣ∇ˣ _ _ = refl
+   braid-preserves-inc⋆ ᵇ∇ᵇ Δ′ = ren-preserves-inc⋆ (swap ᴿ+ Δ′)
+   braid-preserves-inc⋆ ᵇ∇ᶜ _ _ = refl
+   braid-preserves-inc⋆ ᶜ∇ᵇ _ _ = refl
+   braid-preserves-inc⋆ ᶜ∇ᶜ _ _ = refl
+   braid-preserves-inc⋆ ᵛ∇ᵛ _ _ = refl
+
+   braid-preserves-inc⋆-assoc : ∀ {Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Δ′ → let Γ′ = Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) in
+                               (a⋆ : Action⋆ (Γ′ + Δ′)) → Γ′ + (Δ′ + inc⋆ a⋆) ≡ Γ′ + Δ′ + inc⋆ (braid 𝑎 Δ′ a⋆)
+   braid-preserves-inc⋆-assoc {Γ} {a₀} 𝑎 Δ′ a⋆ =
+      let Γ′ = Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)); open EqReasoning (setoid _) in
+      begin
+         Γ′ + (Δ′ + inc⋆ a⋆)
+      ≡⟨ sym (+-assoc Γ′ Δ′ (inc⋆ a⋆)) ⟩
+         Γ′ + Δ′ + inc⋆ a⋆
+      ≡⟨ cong (_+_ (Γ′ + Δ′)) (braid-preserves-inc⋆ 𝑎 Δ′ a⋆) ⟩
+         Γ′ + Δ′ + inc⋆ (braid 𝑎 Δ′ a⋆)
+      ∎
 
    -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. Cofinal by construction.
    infixl 5 _Δ⋆_
@@ -24,7 +47,7 @@ module Transition.Seq.Cofinal where
       field
          {R′} : _
          γ/E⋆ : ⋈[ Γ , 𝑎 , Δ′ + inc⋆ a⋆ ] (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ Proc↱ {!!}{-(ren-preserves-inc⋆-assoc (braid 𝑎) Δ′ a⋆)-} R′
+         E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ Proc↱ (braid-preserves-inc⋆-assoc 𝑎 Δ′ a⋆) R′
 {-
    -- Hetereogeneously equate braidings up to associativity of + on contexts.
    braid-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
