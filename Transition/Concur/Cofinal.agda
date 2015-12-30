@@ -28,17 +28,21 @@ module Transition.Concur.Cofinal where
    ﹙ _ , Γ , ᶜ∇ᶜ , Δ ﹚ P P′ = P ≡ P′
    ﹙ _⋈_ , Γ , ᵛ∇ᵛ , Δ ﹚ P P′ = P ⋈ P′ -- bound braid
 
+   ⋈[_,_,_] : ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
+               let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
+   ⋈[ Γ , 𝑎 , Δ ] = ﹙ _⋈_ , Γ , 𝑎 , Δ ﹚
+
    postulate
       -- Not sure yet if this is true. If so will take some effort; needs various lemmas, including P → R ⇒ P ≠ R.
       ⊖-unique : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
                 (𝐸 : E ⌣₁[ 𝑎 ] E′) {S S′} (G : R —[ _ - _ ]→ S) (G′ : R′ —[ _ - _ ]→ S′) →
-                ﹙ _⋈_ , Γ , 𝑎 , zero ﹚ S (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) S′) → ⊖₁ 𝐸 ≡ G ᵀΔ G′
+                ⋈[ Γ , 𝑎 , zero ] S (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) S′) → ⊖₁ 𝐸 ≡ G ᵀΔ G′
 
    open Delta′
 
    -- Called 'cofin' in the paper.
    ⊖₁-✓ : ∀ {Γ} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {P R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (𝐸 : E ⌣₁[ 𝑎 ] E′) → ﹙ _⋈_ , Γ , 𝑎 , zero ﹚ (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
+          (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈[ Γ , 𝑎 , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
    ⊖₁-✓ (E ᵇ│ᵇ F) = sym (cong₂ _│_ (swap∘push (target E)) (swap∘suc-push (target F)))
    ⊖₁-✓ (E ᵇ│ᶜ F) = refl
    ⊖₁-✓ (E ᶜ│ᵇ F) = refl
