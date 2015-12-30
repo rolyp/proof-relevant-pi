@@ -2,8 +2,8 @@ module Transition.Seq.Cofinal where
 
    open import SharedModules
 
-   open import Action as ᴬ using (inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
-   open import Action.Concur using (Action₂; module _ᴬ⌣_); open _ᴬ⌣_
+   open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖); open _ᴬ⌣_
    open import Action.Ren using (ren-preserves-inc-assoc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
    open import Action.Seq.Ren using (ren-preserves-inc⋆-assoc)
@@ -14,19 +14,19 @@ module Transition.Seq.Cofinal where
    open import Transition using (_—[_-_]→_; source; target)
    open import Transition.Concur using (Concur; module Delta′; ⊖; ⌣-sym; module Properties)
    open import Transition.Concur.Cofinal using (⋈[_,_,_]; ⊖-✓)
-   open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_)
+   open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid)
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; target⋆); open ᵀ⋆._—[_]→⋆_
 
    -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. Cofinal by construction.
    infixl 5 _Δ⋆_
-   record _Δ⋆_ {Γ} {ӓ : Action₂ Γ} {m a⋆} {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + m)} {R}
-          (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , m ] P P′) : Set where
+   record _Δ⋆_ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) {Δ′ a⋆} {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {R}
+          (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , 𝑎 , Δ′ ] P P′) : Set where
       constructor _Δ_
       field
          {R′} : _
-         γ/E⋆ : ⋈[ Γ , ӓ , m + inc⋆ a⋆ ] (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ ((braid ӓ ᴿ+ m) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) m a⋆) R′
-
+         γ/E⋆ : ⋈[ Γ , 𝑎 , Δ′ + inc⋆ a⋆ ] (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) R′
+         E⋆/γ : P′ —[ ((braid 𝑎 ᴿ+ Δ′) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid 𝑎) Δ′ a⋆) R′
+{-
    -- Hetereogeneously equate braidings up to associativity of + on contexts.
    braid-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
                  (((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
@@ -167,3 +167,4 @@ module Transition.Seq.Cofinal where
          sym = ≃-sym;
          trans = ≃-trans
       }
+-}

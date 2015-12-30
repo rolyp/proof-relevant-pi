@@ -1,3 +1,4 @@
+-- Symmetric residual of a transition and a cofinality witness.
 module Transition.Concur.Cofinal.Transition where
 
    open import SharedModules
@@ -8,8 +9,8 @@ module Transition.Concur.Cofinal.Transition where
    open import Action.Ren using (ren-preserves-inc; ren-preserves-target)
    open import Braiding.Proc using (_⋉_)
    open import Braiding.Transition using (_Δ_; ⊖)
-   open import Name as ᴺ using (_+_; +-assoc)
-   open import Ren as ᴿ using (swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
+   open import Name as ᴺ using (Cxt; _+_; +-assoc)
+   open import Ren as ᴿ using (Renameable; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Transition using (_—[_-_]→_)
@@ -18,7 +19,7 @@ module Transition.Concur.Cofinal.Transition where
 
    -- TODO: needs a better name; this is the image of an action in a braid.
    braid : ∀ {Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Δ′ → let Γ′ = Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) in
-          (a : Action (Γ′ + Δ′)) → Action (Γ′ + Δ′)
+           {A : Cxt → Set} ⦃ _ : Renameable A ⦄ (a : A (Γ′ + Δ′)) → A (Γ′ + Δ′)
    braid ˣ∇ˣ _ = id
    braid ᵇ∇ᵇ Δ′ = (swap ᴿ+ Δ′) *
    braid ᵇ∇ᶜ _ = id
