@@ -4,7 +4,7 @@ module Transition.Seq.Cofinal where
    import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
-   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖); open _ᴬ⌣_
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬΔ; ᴬ/); open _ᴬ⌣_
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
    open import Action.Seq.Ren using (ren-preserves-inc⋆)
    open import Braiding.Proc using (_⋉_; ⋈-to-⋉)
@@ -19,7 +19,7 @@ module Transition.Seq.Cofinal where
 
    -- TODO: consolidate with similar lemmas for inc.
    braid-preserves-inc⋆ : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ → let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in
-                        inc⋆ ≃ₑ inc⋆ ∘ braid 𝑎 Δ′
+                          inc⋆ ≃ₑ inc⋆ ∘ braid 𝑎 Δ′
    braid-preserves-inc⋆ ˣ∇ˣ _ _ = refl
    braid-preserves-inc⋆ ᵇ∇ᵇ Δ′ = ren-preserves-inc⋆ (swap ᴿ+ Δ′)
    braid-preserves-inc⋆ ᵇ∇ᶜ _ _ = refl
@@ -28,7 +28,7 @@ module Transition.Seq.Cofinal where
    braid-preserves-inc⋆ ᵛ∇ᵛ _ _ = refl
 
    braid-preserves-inc⋆-assoc : ∀ {Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Δ′ → let Γ′ = Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) in
-                               (a⋆ : Action⋆ (Γ′ + Δ′)) → Γ′ + (Δ′ + inc⋆ a⋆) ≡ Γ′ + Δ′ + inc⋆ (braid 𝑎 Δ′ a⋆)
+                                (a⋆ : Action⋆ (Γ′ + Δ′)) → Γ′ + (Δ′ + inc⋆ a⋆) ≡ Γ′ + Δ′ + inc⋆ (braid 𝑎 Δ′ a⋆)
    braid-preserves-inc⋆-assoc {Γ} {a₀} 𝑎 Δ′ a⋆ =
       let Γ′ = Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)); open EqReasoning (setoid _) in
       begin
@@ -39,15 +39,15 @@ module Transition.Seq.Cofinal where
          Γ′ + Δ′ + inc⋆ (braid 𝑎 Δ′ a⋆)
       ∎
 
-   -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. Cofinal by construction.
+   -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. TODO: restore cofinality-by-construction.
    infixl 5 _Δ⋆_
    record _Δ⋆_ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) {Δ′ a⋆} {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {R}
           (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) : Set where
       constructor _Δ_
       field
-         {R′} : _
-         γ/E⋆ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ + inc⋆ a⋆ ﹚ (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ Proc↱ (braid-preserves-inc⋆-assoc 𝑎 Δ′ a⋆) R′
+         {S S′} : _
+         γ/E⋆ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ + inc⋆ a⋆ ﹚ (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) S
+         E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ S′
 {-
    -- Hetereogeneously equate braidings up to associativity of + on contexts.
    braid-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
@@ -75,12 +75,42 @@ module Transition.Seq.Cofinal where
          )
          (≅-sym (Proc↲ (cong (_+_ Γ′) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
 -}
-   -- Mostly an exercise in heterogenous equality.
+
+   dribble : ∀ Γ Δ′ Γ′ → Γ + Δ′ + 1 + Γ′ ≡ Γ + (Δ′ + (1 + Γ′))
+   dribble Γ Δ′ Γ′ =
+      let open EqReasoning (setoid _) in
+      begin
+         ((Γ + Δ′) + 1) + Γ′
+       ≡⟨ cong (flip _+_ Γ′) (+-assoc Γ Δ′ 1) ⟩
+         (Γ + (Δ′ + 1)) + Γ′
+       ≡⟨ +-assoc Γ (Δ′ + 1) Γ′ ⟩
+         Γ + ((Δ′ + 1) + Γ′)
+       ≡⟨ cong (_+_ Γ) (+-assoc Δ′ 1 Γ′) ⟩
+         Γ + (Δ′ + (1 + Γ′))
+       ∎
+
+   -- Painful exercise in heterogenous equality.
    ⊖⋆[_,_] : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {a⋆ R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) → _Δ⋆_ 𝑎 E⋆ γ
-   ⊖⋆[ 𝑎 , Δ′ ] {a⋆ = a ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ 𝑎 , Δ′ ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ 𝑎 , Δ′ + 1 ] E⋆ γ/E
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E = {!!}
+   ⊖⋆[ ˣ∇ˣ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
+   ⊖⋆[ ᵇ∇ᵇ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
+   ⊖⋆[ ᵇ∇ᶜ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
+   ⊖⋆[ ᶜ∇ᵇ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
+   ⊖⋆[_,_] {Γ} (ᶜ∇ᶜ {a = a} {a′}) Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ᶜ∇ᶜ {a = a} {a′} , Δ′ ] E γ
+   ... | γ/E Δ E/γ with ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , Δ′ + 1 ] E⋆ γ/E
+   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E =
+      let blah : Proc↱ (+-assoc (Γ + zero + zero) Δ′ (1 + inc⋆ a⋆)) (Proc↱ (+-assoc (Γ + Δ′) 1 (inc⋆ a⋆)) (target⋆ E⋆)) ≅ S′
+          blah = {!!}
+      in {!!} Δ (E/γ ᵇ∷ E⋆/γ/E)
+{-
+     let blah : ﹙ _⋉_ , Γ , 𝑎 , Δ′ + (1 + inc⋆ a⋆) ﹚
+                (Proc↱ (dribble (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎))) Δ′ (inc⋆ a⋆)) (target⋆ E⋆))
+                (Proc↱ (cong (_+_ (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)))) (+-assoc Δ′ 1 (inc⋆ a⋆))) S′)
+         blah = {!!}
+         blah′ = subst {!λ !} {!!} γ/E/E⋆ in
+     {!γ/E/E⋆!} Δ {!!}
+-}
+   ⊖⋆[ ᵛ∇ᵛ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
    ⊖⋆[ 𝑎 , m ] {a⋆ = a ᴬ⋆.ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ = {!!}
    ⊖⋆[ ˣ∇ˣ , Δ′ ] [] γ = γ Δ []
    ⊖⋆[ ᵇ∇ᵇ , Δ′ ] [] γ = γ Δ []
