@@ -17,7 +17,7 @@ module Transition.Concur.Cofinal.Transition where
    open import Transition.Concur.Cofinal using (﹙_,_,_,_﹚)
    open import Transition.Ren using (_*′)
 
-   -- TODO: needs a better name; this is the image of an action in a braid.
+   -- TODO: needs a better name; this is the image of a context-indexed renameable in a braid.
    braid : ∀ {Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Δ′ → let Γ′ = Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) in
            {A : Cxt → Set} ⦃ _ : Renameable A ⦄ (a : A (Γ′ + Δ′)) → A (Γ′ + Δ′)
    braid ˣ∇ˣ _ = id
