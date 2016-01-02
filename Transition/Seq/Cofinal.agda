@@ -113,6 +113,9 @@ module Transition.Seq.Cofinal where
       (E/γ ᶜ∷ E⋆/γ/E)
    ⊖⋆[ ᵛ∇ᵛ , Δ′ ] [] γ = γ Δ []
 
+   ⊖⋆-✓ : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {a⋆ R}
+             (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) → _Δ⋆_ 𝑎 E⋆ γ
+   ⊖⋆-✓ 𝑎 Δ′ E⋆ γ = let γ/E Δ E/γ = ⊖⋆[ 𝑎 , Δ′ ] E⋆ γ in ?
 {-
    -- Causal equivalence. TODO: eliminate redundancy in constructor signatures.
    infix 4 _≃_
