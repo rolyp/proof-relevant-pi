@@ -122,9 +122,19 @@ module Transition.Seq.Cofinal where
    ... | refl Δ E/γ with ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , Δ′ ] E⋆ refl
    ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (E/γ ᶜ∷ E⋆/γ/E)
    ⊖⋆[ ᶜ∇ᶜ , Δ′ ] [] γ = γ Δ []
-   ⊖⋆[ ᵛ∇ᵛ , Δ′ ] (E ᵇ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
+   ⊖⋆[_,_] {Γ} ᵛ∇ᵛ Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ + 1 ] E⋆ γ/E
-   ... | γ/E/E Δ E⋆/γ/E = {!!} Δ (E/γ ᵇ∷ E⋆/γ/E)
+   ... | γ/E/E Δ E⋆/γ/E =
+      let open ≅-Reasoning
+          bibble =
+             begin
+                Proc↱ (+-assoc (Γ + zero + zero) Δ′ (1 + inc⋆ a⋆)) (Proc↱ (+-assoc (Γ + Δ′) 1 (inc⋆ a⋆)) (target⋆ E⋆))
+             ≅⟨ {!!} ⟩
+                target⋆ E⋆
+             ≅⟨ {!!} ⟩
+                {!!}
+             ∎
+      in {!!} Δ (E/γ ᵇ∷ E⋆/γ/E)
    ⊖⋆[ ᵛ∇ᵛ , Δ′ ] (E ᶜ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ ] E⋆ γ/E
    ... | γ/E/E Δ E⋆/γ/E = {!!} Δ (E/γ ᶜ∷ E⋆/γ/E)
