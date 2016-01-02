@@ -14,7 +14,7 @@ module Transition.Seq.Cofinal where
    open import Transition using (_—[_-_]→_; source; target)
    open import Transition.Concur using (Concur; module Delta′; ⊖; ⌣-sym; module Properties)
    open import Transition.Concur.Cofinal using (﹙_,_,_,_﹚; ⊖-✓)
-   open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid)
+   open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid; braid-preserves-inc-assoc)
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; target⋆); open ᵀ⋆._—[_]→⋆_
 
    -- TODO: consolidate with similar lemmas for inc.
@@ -45,9 +45,9 @@ module Transition.Seq.Cofinal where
           (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) : Set where
       constructor _Δ_
       field
-         {S} : _
+         {S S′} : _
          γ/E⋆ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ + inc⋆ a⋆ ﹚ (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) S
-         E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ Proc↱ (braid-preserves-inc⋆-assoc 𝑎 Δ′ a⋆) S
+         E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ S′
 {-
    -- Hetereogeneously equate braidings up to associativity of + on contexts.
    braid-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
@@ -90,19 +90,24 @@ module Transition.Seq.Cofinal where
          Γ + (Δ′ + (1 + Γ′))
        ∎
 
+   wib : ∀ Γ Δ′ Γ′ → Γ + (ᴺ.suc Δ′) + Γ′ ≡ Γ + ((ᴺ.suc Δ′) + Γ′)
+   wib Γ Δ′ Γ′ = +-assoc Γ (ᴺ.suc Δ′) Γ′
+
+   bib : ∀ Γ Δ′ Γ′ (S : Proc (ᴺ.suc (Γ + Δ′) + Γ′)) (S′ : Proc (Γ + (ᴺ.suc Δ′ + Γ′))) → S ≅ S′ → ⊤
+   bib Γ Δ′ Γ′ S S′ rewrite +-assoc Γ (ᴺ.suc Δ′) Γ′ = {!λ { ≅-refl → !} -- Γ + (ᴺ.suc Δ′) + Γ′ ≡ Γ + ((ᴺ.suc Δ′) + Γ′)
+
    -- Painful exercise in heterogenous equality.
    ⊖⋆[_,_] : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {a⋆ R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) → _Δ⋆_ 𝑎 E⋆ γ
    ⊖⋆[ ˣ∇ˣ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
-   ⊖⋆[ ᵇ∇ᵇ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
+   ⊖⋆[_,_] (ᵇ∇ᵇ {a = a} {a′}) Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) refl with ⊖′[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E refl
+   ... | γ/E Δ E/γ with ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ + 1 ] E⋆ γ/E
+   ... | γ/E/E⋆ Δ E⋆/γ/E = refl Δ (E/γ ᵇ∷ {!!})
    ⊖⋆[ ᵇ∇ᶜ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
    ⊖⋆[ ᶜ∇ᵇ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
    ⊖⋆[_,_] {Γ} (ᶜ∇ᶜ {a = a} {a′}) Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) refl with ⊖′[ ᶜ∇ᶜ {a = a} {a′} , Δ′ ] E refl
    ... | refl Δ E/γ with ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , Δ′ + 1 ] E⋆ refl
-   ... | _Δ_ {S′} refl E⋆/γ/E =
-      let blah : Proc↱ (+-assoc (Γ + zero + zero) Δ′ (1 + inc⋆ a⋆)) (Proc↱ (+-assoc (Γ + Δ′) 1 (inc⋆ a⋆)) (target⋆ E⋆)) ≅ S′
-          blah = {!!}
-      in {!!} Δ {!!}
+   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (E/γ ᵇ∷ E⋆/γ/E)
    ⊖⋆[ ᵛ∇ᵛ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
    ⊖⋆[ 𝑎 , m ] {a⋆ = a ᴬ⋆.ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ = {!!}
    ⊖⋆[ ˣ∇ˣ , Δ′ ] [] γ = γ Δ []
