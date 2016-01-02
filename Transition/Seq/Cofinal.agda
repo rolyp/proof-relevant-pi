@@ -109,15 +109,18 @@ module Transition.Seq.Cofinal where
    ⊖⋆[ ᶜ∇ᶜ , Δ′ ] [] γ = γ Δ []
    ⊖⋆[_,_] {Γ} ᵛ∇ᵛ Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ + 1 ] E⋆ γ/E
-   ... | γ/E/E⋆ Δ E⋆/γ/E = _Δ_ {S = Proc↱ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆))) (ᴮ.target γ/E/E⋆)}
-      (≅-subst✴₂ Proc _⋉_ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆)))
-                  (bibble Γ Δ′ (inc⋆ a⋆) (target⋆ E⋆))
-                  (≅-sym (Proc↲ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆))) _))
-                  γ/E/E⋆)
+   ... | γ/E/E⋆ Δ E⋆/γ/E =
+      let blah = cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆)) in _Δ_ {S = Proc↱ blah (ᴮ.target γ/E/E⋆)}
+      (≅-subst✴₂ Proc _⋉_ blah (bibble Γ Δ′ (inc⋆ a⋆) (target⋆ E⋆)) (≅-sym (Proc↲ blah _)) γ/E/E⋆)
       (E/γ ᵇ∷ E⋆/γ/E)
-   ⊖⋆[ ᵛ∇ᵛ , Δ′ ] (E ᶜ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
+   ⊖⋆[_,_] {Γ} ᵛ∇ᵛ Δ′ {a⋆ = _ ᴬ⋆.ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ ] E⋆ γ/E
-   ... | γ/E/E⋆ Δ E⋆/γ/E = {!!} Δ (E/γ ᶜ∷ E⋆/γ/E)
+   ... | γ/E/E⋆ Δ E⋆/γ/E = _Δ_ {S = Proc↱ (cong (_+_ Γ) (+-assoc Δ′ 0 (inc⋆ a⋆))) (ᴮ.target γ/E/E⋆)}
+      (≅-subst✴₂ Proc _⋉_ (cong (_+_ Γ) (+-assoc Δ′ 0 (inc⋆ a⋆)))
+                  {!!}
+                  {!!}
+                  γ/E/E⋆)
+      (E/γ ᶜ∷ E⋆/γ/E)
    ⊖⋆[ ᵛ∇ᵛ , Δ′ ] [] γ = γ Δ []
 {-
    ⊖⋆[ ӓ , m ] {a⋆ = a ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
