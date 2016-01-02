@@ -49,6 +49,10 @@ module Transition.Seq.Cofinal where
          {S S′} : _
          γ/E⋆ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ + inc⋆ a⋆ ﹚ (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) S
          E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ S′
+
+   bibble : ∀ Γ Δ′ Γ′ P → Proc↱ (+-assoc Γ (Δ′ + 1) Γ′) P ≅
+            Proc↱ (+-assoc Γ Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + Δ′) 1 Γ′) P)
+   bibble = ?
 {-
    -- Hetereogeneously equate braidings up to associativity of + on contexts.
    braid-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
@@ -128,11 +132,13 @@ module Transition.Seq.Cofinal where
       let open ≅-Reasoning
           bibble =
              begin
-                Proc↱ (+-assoc (Γ + zero + zero) (Δ′ + 1) (inc⋆ a⋆)) (target⋆ E⋆)
-             ≅⟨ {!!} ⟩
+                Proc↱ (+-assoc Γ (Δ′ + 1) (inc⋆ a⋆)) (target⋆ E⋆)
+             ≅⟨ Proc↲ (+-assoc Γ (Δ′ + 1) (inc⋆ a⋆)) _ ⟩
                 target⋆ E⋆
-             ≅⟨ {!!} ⟩
-                Proc↱ (+-assoc (Γ + zero + zero) Δ′ (1 + inc⋆ a⋆)) (Proc↱ (+-assoc (Γ + Δ′) 1 (inc⋆ a⋆)) (target⋆ E⋆))
+             ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + Δ′) 1 (inc⋆ a⋆)) _) ⟩
+                Proc↱ (+-assoc (Γ + Δ′) 1 (inc⋆ a⋆)) (target⋆ E⋆)
+             ≅⟨ ≅-sym (Proc↲ (+-assoc Γ Δ′ (1 + inc⋆ a⋆)) _) ⟩
+                Proc↱ (+-assoc Γ Δ′ (1 + inc⋆ a⋆)) (Proc↱ (+-assoc (Γ + Δ′) 1 (inc⋆ a⋆)) (target⋆ E⋆))
              ∎
       in _Δ_ {S = Proc↱ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆))) (ᴮ.target γ/E/E⋆)}
              (≅-subst✴₂ Proc _⋉_ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆)))
