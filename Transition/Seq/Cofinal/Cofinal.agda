@@ -24,7 +24,23 @@ module Transition.Seq.Cofinal.Cofinal where
    ⊖⋆-✓ ᵇ∇ᵇ Δ′ (E ᵇ∷ E⋆) γ = {!!}
    ⊖⋆-✓ ᵇ∇ᵇ Δ′ (E ᶜ∷ E⋆) γ = {!!}
    ⊖⋆-✓ ᵇ∇ᶜ _ [] _ = ≅-refl
-   ⊖⋆-✓ ᵇ∇ᶜ Δ′ (E ᵇ∷ E⋆) γ = {!!}
+   ⊖⋆-✓ {Γ} (ᵇ∇ᶜ {a = a} {a′}) Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) refl with ⊖′[ ᵇ∇ᶜ {a = a} {a′} , Δ′ ] E refl
+   ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᶜ {a = a} {a′} , Δ′ + 1 ] E⋆ refl | ⊖⋆-✓ (ᵇ∇ᶜ {a = a} {a′}) (Δ′ + 1) E⋆ refl
+   ... | _Δ_ {._} refl E⋆/γ/E | ⊖⋆-✓′ =
+      let open ≅-Reasoning; Γ′ = inc⋆ a⋆ in
+      begin
+         Proc↱ (+-assoc (Γ + 1) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 1 + Δ′) 1 Γ′) (target⋆ E⋆))
+      ≅⟨ Proc↲ (+-assoc (Γ + 1) Δ′ (1 + Γ′)) _ ⟩
+         Proc↱ (+-assoc (Γ + 1 + Δ′) 1 Γ′) (target⋆ E⋆)
+      ≅⟨ Proc↲ (+-assoc (Γ + 1 + Δ′) 1 Γ′) _ ⟩
+         target⋆ E⋆
+      ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + 1) (Δ′ + 1) Γ′) _) ⟩
+         Proc↱ (+-assoc (Γ + 1) (Δ′ + 1) Γ′) (target⋆ E⋆)
+      ≅⟨ ⊖⋆-✓′ ⟩
+         target⋆ E⋆/γ/E
+      ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + 1 + Δ′) 1 Γ′) _) ⟩
+         Proc↱ (+-assoc (Γ + 1 + Δ′) 1 Γ′) (target⋆ E⋆/γ/E)
+      ∎
    ⊖⋆-✓ ᵇ∇ᶜ Δ′ (E ᶜ∷ E⋆) γ = {!!}
    ⊖⋆-✓ ᶜ∇ᵇ _ [] _ = ≅-refl
    ⊖⋆-✓ {Γ} (ᶜ∇ᵇ {a = a} {a′}) Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) refl with ⊖′[ ᶜ∇ᵇ {a = a} {a′} , Δ′ ] E refl
