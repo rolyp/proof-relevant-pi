@@ -18,28 +18,6 @@ module Transition.Seq.Cofinal where
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid; braid-preserves-inc-assoc)
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
 
-   -- TODO: consolidate with similar lemmas for inc.
-   braid-preserves-inc⋆ : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ → let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in
-                          inc⋆ ≃ₑ inc⋆ ∘ braid 𝑎 Δ′
-   braid-preserves-inc⋆ ˣ∇ˣ _ _ = refl
-   braid-preserves-inc⋆ ᵇ∇ᵇ Δ′ = ren-preserves-inc⋆ (swap ᴿ+ Δ′)
-   braid-preserves-inc⋆ ᵇ∇ᶜ _ _ = refl
-   braid-preserves-inc⋆ ᶜ∇ᵇ _ _ = refl
-   braid-preserves-inc⋆ ᶜ∇ᶜ _ _ = refl
-   braid-preserves-inc⋆ ᵛ∇ᵛ _ _ = refl
-
-   braid-preserves-inc⋆-assoc : ∀ {Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Δ′ → let Γ′ = Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) in
-                                (a⋆ : Action⋆ (Γ′ + Δ′)) → Γ′ + (Δ′ + inc⋆ a⋆) ≡ Γ′ + Δ′ + inc⋆ (braid 𝑎 Δ′ a⋆)
-   braid-preserves-inc⋆-assoc {Γ} {a₀} 𝑎 Δ′ a⋆ =
-      let Γ′ = Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)); open EqReasoning (setoid _) in
-      begin
-         Γ′ + (Δ′ + inc⋆ a⋆)
-      ≡⟨ sym (+-assoc Γ′ Δ′ (inc⋆ a⋆)) ⟩
-         Γ′ + Δ′ + inc⋆ a⋆
-      ≡⟨ cong (_+_ (Γ′ + Δ′)) (braid-preserves-inc⋆ 𝑎 Δ′ a⋆) ⟩
-         Γ′ + Δ′ + inc⋆ (braid 𝑎 Δ′ a⋆)
-      ∎
-
    -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. TODO: cofinality.
    infixl 5 _Δ⋆_
    record _Δ⋆_ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) {Δ′ a⋆} {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {R}
@@ -134,52 +112,8 @@ module Transition.Seq.Cofinal where
       (≅-subst✴₂ Proc _⋉_ blah (bibble₀ Γ Δ′ (inc⋆ a⋆) (target⋆ E⋆)) (≅-sym (Proc↲ blah _)) γ/E/E⋆)
       (E/γ ᶜ∷ E⋆/γ/E)
    ⊖⋆[ ᵛ∇ᵛ , Δ′ ] [] γ = γ Δ []
-{-
-   ⊖⋆[ ӓ , m ] {a⋆ = a ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ ӓ , m + 1 ] E⋆ γ/E | ren-preserves-inc-assoc (braid ӓ) m (a ᵇ)
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (braid ӓ) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′) =
-      let σ = braid ӓ
-          open ≅-Reasoning
-          E/γ∷E⋆/γ/E =
-             subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᴬ⋆.ᵇ∷ ((σ ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
-                begin
-                   Proc↱ (+-assoc _ 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆)))
-                         (Proc↱ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′)
-                ≅⟨ Proc↲ (+-assoc _ 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
-                   Proc↱ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′
-                ≅⟨ Proc↲ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′ ⟩
-                   S′
-                ≅⟨ ≅-sym (Proc↲ (cong (_+_ _) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
-                   Proc↱ (cong (_+_ _) (+-assoc m 1 (inc⋆ a⋆))) S′
-                ≅⟨ ≅-sym (Proc↲ (ren-preserves-inc⋆-assoc σ m (a ᴬ⋆.ᵇ∷ a⋆)) _) ⟩
-                   Proc↱ (ren-preserves-inc⋆-assoc σ m (a ᴬ⋆.ᵇ∷ a⋆))
-                         (Proc↱ (cong (_+_ _) (+-assoc m 1 (inc⋆ a⋆))) S′)
-                ∎)
-             ) (E/γ ᵇ∷ E⋆/γ/E)
-      in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
-   ⊖⋆[ ӓ , m ] {a⋆ = a ᴬ⋆.ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ ӓ , m ] E⋆ γ/E | ren-preserves-inc-assoc (braid ӓ) m (a ᶜ)
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (braid ӓ) m 0 (inc⋆ a⋆) (target⋆ E⋆) S′) =
-      let σ = braid ӓ
-          open ≅-Reasoning
-          E/γ∷E⋆/γ/E =
-             subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᴬ⋆.ᶜ∷ ((σ ᴿ+ m) *) a⋆ ]→⋆ P) (≅-to-≡ (
-                begin
-                   Proc↱ (+-assoc _ 0 (inc⋆ (((σ ᴿ+ m) *) a⋆)))
-                         (Proc↱ (ren-preserves-inc⋆-assoc σ m a⋆) S′)
-                ≅⟨ Proc↲ (+-assoc _ 0 (inc⋆ (((σ ᴿ+ m) *) a⋆))) _ ⟩
-                   Proc↱ (ren-preserves-inc⋆-assoc σ m a⋆) S′
-                ≅⟨ Proc↲ (ren-preserves-inc⋆-assoc σ m a⋆) S′ ⟩
-                   S′
-                ≅⟨ ≅-sym (Proc↲ (cong (_+_ _) (+-assoc m 0 (inc⋆ a⋆))) S′) ⟩
-                   Proc↱ (cong (_+_ _) (+-assoc m 0 (inc⋆ a⋆))) S′
-                ≅⟨ ≅-sym (Proc↲ (ren-preserves-inc⋆-assoc σ m (a ᴬ⋆.ᶜ∷ a⋆)) _) ⟩
-                   Proc↱ (ren-preserves-inc⋆-assoc σ m (a ᴬ⋆.ᶜ∷ a⋆))
-                         (Proc↱ (cong (_+_ _) (+-assoc m 0 (inc⋆ a⋆))) S′)
-                ∎)
-             ) (E/γ ᶜ∷ E⋆/γ/E)
-      in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
 
+{-
    -- Causal equivalence. TODO: eliminate redundancy in constructor signatures.
    infix 4 _≃_
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ a′⋆ R R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
