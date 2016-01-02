@@ -39,15 +39,15 @@ module Transition.Seq.Cofinal where
          Γ′ + Δ′ + inc⋆ (braid 𝑎 Δ′ a⋆)
       ∎
 
-   -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. TODO: cofinality lemma.
+   -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace.
    infixl 5 _Δ⋆_
    record _Δ⋆_ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) {Δ′ a⋆} {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {R}
           (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) : Set where
       constructor _Δ_
       field
-         {S S′} : _
+         {S} : _
          γ/E⋆ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ + inc⋆ a⋆ ﹚ (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) S
-         E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ S′
+         E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ Proc↱ (braid-preserves-inc⋆-assoc 𝑎 Δ′ a⋆) S
 {-
    -- Hetereogeneously equate braidings up to associativity of + on contexts.
    braid-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
@@ -99,10 +99,10 @@ module Transition.Seq.Cofinal where
    ⊖⋆[ ᶜ∇ᵇ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
    ⊖⋆[_,_] {Γ} (ᶜ∇ᶜ {a = a} {a′}) Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) refl with ⊖′[ ᶜ∇ᶜ {a = a} {a′} , Δ′ ] E refl
    ... | refl Δ E/γ with ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , Δ′ + 1 ] E⋆ refl
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E =
+   ... | _Δ_ {S′} refl E⋆/γ/E =
       let blah : Proc↱ (+-assoc (Γ + zero + zero) Δ′ (1 + inc⋆ a⋆)) (Proc↱ (+-assoc (Γ + Δ′) 1 (inc⋆ a⋆)) (target⋆ E⋆)) ≅ S′
           blah = {!!}
-      in {!!} Δ (E/γ ᵇ∷ E⋆/γ/E)
+      in {!!} Δ {!!}
    ⊖⋆[ ᵛ∇ᵛ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
    ⊖⋆[ 𝑎 , m ] {a⋆ = a ᴬ⋆.ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ = {!!}
    ⊖⋆[ ˣ∇ˣ , Δ′ ] [] γ = γ Δ []
