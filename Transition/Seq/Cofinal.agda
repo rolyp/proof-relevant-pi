@@ -88,9 +88,9 @@ module Transition.Seq.Cofinal where
              ≅⟨ ≅-sym (Proc↲ (+-assoc Γ Δ′ (1 + Γ′)) _) ⟩
                 Proc↱ (+-assoc Γ Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + Δ′) 1 Γ′) (target⋆ E⋆))
              ∎
-          blah = cong (_+_ Γ) (+-assoc Δ′ 1 Γ′)
-      in _Δ_ {S = Proc↱ blah (ᴮ.target γ/E/E⋆)}
-      (≅-subst✴₂ Proc _⋉_ blah target⋆-E⋆ (≅-sym (Proc↲ blah _)) γ/E/E⋆)
+          assoc₁ = cong (_+_ Γ) (+-assoc Δ′ 1 Γ′)
+      in _Δ_ {S = Proc↱ assoc₁ (ᴮ.target γ/E/E⋆)}
+      (≅-subst✴₂ Proc _⋉_ assoc₁ target⋆-E⋆ (≅-sym (Proc↲ assoc₁ _)) γ/E/E⋆)
       (E/γ ᵇ∷ E⋆/γ/E)
    ⊖⋆[_,_] {Γ} ᵛ∇ᵛ Δ′ {a⋆ = _ ᴬ⋆.ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ ] E⋆ γ/E
@@ -107,9 +107,9 @@ module Transition.Seq.Cofinal where
              ≅⟨ ≅-sym (Proc↲ (+-assoc Γ Δ′ (0 + Γ′)) _) ⟩
                 Proc↱ (+-assoc Γ Δ′ (0 + Γ′)) (Proc↱ (+-assoc (Γ + Δ′) 0 Γ′) (target⋆ E⋆))
              ∎
-          blah = cong (_+_ Γ) (+-assoc Δ′ 0 (inc⋆ a⋆))
-      in _Δ_ {S = Proc↱ blah (ᴮ.target γ/E/E⋆)}
-      (≅-subst✴₂ Proc _⋉_ blah target⋆-E⋆ (≅-sym (Proc↲ blah _)) γ/E/E⋆)
+          assoc₀ = cong (_+_ Γ) (+-assoc Δ′ 0 (inc⋆ a⋆))
+      in _Δ_ {S = Proc↱ assoc₀ (ᴮ.target γ/E/E⋆)}
+      (≅-subst✴₂ Proc _⋉_ assoc₀ target⋆-E⋆ (≅-sym (Proc↲ assoc₀ _)) γ/E/E⋆)
       (E/γ ᶜ∷ E⋆/γ/E)
    ⊖⋆[ ᵛ∇ᵛ , Δ′ ] [] γ = γ Δ []
 
