@@ -19,7 +19,7 @@ module Transition.Concur.Cofinal.Transition where
 
    -- TODO: needs a better name; this is the image of a context-indexed renameable in a braid.
    braid : ∀ {Γ} {a₀ a₀′ : Action Γ} (𝑎 : a₀ ᴬ⌣ a₀′) Δ′ → let Γ′ = Γ + inc a₀ + inc (π₁ (ᴬ⊖ 𝑎)) in
-           {A : Cxt → Set} ⦃ _ : Renameable A ⦄ (a : A (Γ′ + Δ′)) → A (Γ′ + Δ′)
+           {A : Cxt → Set} ⦃ _ : Renameable A ⦄ → A (Γ′ + Δ′) → A (Γ′ + Δ′)
    braid ˣ∇ˣ _ = id
    braid ᵇ∇ᵇ Δ′ = (swap ᴿ+ Δ′) *
    braid ᵇ∇ᶜ _ = id
@@ -28,7 +28,7 @@ module Transition.Concur.Cofinal.Transition where
    braid ᵛ∇ᵛ _ = id
 
    braid-preserves-inc : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ → let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in
-                        inc ≃ₑ inc ∘ braid 𝑎 Δ′
+                         inc ≃ₑ inc ∘ braid 𝑎 Δ′
    braid-preserves-inc ˣ∇ˣ _ _ = refl
    braid-preserves-inc ᵇ∇ᵇ Δ′ = ren-preserves-inc (swap ᴿ+ Δ′)
    braid-preserves-inc ᵇ∇ᶜ _ _ = refl
