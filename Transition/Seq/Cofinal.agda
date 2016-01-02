@@ -5,17 +5,18 @@ module Transition.Seq.Cofinal where
 
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬΔ; ᴬ/); open _ᴬ⌣_
+   open import Action.Ren using (ren-preserves-inc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
    open import Action.Seq.Ren using (ren-preserves-inc⋆)
    open import Braiding.Proc using (_⋉_; ⋈-to-⋉)
    open import Name as ᴺ using (_+_; +-assoc; zero)
    open import Ren as ᴿ using (Ren; _ᴿ+_; push; swap); open ᴿ.Renameable ⦃...⦄
    open import Proc using (Proc; Proc↱; Proc↲)
-   open import Transition using (_—[_-_]→_; source; target)
+   open import Transition using (_—[_-_]→_; source; target; action)
    open import Transition.Concur using (Concur; module Delta′; ⊖; ⌣-sym; module Properties)
    open import Transition.Concur.Cofinal using (﹙_,_,_,_﹚; ⊖-✓)
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid; braid-preserves-inc-assoc)
-   open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; target⋆); open ᵀ⋆._—[_]→⋆_
+   open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
 
    -- TODO: consolidate with similar lemmas for inc.
    braid-preserves-inc⋆ : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ → let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in
@@ -87,12 +88,18 @@ module Transition.Seq.Cofinal where
    ... | γ/E Δ E/γ with ⊖⋆[ ˣ∇ˣ {x = x} {u} , Δ′ ] E⋆ γ/E
    ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (E/γ ᶜ∷ E⋆/γ/E)
    ⊖⋆[ ˣ∇ˣ , Δ′ ] [] γ = γ Δ []
-   ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] (E ᵇ∷ E⋆) refl with ⊖′[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E refl
-   ... | γ/E Δ E/γ with ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ + 1 ] E⋆ γ/E
-   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ ({!!} ᵇ∷ E⋆/γ/E)
-   ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] (E ᶜ∷ E⋆) refl with ⊖′[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E refl
-   ... | γ/E Δ E/γ with ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E⋆ γ/E
-   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ ({!!} ᶜ∷ E⋆/γ/E)
+   ⊖⋆[_,_] {Γ} (ᵇ∇ᵇ {a = a} {a′}) Δ′ (E ᵇ∷ E⋆) refl with ⊖′[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E refl
+   ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ + 1 ] E⋆ refl
+   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (subst (λ R′ → (source E/γ) —[ action E/γ - _ ]→ R′)
+      (let open IsEquivalence isEquivalence using (reflexive) in ≅-to-≡ (
+         Proc↲ (trans (reflexive (cong (_+_ (ᴺ.suc (ᴺ.suc Γ) + Δ′)) (ren-preserves-inc (swap ᴿ+ Δ′) (action E)))) refl) _)
+      ) E/γ ᵇ∷ E⋆/γ/E)
+   ⊖⋆[_,_] {Γ} (ᵇ∇ᵇ {a = a} {a′}) Δ′ (E ᶜ∷ E⋆) refl with ⊖′[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E refl
+   ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E⋆ refl
+   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (subst (λ R′ → (source E/γ) —[ action E/γ - _ ]→ R′) (
+      let open IsEquivalence isEquivalence using (reflexive) in ≅-to-≡ (
+         Proc↲ (trans (reflexive (cong (_+_ (ᴺ.suc (ᴺ.suc Γ) + Δ′)) (ren-preserves-inc (swap ᴿ+ Δ′) (action E)))) refl) _)
+      ) E/γ ᶜ∷ E⋆/γ/E)
    ⊖⋆[ ᵇ∇ᵇ , Δ′ ] [] γ = γ Δ []
    ⊖⋆[ ᵇ∇ᶜ {a = a} {a′} , Δ′ ] (E ᵇ∷ E⋆) refl with ⊖′[ ᵇ∇ᶜ {a = a} {a′} , Δ′ ] E refl
    ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᶜ {a = a} {a′} , Δ′ + 1 ] E⋆ refl
