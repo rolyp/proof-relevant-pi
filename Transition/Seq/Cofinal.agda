@@ -77,26 +77,6 @@ module Transition.Seq.Cofinal where
          (≅-sym (Proc↲ (cong (_+_ Γ′) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
 -}
 
-   dribble : ∀ Γ Δ′ Γ′ → Γ + Δ′ + 1 + Γ′ ≡ Γ + (Δ′ + (1 + Γ′))
-   dribble Γ Δ′ Γ′ =
-      let open EqReasoning (setoid _) in
-      begin
-         ((Γ + Δ′) + 1) + Γ′
-       ≡⟨ cong (flip _+_ Γ′) (+-assoc Γ Δ′ 1) ⟩
-         (Γ + (Δ′ + 1)) + Γ′
-       ≡⟨ +-assoc Γ (Δ′ + 1) Γ′ ⟩
-         Γ + ((Δ′ + 1) + Γ′)
-       ≡⟨ cong (_+_ Γ) (+-assoc Δ′ 1 Γ′) ⟩
-         Γ + (Δ′ + (1 + Γ′))
-       ∎
-
-   wib : ∀ Γ Δ′ Γ′ → Γ + (ᴺ.suc Δ′) + Γ′ ≡ Γ + ((ᴺ.suc Δ′) + Γ′)
-   wib Γ Δ′ Γ′ = +-assoc Γ (ᴺ.suc Δ′) Γ′
-
-   bib : ∀ Γ Δ′ Γ′ (S : Proc (ᴺ.suc (Γ + Δ′) + Γ′)) (S′ : Proc (Γ + (ᴺ.suc Δ′ + Γ′))) → S ≅ S′ → ⊤
-   bib Γ Δ′ Γ′ S S′ rewrite +-assoc Γ (ᴺ.suc Δ′) Γ′ = {!λ { ≅-refl → !} -- Γ + (ᴺ.suc Δ′) + Γ′ ≡ Γ + ((ᴺ.suc Δ′) + Γ′)
-
-   -- Painful exercise in heterogenous equality.
    ⊖⋆[_,_] : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {a⋆ R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) → _Δ⋆_ 𝑎 E⋆ γ
    ⊖⋆[ ˣ∇ˣ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
@@ -108,8 +88,13 @@ module Transition.Seq.Cofinal where
    ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , Δ′ ] (E ᵇ∷ E⋆) refl with ⊖′[ ᶜ∇ᶜ {a = a} {a′} , Δ′ ] E refl
    ... | refl Δ E/γ with ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , Δ′ + 1 ] E⋆ refl
    ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (E/γ ᵇ∷ E⋆/γ/E)
-   ⊖⋆[ ᵛ∇ᵛ , Δ′ ] {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ = {!!}
-   ⊖⋆[ 𝑎 , m ] {a⋆ = a ᴬ⋆.ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ = {!!}
+   ⊖⋆[ ᵛ∇ᵛ , Δ′ ] (E ᵇ∷ E⋆) γ = {!!}
+   ⊖⋆[ ˣ∇ˣ , Δ′ ] (E ᶜ∷ E⋆) γ = {!!}
+   ⊖⋆[ ᵇ∇ᵇ , Δ′ ] (E ᶜ∷ E⋆) γ = {!!}
+   ⊖⋆[ ᵇ∇ᶜ , Δ′ ] (E ᶜ∷ E⋆) γ = {!!}
+   ⊖⋆[ ᶜ∇ᵇ , Δ′ ] (E ᶜ∷ E⋆) γ = {!!}
+   ⊖⋆[ ᶜ∇ᶜ , Δ′ ] (E ᶜ∷ E⋆) γ = {!!}
+   ⊖⋆[ ᵛ∇ᵛ , Δ′ ] (E ᶜ∷ E⋆) γ = {!!}
    ⊖⋆[ ˣ∇ˣ , Δ′ ] [] γ = γ Δ []
    ⊖⋆[ ᵇ∇ᵇ , Δ′ ] [] γ = γ Δ []
    ⊖⋆[ ᵇ∇ᶜ , Δ′ ] [] γ = γ Δ []
