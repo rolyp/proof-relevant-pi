@@ -50,37 +50,18 @@ module Transition.Seq.Cofinal where
          γ/E⋆ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ + inc⋆ a⋆ ﹚ (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) S
          E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ S′
 
-   bibble : ∀ Γ Δ′ Γ′ P → Proc↱ (+-assoc Γ (Δ′ + 1) Γ′) P ≅
-            Proc↱ (+-assoc Γ Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + Δ′) 1 Γ′) P)
-   bibble = ?
-{-
-   -- Hetereogeneously equate braidings up to associativity of + on contexts.
-   braid-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
-                 (((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
-                 (Proc↱ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′)
-                 ≅
-                 (((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*)
-                 (Proc↱ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc↱ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈
-                 Proc↱ (cong (_+_ Γ′) (+-assoc Δ₁ Δ₂ Δ₃)) S′)
-   braid-assoc {Γ} {Γ′} ρ Δ₁ Δ₂ Δ₃ S S′ =
-      ≅-cong₃ (λ Δ† P P′ → ((ρ ᴿ+ Δ†)*) P ≈ P′)
-         (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃))
-         (
-            let open ≅-Reasoning in
-            begin
-               Proc↱ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)
-            ≅⟨ Proc↲ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) _ ⟩
-               Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S
-            ≅⟨ Proc↲ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S ⟩
-               S
-            ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S) ⟩
-               Proc↱ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S
-            ≅⟨ ≅-sym (Proc↲ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) _) ⟩
-               Proc↱ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc↱ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)
-            ∎
-         )
-         (≅-sym (Proc↲ (cong (_+_ Γ′) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
--}
+   -- Helper for associativity of + on contexts.
+   bibble : ∀ Γ Δ′ Γ′ P → Proc↱ (+-assoc Γ (Δ′ + 1) Γ′) P ≅ Proc↱ (+-assoc Γ Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + Δ′) 1 Γ′) P)
+   bibble Γ Δ′ Γ′ P = let open ≅-Reasoning in
+      begin
+         Proc↱ (+-assoc Γ (Δ′ + 1) Γ′) P
+      ≅⟨ Proc↲ (+-assoc Γ (Δ′ + 1) Γ′) _ ⟩
+         P
+      ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + Δ′) 1 Γ′) _) ⟩
+         Proc↱ (+-assoc (Γ + Δ′) 1 Γ′) P
+      ≅⟨ ≅-sym (Proc↲ (+-assoc Γ Δ′ (1 + Γ′)) _) ⟩
+         Proc↱ (+-assoc Γ Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + Δ′) 1 Γ′) P)
+      ∎
 
    -- Mostly case analysis which can be glossed in the paper version.
    ⊖⋆[_,_] : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {a⋆ R}
@@ -128,23 +109,12 @@ module Transition.Seq.Cofinal where
    ⊖⋆[ ᶜ∇ᶜ , Δ′ ] [] γ = γ Δ []
    ⊖⋆[_,_] {Γ} ᵛ∇ᵛ Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ + 1 ] E⋆ γ/E
-   ... | γ/E/E⋆ Δ E⋆/γ/E =
-      let open ≅-Reasoning
-          bibble =
-             begin
-                Proc↱ (+-assoc Γ (Δ′ + 1) (inc⋆ a⋆)) (target⋆ E⋆)
-             ≅⟨ Proc↲ (+-assoc Γ (Δ′ + 1) (inc⋆ a⋆)) _ ⟩
-                target⋆ E⋆
-             ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + Δ′) 1 (inc⋆ a⋆)) _) ⟩
-                Proc↱ (+-assoc (Γ + Δ′) 1 (inc⋆ a⋆)) (target⋆ E⋆)
-             ≅⟨ ≅-sym (Proc↲ (+-assoc Γ Δ′ (1 + inc⋆ a⋆)) _) ⟩
-                Proc↱ (+-assoc Γ Δ′ (1 + inc⋆ a⋆)) (Proc↱ (+-assoc (Γ + Δ′) 1 (inc⋆ a⋆)) (target⋆ E⋆))
-             ∎
-      in _Δ_ {S = Proc↱ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆))) (ᴮ.target γ/E/E⋆)}
-             (≅-subst✴₂ Proc _⋉_ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆)))
-                         bibble
-                         (≅-sym (Proc↲ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆))) _))
-                         γ/E/E⋆) (E/γ ᵇ∷ E⋆/γ/E)
+   ... | γ/E/E⋆ Δ E⋆/γ/E = _Δ_ {S = Proc↱ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆))) (ᴮ.target γ/E/E⋆)}
+      (≅-subst✴₂ Proc _⋉_ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆)))
+                  (bibble Γ Δ′ (inc⋆ a⋆) (target⋆ E⋆))
+                  (≅-sym (Proc↲ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆))) _))
+                  γ/E/E⋆)
+      (E/γ ᵇ∷ E⋆/γ/E)
    ⊖⋆[ ᵛ∇ᵛ , Δ′ ] (E ᶜ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ ] E⋆ γ/E
    ... | γ/E/E⋆ Δ E⋆/γ/E = {!!} Δ (E/γ ᶜ∷ E⋆/γ/E)
