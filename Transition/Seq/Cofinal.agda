@@ -134,7 +134,8 @@ module Transition.Seq.Cofinal where
              ≅⟨ {!!} ⟩
                 Proc↱ (+-assoc (Γ + zero + zero) Δ′ (1 + inc⋆ a⋆)) (Proc↱ (+-assoc (Γ + Δ′) 1 (inc⋆ a⋆)) (target⋆ E⋆))
              ∎
-      in _Δ_ {S = Proc↱ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆))) (ᴮ.target γ/E/E⋆)} {!!} {- subst {!!} (≅-to-≡ {!!}) γ/E/E⋆ -} (E/γ ᵇ∷ E⋆/γ/E)
+      in _Δ_ {S = Proc↱ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆))) (ᴮ.target γ/E/E⋆)}
+             (≅-subst✴₂ Proc _⋉_ (cong (_+_ Γ) (+-assoc Δ′ 1 (inc⋆ a⋆))) {!!} {!!} γ/E/E⋆) (E/γ ᵇ∷ E⋆/γ/E)
    ⊖⋆[ ᵛ∇ᵛ , Δ′ ] (E ᶜ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ ] E⋆ γ/E
    ... | γ/E/E⋆ Δ E⋆/γ/E = {!!} Δ (E/γ ᶜ∷ E⋆/γ/E)
