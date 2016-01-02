@@ -15,7 +15,7 @@ module Transition.Seq.Cofinal where
    open import Transition using (_—[_-_]→_; source; target; action)
    open import Transition.Concur using (Concur; module Delta′; ⊖; ⌣-sym; module Properties)
    open import Transition.Concur.Cofinal using (﹙_,_,_,_﹚; ⊖-✓)
-   open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid; braid-preserves-inc-assoc)
+   open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid)
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
 
    -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. TODO: cofinality.
@@ -28,20 +28,7 @@ module Transition.Seq.Cofinal where
          γ/E⋆ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ + inc⋆ a⋆ ﹚ (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) S
          E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ S′
 
-   bibble₀ : ∀ Γ Δ′ Γ′ (P : Proc (Γ + (Δ′ + 0) + Γ′)) →
-             Proc↱ (+-assoc Γ (Δ′ + 0) Γ′) P ≅ Proc↱ (+-assoc Γ Δ′ (0 + Γ′)) (Proc↱ (+-assoc (Γ + Δ′) 0 Γ′) P)
-   bibble₀ Γ Δ′ Γ′ P = let open ≅-Reasoning in
-      begin
-         Proc↱ (+-assoc Γ (Δ′ + 0) Γ′) P
-      ≅⟨ Proc↲ (+-assoc Γ (Δ′ + 0) Γ′) _ ⟩
-         P
-      ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + Δ′) 0 Γ′) _) ⟩
-         Proc↱ (+-assoc (Γ + Δ′) 0 Γ′) P
-      ≅⟨ ≅-sym (Proc↲ (+-assoc Γ Δ′ (0 + Γ′)) _) ⟩
-         Proc↱ (+-assoc Γ Δ′ (0 + Γ′)) (Proc↱ (+-assoc (Γ + Δ′) 0 Γ′) P)
-      ∎
-
-   -- Mostly case analysis, which is glossed in the paper version.
+   -- Mostly case analysis which is glossed in the paper version.
    ⊖⋆[_,_] : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {a⋆ R}
              (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) → _Δ⋆_ 𝑎 E⋆ γ
    ⊖⋆[ ˣ∇ˣ {x = x} {u} , Δ′ ] (E ᵇ∷ E⋆) refl with ⊖′[ ˣ∇ˣ {x = x} {u} , Δ′ ] E refl
@@ -85,7 +72,7 @@ module Transition.Seq.Cofinal where
    ... | refl Δ E/γ with ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , Δ′ ] E⋆ refl
    ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (E/γ ᶜ∷ E⋆/γ/E)
    ⊖⋆[ ᶜ∇ᶜ , Δ′ ] [] γ = γ Δ []
-   -- These two cases require a bit of heterogeneous equality shuffling.
+   -- Next two require a bit of heterogeneous equality shuffling.
    ⊖⋆[_,_] {Γ} ᵛ∇ᵛ Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ + 1 ] E⋆ γ/E
    ... | γ/E/E⋆ Δ E⋆/γ/E =
@@ -108,8 +95,21 @@ module Transition.Seq.Cofinal where
    ⊖⋆[_,_] {Γ} ᵛ∇ᵛ Δ′ {a⋆ = _ ᴬ⋆.ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ ] E⋆ γ/E
    ... | γ/E/E⋆ Δ E⋆/γ/E =
-      let blah = cong (_+_ Γ) (+-assoc Δ′ 0 (inc⋆ a⋆)) in _Δ_ {S = Proc↱ blah (ᴮ.target γ/E/E⋆)}
-      (≅-subst✴₂ Proc _⋉_ blah (bibble₀ Γ Δ′ (inc⋆ a⋆) (target⋆ E⋆)) (≅-sym (Proc↲ blah _)) γ/E/E⋆)
+      let open ≅-Reasoning
+          Γ′ = inc⋆ a⋆
+          bibble =
+             begin
+                Proc↱ (+-assoc Γ (Δ′ + 0) Γ′) (target⋆ E⋆)
+             ≅⟨ Proc↲ (+-assoc Γ (Δ′ + 0) Γ′) _ ⟩
+                target⋆ E⋆
+             ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + Δ′) 0 Γ′) _) ⟩
+                Proc↱ (+-assoc (Γ + Δ′) 0 Γ′) (target⋆ E⋆)
+             ≅⟨ ≅-sym (Proc↲ (+-assoc Γ Δ′ (0 + Γ′)) _) ⟩
+                Proc↱ (+-assoc Γ Δ′ (0 + Γ′)) (Proc↱ (+-assoc (Γ + Δ′) 0 Γ′) (target⋆ E⋆))
+             ∎
+          blah = cong (_+_ Γ) (+-assoc Δ′ 0 (inc⋆ a⋆))
+      in _Δ_ {S = Proc↱ blah (ᴮ.target γ/E/E⋆)}
+      (≅-subst✴₂ Proc _⋉_ blah bibble (≅-sym (Proc↲ blah _)) γ/E/E⋆)
       (E/γ ᶜ∷ E⋆/γ/E)
    ⊖⋆[ ᵛ∇ᵛ , Δ′ ] [] γ = γ Δ []
 
