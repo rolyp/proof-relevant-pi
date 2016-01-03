@@ -89,7 +89,16 @@ module Transition.Seq.Cofinal.Cofinal where
       begin
          ((swap ᴿ+ (Δ′ + (0 + Γ′))) *)
          (Proc↱ (+-assoc (Γ + 2) Δ′ (0 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 0 Γ′) (target⋆ E⋆)))
-      ≅⟨ ≅-cong-swap (sym (+-assoc Δ′ 0 Γ′)) {!!} ⟩
+      ≅⟨ ≅-cong-swap (sym (+-assoc Δ′ 0 Γ′))
+         (begin
+            Proc↱ (+-assoc (Γ + 2) Δ′ (0 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 0 Γ′) (target⋆ E⋆))
+         ≅⟨ Proc↲ (+-assoc (Γ + 2) Δ′ (0 + Γ′)) _ ⟩
+            Proc↱ (+-assoc (Γ + 2 + Δ′) 0 Γ′) (target⋆ E⋆)
+         ≅⟨ Proc↲ (+-assoc (Γ + 2 + Δ′) 0 Γ′) _ ⟩
+            target⋆ E⋆
+         ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + 2) (Δ′ + 0) Γ′) _) ⟩
+            Proc↱ (+-assoc (Γ + 2) (Δ′ + 0) Γ′) (target⋆ E⋆)
+         ∎) ⟩
          ((swap ᴿ+ (Δ′ + 0 + Γ′)) *) (Proc↱ (+-assoc (Γ + 2) (Δ′ + 0) Γ′) (target⋆ E⋆))
       ≅⟨ ⊖⋆-✓′ ⟩
          target⋆ E⋆/γ/E
