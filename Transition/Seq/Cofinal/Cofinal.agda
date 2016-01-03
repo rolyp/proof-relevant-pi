@@ -16,6 +16,18 @@ module Transition.Seq.Cofinal.Cofinal where
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
    open import Transition.Seq.Cofinal using (_Δ⋆_; module _Δ⋆_; _Δ_; ⊖⋆[_,_])
 
+   -- Experiment with isolated version of problem case.
+   bibble : ∀ Γ Δ′ Γ′ P →
+            ((swap ᴿ+ (Δ′ + (1 + Γ′))) *) (Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) P)) ≅
+            ((swap ᴿ+ (Δ′ + 1 + Γ′)) *) (Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) P)
+   bibble Γ Δ′ Γ′ P =
+      let open ≅-Reasoning in
+      begin
+         ((swap ᴿ+ (Δ′ + (1 + Γ′))) *) (Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) P))
+      ≅⟨ {!!} ⟩
+         ((swap ᴿ+ (Δ′ + 1 + Γ′)) *) (Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) P)
+      ∎
+
    -- Painful exercise in heterogeneous equality. TODO: consolidate ˣ∇ˣ, ᵇ∇ᶜ and ᶜ∇ᵇ cases, which are identical.
    ⊖⋆-✓ : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {a⋆ R}
           (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) → let open _Δ⋆_ in S (⊖⋆[ 𝑎 , Δ′ ] E⋆ γ) ≅ S′ (⊖⋆[ 𝑎 , Δ′ ] E⋆ γ)
