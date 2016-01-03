@@ -21,14 +21,15 @@ structure.
 
 # To do
 
+* `Everything` module that imports everything, for easy build validation
 * Reorganise packages relating to cofinality and causal equivalence
 * Proof of symmetry for causal equivalence
 * Vertical composition of braidings
 * Several examples of causal equivalence (trickier than it should be)
-* Residuation-preserves-concurrency for *symmetric* version of
-  concurrency (also tricky)
+* <s>Residuation-preserves-concurrency for *symmetric* version of
+  concurrency (also tricky)</s>
 * Proof of ⊖-preserves-sym
-* Proof of Theorem 3 from paper (cubical transition)
+* <s>Proof of Theorem 3 from paper (cubical transition)</s>
 * Tighten connection to paper, e.g. key theorems, naming conventions
 * Typeclass for residuals (improve overloading mess somehow, and problem
   with use of Δ as type, constructor and meta-variable)
