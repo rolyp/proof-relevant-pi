@@ -16,11 +16,11 @@ module Transition.Seq.Cofinal.Cofinal where
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
    open import Transition.Seq.Cofinal using (_Δ⋆_; module _Δ⋆_; _Δ_; ⊖⋆[_,_])
 
-   f : ∀ (Γ Δ′ : Cxt) → Proc (Γ + 2 + Δ′) → Proc (Γ + 2 + Δ′)
-   f Γ Δ′ = (swap ᴿ+ Δ′) *
+   f : ∀ {Γ} (Δ′ : Cxt) → Proc (Γ + 2 + Δ′) → Proc (Γ + 2 + Δ′)
+   f Δ′ = (swap ᴿ+ Δ′) *
 
-   ≅-cong✴₂′ : ∀ {Γ Δ′ Δ″ : Cxt} {P P′}
-               (f : ∀ (Γ Δ′ : Cxt) → Proc (Γ + 2 + Δ′) → Proc (Γ + 2 + Δ′)) → Δ′ ≡ Δ″ → P ≅ P′ → f Γ Δ′ P ≅ f Γ Δ″ P′
+   ≅-cong✴₂′ : ∀ {Γ Δ′ Δ″ : Cxt} {P : Proc (Γ + 2 + Δ′)} {P′ : Proc (Γ + 2 + Δ″)}
+               (f : ∀ {Γ} (Δ′ : Cxt) → Proc (Γ + 2 + Δ′) → Proc (Γ + 2 + Δ′)) → Δ′ ≡ Δ″ → P ≅ P′ → f Δ′ P ≅ f Δ″ P′
    ≅-cong✴₂′  _ refl ≅-refl = ≅-refl
 
    -- Experiment with isolated version of problem case.
