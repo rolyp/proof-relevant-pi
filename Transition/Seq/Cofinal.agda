@@ -153,7 +153,6 @@ module Transition.Seq.Cofinal where
       ≃-trans : ∀ {a⋆ R a″⋆ S a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {F⋆ : P —[ a″⋆ ]→⋆ S} {E′⋆ : P —[ a′⋆ ]→⋆ R′} →
                 E⋆ ≃ F⋆ → F⋆ ≃ E′⋆ → E⋆ ≃ E′⋆
 
-{-
    ≃-target : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E : P —[ a⋆ ]→⋆ R} {E′ : P —[ a′⋆ ]→⋆ R′} → E ≃ E′ → P —[ a′⋆ ]→⋆ R′
    ≃-target {E′ = E′} _ = E′
 
@@ -164,6 +163,7 @@ module Transition.Seq.Cofinal where
    ≃-refl [] = []
    ≃-refl (E ᵇ∷ E⋆) = E ᵇ∷ ≃-refl E⋆
    ≃-refl (E ᶜ∷ E⋆) = E ᶜ∷ ≃-refl E⋆
+{-
 
    open Delta′
    open Properties
