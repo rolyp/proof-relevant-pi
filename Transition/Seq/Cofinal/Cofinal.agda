@@ -35,19 +35,31 @@ module Transition.Seq.Cofinal.Cofinal where
                 target⋆ E⋆
              ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) _) ⟩
                 Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) (target⋆ E⋆)
-             ∎
-      in
+             ∎ in
       begin
          ((swap ᴿ+ (Δ′ + (1 + Γ′))) *)
          (Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) (target⋆ E⋆)))
-      ≅⟨ ? ⟩
+      ≅⟨ {!!} ⟩
          ((swap ᴿ+ (Δ′ + 1 + Γ′)) *) (Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) (target⋆ E⋆))
       ≅⟨ ⊖⋆-✓′ ⟩
          target⋆ E⋆/γ/E
       ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + 2 + Δ′) 1 (inc⋆ ((suc (swap ᴿ+ Δ′) *) a⋆))) _) ⟩
          Proc↱ (+-assoc (Γ + 2 + Δ′) 1 (inc⋆ ((suc (swap ᴿ+ Δ′) *) a⋆))) (target⋆ E⋆/γ/E)
       ∎
-   ⊖⋆-✓ ᵇ∇ᵇ Δ′ (E ᶜ∷ E⋆) γ = {!!}
+   ⊖⋆-✓ {Γ} (ᵇ∇ᵇ {a = a} {a′}) Δ′ {a⋆ = _ ᴬ⋆.ᶜ∷ a⋆} (E ᶜ∷ E⋆) refl with ⊖′[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E refl
+   ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E⋆ refl | ⊖⋆-✓ (ᵇ∇ᵇ {a = a} {a′}) Δ′ E⋆ refl
+   ... | _Δ_ {._} refl E⋆/γ/E | ⊖⋆-✓′ =
+      let open ≅-Reasoning; Γ′ = inc⋆ a⋆ in
+      begin
+         ((swap ᴿ+ (Δ′ + (0 + Γ′))) *)
+         (Proc↱ (+-assoc (Γ + 2) Δ′ (0 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 0 Γ′) (target⋆ E⋆)))
+      ≅⟨ {!!} ⟩
+         ((swap ᴿ+ (Δ′ + 0 + Γ′)) *) (Proc↱ (+-assoc (Γ + 2) (Δ′ + 0) Γ′) (target⋆ E⋆))
+      ≅⟨ ⊖⋆-✓′ ⟩
+         target⋆ E⋆/γ/E
+      ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + 2 + Δ′) 0 (inc⋆ (((swap ᴿ+ Δ′) *) a⋆))) _) ⟩
+         Proc↱ (+-assoc (Γ + 2 + Δ′) 0 (inc⋆ (((swap ᴿ+ Δ′) *) a⋆))) (target⋆ E⋆/γ/E)
+      ∎
    ⊖⋆-✓ ᵇ∇ᶜ _ [] _ = ≅-refl
    ⊖⋆-✓ {Γ} (ᵇ∇ᶜ {a = a} {a′}) Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) refl with ⊖′[ ᵇ∇ᶜ {a = a} {a′} , Δ′ ] E refl
    ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᶜ {a = a} {a′} , Δ′ + 1 ] E⋆ refl | ⊖⋆-✓ (ᵇ∇ᶜ {a = a} {a′}) (Δ′ + 1) E⋆ refl
