@@ -13,6 +13,7 @@ module Transition.Seq.Cofinal where
    open import Ren as ᴿ using (Ren; _ᴿ+_; push; swap); open ᴿ.Renameable ⦃...⦄
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Transition using (_—[_-_]→_; source; target; action)
+   open import Transition.Concur using (Concur; module Delta′; ⊖)
    open import Transition.Concur.Cofinal using (﹙_,_,_,_﹚; ⊖-✓)
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid)
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
@@ -112,7 +113,6 @@ module Transition.Seq.Cofinal where
       (E/γ ᶜ∷ E⋆/γ/E)
    ⊖⋆[ ᵛ∇ᵛ , _ ] [] γ = γ Δ []
 
-{-
    -- Causal equivalence. TODO: eliminate redundancy in constructor signatures.
    infix 4 _≃_
    data _≃_ {Γ} {P : Proc Γ} : ∀ {a⋆ a′⋆ R R′} → P —[ a⋆ ]→⋆ R → P —[ a′⋆ ]→⋆ R′ → Set where
@@ -146,7 +146,7 @@ module Transition.Seq.Cofinal where
       -- Transitivity and symmetry.
       ≃-trans : ∀ {a⋆ R a″⋆ S a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {F⋆ : P —[ a″⋆ ]→⋆ S} {E′⋆ : P —[ a′⋆ ]→⋆ R′} →
                 E⋆ ≃ F⋆ → F⋆ ≃ E′⋆ → E⋆ ≃ E′⋆
-
+{-
    ≃-target : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E : P —[ a⋆ ]→⋆ R} {E′ : P —[ a′⋆ ]→⋆ R′} → E ≃ E′ → P —[ a′⋆ ]→⋆ R′
    ≃-target {E′ = E′} _ = E′
 
