@@ -17,11 +17,23 @@ module Transition.Seq.Cofinal.Cofinal where
    open import Transition.Seq.Cofinal using (_Δ⋆_; module _Δ⋆_; _Δ_; ⊖⋆[_,_])
 
    -- Experiment with isolated version of problem case.
-   bibble : ∀ Γ Δ′ Γ′ P →
+   bibble : ∀ Γ Δ′ Γ′ (P : Proc (Γ + 2 + Δ′ + 1 + Γ′)) →
             ((swap ᴿ+ (Δ′ + (1 + Γ′))) *) (Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) P)) ≅
             ((swap ᴿ+ (Δ′ + 1 + Γ′)) *) (Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) P)
    bibble Γ Δ′ Γ′ P =
-      let open ≅-Reasoning in
+      let open ≅-Reasoning
+          blah =
+             begin
+                Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) P)
+             ≅⟨ Proc↲ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) _ ⟩
+                Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) P
+             ≅⟨ Proc↲ (+-assoc (Γ + 2 + Δ′) 1 Γ′) _ ⟩
+                P
+             ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) _) ⟩
+                Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) P
+             ∎
+          quib : Δ′ + (1 + Γ′) ≡ Δ′ + 1 + Γ′
+          quib = sym (+-assoc Δ′ 1 Γ′) in
       begin
          ((swap ᴿ+ (Δ′ + (1 + Γ′))) *) (Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) P))
       ≅⟨ {!!} ⟩
@@ -70,17 +82,7 @@ module Transition.Seq.Cofinal.Cofinal where
    ⊖⋆-✓ {Γ} (ᵇ∇ᵇ {a = a} {a′}) Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) refl with ⊖′[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E refl
    ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ + 1 ] E⋆ refl | ⊖⋆-✓ (ᵇ∇ᵇ {a = a} {a′}) (Δ′ + 1) E⋆ refl
    ... | _Δ_ {._} refl E⋆/γ/E | ⊖⋆-✓′ =
-      let open ≅-Reasoning; Γ′ = inc⋆ a⋆
-          blah =
-             begin
-                Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) (target⋆ E⋆))
-             ≅⟨ Proc↲ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) _ ⟩
-                Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) (target⋆ E⋆)
-             ≅⟨ Proc↲ (+-assoc (Γ + 2 + Δ′) 1 Γ′) _ ⟩
-                target⋆ E⋆
-             ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) _) ⟩
-                Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) (target⋆ E⋆)
-             ∎ in
+      let open ≅-Reasoning; Γ′ = inc⋆ a⋆ in
       begin
          ((swap ᴿ+ (Δ′ + (1 + Γ′))) *)
          (Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) (target⋆ E⋆)))
