@@ -19,8 +19,8 @@ module Transition.Seq.Cofinal.Cofinal where
    f : ∀ (Γ Δ′ : Cxt) → Proc (Γ + 2 + Δ′) → Proc (Γ + 2 + Δ′)
    f Γ Δ′ = (swap ᴿ+ Δ′) *
 
-   ≅-cong✴₂′ : ∀ {Γ Γ′ : Cxt} {P P′}
-               (f : ∀ (Γ Δ′ : Cxt) → Proc (Γ + 2 + Δ′) → Proc (Γ + 2 + Δ′)) → Γ ≡ Γ′ → P ≅ P′ → f Γ P ≅ f Γ′ P′
+   ≅-cong✴₂′ : ∀ {Γ Δ′ Δ″ : Cxt} {P P′}
+               (f : ∀ (Γ Δ′ : Cxt) → Proc (Γ + 2 + Δ′) → Proc (Γ + 2 + Δ′)) → Δ′ ≡ Δ″ → P ≅ P′ → f Γ Δ′ P ≅ f Γ Δ″ P′
    ≅-cong✴₂′  _ refl ≅-refl = ≅-refl
 
    -- Experiment with isolated version of problem case.
@@ -43,7 +43,7 @@ module Transition.Seq.Cofinal.Cofinal where
           quib = sym (+-assoc Δ′ 1 Γ′) in
       begin
          ((swap ᴿ+ (Δ′ + (1 + Γ′))) *) (Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) P))
-      ≅⟨ {!!} ⟩
+      ≅⟨ ≅-cong✴₂′ f quib blah ⟩
          ((swap ᴿ+ (Δ′ + 1 + Γ′)) *) (Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) P)
       ∎
 
