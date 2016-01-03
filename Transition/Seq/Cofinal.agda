@@ -163,10 +163,8 @@ module Transition.Seq.Cofinal where
    ≃-refl [] = []
    ≃-refl (E ᵇ∷ E⋆) = E ᵇ∷ ≃-refl E⋆
    ≃-refl (E ᶜ∷ E⋆) = E ᶜ∷ ≃-refl E⋆
-{-
 
    open Delta′
-   open Properties
 
    postulate
       -- Not trivial to prove, so come back to this.
@@ -185,4 +183,3 @@ module Transition.Seq.Cofinal where
          sym = ≃-sym;
          trans = ≃-trans
       }
--}
