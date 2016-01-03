@@ -119,29 +119,30 @@ module Transition.Seq.Cofinal where
       -- Transposition cases, which can't be axioms without a way of extending a trace to the right.
       _ᶜ∶⇋∶ᶜ_[_]∷_ : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᶜ - _ ]→ R′) →
                      (E⌣E′ : E ⌣[ ᶜ∇ᶜ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                     ∀ {a⋆ S} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a⋆ ]→⋆ S} → E⋆ ≃ E′⋆ →
+                     ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
                      let _ Δ E′⋆/γ = ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , 0 ] E′⋆ (⊖-✓ E⌣E′) in
                      E ᶜ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᶜ∷ E/E′ ᶜ∷ E′⋆/γ
       _ᶜ∶⇋∶ᵇ_[_]∷_ : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
                     (E⌣E′ : E ⌣[ ᶜ∇ᵇ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                    ∀ {a⋆ S} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a⋆ ]→⋆ S} → E⋆ ≃ E′⋆ →
+                    ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
                     let _ Δ E′⋆/γ = ⊖⋆[ ᶜ∇ᵇ {a = a} {a′} , 0 ] E′⋆ (⊖-✓ E⌣E′) in
                     E ᶜ∷ E′/E ᵇ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᶜ∷ E′⋆/γ
       _ᵇ∶⇋∶ᵇ_[_]∷_ : ∀ {a a′} {R R′} (E : P —[ a ᵇ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
                     (E⌣E′ : E ⌣[ ᵇ∇ᵇ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                    ∀ {a⋆ S} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a⋆ ]→⋆ S} → E⋆ ≃ E′⋆ →
+                    ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
                     let _ Δ E′⋆/γ = ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , 0 ] E′⋆ (⊖-✓ E⌣E′) in
                     E ᵇ∷ E′/E ᵇ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᵇ∷ E′⋆/γ
       _ˣ∶⇋∶ˣ_[_]∷_ : ∀ {x u} {R R′} (E : P —[ (• x) ᵇ - _ ]→ R) (E′ : P —[ (• u) ᵇ - _ ]→ R′) →
                     (E⌣E′ : E ⌣[ ˣ∇ˣ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                    ∀ {a⋆ S} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a⋆ ]→⋆ S} → E⋆ ≃ E′⋆ →
+                    ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
                     let _ Δ E′⋆/γ = ⊖⋆[ ˣ∇ˣ {x = x} {u} , 0 ] E′⋆ (⊖-✓ E⌣E′) in
                     E ᵇ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᶜ∷ E′⋆/γ
       _ᵛ∶⇋∶ᵛ_[_]∷_ : ∀ {R R′} (E : P —[ τ ᶜ - _ ]→ R) (E′ : P —[ τ ᶜ - _ ]→ R′) →
                     (E⌣E′ : E ⌣[ ᵛ∇ᵛ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                    ∀ {a⋆ S} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a⋆ ]→⋆ S} → E⋆ ≃ E′⋆ →
+                    ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
                     let _ Δ E′⋆/γ = ⊖⋆[ ᵛ∇ᵛ , 0 ] E′⋆ (⊖-✓ E⌣E′) in
                     E ᶜ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᶜ∷ E/E′ ᶜ∷ E′⋆/γ
+{-
       -- Close under trace constructors.
       [] : [] ≃ []
       _ᵇ∷_ : ∀ {a a⋆ a′⋆ R S S′} (E : P —[ a ᵇ - _ ]→ R) {E⋆ : R —[ a⋆ ]→⋆ S} {E′⋆ : R —[ a′⋆ ]→⋆ S′} →
@@ -151,7 +152,7 @@ module Transition.Seq.Cofinal where
       -- Transitivity and symmetry.
       ≃-trans : ∀ {a⋆ R a″⋆ S a′⋆ R′} {E⋆ : P —[ a⋆ ]→⋆ R} {F⋆ : P —[ a″⋆ ]→⋆ S} {E′⋆ : P —[ a′⋆ ]→⋆ R′} →
                 E⋆ ≃ F⋆ → F⋆ ≃ E′⋆ → E⋆ ≃ E′⋆
-{-
+
    ≃-target : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E : P —[ a⋆ ]→⋆ R} {E′ : P —[ a′⋆ ]→⋆ R′} → E ≃ E′ → P —[ a′⋆ ]→⋆ R′
    ≃-target {E′ = E′} _ = E′
 
