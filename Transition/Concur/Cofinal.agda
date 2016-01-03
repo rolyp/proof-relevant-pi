@@ -1,12 +1,12 @@
 module Transition.Concur.Cofinal where
 
    open import SharedModules
+   import Relation.Binary.EqReasoning as EqReasoning
 
-   open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ
+   open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬ⊖-✓; Action₂); open _ᴬ⌣_
-   open import Braiding.Proc using (_≈_; module _≈_; ≈-refl; ≈-reflexive; ≈-sym; _*⁼; module ≈-Reasoning);
-      open _≈_ renaming (trans to ≈-trans)
    import Action.Ren
+   open import Braiding.Proc using (_⋈_; module _⋈_; ⋈-sym; _⋉_; ⋈-to-⋉); open _⋈_
    open import Name as ᴺ using (Cxt; Name; toℕ; _+_; zero)
    open import Proc using (Proc); open Proc
    import Proc.Ren
@@ -18,351 +18,177 @@ module Transition.Concur.Cofinal where
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
-   -- braiding-congruent, or braiding-congruent with each other's swap image.
-   braid : ∀ {Γ} (ӓ : Action₂ Γ) → let Γ′ = Γ + inc (π₁ ӓ) + inc (π₂ ӓ) in Ren Γ′ Γ′
-   braid (_ ᵇ , _ ᵇ) = swap
-   braid (_ ᵇ , _ ᶜ) = id
-   braid (_ ᶜ , _ ᵇ) = id
-   braid (_ ᶜ , _ ᶜ) = id
+   -- related by a "bound" braid, by a "free" braid, or by identity. Parametric in the underlying notion of braid.
+   ﹙_,_,_,_﹚ : (∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
+               let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
+   ﹙ _ , Γ , ˣ∇ˣ , Δ ﹚ P P′ = P ≡ P′
+   ﹙ _ , Γ , ᵇ∇ᵇ , Δ ﹚ P P′ = ((swap ᴿ+ Δ) *) P ≡ P′ -- free braid
+   ﹙ _ , Γ , ᵇ∇ᶜ , Δ ﹚ P P′ = P ≡ P′
+   ﹙ _ , Γ , ᶜ∇ᵇ , Δ ﹚ P P′ = P ≡ P′
+   ﹙ _ , Γ , ᶜ∇ᶜ , Δ ﹚ P P′ = P ≡ P′
+   ﹙ _⋈_ , Γ , ᵛ∇ᵛ , Δ ﹚ P P′ = P ⋈ P′ -- bound braid
 
-   ⋈[_,_,_] : ∀ Γ (ӓ : Action₂ Γ) (Δ : Cxt) →
-              let Γ′ = Γ + inc (π₁ ӓ) + inc (π₂ ӓ) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
-   ⋈[ Γ , ӓ , Δ ] P P′ = ((braid ӓ ᴿ+ Δ) *) P ≈ P′
+   ⋈[_,_,_] : ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
+               let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
+   ⋈[ Γ , 𝑎 , Δ ] = ﹙ _⋈_ , Γ , 𝑎 , Δ ﹚
 
-   open ≈-Reasoning
+   postulate
+      -- Not sure yet if this is true. If so will take some effort; needs various lemmas, including P → R ⇒ P ≠ R.
+      ⊖-unique : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
+                (𝐸 : E ⌣₁[ 𝑎 ] E′) {S S′} (G : R —[ _ - _ ]→ S) (G′ : R′ —[ _ - _ ]→ S′) →
+                ⋈[ Γ , 𝑎 , zero ] S (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) S′) → ⊖₁ 𝐸 ≡ G ᵀΔ G′
+
    open Delta′
 
-   -- Called 'cofin' in the paper. Use ≈-Reasoning for maximum clarity.
-   ⊖₁-✓ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈[ Γ , (a , π₁ (ᴬ⊖ 𝑎)) , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
-   ⊖₁-✓ (E ᵇ│ᵇ F) =
-      let R = target E; S = target F in
-      (begin
-         (swap *) ((push *) R)
-      ≡⟨ sym (swap∘push _) ⟩
-         (suc push *) R
-      ∎) │
-      (begin
-         (swap *) ((suc push *) S)
-      ≡⟨ sym (swap∘suc-push _) ⟩
-         (push *) S
-      ∎)
-   ⊖₁-✓ (E ᵇ│ᶜ F) = ≈-reflexive (*-preserves-id _) │ ≈-reflexive (*-preserves-id _)
-   ⊖₁-✓ (E ᶜ│ᵇ F) = ≈-reflexive (*-preserves-id _) │ ≈-reflexive (*-preserves-id _)
-   ⊖₁-✓ (E ᶜ│ᶜ F) = ≈-reflexive (*-preserves-id _) │ ≈-reflexive (*-preserves-id _)
+   -- Called 'cofin' in the paper.
+   ⊖₁-✓ : ∀ {Γ} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {P R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
+          (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈[ Γ , 𝑎 , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
+   ⊖₁-✓ (E ᵇ│ᵇ F) = sym (cong₂ _│_ (swap∘push (target E)) (swap∘suc-push (target F)))
+   ⊖₁-✓ (E ᵇ│ᶜ F) = refl
+   ⊖₁-✓ (E ᶜ│ᵇ F) = refl
+   ⊖₁-✓ (E ᶜ│ᶜ F) = refl
    ⊖₁-✓ (_│•ᵇ_ {y = y} {a = a} 𝐸 F) with (pop y *ᵇ) (E/E′ (⊖₁ 𝐸))
-   ... | pop-y*E/E′ rewrite pop∘push y a =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      (begin
-         (id *) ((pop ((push *) y) *) S)
-      ≡⟨ *-preserves-id _ ⟩
-         (pop ((push *) y) *) S
-      ≡⟨ cong (pop ((push *) y) *) (sym (swap-involutive _)) ⟩
-         (pop ((push *) y) *) ((swap *) ((swap *) S))
-      ≈⟨ (pop ((push *) y) *⁼) ((swap *⁼) (⊖₁-✓ 𝐸)) ⟩
-         (pop ((push *) y) *) ((swap *) S′)
+   ... | _ rewrite pop∘push y a = cong₂ _│_ (
+      let open EqReasoning (setoid _); S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
+      begin
+         (pop (push y) *) S
+      ≡⟨ cong (pop (push y) *) (swap-swap (⊖₁-✓ 𝐸)) ⟩
+         (pop (push y) *) ((swap *) S′)
       ≡⟨ sym (pop∘swap y _) ⟩
          (suc (pop y) *) S′
-      ∎) │ ≈-reflexive (*-preserves-id _)
+      ∎) refl
    ⊖₁-✓ (_│•ᶜ_ {y = y} {a = a} 𝐸 F) with (pop y *ᶜ) (E/E′ (⊖₁ 𝐸))
-   ... | pop-y*E/E′ rewrite pop∘push y a =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      (begin
-         (id *) ((pop y *) S)
-      ≡⟨ *-preserves-id _ ⟩
-         (pop y *) S
-      ≡⟨ cong (pop y *) (sym (*-preserves-id _)) ⟩
-         (pop y *) ((id *) S)
-      ≈⟨ (pop y *⁼) (⊖₁-✓ 𝐸) ⟩
-         (pop y *) S′
-      ∎) │ ≈-reflexive (*-preserves-id _)
-   ⊖₁-✓ (_ᵇ│•_ {y = y} E 𝐹) =
-      let R = target E in
-      (begin
-         (id *) ((pop (ᴺ.suc y) *) ((suc push *) R))
-      ≡⟨ *-preserves-id _ ⟩
-         ((pop (ᴺ.suc y) *) ((suc push *) R))
-      ≡⟨ sym (pop∘suc-push y _) ⟩
-         (push *) ((pop y *) R)
-      ∎) │ ⊖₁-✓ 𝐹
-   ⊖₁-✓ (E ᶜ│• 𝐹) = ≈-reflexive (*-preserves-id _) │ (⊖₁-✓ 𝐹)
-   ⊖₁-✓ (𝐸 │ᵥᵇ F) =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸); S₁ = target F in
-      ν ((
-         begin
-            (suc id *) S
-         ≡⟨ +-id-elim 1 _ ⟩
-            S
-         ≡⟨ sym (swap-involutive _) ⟩
-            (swap *) ((swap *) S)
-         ≈⟨ (swap *⁼) (⊖₁-✓ 𝐸) ⟩
-            (swap *) S′
-         ∎) │ (
-         begin
-            (suc id *) ((suc push *) S₁)
-         ≡⟨ +-id-elim 1 _ ⟩
-            ((suc push *) S₁)
-         ≡⟨ swap∘push _ ⟩
-            (swap *) ((push *) S₁)
-         ∎))
-      where open ≈-Reasoning
-   ⊖₁-✓ (𝐸 │ᵥᶜ F) =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      ν ((
-         begin
-            (suc id *) S
-         ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
-            (id *) S
-         ≈⟨ ⊖₁-✓ 𝐸 ⟩
-            S′
-         ∎) │ ≈-reflexive (+-id-elim 1 _))
-   ⊖₁-✓ (_ᵇ│ᵥ_ {x = x} {𝑎 = ᵛ∇ᵛ} E 𝐹) =
-      let R = target E in
-      (begin
-         (id *) ((pop zero *) ((suc push *) R))
-      ≡⟨ *-preserves-id _ ⟩
-         ((pop zero *) ((suc push *) R))
-      ≡⟨ pop-zero∘suc-push _ ⟩
-         R
-      ∎) │ ⊖₁-✓ 𝐹
-   ⊖₁-✓ (_ᵇ│ᵥ_ {𝑎 = ᵇ∇ᵇ} E 𝐹) rewrite swap∘push (target E) =
-      let S₁ = S (⊖₁ 𝐹); S′₁ = S′ (⊖₁ 𝐹) in
-      ν (≈-reflexive (+-id-elim 1 _) │
-         (begin
-            (suc id *) S₁
-         ≡⟨ +-id-elim 1 _ ⟩
-            S₁
-         ≡⟨ sym (swap-involutive _) ⟩
-            (swap *) ((swap *) S₁)
-         ≈⟨ (swap *⁼) (⊖₁-✓ 𝐹) ⟩
-            (swap *) S′₁
-         ∎))
-   ⊖₁-✓ (E ᶜ│ᵥ 𝐹) =
-      let S₁ = S (⊖₁ 𝐹); S′₁ = S′ (⊖₁ 𝐹) in
-      ν (≈-reflexive (+-id-elim 1 _) │ (
-         begin
-            (suc id *) S₁
-         ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
-            (id *) S₁
-         ≈⟨ ⊖₁-✓ 𝐹 ⟩
-            S′₁
-         ∎))
-   ⊖₁-✓ (_│ᵇᵇ_ {𝑎 = ᵛ∇ᵛ} P 𝐹) = ≈-reflexive (*-preserves-id _) │ ⊖₁-✓ 𝐹
-   ⊖₁-✓ (_│ᵇᵇ_ {𝑎 = ᵇ∇ᵇ} P 𝐹) rewrite swap∘push∘push P = ≈-refl │ ⊖₁-✓ 𝐹
-   ⊖₁-✓ (P │ᵇᶜ 𝐹) = ≈-reflexive (*-preserves-id _) │ ⊖₁-✓ 𝐹
-   ⊖₁-✓ (P │ᶜᵇ 𝐹) = ≈-reflexive (*-preserves-id _) │ ⊖₁-✓ 𝐹
-   ⊖₁-✓ (P │ᶜᶜ 𝐹) = ≈-reflexive (*-preserves-id _) │ ⊖₁-✓ 𝐹
-   ⊖₁-✓ (_ᵇᵇ│_ {𝑎 = ᵛ∇ᵛ} 𝐸 _) = ⊖₁-✓ 𝐸 │ ≈-reflexive (*-preserves-id _)
-   ⊖₁-✓ (_ᵇᵇ│_ {𝑎 = ᵇ∇ᵇ} 𝐸 Q) rewrite swap∘push∘push Q = ⊖₁-✓ 𝐸 │ ≈-refl
-   ⊖₁-✓ (𝐸 ᵇᶜ│ Q) = ⊖₁-✓ 𝐸 │ ≈-reflexive (*-preserves-id _)
-   ⊖₁-✓ (𝐸 ᶜᵇ│ Q) = ⊖₁-✓ 𝐸 │ ≈-reflexive (*-preserves-id _)
-   ⊖₁-✓ (𝐸 ᶜᶜ│ Q) = ⊖₁-✓ 𝐸 │ ≈-reflexive (*-preserves-id _)
+   ... | _ rewrite pop∘push y a = cong₂ _│_ (cong (pop y *) (⊖₁-✓ 𝐸)) refl
+   ⊖₁-✓ (_ᵇ│•_ {y = y} E 𝐹) = cong₂ _│_ (sym (pop∘suc-push y _)) (⊖₁-✓ 𝐹)
+   ⊖₁-✓ (E ᶜ│• 𝐹) = cong₂ _│_ refl (⊖₁-✓ 𝐹)
+   ⊖₁-✓ (𝐸 │ᵥᵇ F) = cong ν_ (cong₂ _│_ (swap-swap (⊖₁-✓ 𝐸)) (swap∘push _))
+   ⊖₁-✓ (𝐸 │ᵥᶜ F) = cong ν_ (cong₂ _│_ (⊖₁-✓ 𝐸) refl)
+   ⊖₁-✓ (_ᵇ│ᵥ_ {x = x} {𝑎 = ˣ∇ˣ} E 𝐹) = cong₂ _│_ (pop-zero∘suc-push _) (⊖₁-✓ 𝐹)
+   ⊖₁-✓ (_ᵇ│ᵥ_ {𝑎 = ᵇ∇ᵇ} E 𝐹) rewrite swap∘push (target E) = cong ν_ (cong₂ _│_ refl (swap-swap (⊖₁-✓ 𝐹)))
+   ⊖₁-✓ (E ᶜ│ᵥ 𝐹) = cong ν_ (cong₂ _│_ refl (⊖₁-✓ 𝐹))
+   ⊖₁-✓ (_│ᵇᵇ_ {𝑎 = ˣ∇ˣ} P 𝐹) = cong₂ _│_ refl (⊖₁-✓ 𝐹)
+   ⊖₁-✓ (_│ᵇᵇ_ {𝑎 = ᵇ∇ᵇ} P 𝐹) = cong₂ _│_ (swap∘push∘push P) (⊖₁-✓ 𝐹)
+   ⊖₁-✓ (P │ᵇᶜ 𝐹) = cong₂ _│_ refl (⊖₁-✓ 𝐹)
+   ⊖₁-✓ (P │ᶜᵇ 𝐹) = cong₂ _│_ refl (⊖₁-✓ 𝐹)
+   ⊖₁-✓ (P │ᶜᶜ 𝐹) = cong₂ _│_ refl (⊖₁-✓ 𝐹)
+   ⊖₁-✓ (P │ᵛᵛ 𝐹) = refl │₂ (⊖₁-✓ 𝐹)
+   ⊖₁-✓ (_ᵇᵇ│_ {𝑎 = ˣ∇ˣ} 𝐸 _) = cong₂ _│_ (⊖₁-✓ 𝐸) refl
+   ⊖₁-✓ (_ᵇᵇ│_ {𝑎 = ᵇ∇ᵇ} 𝐸 Q) = cong₂ _│_ (⊖₁-✓ 𝐸) (swap∘push∘push Q)
+   ⊖₁-✓ (𝐸 ᵇᶜ│ Q) = cong₂ _│_ (⊖₁-✓ 𝐸) refl
+   ⊖₁-✓ (𝐸 ᶜᵇ│ Q) = cong₂ _│_ (⊖₁-✓ 𝐸) refl
+   ⊖₁-✓ (𝐸 ᶜᶜ│ Q) = cong₂ _│_ (⊖₁-✓ 𝐸) refl
+   ⊖₁-✓ (𝐸 ᵛᵛ│ Q) = (⊖₁-✓ 𝐸) │₁ refl
    ⊖₁-✓ (𝐸 ➕₁ Q) = ⊖₁-✓ 𝐸
-   ⊖₁-✓ (_│•_ {y = y} {z = z} 𝐸 𝐹) =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      (begin
-         (id *) ((pop z *) ((suc (pop y) *) S))
-      ≡⟨ *-preserves-id _ ⟩
+   ⊖₁-✓ (_│•_ {y = y} {z = z} 𝐸 𝐹) = cong₂ _│_ (
+      let open EqReasoning (setoid _); S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
+      begin
          (pop z *) ((suc (pop y) *) S)
       ≡⟨ sym (pop-pop-swap y z _) ⟩
          (pop y *) ((suc (pop z) *) ((swap *) S))
-      ≈⟨ (pop y *⁼) ((suc (pop z) *⁼) (⊖₁-✓ 𝐸)) ⟩
+      ≡⟨ cong (pop y *) (cong (suc (pop z) *) (⊖₁-✓ 𝐸)) ⟩
          (pop y *) ((suc (pop z) *) S′)
-      ∎) │ ⊖₁-✓ 𝐹
-   ⊖₁-✓ (_│•ᵥ_ {y = y} 𝐸 𝐹) =
-      let S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸); S₂ = S (⊖₁ 𝐹); S′₂ = S′ (⊖₁ 𝐹) in
-      ν ((
+      ∎) (⊖₁-✓ 𝐹)
+   ⊖₁-✓ (_│•ᵥ_ {y = y} 𝐸 𝐹) with (pop y *ᵇ) (E′/E (⊖₁ 𝐸))
+   ... | _ = cong ν_ (cong₂ _│_ (
+      let open EqReasoning (setoid _); S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸) in
+      begin
+         (suc (pop y) *) S₁
+      ≡⟨ cong (suc (pop y) *) (sym (swap-involutive _ )) ⟩
+         (suc (pop y) *) ((swap *) ((swap *) S₁))
+      ≡⟨ cong (suc (pop y) *) (cong (swap *) (⊖₁-✓ 𝐸)) ⟩
+         (suc (pop y) *) ((swap *) S′₁)
+      ≡⟨ suc-pop∘swap y _ ⟩
+         (pop ((push *) y) *) S′₁
+      ∎) (⊖₁-✓ 𝐹))
+   ⊖₁-✓ (_│ᵥ•_ {y = y} 𝐸 𝐹) with (pop y *ᵇ) (E′/E (⊖₁ 𝐸))
+   ... | _ =
+      let open EqReasoning (setoid _); S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸) in
+      cong ν_ (cong₂ _│_ (
          begin
-            (suc id *) ((suc (pop y) *) S₁)
-         ≡⟨ +-id-elim 1 _ ⟩
-            (suc (pop y) *) S₁
-         ≡⟨ cong (suc (pop y) *) (sym (swap-involutive _ )) ⟩
-            (suc (pop y) *) ((swap *) ((swap *) S₁))
-         ≈⟨ (suc (pop y) *⁼) ((swap *⁼) (⊖₁-✓ 𝐸)) ⟩
-            (suc (pop y) *) ((swap *) S′₁)
-         ≡⟨ suc-pop∘swap y _ ⟩
-            (pop ((push *) y) *) S′₁
-         ∎) │ (
-         begin
-            (suc id *) S₂
-         ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
-            (id *) S₂
-         ≈⟨ ⊖₁-✓ 𝐹 ⟩
-            S′₂
-         ∎))
-   ⊖₁-✓ (_│ᵥ•_ {y = y} 𝐸 𝐹) =
-      let S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸); S₂ = S (⊖₁ 𝐹); S′₂ = S′ (⊖₁ 𝐹) in
-      ν ((
-         begin
-            (suc id *) ((pop (push y) *) S₁)
-         ≡⟨ +-id-elim 1 _ ⟩
             (pop (push y) *) S₁
          ≡⟨ sym (suc-pop∘swap y _) ⟩
             (suc (pop y) *) ((swap *) S₁)
-         ≈⟨ (suc (pop y) *⁼) (⊖₁-✓ 𝐸) ⟩
+         ≡⟨ cong (suc (pop y) *) (⊖₁-✓ 𝐸) ⟩
             (suc (pop y) *) S′₁
-         ∎
-      ) │ (
+         ∎) (⊖₁-✓ 𝐹))
+   ⊖₁-✓ (𝐸 │ᵥ 𝐹) =
+      let open EqReasoning (setoid _); S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸) in
+      cong ν_ (cong₂ _│_ (
          begin
-            (suc id *) S₂
-         ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
-            (id *) S₂
-         ≈⟨ ⊖₁-✓ 𝐹 ⟩
-            S′₂
-         ∎))
-   ⊖₁-✓ (_│ᵥ_ {•x⌣•u = ᵛ∇ᵛ} 𝐸 𝐹) =
-      let S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸); S₂ = S (⊖₁ 𝐹); S′₂ = S′ (⊖₁ 𝐹) in
-      ν ((
-         begin
-            (suc id *) ((pop zero *) S₁)
-         ≡⟨ +-id-elim 1 _ ⟩
             (pop zero *) S₁
          ≡⟨ sym (pop-swap _) ⟩
             (pop zero *) ((swap *) S₁)
-         ≈⟨ (pop zero * *⁼) (⊖₁-✓ 𝐸) ⟩
+         ≡⟨ cong (pop zero *) (⊖₁-✓ 𝐸) ⟩
             (pop zero *) S′₁
-         ∎) │ (
-         begin
-            (suc id *) S₂
-         ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
-            (id *) S₂
-         ≈⟨ ⊖₁-✓ 𝐹 ⟩
-            S′₂
-         ∎))
-   ⊖₁-✓ (_│ᵥ_ {•x⌣•u = ᵇ∇ᵇ} 𝐸 𝐹) =
-      let S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸); S₂ = S (⊖₁ 𝐹); S′₂ = S′ (⊖₁ 𝐹) in
-      ≈-trans (ν (ν ((
-         begin
-            (suc (suc id) *) S₁
-         ≡⟨ +-id-elim 2 _ ⟩
-            S₁
-         ≡⟨ sym (swap-involutive _) ⟩
-            (swap *) ((swap *) S₁)
-         ≈⟨ (swap *⁼) (⊖₁-✓ 𝐸) ⟩
-            (swap *) S′₁
-         ∎) │ (
-         begin
-            (suc (suc id) *) S₂
-         ≡⟨ +-id-elim 2 _ ⟩
-            S₂
-         ≡⟨ sym (swap-involutive _) ⟩
-            (swap *) ((swap *) S₂)
-         ≈⟨ (swap *⁼) (⊖₁-✓ 𝐹) ⟩
-            (swap *) S′₂
-         ∎)))) (νν-swapₗ _)
+         ∎) (⊖₁-✓ 𝐹))
+   ⊖₁-✓ (𝐸 │ᵥ′ 𝐹) rewrite sym (⊖₁-✓ 𝐸) | sym (⊖₁-✓ 𝐹) = νν-swapᵣ _
    ⊖₁-✓ (ν• 𝐸) = ⊖₁-✓ 𝐸
-   ⊖₁-✓ (ν•ᵇ 𝐸) =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      begin
-         (swap *) S
-      ≡⟨ cong (swap *) (sym (*-preserves-id _)) ⟩
-         (swap *) ((id *) S)
-      ≈⟨ (swap *⁼) (⊖₁-✓ 𝐸) ⟩
-         (swap *) S′
-      ∎
+   ⊖₁-✓ (ν•ᵇ 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
+   ... | _ = cong (swap *) (⊖₁-✓ 𝐸)
    ⊖₁-✓ (ν•ᶜ 𝐸) = ⊖₁-✓ 𝐸
    ⊖₁-✓ (νᵇᵇ_ {a = x •} {a} 𝐸) with (swap *ᵇ) (E/E′ (⊖₁ 𝐸)) | (swap *ᵇ) (E′/E (⊖₁ 𝐸))
    ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push a =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      ν (begin
-         (suc swap *) ((swap *) ((suc swap *) S))
-      ≡⟨ sym (swap∘suc-swap∘swap _) ⟩
-         (swap *) ((suc swap *) ((swap *) S))
-      ≈⟨ (swap *⁼) ((suc swap *⁼) (⊖₁-✓ 𝐸)) ⟩
-         (swap *) ((suc swap *) S′)
-      ∎)
-   ⊖₁-✓ (νᵇᵇ_ {a = • x} {u •} 𝐸) =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      ν (begin
-         (suc swap *) ((swap *) ((suc swap *) S))
-      ≡⟨ sym (swap∘suc-swap∘swap _) ⟩
-         (swap *) ((suc swap *) ((swap *) S))
-      ≈⟨ (swap *⁼) ((suc swap *⁼) (⊖₁-✓ 𝐸)) ⟩
-         (swap *) ((suc swap *) S′)
-      ∎)
-   ⊖₁-✓ (νᵇᵇ_ {a = • x} {• u} 𝐸) =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      ν (begin
-         (suc swap *) ((swap *) ((suc swap *) S))
-      ≡⟨ sym (swap∘suc-swap∘swap _) ⟩
-         (swap *) ((suc swap *) ((swap *) S))
-      ≈⟨ (swap *⁼) ((suc swap *⁼) (⊖₁-✓ 𝐸)) ⟩
-         (swap *) ((suc swap *) S′)
-      ∎)
-   ⊖₁-✓ (νᵛᵛ 𝐸) =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      ν (begin
-         (suc id *) ((swap *) S)
-      ≡⟨ +-id-elim 1 _ ⟩
-         (swap *) S
-      ≡⟨ cong (swap *) (sym (*-preserves-id _)) ⟩
-         (swap *) ((id *) S)
-      ≈⟨ (swap *⁼) (⊖₁-✓ 𝐸) ⟩
-         (swap *) S′
-      ∎)
-   ⊖₁-✓ (νᵇᶜ_ {a′ = a′} 𝐸) with (swap *ᶜ) (E′/E (⊖₁ 𝐸))
-   ... | _ rewrite swap∘push∘push a′ =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      ν (begin
-         (suc id *) ((swap *) S)
-      ≡⟨ +-id-elim 1 _ ⟩
-         (swap *) S
-      ≡⟨ cong (swap *) (sym (*-preserves-id _)) ⟩
-         (swap *) ((id *) S)
-      ≈⟨ (swap *⁼) (⊖₁-✓ 𝐸) ⟩
-         (swap *) S′
-      ∎)
-   ⊖₁-✓ (νᶜᵇ_ {a = a} 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
-   ... | _ rewrite swap∘push∘push a =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      ν (begin
-         (suc id *) ((swap *) S)
-      ≡⟨ +-id-elim 1 _ ⟩
-         (swap *) S
-      ≡⟨ cong (swap *) (sym (*-preserves-id _)) ⟩
-         (swap *) ((id *) S)
-      ≈⟨ (swap *⁼) (⊖₁-✓ 𝐸) ⟩
-         (swap *) S′
-      ∎)
-   ⊖₁-✓ (νᶜᶜ 𝐸) =
-      let S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
-      ν (begin
-         (suc id *) S
-      ≡⟨ *-preserves-≃ₑ (+-preserves-id 1) _ ⟩
-         (id *) S
-      ≈⟨ ⊖₁-✓ 𝐸 ⟩
-         S′
-      ∎)
-   ⊖₁-✓ (! 𝐸) = ⊖₁-✓ 𝐸
-
-   symmetrise : ∀ {Γ} {S S′ : Proc Γ} → (id *) S ≈ S′ → (id *) S′ ≈ S
-   symmetrise {S = S} {S′} id*S≈S′ =
+      cong ν_ (
+         let open EqReasoning (setoid _); S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
+         begin
+            (suc swap *) ((swap *) ((suc swap *) S))
+         ≡⟨ sym (swap∘suc-swap∘swap _) ⟩
+            (swap *) ((suc swap *) ((swap *) S))
+         ≡⟨ cong (swap *) (cong (suc swap *) (⊖₁-✓ 𝐸)) ⟩
+            (swap *) ((suc swap *) S′)
+         ∎)
+   ⊖₁-✓ (νᵇᵇ_ {a = • x} {u •} 𝐸) = cong ν_ (
+      let open EqReasoning (setoid _); S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
       begin
-         (id *) S′
-      ≡⟨ *-preserves-id _ ⟩
-         S′
-      ≈⟨ ≈-sym id*S≈S′ ⟩
-         (id *) S
-      ≡⟨ *-preserves-id _ ⟩
-         S
-      ∎
+         (suc swap *) ((swap *) ((suc swap *) S))
+      ≡⟨ sym (swap∘suc-swap∘swap _) ⟩
+         (swap *) ((suc swap *) ((swap *) S))
+      ≡⟨ cong (swap *) (cong (suc swap *) (⊖₁-✓ 𝐸)) ⟩
+         (swap *) ((suc swap *) S′)
+      ∎)
+   ⊖₁-✓ (νᵇᵇ_ {a = • x} {• u} 𝐸) = cong ν_ (
+      let open EqReasoning (setoid _); S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
+      begin
+         (suc swap *) ((swap *) ((suc swap *) S))
+      ≡⟨ sym (swap∘suc-swap∘swap _) ⟩
+         (swap *) ((suc swap *) ((swap *) S))
+      ≡⟨ cong (swap *) (cong (suc swap *) (⊖₁-✓ 𝐸)) ⟩
+         (swap *) ((suc swap *) S′)
+      ∎)
+   ⊖₁-✓ (νˣˣ 𝐸) = cong ν_ (cong (swap *) (⊖₁-✓ 𝐸))
+   ⊖₁-✓ (νᵇᶜ_ {a′ = a′} 𝐸) with (swap *ᶜ) (E′/E (⊖₁ 𝐸))
+   ... | _ rewrite swap∘push∘push a′ = cong ν_ (cong (swap *) (⊖₁-✓ 𝐸))
+   ⊖₁-✓ (νᶜᵇ_ {a = a} 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
+   ... | _ rewrite swap∘push∘push a = cong ν_ (cong (swap *) (⊖₁-✓ 𝐸))
+   ⊖₁-✓ (νᶜᶜ 𝐸) = cong ν_ (⊖₁-✓ 𝐸)
+   ⊖₁-✓ (νᵛᵛ 𝐸) = ν (⊖₁-✓ 𝐸)
+   ⊖₁-✓ (! 𝐸) = ⊖₁-✓ 𝐸
 
    -- Now symmetrise.
    ⊖-✓ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-         (𝐸 : E ⌣[ 𝑎 ] E′) →
-         ⋈[ Γ , (a , π₁ (ᴬ⊖ 𝑎)) , zero ] (S (⊖ 𝐸)) (subst Proc (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖ 𝐸)))
+         (𝐸 : E ⌣[ 𝑎 ] E′) → ﹙ _⋈_ , Γ , 𝑎 , zero ﹚ (S (⊖ 𝐸)) (subst Proc (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖ 𝐸)))
    ⊖-✓ (inj₁ 𝐸) = ⊖₁-✓ 𝐸
    ⊖-✓ (inj₂ 𝐸′) with ⊖₁ 𝐸′ | ⊖₁-✓ 𝐸′
-   ⊖-✓ {𝑎 = ᵛ∇ᵛ} (inj₂ 𝐸′) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
-   ⊖-✓ {𝑎 = ᵇ∇ᵇ} (inj₂ 𝐸′) | E′/E ᵀΔ E/E′ | swap*S≈S′ =
-      let S = target E′/E; S′ = target E/E′ in
+   ⊖-✓ {𝑎 = ˣ∇ˣ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≡S′ = sym S≡S′
+   ⊖-✓ {𝑎 = ᵇ∇ᵇ} (inj₂ 𝐸′) | E′/E ᵀΔ E/E′ | swap*S≡S′ =
+      let open EqReasoning (setoid _); S = target E′/E; S′ = target E/E′ in
       begin
          (swap *) S′
-      ≈⟨ (swap *⁼) (≈-sym swap*S≈S′) ⟩
+      ≡⟨ cong (swap *) (sym swap*S≡S′) ⟩
          (swap *) ((swap *) S)
       ≡⟨ swap-involutive _ ⟩
          S
       ∎
-   ⊖-✓ {𝑎 = ᵇ∇ᶜ} (inj₂ 𝐸′) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
-   ⊖-✓ {𝑎 = ᶜ∇ᵇ} (inj₂ 𝐸′) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
-   ⊖-✓ {𝑎 = ᶜ∇ᶜ} (inj₂ 𝐸′) | _ ᵀΔ _ | id*S≈S′ = symmetrise id*S≈S′
+   ⊖-✓ {𝑎 = ᵇ∇ᶜ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≡S′ = sym S≡S′
+   ⊖-✓ {𝑎 = ᶜ∇ᵇ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≡S′ = sym S≡S′
+   ⊖-✓ {𝑎 = ᶜ∇ᶜ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≡S′ = sym S≡S′
+   ⊖-✓ {𝑎 = ᵛ∇ᵛ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≈S′ = ⋈-sym S≈S′
+
+   ⊖-✓-⋉ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
+         (𝐸 : E ⌣[ 𝑎 ] E′) → ﹙ _⋉_ , Γ , 𝑎 , zero ﹚ (S (⊖ 𝐸)) (subst Proc (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖ 𝐸)))
+   ⊖-✓-⋉ {𝑎 = ˣ∇ˣ} = ⊖-✓
+   ⊖-✓-⋉ {𝑎 = ᵇ∇ᵇ} = ⊖-✓
+   ⊖-✓-⋉ {𝑎 = ᵇ∇ᶜ} = ⊖-✓
+   ⊖-✓-⋉ {𝑎 = ᶜ∇ᵇ} = ⊖-✓
+   ⊖-✓-⋉ {𝑎 = ᶜ∇ᶜ} = ⊖-✓
+   ⊖-✓-⋉ {𝑎 = ᵛ∇ᵛ} = ⋈-to-⋉ ∘ ⊖-✓

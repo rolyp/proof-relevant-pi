@@ -1,106 +1,117 @@
 module Transition.Seq.Cofinal where
 
    open import SharedModules
+   import Relation.Binary.EqReasoning as EqReasoning
 
-   open import Action as ᴬ using (inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
-   open import Action.Concur using (Action₂; module _ᴬ⌣_); open _ᴬ⌣_
-   open import Action.Ren using (ren-preserves-inc-assoc)
+   open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬΔ; ᴬ/); open _ᴬ⌣_
+   open import Action.Ren using (ren-preserves-inc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
-   open import Action.Seq.Ren using (ren-preserves-inc⋆-assoc)
-   open import Braiding.Proc using (_≈_)
+   import Action.Seq.Ren
+   open import Braiding.Proc as ᴮ using (_⋉_; ⋈-to-⋉)
    open import Name as ᴺ using (_+_; +-assoc; zero)
-   open import Ren as ᴿ using (Ren; _ᴿ+_; push); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; _ᴿ+_; push; swap); open ᴿ.Renameable ⦃...⦄
    open import Proc using (Proc; Proc↱; Proc↲)
-   open import Transition using (_—[_-_]→_; source; target)
-   open import Transition.Concur using (Concur; module Delta′; ⊖; ⌣-sym; module Properties)
-   open import Transition.Concur.Cofinal using (⋈[_,_,_]; braid; ⊖-✓)
-   open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_)
-   open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; target⋆); open ᵀ⋆._—[_]→⋆_
+   open import Transition using (_—[_-_]→_; source; target; action)
+   open import Transition.Concur using (Concur; module Delta′; ⊖)
+   open import Transition.Concur.Cofinal using (﹙_,_,_,_﹚; ⊖-✓)
+   open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid)
+   open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
 
-   -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. Cofinal by construction.
+   -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. Cofinality as a separate lemma.
    infixl 5 _Δ⋆_
-   record _Δ⋆_ {Γ} {ӓ : Action₂ Γ} {m a⋆} {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + m)} {R}
-          (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , m ] P P′) : Set where
+   record _Δ⋆_ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) {Δ′ a⋆} {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {R}
+          (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) : Set where
       constructor _Δ_
       field
-         {R′} : _
-         γ/E⋆ : ⋈[ Γ , ӓ , m + inc⋆ a⋆ ] (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) R′
-         E⋆/γ : P′ —[ ((braid ӓ ᴿ+ m) *) a⋆ ]→⋆ Proc↱ (ren-preserves-inc⋆-assoc (braid ӓ) m a⋆) R′
+         {S S′} : _
+         γ/E⋆ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ + inc⋆ a⋆ ﹚ (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) S
+         E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ S′
 
-   -- Hetereogeneously equate braidings up to associativity of + on contexts.
-   braid-assoc : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) Δ₁ Δ₂ Δ₃ S S′ →
-                 (((ρ ᴿ+ (Δ₁ + Δ₂ + Δ₃))*)
-                 (Proc↱ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)) ≈ S′) ≅
-                 (((ρ ᴿ+ (Δ₁ + (Δ₂ + Δ₃)))*)
-                 (Proc↱ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc↱ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)) ≈
-                 Proc↱ (cong (_+_ Γ′) (+-assoc Δ₁ Δ₂ Δ₃)) S′)
-   braid-assoc {Γ} {Γ′} ρ Δ₁ Δ₂ Δ₃ S S′ =
-      ≅-cong₃ (λ Δ† P P′ → ((ρ ᴿ+ Δ†)*) P ≈ P′)
-         (≡-to-≅ (+-assoc Δ₁ Δ₂ Δ₃))
-         (
-            let open ≅-Reasoning in
-            begin
-               Proc↱ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) (Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S)
-            ≅⟨ Proc↲ (+-assoc Γ (Δ₁ + Δ₂) Δ₃) _ ⟩
-               Proc↱ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S
-            ≅⟨ Proc↲ (cong (flip _+_ Δ₃) (+-assoc Γ Δ₁ Δ₂)) S ⟩
-               S
-            ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S) ⟩
-               Proc↱ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S
-            ≅⟨ ≅-sym (Proc↲ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) _) ⟩
-               Proc↱ (+-assoc Γ Δ₁ (Δ₂ + Δ₃)) (Proc↱ (+-assoc (Γ + Δ₁) Δ₂ Δ₃) S)
-            ∎
-         )
-         (≅-sym (Proc↲ (cong (_+_ Γ′) (+-assoc Δ₁ Δ₂ Δ₃)) S′))
-
-   -- Mostly an exercise in heterogenous equality.
-   ⊖⋆[_,_] : ∀ {Γ} (ӓ : Action₂ Γ) m {P P′ : Proc (Γ + inc (π₁ ӓ) + inc (π₂ ӓ) + m)} {a⋆ R}
-             (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ Γ , ӓ , m ] P P′) → _Δ⋆_ {ӓ = ӓ} {m = m} E⋆ γ
-   ⊖⋆[ _ , _ ] [] γ = γ Δ []
-   ⊖⋆[ ӓ , m ] {a⋆ = a ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ ӓ , m + 1 ] E⋆ γ/E | ren-preserves-inc-assoc (braid ӓ) m (a ᵇ)
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (braid ӓ) m 1 (inc⋆ a⋆) (target⋆ E⋆) S′) =
-      let σ = braid ӓ
+   -- Mostly case analysis which is glossed in the paper version.
+   ⊖⋆[_,_] : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {a⋆ R}
+             (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) → _Δ⋆_ 𝑎 E⋆ γ
+   ⊖⋆[ ˣ∇ˣ , _ ] [] γ = γ Δ []
+   ⊖⋆[ ˣ∇ˣ {x = x} {u} , Δ′ ] (E ᵇ∷ E⋆) refl with ⊖′[ ˣ∇ˣ {x = x} {u} , Δ′ ] E refl
+   ... | γ/E Δ E/γ with ⊖⋆[ ˣ∇ˣ {x = x} {u} , Δ′ + 1 ] E⋆ γ/E
+   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (E/γ ᵇ∷ E⋆/γ/E)
+   ⊖⋆[ ˣ∇ˣ {x = x} {u} , Δ′ ] (E ᶜ∷ E⋆) refl with ⊖′[ ˣ∇ˣ {x = x} {u} , Δ′ ] E refl
+   ... | γ/E Δ E/γ with ⊖⋆[ ˣ∇ˣ {x = x} {u} , Δ′ ] E⋆ γ/E
+   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (E/γ ᶜ∷ E⋆/γ/E)
+   ⊖⋆[ ᵇ∇ᵇ , _ ] [] γ = γ Δ []
+   ⊖⋆[_,_] {Γ} (ᵇ∇ᵇ {a = a} {a′}) Δ′ (E ᵇ∷ E⋆) refl with ⊖′[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E refl
+   ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ + 1 ] E⋆ refl
+   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (subst (λ R′ → (source E/γ) —[ action E/γ - _ ]→ R′)
+      (let open IsEquivalence isEquivalence using (reflexive) in ≅-to-≡ (
+         Proc↲ (trans (reflexive (cong (_+_ (Γ + 1 + 1 + Δ′)) (ren-preserves-inc (swap ᴿ+ Δ′) (action E)))) refl) _)
+      ) E/γ ᵇ∷ E⋆/γ/E)
+   ⊖⋆[_,_] {Γ} (ᵇ∇ᵇ {a = a} {a′}) Δ′ (E ᶜ∷ E⋆) refl with ⊖′[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E refl
+   ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E⋆ refl
+   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (subst (λ R′ → (source E/γ) —[ action E/γ - _ ]→ R′) (
+      let open IsEquivalence isEquivalence using (reflexive) in ≅-to-≡ (
+         Proc↲ (trans (reflexive (cong (_+_ (Γ + 1 + 1 + Δ′)) (ren-preserves-inc (swap ᴿ+ Δ′) (action E)))) refl) _)
+      ) E/γ ᶜ∷ E⋆/γ/E)
+   ⊖⋆[ ᵇ∇ᶜ , _ ] [] γ = γ Δ []
+   ⊖⋆[ ᵇ∇ᶜ {a = a} {a′} , Δ′ ] (E ᵇ∷ E⋆) refl with ⊖′[ ᵇ∇ᶜ {a = a} {a′} , Δ′ ] E refl
+   ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᶜ {a = a} {a′} , Δ′ + 1 ] E⋆ refl
+   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (E/γ ᵇ∷ E⋆/γ/E)
+   ⊖⋆[ ᵇ∇ᶜ {a = a} {a′} , Δ′ ] (E ᶜ∷ E⋆) refl with ⊖′[ ᵇ∇ᶜ {a = a} {a′} , Δ′ ] E refl
+   ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᶜ {a = a} {a′} , Δ′ ] E⋆ refl
+   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (E/γ ᶜ∷ E⋆/γ/E)
+   ⊖⋆[ ᶜ∇ᵇ , _ ] [] γ = γ Δ []
+   ⊖⋆[ ᶜ∇ᵇ {a = a} {a′} , Δ′ ] (E ᵇ∷ E⋆) refl with ⊖′[ ᶜ∇ᵇ {a = a} {a′} , Δ′ ] E refl
+   ... | refl Δ E/γ with ⊖⋆[ ᶜ∇ᵇ {a = a} {a′} , Δ′ + 1 ] E⋆ refl
+   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (E/γ ᵇ∷ E⋆/γ/E)
+   ⊖⋆[ ᶜ∇ᵇ {a = a} {a′} , Δ′ ] (E ᶜ∷ E⋆) refl with ⊖′[ ᶜ∇ᵇ {a = a} {a′} , Δ′ ] E refl
+   ... | refl Δ E/γ with ⊖⋆[ ᶜ∇ᵇ {a = a} {a′} , Δ′ ] E⋆ refl
+   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (E/γ ᶜ∷ E⋆/γ/E)
+   ⊖⋆[ ᶜ∇ᶜ , _ ] [] γ = γ Δ []
+   ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , Δ′ ] (E ᵇ∷ E⋆) refl with ⊖′[ ᶜ∇ᶜ {a = a} {a′} , Δ′ ] E refl
+   ... | refl Δ E/γ with ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , Δ′ + 1 ] E⋆ refl
+   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (E/γ ᵇ∷ E⋆/γ/E)
+   ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , Δ′ ] (E ᶜ∷ E⋆) refl with ⊖′[ ᶜ∇ᶜ {a = a} {a′} , Δ′ ] E refl
+   ... | refl Δ E/γ with ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , Δ′ ] E⋆ refl
+   ... | _Δ_ {._} refl E⋆/γ/E = refl Δ (E/γ ᶜ∷ E⋆/γ/E)
+   -- Next two require a bit of heterogeneous equality shuffling.
+   ⊖⋆[_,_] {Γ} ᵛ∇ᵛ Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
+   ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ + 1 ] E⋆ γ/E
+   ... | γ/E/E⋆ Δ E⋆/γ/E =
+      let Γ′ = inc⋆ a⋆
           open ≅-Reasoning
-          E/γ∷E⋆/γ/E =
-             subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᴬ⋆.ᵇ∷ ((σ ᴿ+ m ᴿ+ 1) *) a⋆ ]→⋆ P) (≅-to-≡ (
-                begin
-                   Proc↱ (+-assoc _ 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆)))
-                         (Proc↱ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′)
-                ≅⟨ Proc↲ (+-assoc _ 1 (inc⋆ (((σ ᴿ+ m ᴿ+ 1) *) a⋆))) _ ⟩
-                   Proc↱ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′
-                ≅⟨ Proc↲ (ren-preserves-inc⋆-assoc σ (m + 1) a⋆) S′ ⟩
-                   S′
-                ≅⟨ ≅-sym (Proc↲ (cong (_+_ _) (+-assoc m 1 (inc⋆ a⋆))) S′) ⟩
-                   Proc↱ (cong (_+_ _) (+-assoc m 1 (inc⋆ a⋆))) S′
-                ≅⟨ ≅-sym (Proc↲ (ren-preserves-inc⋆-assoc σ m (a ᴬ⋆.ᵇ∷ a⋆)) _) ⟩
-                   Proc↱ (ren-preserves-inc⋆-assoc σ m (a ᴬ⋆.ᵇ∷ a⋆))
-                         (Proc↱ (cong (_+_ _) (+-assoc m 1 (inc⋆ a⋆))) S′)
-                ∎)
-             ) (E/γ ᵇ∷ E⋆/γ/E)
-      in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
-   ⊖⋆[ ӓ , m ] {a⋆ = a ᴬ⋆.ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ ӓ , m ] E γ
-   ... | γ/E Δ E/γ with ⊖⋆[ ӓ , m ] E⋆ γ/E | ren-preserves-inc-assoc (braid ӓ) m (a ᶜ)
-   ... | _Δ_ {S′} γ/E/E⋆ E⋆/γ/E | refl rewrite ≅-to-≡ (braid-assoc (braid ӓ) m 0 (inc⋆ a⋆) (target⋆ E⋆) S′) =
-      let σ = braid ӓ
+          target⋆-E⋆ =
+             begin
+                Proc↱ (+-assoc Γ (Δ′ + 1) Γ′) (target⋆ E⋆)
+             ≅⟨ Proc↲ (+-assoc Γ (Δ′ + 1) Γ′) _ ⟩
+                target⋆ E⋆
+             ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + Δ′) 1 Γ′) _) ⟩
+                Proc↱ (+-assoc (Γ + Δ′) 1 Γ′) (target⋆ E⋆)
+             ≅⟨ ≅-sym (Proc↲ (+-assoc Γ Δ′ (1 + Γ′)) _) ⟩
+                Proc↱ (+-assoc Γ Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + Δ′) 1 Γ′) (target⋆ E⋆))
+             ∎
+          assoc₁ = cong (_+_ Γ) (+-assoc Δ′ 1 Γ′)
+      in _Δ_ {S = Proc↱ assoc₁ (ᴮ.target γ/E/E⋆)}
+      (≅-subst✴₂ Proc _⋉_ assoc₁ target⋆-E⋆ (≅-sym (Proc↲ assoc₁ _)) γ/E/E⋆)
+      (E/γ ᵇ∷ E⋆/γ/E)
+   ⊖⋆[_,_] {Γ} ᵛ∇ᵛ Δ′ {a⋆ = _ ᴬ⋆.ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
+   ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ ] E⋆ γ/E
+   ... | γ/E/E⋆ Δ E⋆/γ/E =
+      let Γ′ = inc⋆ a⋆
           open ≅-Reasoning
-          E/γ∷E⋆/γ/E =
-             subst (λ P → source E/γ —[ ((σ ᴿ+ m) *) a ᴬ⋆.ᶜ∷ ((σ ᴿ+ m) *) a⋆ ]→⋆ P) (≅-to-≡ (
-                begin
-                   Proc↱ (+-assoc _ 0 (inc⋆ (((σ ᴿ+ m) *) a⋆)))
-                         (Proc↱ (ren-preserves-inc⋆-assoc σ m a⋆) S′)
-                ≅⟨ Proc↲ (+-assoc _ 0 (inc⋆ (((σ ᴿ+ m) *) a⋆))) _ ⟩
-                   Proc↱ (ren-preserves-inc⋆-assoc σ m a⋆) S′
-                ≅⟨ Proc↲ (ren-preserves-inc⋆-assoc σ m a⋆) S′ ⟩
-                   S′
-                ≅⟨ ≅-sym (Proc↲ (cong (_+_ _) (+-assoc m 0 (inc⋆ a⋆))) S′) ⟩
-                   Proc↱ (cong (_+_ _) (+-assoc m 0 (inc⋆ a⋆))) S′
-                ≅⟨ ≅-sym (Proc↲ (ren-preserves-inc⋆-assoc σ m (a ᴬ⋆.ᶜ∷ a⋆)) _) ⟩
-                   Proc↱ (ren-preserves-inc⋆-assoc σ m (a ᴬ⋆.ᶜ∷ a⋆))
-                         (Proc↱ (cong (_+_ _) (+-assoc m 0 (inc⋆ a⋆))) S′)
-                ∎)
-             ) (E/γ ᶜ∷ E⋆/γ/E)
-      in γ/E/E⋆ Δ E/γ∷E⋆/γ/E
+          target⋆-E⋆ =
+             begin
+                Proc↱ (+-assoc Γ (Δ′ + 0) Γ′) (target⋆ E⋆)
+             ≅⟨ Proc↲ (+-assoc Γ (Δ′ + 0) Γ′) _ ⟩
+                target⋆ E⋆
+             ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + Δ′) 0 Γ′) _) ⟩
+                Proc↱ (+-assoc (Γ + Δ′) 0 Γ′) (target⋆ E⋆)
+             ≅⟨ ≅-sym (Proc↲ (+-assoc Γ Δ′ (0 + Γ′)) _) ⟩
+                Proc↱ (+-assoc Γ Δ′ (0 + Γ′)) (Proc↱ (+-assoc (Γ + Δ′) 0 Γ′) (target⋆ E⋆))
+             ∎
+          assoc₀ = cong (_+_ Γ) (+-assoc Δ′ 0 (inc⋆ a⋆))
+      in _Δ_ {S = Proc↱ assoc₀ (ᴮ.target γ/E/E⋆)}
+      (≅-subst✴₂ Proc _⋉_ assoc₀ target⋆-E⋆ (≅-sym (Proc↲ assoc₀ _)) γ/E/E⋆)
+      (E/γ ᶜ∷ E⋆/γ/E)
+   ⊖⋆[ ᵛ∇ᵛ , _ ] [] γ = γ Δ []
 
    -- Causal equivalence. TODO: eliminate redundancy in constructor signatures.
    infix 4 _≃_
@@ -108,24 +119,30 @@ module Transition.Seq.Cofinal where
       -- Transposition cases, which can't be axioms without a way of extending a trace to the right.
       _ᶜ∶⇋∶ᶜ_[_]∷_ : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᶜ - _ ]→ R′) →
                      (E⌣E′ : E ⌣[ ᶜ∇ᶜ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                     ∀ {a⋆ S} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a⋆ ]→⋆ S} → E⋆ ≃ E′⋆ →
-                     let _ Δ E′⋆/γ = ⊖⋆[ (a ᶜ , a′ ᶜ) , 0 ] E′⋆ (⊖-✓ E⌣E′) in
+                     ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
+                     let _ Δ E′⋆/γ = ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , 0 ] E′⋆ (⊖-✓ E⌣E′) in
                      E ᶜ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᶜ∷ E/E′ ᶜ∷ E′⋆/γ
       _ᶜ∶⇋∶ᵇ_[_]∷_ : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
                     (E⌣E′ : E ⌣[ ᶜ∇ᵇ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                    ∀ {a⋆ S} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a⋆ ]→⋆ S} → E⋆ ≃ E′⋆ →
-                    let _ Δ E′⋆/γ = ⊖⋆[ (a ᶜ , a′ ᵇ) , 0 ] E′⋆ (⊖-✓ E⌣E′) in
+                    ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
+                    let _ Δ E′⋆/γ = ⊖⋆[ ᶜ∇ᵇ {a = a} {a′} , 0 ] E′⋆ (⊖-✓ E⌣E′) in
                     E ᶜ∷ E′/E ᵇ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᶜ∷ E′⋆/γ
       _ᵇ∶⇋∶ᵇ_[_]∷_ : ∀ {a a′} {R R′} (E : P —[ a ᵇ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
                     (E⌣E′ : E ⌣[ ᵇ∇ᵇ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                    ∀ {a⋆ S} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a⋆ ]→⋆ S} → E⋆ ≃ E′⋆ →
-                    let _ Δ E′⋆/γ = ⊖⋆[ (a ᵇ , (push *) a′ ᵇ) , 0 ] E′⋆ (⊖-✓ E⌣E′) in
+                    ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
+                    let _ Δ E′⋆/γ = ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , 0 ] E′⋆ (⊖-✓ E⌣E′) in
                     E ᵇ∷ E′/E ᵇ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᵇ∷ E′⋆/γ
-      _ᵛ∶⇋∶ᵛ_[_]∷_ : ∀ {x u} {R R′} (E : P —[ (• x) ᵇ - _ ]→ R) (E′ : P —[ (• u) ᵇ - _ ]→ R′) →
-                    (E⌣E′ : E ⌣[ ᵛ∇ᵛ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
-                    ∀ {a⋆ S} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a⋆ ]→⋆ S} → E⋆ ≃ E′⋆ →
-                    let _ Δ E′⋆/γ = ⊖⋆[ ((• x) ᵇ , • ᴺ.suc u 〈 zero 〉 ᶜ) , 0 ] E′⋆ (⊖-✓ E⌣E′) in
+      _ˣ∶⇋∶ˣ_[_]∷_ : ∀ {x u} {R R′} (E : P —[ (• x) ᵇ - _ ]→ R) (E′ : P —[ (• u) ᵇ - _ ]→ R′) →
+                    (E⌣E′ : E ⌣[ ˣ∇ˣ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
+                    ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
+                    let _ Δ E′⋆/γ = ⊖⋆[ ˣ∇ˣ {x = x} {u} , 0 ] E′⋆ (⊖-✓ E⌣E′) in
                     E ᵇ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᶜ∷ E′⋆/γ
+      _ᵛ∶⇋∶ᵛ_[_]∷_ : ∀ {R R′} (E : P —[ τ ᶜ - _ ]→ R) (E′ : P —[ τ ᶜ - _ ]→ R′) →
+                    (E⌣E′ : E ⌣[ ᵛ∇ᵛ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
+                    ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
+                    let _ Δ E′⋆/γ = ⊖⋆[ ᵛ∇ᵛ , 0 ] E′⋆ (⋈-to-⋉ (⊖-✓ E⌣E′)) in
+                    E ᶜ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᶜ∷ E/E′ ᶜ∷ E′⋆/γ
+
       -- Close under trace constructors.
       [] : [] ≃ []
       _ᵇ∷_ : ∀ {a a⋆ a′⋆ R S S′} (E : P —[ a ᵇ - _ ]→ R) {E⋆ : R —[ a⋆ ]→⋆ S} {E′⋆ : R —[ a′⋆ ]→⋆ S′} →
@@ -148,10 +165,9 @@ module Transition.Seq.Cofinal where
    ≃-refl (E ᶜ∷ E⋆) = E ᶜ∷ ≃-refl E⋆
 
    open Delta′
-   open Properties
 
    postulate
-      -- Not trivial to prove, so come back to this. There is a proof sketch in the paper.
+      -- Not trivial to prove, so come back to this.
       ≃-sym : ∀ {Γ} {P : Proc Γ} {a⋆ a′⋆ R R′} {E⋆ : P —[ a⋆ ]→⋆ R} {E′⋆ : P —[ a′⋆ ]→⋆ R′} → E⋆ ≃ E′⋆ → E′⋆ ≃ E⋆
 
    -- Existentially quantified version so we can state isEquivalence.

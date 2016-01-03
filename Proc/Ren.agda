@@ -4,8 +4,6 @@ module Proc.Ren where
    open import SharedModules
    import Relation.Binary.EqReasoning as EqReasoning
 
-   open import Ext
-
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Ren as ᴿ using (
          Ren; suc; push; pop; swap; +-preserves-≃ₑ; +-preserves-id; +-preserves-∘; Renameable; module Renameable; ᴺren

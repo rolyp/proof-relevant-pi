@@ -20,5 +20,8 @@ module Transition.Seq where
 
    infixl 0 _—[_]→⋆_
 
+   source⋆ : ∀ {Γ} {P : Proc Γ} {a⋆ : Action⋆ Γ} {R} → P —[ a⋆ ]→⋆ R → Proc Γ
+   source⋆ {P = P} _ = P
+
    target⋆ : ∀ {Γ} {P : Proc Γ} {a⋆ : Action⋆ Γ} {R} → P —[ a⋆ ]→⋆ R → Proc (Γ + inc⋆ a⋆)
    target⋆ {R = R} _ = R

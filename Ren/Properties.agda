@@ -1,4 +1,4 @@
-open import Name as ᴺ using (Cxt)
+open import Name as ᴺ using (Cxt; +-assoc)
 open import Ren as ᴿ using (Renameable; Ren)
 
 -- Agda can't infer the renaming arguments in many cases; these wrappers make them more explicit.
@@ -82,3 +82,14 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
 
    suc-pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) * ∘ swap {Γ} * ≃ₑ pop ((push *′) y) *
    suc-pop∘swap y = ∘-*₁ (ᴿ.suc-pop∘swap y)
+
+   swap-swap : ∀ {Γ} {a a′ : A (Γ + 2)} → (swap *) a ≡ a′ → a ≡ (swap *) a′
+   swap-swap {a = a} {a′} swap*a≡a′ =
+      let open EqReasoning (setoid _) in
+      begin
+         a
+      ≡⟨ sym (swap-involutive _) ⟩
+         (swap *) ((swap *) a)
+      ≡⟨ cong (swap *) swap*a≡a′ ⟩
+         (swap *) a′
+      ∎
