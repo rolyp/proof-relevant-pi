@@ -16,6 +16,10 @@ module Transition.Seq.Cofinal.Cofinal where
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
    open import Transition.Seq.Cofinal using (_Δ⋆_; module _Δ⋆_; _Δ_; ⊖⋆[_,_])
 
+   ≅-cong-swap : ∀ {Γ Δ′ Δ″ : Cxt} {P : Proc (Γ + 2 + Δ′)} {P′ : Proc (Γ + 2 + Δ″)} →
+                 Δ′ ≡ Δ″ → P ≅ P′ → ((swap ᴿ+ Δ′) *) P ≅ ((swap ᴿ+ Δ″) *) P′
+   ≅-cong-swap = λ { {Δ′ = _} refl ≅-refl → ≅-refl }
+
    -- Painful exercise in heterogeneous equality. TODO: consolidate ˣ∇ˣ, ᵇ∇ᶜ and ᶜ∇ᵇ cases, which are identical.
    ⊖⋆-✓ : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {a⋆ R}
           (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) → let open _Δ⋆_ in S (⊖⋆[ 𝑎 , Δ′ ] E⋆ γ) ≅ S′ (⊖⋆[ 𝑎 , Δ′ ] E⋆ γ)
@@ -58,10 +62,7 @@ module Transition.Seq.Cofinal.Cofinal where
    ⊖⋆-✓ {Γ} (ᵇ∇ᵇ {a = a} {a′}) Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) refl with ⊖′[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E refl
    ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ + 1 ] E⋆ refl | ⊖⋆-✓ (ᵇ∇ᵇ {a = a} {a′}) (Δ′ + 1) E⋆ refl
    ... | _Δ_ {._} refl E⋆/γ/E | ⊖⋆-✓′ =
-      let open ≅-Reasoning; Γ′ = inc⋆ a⋆
-          ≅-cong-swap : ∀ {Δ′ Δ″ : Cxt} {P : Proc (Γ + 2 + Δ′)} {P′ : Proc (Γ + 2 + Δ″)} →
-                      Δ′ ≡ Δ″ → P ≅ P′ → ((swap ᴿ+ Δ′) *) P ≅ ((swap ᴿ+ Δ″) *) P′
-          ≅-cong-swap = λ { {Δ′ = _} refl ≅-refl → ≅-refl } in
+      let open ≅-Reasoning; Γ′ = inc⋆ a⋆ in
       begin
          ((swap ᴿ+ (Δ′ + (1 + Γ′))) *)
          (Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) (target⋆ E⋆)))
@@ -88,7 +89,7 @@ module Transition.Seq.Cofinal.Cofinal where
       begin
          ((swap ᴿ+ (Δ′ + (0 + Γ′))) *)
          (Proc↱ (+-assoc (Γ + 2) Δ′ (0 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 0 Γ′) (target⋆ E⋆)))
-      ≅⟨ {!!} ⟩
+      ≅⟨ ≅-cong-swap (sym (+-assoc Δ′ 0 Γ′)) {!!} ⟩
          ((swap ᴿ+ (Δ′ + 0 + Γ′)) *) (Proc↱ (+-assoc (Γ + 2) (Δ′ + 0) Γ′) (target⋆ E⋆))
       ≅⟨ ⊖⋆-✓′ ⟩
          target⋆ E⋆/γ/E
