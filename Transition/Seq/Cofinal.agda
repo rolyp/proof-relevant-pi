@@ -140,7 +140,7 @@ module Transition.Seq.Cofinal where
       _ᵛ∶⇋∶ᵛ_[_]∷_ : ∀ {R R′} (E : P —[ τ ᶜ - _ ]→ R) (E′ : P —[ τ ᶜ - _ ]→ R′) →
                     (E⌣E′ : E ⌣[ ᵛ∇ᵛ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
                     ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
-                    let _ Δ E′⋆/γ = ⊖⋆[ ᵛ∇ᵛ , 0 ] E′⋆ (⊖-✓ E⌣E′) in
+                    let _ Δ E′⋆/γ = ⊖⋆[ ᵛ∇ᵛ , 0 ] E′⋆ (⋈-to-⋉ (⊖-✓ E⌣E′)) in
                     E ᶜ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᶜ∷ E/E′ ᶜ∷ E′⋆/γ
 {-
       -- Close under trace constructors.
