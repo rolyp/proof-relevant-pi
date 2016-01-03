@@ -6,7 +6,7 @@ module Transition.Seq.Cofinal.Cofinal where
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬΔ; ᴬ/); open _ᴬ⌣_
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
-   open import Braiding.Proc as ᴮ using (_⋉_; ⋈-to-⋉)
+   open import Braiding.Proc as ᴮ using (_⋉_; ⋈-to-⋉; target)
    open import Braiding.Transition using (_Δ⁼_; _Δ_; ⊖)
    open import Name as ᴺ using (Cxt; _+_; +-assoc; zero)
    open import Proc using (Proc; Proc↱; Proc↲)
@@ -204,9 +204,13 @@ module Transition.Seq.Cofinal.Cofinal where
    ... | φ/E/E⋆ Δ E⋆/φ/E | ⊖⋆-✓′ =
       let open ≅-Reasoning; Γ′ = inc⋆ a⋆ in
       begin
-         {!!}
-      ≅⟨ {!!} ⟩
-         {!!}
+         Proc↱ (cong (_+_ Γ) (+-assoc Δ′ 1 Γ′)) (target φ/E/E⋆)
+      ≅⟨ Proc↲ (cong (_+_ Γ) (+-assoc Δ′ 1 Γ′)) _ ⟩
+         target φ/E/E⋆
+      ≅⟨ ⊖⋆-✓′ ⟩
+         target⋆ E⋆/φ/E
+      ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + Δ′) 1 Γ′) _) ⟩
+         Proc↱ (+-assoc (Γ + Δ′) 1 Γ′) (target⋆ E⋆/φ/E)
       ∎
 {-
       begin
