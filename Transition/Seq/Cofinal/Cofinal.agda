@@ -16,12 +16,9 @@ module Transition.Seq.Cofinal.Cofinal where
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
    open import Transition.Seq.Cofinal using (_Δ⋆_; module _Δ⋆_; _Δ_; ⊖⋆[_,_])
 
-   f : ∀ {Γ} (Δ′ : Cxt) → Proc (Γ + 2 + Δ′) → Proc (Γ + 2 + Δ′)
-   f Δ′ = (swap ᴿ+ Δ′) *
-
-   ≅-cong✴₂′ : ∀ {Γ Δ′ Δ″ : Cxt} {P : Proc (Γ + 2 + Δ′)} {P′ : Proc (Γ + 2 + Δ″)}
-               (f : ∀ {Γ} (Δ′ : Cxt) → Proc (Γ + 2 + Δ′) → Proc (Γ + 2 + Δ′)) → Δ′ ≡ Δ″ → P ≅ P′ → f Δ′ P ≅ f Δ″ P′
-   ≅-cong✴₂′  _ refl ≅-refl = ≅-refl
+   ≅-cong✴₂′ : ∀ {Γ Δ′ Δ″ : Cxt} {P : Proc (Γ + 2 + Δ′)} {P′ : Proc (Γ + 2 + Δ″)} →
+               Δ′ ≡ Δ″ → P ≅ P′ → ((swap ᴿ+ Δ′) *) P ≅ ((swap ᴿ+ Δ″) *) P′
+   ≅-cong✴₂′  refl ≅-refl = ≅-refl
 
    -- Experiment with isolated version of problem case.
    bibble : ∀ Γ Δ′ Γ′ (P : Proc (Γ + 2 + Δ′ + 1 + Γ′)) →
@@ -38,12 +35,10 @@ module Transition.Seq.Cofinal.Cofinal where
                 P
              ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) _) ⟩
                 Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) P
-             ∎
-          quib : Δ′ + (1 + Γ′) ≡ Δ′ + 1 + Γ′
-          quib = sym (+-assoc Δ′ 1 Γ′) in
+             ∎ in
       begin
          ((swap ᴿ+ (Δ′ + (1 + Γ′))) *) (Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) P))
-      ≅⟨ ≅-cong✴₂′ f quib blah ⟩
+      ≅⟨ ≅-cong✴₂′ (sym (+-assoc Δ′ 1 Γ′)) blah ⟩
          ((swap ᴿ+ (Δ′ + 1 + Γ′)) *) (Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) P)
       ∎
 
