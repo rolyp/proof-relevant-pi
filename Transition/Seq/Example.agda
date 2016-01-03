@@ -9,7 +9,7 @@ module Transition.Seq.Example where
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Ren as ᴿ using (suc; pop); open ᴿ.Renameable ⦃...⦄
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
-   open import Transition.Concur using (Concur₁; Delta′; module Delta′; ⊖)
+   open import Transition.Concur using (Concur; Concur₁; module Concur₁; Delta′; module Delta′; ⊖); open Concur₁
    open import Transition.Ren
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_); open ᵀ⋆._—[_]→⋆_
 
@@ -34,12 +34,16 @@ module Transition.Seq.Example where
       𝐹″ : F″ ⌣₁[ ˣ∇ˣ ] F
 
    E′/E = Delta′.E′/E (⊖ (inj₁ 𝐸))
+   E″/E = Delta′.E/E′ (⊖ (inj₁ 𝐸″))
    F′/F = Delta′.E′/E (⊖ (inj₁ 𝐹))
+   F″/F = Delta′.E/E′ (⊖ (inj₁ 𝐹″))
    P₁ = target E′/E
    Q₁ = target F′/F
 
-   𝐸′/E = {!!}
-   𝐹′/F = {!!}
+   postulate
+      𝐸′/E : E′/E ⌣[ ᵇ∇ᵇ ] E″/E
+      𝐹′/F : F′/F ⌣[ ᶜ∇ᶜ ] F″/F
+
    E″/E/E′/E = Delta′.E′/E (⊖ 𝐸′/E)
    F″/F/F′/F = Delta′.E′/E (⊖ 𝐹′/F)
 
@@ -56,12 +60,16 @@ module Transition.Seq.Example where
    E₃ = νᶜ ((pop zero *ᵇ) E″/E/E′/E │• F″/F/F′/F)
 
    E/E′ = Delta′.E/E′ (⊖ (inj₁ 𝐸))
+   E″/E′ = Delta′.E′/E (⊖ (inj₁ 𝐸′))
    F/F′ = Delta′.E/E′ (⊖ (inj₁ 𝐹))
+   F″/F′ = Delta′.E′/E (⊖ (inj₁ 𝐹′))
    P′₁ = target E/E′
    Q′₁ = target F/F′
 
-   𝐸″/E′ = {!!}
-   𝐹″/𝐹′ = {!!}
+   postulate
+      𝐸″/E′ : E″/E′ ⌣[ ᵇ∇ᵇ ] E/E′
+      𝐹″/𝐹′ : F″/F′ ⌣[ ᶜ∇ᶜ ] F/F′
+
    E″/E′/E/E′ = Delta′.E/E′ (⊖ 𝐸″/E′)
    F″/F′/F/F′ = Delta′.E/E′ (⊖ 𝐹″/𝐹′)
 
