@@ -16,11 +16,11 @@ module Transition.Seq.Cofinal.Cofinal where
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
    open import Transition.Seq.Cofinal using (_Δ⋆_; module _Δ⋆_; _Δ_; ⊖⋆[_,_])
 
-   ≅-cong✴₂′ : ∀ {𝑖 𝑎 𝑏 𝑐} {I : Set 𝑖} (A : I → Set 𝑎) {B : ∀ {k} → A k → Set 𝑏}
-              {C : ∀ {k} (x : A k) → B x → Set 𝑐}
-              {i j} {x : A i} {y : A j} {u v} → i ≡ j →
-              (f : ∀ {k} (x : A k) (y : B x) → C x y) → x ≅ y → u ≅ v → f x u ≅ f y v
-   ≅-cong✴₂′  _ refl _ ≅-refl ≅-refl = ≅-refl
+   ≅-cong✴₂′ : ∀ {B : Cxt → Set}
+              {C : ∀ (Γ : Cxt) → B Γ → Set}
+              {Γ Γ′ : Cxt} {u v} →
+              (f : ∀ (Γ : Cxt) (u : B Γ) → C Γ u) → Γ ≡ Γ′ → u ≅ v → f Γ u ≅ f Γ′ v
+   ≅-cong✴₂′  _ refl ≅-refl = ≅-refl
 
    -- Experiment with isolated version of problem case.
    bibble : ∀ Γ Δ′ Γ′ (P : Proc (Γ + 2 + Δ′ + 1 + Γ′)) →
