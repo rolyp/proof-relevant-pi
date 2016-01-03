@@ -10,7 +10,6 @@ module Transition.Seq.Example where
    open import Ren as ᴿ using (suc; pop); open ᴿ.Renameable ⦃...⦄
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Concur using (Concur₁; Delta′; module Delta′; ⊖)
-   open import Transition.Concur.Transition using (/-preserves-⌣)
    open import Transition.Ren
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_); open ᵀ⋆._—[_]→⋆_
 
@@ -39,8 +38,8 @@ module Transition.Seq.Example where
    P₁ = target E′/E
    Q₁ = target F′/F
 
-   𝐸′/E = /-preserves-⌣ (inj₁ 𝐸) (inj₁ 𝐸′) (inj₁ 𝐸″)
-   𝐹′/F = /-preserves-⌣ (inj₁ 𝐹) (inj₁ 𝐹′) (inj₁ 𝐹″)
+   𝐸′/E = {!!}
+   𝐹′/F = {!!}
    E″/E/E′/E = Delta′.E′/E (⊖ 𝐸′/E)
    F″/F/F′/F = Delta′.E′/E (⊖ 𝐹′/F)
 
@@ -61,8 +60,8 @@ module Transition.Seq.Example where
    P′₁ = target E/E′
    Q′₁ = target F/F′
 
-   𝐸″/E′ = /-preserves-⌣ (inj₁ 𝐸′) (inj₁ 𝐸″) (inj₁ 𝐸)
-   𝐹″/𝐹′ = /-preserves-⌣ (inj₁ 𝐹′) (inj₁ 𝐹″) (inj₁ 𝐹)
+   𝐸″/E′ = {!!}
+   𝐹″/𝐹′ = {!!}
    E″/E′/E/E′ = Delta′.E/E′ (⊖ 𝐸″/E′)
    F″/F′/F/F′ = Delta′.E/E′ (⊖ 𝐹″/𝐹′)
 
