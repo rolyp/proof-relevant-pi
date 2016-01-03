@@ -7,6 +7,7 @@ module Transition.Seq.Cofinal.Cofinal where
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬΔ; ᴬ/); open _ᴬ⌣_
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
    open import Braiding.Proc as ᴮ using (_⋉_; ⋈-to-⋉)
+   open import Braiding.Transition using (_Δ⁼_; ⊖)
    open import Name as ᴺ using (Cxt; _+_; +-assoc; zero)
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Ren as ᴿ using (suc; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
@@ -200,7 +201,13 @@ module Transition.Seq.Cofinal.Cofinal where
    ⊖⋆-✓ ᵛ∇ᵛ _ [] _ = ≅-refl
    ⊖⋆-✓ {Γ} ᵛ∇ᵛ Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ + 1 ] E⋆ γ/E | ⊖⋆-✓ ᵛ∇ᵛ (Δ′ + 1) E⋆ γ/E
-   ... | γ/E/E⋆ Δ E⋆/γ/E | ⊖⋆-✓′ = {!!}
+   ... | γ/E/E⋆ Δ E⋆/γ/E | ⊖⋆-✓′ =
+      let open ≅-Reasoning; Γ′ = inc⋆ a⋆ in
+      begin
+        Proc↱ (cong (_+_ Γ) (+-assoc Δ′ 1 Γ′)) ((_Δ⋆_.S (⊖⋆[ ᵛ∇ᵛ , Δ′ + 1 ] E⋆ (_Δ⁼_.φ/E (⊖ E γ)))))
+      ≅⟨ {!!} ⟩
+         Proc↱ (+-assoc (Γ + Δ′) 1 Γ′) (_Δ⋆_.S′ (⊖⋆[ ᵛ∇ᵛ , Δ′ + 1 ] E⋆ (_Δ⁼_.φ/E (⊖ E γ))))
+      ∎
    ⊖⋆-✓ {Γ} ᵛ∇ᵛ Δ′ {a⋆ = _ ᴬ⋆.ᶜ∷ a⋆} (E ᶜ∷ E⋆) γ with ⊖′[ ᵛ∇ᵛ , Δ′ ] E γ
    ... | γ/E Δ E/γ with ⊖⋆[ ᵛ∇ᵛ , Δ′ ] E⋆ γ/E | ⊖⋆-✓ ᵛ∇ᵛ Δ′ E⋆ γ/E
    ... | γ/E/E⋆ Δ E⋆/γ/E | ⊖⋆-✓′ = {!!}
