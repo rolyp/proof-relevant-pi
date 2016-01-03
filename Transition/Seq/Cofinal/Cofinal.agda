@@ -7,8 +7,9 @@ module Transition.Seq.Cofinal.Cofinal where
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬΔ; ᴬ/); open _ᴬ⌣_
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
    open import Braiding.Proc as ᴮ using (_⋉_; ⋈-to-⋉)
-   open import Name as ᴺ using (_+_; +-assoc; zero)
+   open import Name as ᴺ using (Cxt; _+_; +-assoc; zero)
    open import Proc using (Proc; Proc↱; Proc↲)
+   open import Ren as ᴿ using (suc; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import Transition.Concur.Cofinal using (﹙_,_,_,_﹚; ⊖-✓)
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid)
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
@@ -24,11 +25,27 @@ module Transition.Seq.Cofinal.Cofinal where
    ⊖⋆-✓ {Γ} (ᵇ∇ᵇ {a = a} {a′}) Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) refl with ⊖′[ ᵇ∇ᵇ {a = a} {a′} , Δ′ ] E refl
    ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ + 1 ] E⋆ refl | ⊖⋆-✓ (ᵇ∇ᵇ {a = a} {a′}) (Δ′ + 1) E⋆ refl
    ... | _Δ_ {._} refl E⋆/γ/E | ⊖⋆-✓′ =
-      let open ≅-Reasoning; Γ′ = inc⋆ a⋆ in
+      let open ≅-Reasoning; Γ′ = inc⋆ a⋆
+          blah =
+             begin
+                Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) (target⋆ E⋆))
+             ≅⟨ Proc↲ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) _ ⟩
+                Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) (target⋆ E⋆)
+             ≅⟨ Proc↲ (+-assoc (Γ + 2 + Δ′) 1 Γ′) _ ⟩
+                target⋆ E⋆
+             ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) _) ⟩
+                Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) (target⋆ E⋆)
+             ∎
+      in
       begin
-         {!!}
-      ≅⟨ {!!} ⟩
-         {!!}
+         ((swap ᴿ+ (Δ′ + (1 + Γ′))) *)
+         (Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) (target⋆ E⋆)))
+      ≅⟨ ? ⟩
+         ((swap ᴿ+ (Δ′ + 1 + Γ′)) *) (Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) (target⋆ E⋆))
+      ≅⟨ ⊖⋆-✓′ ⟩
+         target⋆ E⋆/γ/E
+      ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + 2 + Δ′) 1 (inc⋆ ((suc (swap ᴿ+ Δ′) *) a⋆))) _) ⟩
+         Proc↱ (+-assoc (Γ + 2 + Δ′) 1 (inc⋆ ((suc (swap ᴿ+ Δ′) *) a⋆))) (target⋆ E⋆/γ/E)
       ∎
    ⊖⋆-✓ ᵇ∇ᵇ Δ′ (E ᶜ∷ E⋆) γ = {!!}
    ⊖⋆-✓ ᵇ∇ᶜ _ [] _ = ≅-refl
