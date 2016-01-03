@@ -59,23 +59,22 @@ module Transition.Seq.Cofinal.Cofinal where
    ... | refl Δ E/γ with ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , Δ′ + 1 ] E⋆ refl | ⊖⋆-✓ (ᵇ∇ᵇ {a = a} {a′}) (Δ′ + 1) E⋆ refl
    ... | _Δ_ {._} refl E⋆/γ/E | ⊖⋆-✓′ =
       let open ≅-Reasoning; Γ′ = inc⋆ a⋆
-          blah =
-             begin
-                Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) (target⋆ E⋆))
-             ≅⟨ Proc↲ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) _ ⟩
-                Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) (target⋆ E⋆)
-             ≅⟨ Proc↲ (+-assoc (Γ + 2 + Δ′) 1 Γ′) _ ⟩
-                target⋆ E⋆
-             ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) _) ⟩
-                Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) (target⋆ E⋆)
-             ∎
           ≅-cong-swap : ∀ {Δ′ Δ″ : Cxt} {P : Proc (Γ + 2 + Δ′)} {P′ : Proc (Γ + 2 + Δ″)} →
                       Δ′ ≡ Δ″ → P ≅ P′ → ((swap ᴿ+ Δ′) *) P ≅ ((swap ᴿ+ Δ″) *) P′
           ≅-cong-swap = λ { {Δ′ = _} refl ≅-refl → ≅-refl } in
       begin
          ((swap ᴿ+ (Δ′ + (1 + Γ′))) *)
          (Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) (target⋆ E⋆)))
-      ≅⟨ ≅-cong-swap (sym (+-assoc Δ′ 1 Γ′)) blah ⟩
+      ≅⟨ ≅-cong-swap (sym (+-assoc Δ′ 1 Γ′))
+         (begin
+            Proc↱ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) (Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) (target⋆ E⋆))
+         ≅⟨ Proc↲ (+-assoc (Γ + 2) Δ′ (1 + Γ′)) _ ⟩
+            Proc↱ (+-assoc (Γ + 2 + Δ′) 1 Γ′) (target⋆ E⋆)
+         ≅⟨ Proc↲ (+-assoc (Γ + 2 + Δ′) 1 Γ′) _ ⟩
+            target⋆ E⋆
+         ≅⟨ ≅-sym (Proc↲ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) _) ⟩
+            Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) (target⋆ E⋆)
+         ∎) ⟩
          ((swap ᴿ+ (Δ′ + 1 + Γ′)) *) (Proc↱ (+-assoc (Γ + 2) (Δ′ + 1) Γ′) (target⋆ E⋆))
       ≅⟨ ⊖⋆-✓′ ⟩
          target⋆ E⋆/γ/E
