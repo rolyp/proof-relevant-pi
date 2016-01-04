@@ -1,4 +1,4 @@
--- Import everything; useful for validating the whole development. TODO: add a makefile that builds this.
+-- Compile this to validate the whole development. TODO: add a makefile for this.
 module ProofRelevantPi where
 
    open import SharedModules

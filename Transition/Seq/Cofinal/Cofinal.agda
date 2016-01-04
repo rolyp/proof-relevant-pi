@@ -6,12 +6,12 @@ module Transition.Seq.Cofinal.Cofinal where
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬΔ; ᴬ/); open _ᴬ⌣_
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
-   open import Braiding.Proc as ᴮ using (_⋉_; ⋈-to-⋉; target)
+   open import Braiding.Proc as ᴮ using (_⋉_; ⋉̂-to-⋉; target)
    open import Braiding.Transition using (_Δ⁼_; _Δ_; ⊖)
    open import Name as ᴺ using (Cxt; _+_; +-assoc; zero)
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Ren as ᴿ using (suc; swap; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
-   open import Transition.Concur.Cofinal using (﹙_,_,_,_﹚; ⊖-✓)
+   open import Transition.Concur.Cofinal using (⋈[_,_,_,_]; ⊖-✓)
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid)
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
    open import Transition.Seq.Cofinal using (_Δ⋆_; module _Δ⋆_; _Δ_; ⊖⋆[_,_])
@@ -22,7 +22,8 @@ module Transition.Seq.Cofinal.Cofinal where
 
    -- Painful exercise in heterogeneous equality. TODO: consolidate ˣ∇ˣ, ᵇ∇ᶜ and ᶜ∇ᵇ cases, which are identical.
    ⊖⋆-✓ : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {a⋆ R}
-          (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) → let open _Δ⋆_ in S (⊖⋆[ 𝑎 , Δ′ ] E⋆ γ) ≅ S′ (⊖⋆[ 𝑎 , Δ′ ] E⋆ γ)
+          (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ _⋉_ , Γ , 𝑎 , Δ′ ] P P′) →
+          let open _Δ⋆_ in S (⊖⋆[ 𝑎 , Δ′ ] E⋆ γ) ≅ S′ (⊖⋆[ 𝑎 , Δ′ ] E⋆ γ)
    ⊖⋆-✓ ˣ∇ˣ _ [] _ = ≅-refl
    ⊖⋆-✓ {Γ} (ˣ∇ˣ {x = x} {u}) Δ′ {a⋆ = _ ᴬ⋆.ᵇ∷ a⋆} (E ᵇ∷ E⋆) refl with ⊖′[ ˣ∇ˣ {x = x} {u} , Δ′ ] E refl
    ... | refl Δ E/γ with ⊖⋆[ ˣ∇ˣ {x = x} {u} , Δ′ + 1 ] E⋆ refl | ⊖⋆-✓ (ˣ∇ˣ {x = x} {u}) (Δ′ + 1) E⋆ refl
