@@ -18,7 +18,7 @@ module Transition.Concur.Cofinal where
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
-   -- related by a "bound" braid, by a "free" braid, or by identity. Parametric in the underlying notion of braid.
+   -- related by a "bound" braid, by a "free" braid, or by identity. Parametric in the notion of bound braid.
    ﹙_,_,_,_﹚ : (∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
                let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
    ﹙ _ , Γ , ˣ∇ˣ , Δ ﹚ P P′ = P ≡ P′

@@ -1,7 +1,3 @@
--- Symmetric, irreflexive relation that relates processes that differ by exactly one transposition of
--- adjacent binders, without proceeding under prefixes. In the de Bruijn setting, this means relating ν (ν P)
--- to ν (ν (swap * P)), and then closing under constructors other than 0, input and output. Was a congruence
--- in the LFMTP 2015 paper.
 module Braiding.Proc where
 
    open import SharedModules hiding ([_]; preorder) renaming (sym to ≡-sym; trans to ≡-trans)
@@ -17,41 +13,45 @@ module Braiding.Proc where
       open Renameable ⦃...⦄
    open import Ren.Properties
 
-   infix 4 _⋈_
+   -- Symmetric, irreflexive relation that relates processes that differ by exactly one transposition of
+   -- adjacent binders, without proceeding under prefixes. In the de Bruijn setting, this means relating ν (ν P)
+   -- to ν (ν (swap * P)), and then closing under constructors other than 0, input and output. Was a congruence
+   -- in the LFMTP 2015 paper.
+   infix 4 _⋉̂_
    infixl 6 _➕₁_ _➕₂_ _│₁_ _│₂_
-   data _⋈_ {Γ} : Proc Γ → Proc Γ → Set where
+   data _⋉̂_ {Γ} : Proc Γ → Proc Γ → Set where
       -- Braiding cases. Can derive the symmetric version but found it hard to prove involutivity.
-      νν-swapᵣ : ∀ P → ν (ν P) ⋈ ν (ν (swap *) P)
-      νν-swapₗ : ∀ P → ν (ν (swap *) P) ⋈ ν (ν P)
+      νν-swapᵣ : ∀ P → ν (ν P) ⋉̂ ν (ν (swap *) P)
+      νν-swapₗ : ∀ P → ν (ν (swap *) P) ⋉̂ ν (ν P)
       -- Propagate.
-      _➕₁_ : ∀ {P Q R S} → P ⋈ R → Q ≡ S → P ➕ Q ⋈ R ➕ S
-      _➕₂_ : ∀ {P Q R S} → P ≡ R → Q ⋈ S → P ➕ Q ⋈ R ➕ S
-      _│₁_ : ∀ {P Q R S} → P ⋈ R → Q ≡ S → P │ Q ⋈ R │ S
-      _│₂_ : ∀ {P Q R S} → P ≡ R → Q ⋈ S → P │ Q ⋈ R │ S
-      ν_ : ∀ {P R} → P ⋈ R → ν P ⋈ ν R
-      !_ : ∀ {P R} → P ⋈ R → ! P ⋈ ! R
+      _➕₁_ : ∀ {P Q R S} → P ⋉̂ R → Q ≡ S → P ➕ Q ⋉̂ R ➕ S
+      _➕₂_ : ∀ {P Q R S} → P ≡ R → Q ⋉̂ S → P ➕ Q ⋉̂ R ➕ S
+      _│₁_ : ∀ {P Q R S} → P ⋉̂ R → Q ≡ S → P │ Q ⋉̂ R │ S
+      _│₂_ : ∀ {P Q R S} → P ≡ R → Q ⋉̂ S → P │ Q ⋉̂ R │ S
+      ν_ : ∀ {P R} → P ⋉̂ R → ν P ⋉̂ ν R
+      !_ : ∀ {P R} → P ⋉̂ R → ! P ⋉̂ ! R
 
-   ⋈-sym : ∀ {Γ} → Symmetric (_⋈_ {Γ})
-   ⋈-sym (νν-swapᵣ P) = νν-swapₗ P
-   ⋈-sym (νν-swapₗ P) = νν-swapᵣ P
-   ⋈-sym (P ➕₁ refl) = ⋈-sym P ➕₁ refl
-   ⋈-sym (refl ➕₂ Q) = refl ➕₂ ⋈-sym Q
-   ⋈-sym (P │₁ refl) = ⋈-sym P │₁ refl
-   ⋈-sym (refl │₂ Q) = refl │₂ ⋈-sym Q
-   ⋈-sym (ν P) = ν ⋈-sym P
-   ⋈-sym (! P) = ! ⋈-sym P
+   ⋉̂-sym : ∀ {Γ} → Symmetric (_⋉̂_ {Γ})
+   ⋉̂-sym (νν-swapᵣ P) = νν-swapₗ P
+   ⋉̂-sym (νν-swapₗ P) = νν-swapᵣ P
+   ⋉̂-sym (P ➕₁ refl) = ⋉̂-sym P ➕₁ refl
+   ⋉̂-sym (refl ➕₂ Q) = refl ➕₂ ⋉̂-sym Q
+   ⋉̂-sym (P │₁ refl) = ⋉̂-sym P │₁ refl
+   ⋉̂-sym (refl │₂ Q) = refl │₂ ⋉̂-sym Q
+   ⋉̂-sym (ν P) = ν ⋉̂-sym P
+   ⋉̂-sym (! P) = ! ⋉̂-sym P
 
-   ⋈-sym-involutive : ∀ {Γ} {P P′ : Proc Γ} (φ : P ⋈ P′) → ⋈-sym (⋈-sym φ) ≡ φ
-   ⋈-sym-involutive (φ ➕₁ refl) = cong (flip _➕₁_ refl) (⋈-sym-involutive φ)
-   ⋈-sym-involutive (refl ➕₂ ψ) = cong (_➕₂_ refl) (⋈-sym-involutive ψ)
-   ⋈-sym-involutive (φ │₁ refl) = cong (flip _│₁_ refl) (⋈-sym-involutive φ)
-   ⋈-sym-involutive (refl │₂ ψ) = cong (_│₂_ refl) (⋈-sym-involutive ψ)
-   ⋈-sym-involutive (νν-swapᵣ P) = refl
-   ⋈-sym-involutive (νν-swapₗ P) = refl
-   ⋈-sym-involutive (ν φ) = cong ν_ (⋈-sym-involutive φ)
-   ⋈-sym-involutive (! φ) = cong !_ (⋈-sym-involutive φ)
+   ⋉̂-sym-involutive : ∀ {Γ} {P P′ : Proc Γ} (φ : P ⋉̂ P′) → ⋉̂-sym (⋉̂-sym φ) ≡ φ
+   ⋉̂-sym-involutive (φ ➕₁ refl) = cong (flip _➕₁_ refl) (⋉̂-sym-involutive φ)
+   ⋉̂-sym-involutive (refl ➕₂ ψ) = cong (_➕₂_ refl) (⋉̂-sym-involutive ψ)
+   ⋉̂-sym-involutive (φ │₁ refl) = cong (flip _│₁_ refl) (⋉̂-sym-involutive φ)
+   ⋉̂-sym-involutive (refl │₂ ψ) = cong (_│₂_ refl) (⋉̂-sym-involutive ψ)
+   ⋉̂-sym-involutive (νν-swapᵣ P) = refl
+   ⋉̂-sym-involutive (νν-swapₗ P) = refl
+   ⋉̂-sym-involutive (ν φ) = cong ν_ (⋉̂-sym-involutive φ)
+   ⋉̂-sym-involutive (! φ) = cong !_ (⋉̂-sym-involutive φ)
 
-   -- Reflexive closure of ⋈, representing at most (rather than exactly) one braid.
+   -- Reflexive closure of ⋉̂, representing at most (rather than exactly) one braid.
    -- Defined explicitly so we have (a suitably "affine" notion of) compatibility by definition.
    infix 4 _⋉_
    data _⋉_ {Γ} : Proc Γ → Proc Γ → Set where
@@ -64,7 +64,7 @@ module Braiding.Proc where
       _│_ : ∀ {P Q R S} → P ⋉ R → Q ⋉ S → P │ Q ⋉ R │ S
       ν_ : ∀ {P R} → P ⋉ R → ν P ⋉ ν R
       !_ : ∀ {P R} → P ⋉ R → ! P ⋉ ! R
-      -- Close under additional process constructors for reflexivity.
+      -- Close under remaining process constructors for reflexivity.
       Ο : Ο ⋉ Ο
       _•∙_ : ∀ x {P P′} → P ≡ P′ → x •∙ P ⋉ x •∙ P′
       •_〈_〉∙_ : ∀ x y {P P′} → P ≡ P′ → • x 〈 y 〉∙ P ⋉ • x 〈 y 〉∙ P′
@@ -87,15 +87,15 @@ module Braiding.Proc where
    ⋉-reflexive : ∀ {Γ} → _≡_ ⇒ _⋉_ {Γ}
    ⋉-reflexive refl = ⋉-refl
 
-   ⋈-to-⋉ : ∀ {Γ} → _⋈_ {Γ} ⇒ _⋉_
-   ⋈-to-⋉ (νν-swapᵣ P) = νν-swapᵣ P
-   ⋈-to-⋉ (νν-swapₗ P) = νν-swapₗ P
-   ⋈-to-⋉ (φ ➕₁ Q) = ⋈-to-⋉ φ ➕₁ Q
-   ⋈-to-⋉ (P ➕₂ ψ) = P ➕₂ ⋈-to-⋉ ψ
-   ⋈-to-⋉ (φ │₁ Q) = ⋈-to-⋉ φ │ ⋉-reflexive Q
-   ⋈-to-⋉ (P │₂ ψ) = ⋉-reflexive P │ ⋈-to-⋉ ψ
-   ⋈-to-⋉ (ν φ) = ν ⋈-to-⋉ φ
-   ⋈-to-⋉ (! φ) = ! ⋈-to-⋉ φ
+   ⋉̂-to-⋉ : ∀ {Γ} → _⋉̂_ {Γ} ⇒ _⋉_
+   ⋉̂-to-⋉ (νν-swapᵣ P) = νν-swapᵣ P
+   ⋉̂-to-⋉ (νν-swapₗ P) = νν-swapₗ P
+   ⋉̂-to-⋉ (φ ➕₁ Q) = ⋉̂-to-⋉ φ ➕₁ Q
+   ⋉̂-to-⋉ (P ➕₂ ψ) = P ➕₂ ⋉̂-to-⋉ ψ
+   ⋉̂-to-⋉ (φ │₁ Q) = ⋉̂-to-⋉ φ │ ⋉-reflexive Q
+   ⋉̂-to-⋉ (P │₂ ψ) = ⋉-reflexive P │ ⋉̂-to-⋉ ψ
+   ⋉̂-to-⋉ (ν φ) = ν ⋉̂-to-⋉ φ
+   ⋉̂-to-⋉ (! φ) = ! ⋉̂-to-⋉ φ
 
    -- Renaming commutes with ⋉. This isn't a Renameable (i.e. a functor from Ren), but rather
    -- the action of such a functor on a 2-cell.
