@@ -8,29 +8,29 @@ module Transition.Seq.Cofinal where
    open import Action.Ren using (ren-preserves-inc)
    open import Action.Seq as ᴬ⋆ using (Action⋆; inc⋆)
    import Action.Seq.Ren
-   open import Braiding.Proc as ᴮ using (_⋉_; ⋈-to-⋉)
+   open import Braiding.Proc as ᴮ using (_⋉_; ⋉̂-to-⋉)
    open import Name as ᴺ using (_+_; +-assoc; zero)
    open import Ren as ᴿ using (Ren; _ᴿ+_; push; swap); open ᴿ.Renameable ⦃...⦄
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Transition using (_—[_-_]→_; source; target; action)
    open import Transition.Concur using (Concur; module Delta′; ⊖)
-   open import Transition.Concur.Cofinal using (﹙_,_,_,_﹚; ⊖-✓)
+   open import Transition.Concur.Cofinal using (⋈[_,_,_,_]; ⊖-✓)
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid)
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
 
    -- The type of the symmetric residual (γ/E⋆ , E⋆/γ) for a trace. Cofinality as a separate lemma.
    infixl 5 _Δ⋆_
    record _Δ⋆_ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) {Δ′ a⋆} {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {R}
-          (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) : Set where
+          (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ _⋉_ , Γ , 𝑎 , Δ′ ] P P′) : Set where
       constructor _Δ_
       field
          {S S′} : _
-         γ/E⋆ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ + inc⋆ a⋆ ﹚ (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) S
+         γ/E⋆ : ⋈[ _⋉_ , Γ , 𝑎 , Δ′ + inc⋆ a⋆ ] (Proc↱ (+-assoc _ _ (inc⋆ a⋆)) R) S
          E⋆/γ : P′ —[ braid 𝑎 Δ′ a⋆ ]→⋆ S′
 
    -- Mostly case analysis which is glossed in the paper version.
    ⊖⋆[_,_] : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ′ {P P′ : Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ′)} {a⋆ R}
-             (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ﹙ _⋉_ , Γ , 𝑎 , Δ′ ﹚ P P′) → _Δ⋆_ 𝑎 E⋆ γ
+             (E⋆ : P —[ a⋆ ]→⋆ R) (γ : ⋈[ _⋉_ , Γ , 𝑎 , Δ′ ] P P′) → _Δ⋆_ 𝑎 E⋆ γ
    ⊖⋆[ ˣ∇ˣ , _ ] [] γ = γ Δ []
    ⊖⋆[ ˣ∇ˣ {x = x} {u} , Δ′ ] (E ᵇ∷ E⋆) refl with ⊖′[ ˣ∇ˣ {x = x} {u} , Δ′ ] E refl
    ... | γ/E Δ E/γ with ⊖⋆[ ˣ∇ˣ {x = x} {u} , Δ′ + 1 ] E⋆ γ/E
@@ -140,7 +140,7 @@ module Transition.Seq.Cofinal where
       _ᵛ∶⇋∶ᵛ_[_]∷_ : ∀ {R R′} (E : P —[ τ ᶜ - _ ]→ R) (E′ : P —[ τ ᶜ - _ ]→ R′) →
                     (E⌣E′ : E ⌣[ ᵛ∇ᵛ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
                     ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
-                    let _ Δ E′⋆/γ = ⊖⋆[ ᵛ∇ᵛ , 0 ] E′⋆ (⋈-to-⋉ (⊖-✓ E⌣E′)) in
+                    let _ Δ E′⋆/γ = ⊖⋆[ ᵛ∇ᵛ , 0 ] E′⋆ (⋉̂-to-⋉ (⊖-✓ E⌣E′)) in
                     E ᶜ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᶜ∷ E/E′ ᶜ∷ E′⋆/γ
 
       -- Close under trace constructors.

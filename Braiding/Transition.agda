@@ -3,7 +3,7 @@ module Braiding.Transition where
    open import SharedModules
 
    open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
-   open import Braiding.Proc as ᴾ⁼ using (_*⁼; ⋈-sym; _⋉_; ⋉-refl; ⋉-reflexive); open ᴾ⁼._⋉_
+   open import Braiding.Proc as ᴾ⁼ using (_*⁼; _⋉_; ⋉-refl; ⋉-reflexive); open ᴾ⁼._⋉_
    open import Action.Ren
    open import Proc.Ren
    open import Ren as ᴿ using (suc; push; pop; swap; ᴺren; module Renameable); open Renameable ⦃...⦄
