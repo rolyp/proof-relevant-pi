@@ -19,18 +19,18 @@ module Transition.Concur.Cofinal where
 
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
    -- related by a "bound" braid, by a "free" braid, or by identity. Parametric in the notion of bound braid.
-   ﹙_,_,_,_﹚ : (∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
+   ⋈[_,_,_,_] : (∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
                let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
-   ﹙ _ , Γ , ˣ∇ˣ , Δ ﹚ P P′ = P ≡ P′
-   ﹙ _ , Γ , ᵇ∇ᵇ , Δ ﹚ P P′ = ((swap ᴿ+ Δ) *) P ≡ P′ -- free braid
-   ﹙ _ , Γ , ᵇ∇ᶜ , Δ ﹚ P P′ = P ≡ P′
-   ﹙ _ , Γ , ᶜ∇ᵇ , Δ ﹚ P P′ = P ≡ P′
-   ﹙ _ , Γ , ᶜ∇ᶜ , Δ ﹚ P P′ = P ≡ P′
-   ﹙ _⋉̂_ , Γ , ᵛ∇ᵛ , Δ ﹚ P P′ = P ⋉̂ P′ -- bound braid
+   ⋈[ _ , Γ , ˣ∇ˣ , Δ ] P P′ = P ≡ P′
+   ⋈[ _ , Γ , ᵇ∇ᵇ , Δ ] P P′ = ((swap ᴿ+ Δ) *) P ≡ P′ -- free braid
+   ⋈[ _ , Γ , ᵇ∇ᶜ , Δ ] P P′ = P ≡ P′
+   ⋈[ _ , Γ , ᶜ∇ᵇ , Δ ] P P′ = P ≡ P′
+   ⋈[ _ , Γ , ᶜ∇ᶜ , Δ ] P P′ = P ≡ P′
+   ⋈[ _⋉̂_ , Γ , ᵛ∇ᵛ , Δ ] P P′ = P ⋉̂ P′ -- bound braid
 
    ⋉̂[_,_,_] : ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
                let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
-   ⋉̂[ Γ , 𝑎 , Δ ] = ﹙ _⋉̂_ , Γ , 𝑎 , Δ ﹚
+   ⋉̂[ Γ , 𝑎 , Δ ] = ⋈[ _⋉̂_ , Γ , 𝑎 , Δ ]
 
    postulate
       -- Candidate for a universal property. May require some tweaks to the definition of concurrency
@@ -167,7 +167,7 @@ module Transition.Concur.Cofinal where
 
    -- Now symmetrise.
    ⊖-✓ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-         (𝐸 : E ⌣[ 𝑎 ] E′) → ﹙ _⋉̂_ , Γ , 𝑎 , zero ﹚ (S (⊖ 𝐸)) (subst Proc (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖ 𝐸)))
+         (𝐸 : E ⌣[ 𝑎 ] E′) → ⋈[ _⋉̂_ , Γ , 𝑎 , zero ] (S (⊖ 𝐸)) (subst Proc (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖ 𝐸)))
    ⊖-✓ (inj₁ 𝐸) = ⊖₁-✓ 𝐸
    ⊖-✓ (inj₂ 𝐸′) with ⊖₁ 𝐸′ | ⊖₁-✓ 𝐸′
    ⊖-✓ {𝑎 = ˣ∇ˣ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≡S′ = sym S≡S′
@@ -186,7 +186,7 @@ module Transition.Concur.Cofinal where
    ⊖-✓ {𝑎 = ᵛ∇ᵛ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≈S′ = ⋉̂-sym S≈S′
 
    ⊖-✓-⋉ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-         (𝐸 : E ⌣[ 𝑎 ] E′) → ﹙ _⋉_ , Γ , 𝑎 , zero ﹚ (S (⊖ 𝐸)) (subst Proc (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖ 𝐸)))
+         (𝐸 : E ⌣[ 𝑎 ] E′) → ⋈[ _⋉_ , Γ , 𝑎 , zero ] (S (⊖ 𝐸)) (subst Proc (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖ 𝐸)))
    ⊖-✓-⋉ {𝑎 = ˣ∇ˣ} = ⊖-✓
    ⊖-✓-⋉ {𝑎 = ᵇ∇ᵇ} = ⊖-✓
    ⊖-✓-⋉ {𝑎 = ᵇ∇ᶜ} = ⊖-✓
