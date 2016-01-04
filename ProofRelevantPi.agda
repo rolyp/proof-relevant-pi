@@ -4,7 +4,6 @@ module ProofRelevantPi where
    open import SharedModules
    open import Action
    open import Action.Concur
-   open import Action.Concur.Action
    open import Action.Ren
    open import Action.Seq
    open import Action.Seq.Ren
