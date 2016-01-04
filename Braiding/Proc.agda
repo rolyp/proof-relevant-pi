@@ -51,8 +51,9 @@ module Braiding.Proc where
    ⋉̂-sym-involutive (ν φ) = cong ν_ (⋉̂-sym-involutive φ)
    ⋉̂-sym-involutive (! φ) = cong !_ (⋉̂-sym-involutive φ)
 
-   -- Reflexive closure of ⋉̂, representing at most (rather than exactly) one braid.
-   -- Defined explicitly so we have (a suitably "affine" notion of) compatibility by definition.
+   -- Generalise ⋉̂ in two ways. First, close under reflexivity, to allow braids to be dropped (e.g. under
+   -- a choice). Second, permit a braid to be duplicated across a parallel composition; needed for exponentials.
+   -- The "depth" of the braiding remains (at most) 1.
    infix 4 _⋉_
    data _⋉_ {Γ} : Proc Γ → Proc Γ → Set where
       -- Braiding cases.
