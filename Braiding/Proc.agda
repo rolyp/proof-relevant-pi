@@ -51,8 +51,8 @@ module Braiding.Proc where
    ⋉̂-sym-involutive (ν φ) = cong ν_ (⋉̂-sym-involutive φ)
    ⋉̂-sym-involutive (! φ) = cong !_ (⋉̂-sym-involutive φ)
 
-   -- Generalise ⋉̂ in two ways. First, close under reflexivity, to allow braids to be dropped (e.g. under
-   -- a choice). Second, permit a braid to be duplicated across a parallel composition; needed for exponentials.
+   -- Generalise ⋉̂ in two ways. First, close under reflexivity, to allow a braid to be dropped (e.g. under
+   -- a choice). Second, permit a braid to be duplicated across a parallel composition, for exponentials.
    -- The "depth" of the braiding remains (at most) 1.
    infix 4 _⋉_
    data _⋉_ {Γ} : Proc Γ → Proc Γ → Set where
