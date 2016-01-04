@@ -8,8 +8,8 @@ module Action.Concur where
    open import Ren as ᴿ using (push); open ᴿ.Renameable ⦃...⦄
 
    -- The 5 (modulo symmetry) kinds of concurrent action. The ˣ∇ˣ and ᵛ∇ᵛ cases are the interesting ones; the
-   -- former represents concurrent extrusions of the same binder, and the latter concurrent extrusion rendezvous
-   -- (necessarily of distinct binders). TODO: make the component actions explicit, as per the paper?
+   -- former represents concurrent extrusions of the same binder, and the latter concurrent extrusion-synchronisations
+   -- TODO: make the component actions explicit, as per the paper?
    infix 4 _ᴬ⌣_
    data _ᴬ⌣_ {Γ} : (a a′ : Action Γ) → Set where
       ˣ∇ˣ : {x u : Name Γ} → (• x) ᵇ ᴬ⌣ (• u) ᵇ

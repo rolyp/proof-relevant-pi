@@ -26,8 +26,9 @@ module Transition.Concur.Cofinal where
    ⋈[ _ , Γ , ᵇ∇ᶜ , Δ ] P P′ = P ≡ P′
    ⋈[ _ , Γ , ᶜ∇ᵇ , Δ ] P P′ = P ≡ P′
    ⋈[ _ , Γ , ᶜ∇ᶜ , Δ ] P P′ = P ≡ P′
-   ⋈[ _⋉̂_ , Γ , ᵛ∇ᵛ , Δ ] P P′ = P ⋉̂ P′ -- bound braid
+   ⋈[ _⋉_ , Γ , ᵛ∇ᵛ , Δ ] P P′ = P ⋉ P′ -- bound braid
 
+   -- Specialise cofinality to the irreflexive notion of bound braid.
    ⋉̂[_,_,_] : ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
                let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
    ⋉̂[ Γ , 𝑎 , Δ ] = ⋈[ _⋉̂_ , Γ , 𝑎 , Δ ]
