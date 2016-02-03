@@ -1,6 +1,6 @@
 module Transition.Seq.Example where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
 
    open import Action as ᴬ using (); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Concur using (module _ᴬ⌣_); open _ᴬ⌣_

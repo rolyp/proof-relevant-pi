@@ -1,7 +1,7 @@
 -- A renaming as a context morphism.
 module Ren where
 
-   open import SharedModules hiding (Involutive)
+   open import ProofRelevantPiCommon hiding (Involutive)
 
    open import Data.Nat.Properties.Simple
    import Relation.Binary.EqReasoning as EqReasoning

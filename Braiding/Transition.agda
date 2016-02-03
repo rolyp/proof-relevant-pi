@@ -1,6 +1,6 @@
 module Braiding.Transition where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
 
    open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Braiding.Proc as ᴾ⁼ using (_*⁼; _⋉_; ⋉-refl; ⋉-reflexive); open ᴾ⁼._⋉_

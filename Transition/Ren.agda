@@ -1,7 +1,7 @@
 -- Residual of transitions and renamings.
 module Transition.Ren where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
 
    open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; _ᵇ; _ᶜ; inc); open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Action.Ren

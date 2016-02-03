@@ -4,7 +4,7 @@ open import Ren as ᴿ using (Renameable; Ren)
 -- Agda can't infer the renaming arguments in many cases; these wrappers make them more explicit.
 module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
    import Relation.Binary.EqReasoning as EqReasoning
 
    open import Ext

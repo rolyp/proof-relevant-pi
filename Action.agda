@@ -1,7 +1,7 @@
 -- Action transforming process in Γ.
 module Action where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
    open import Name as ᴺ using (Cxt; Name; zero)
 
    data Actionᵇ (Γ : Cxt) : Set where

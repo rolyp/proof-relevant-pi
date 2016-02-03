@@ -1,7 +1,7 @@
 -- Residual of a renaming and an action. TODO: define ρ / a.
 module Action.Ren where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
 
    open import Ext
 

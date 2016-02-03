@@ -1,7 +1,7 @@
 -- Extend residual of a renaming and an action to action sequences.
 module Action.Seq.Ren where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
    import Relation.Binary.EqReasoning as EqReasoning
 
    open import Ext

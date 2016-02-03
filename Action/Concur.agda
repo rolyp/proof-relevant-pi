@@ -1,6 +1,6 @@
 module Action.Concur where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
 
    open import Action as ᴬ using (Action; Actionᵇ; Actionᶜ; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    import Action.Ren
@@ -8,8 +8,8 @@ module Action.Concur where
    open import Ren as ᴿ using (push); open ᴿ.Renameable ⦃...⦄
 
    -- The 5 (modulo symmetry) kinds of concurrent action. The ˣ∇ˣ and ᵛ∇ᵛ cases are the interesting ones; the
-   -- former represents concurrent extrusions of the same binder, and the latter concurrent extrusion-synchronisations
-   -- TODO: make the component actions explicit, as per the paper?
+   -- former represents concurrent extrusions of the _same_ binder, and the latter concurrent extrusion
+   -- synchronisations of _different_ binders. TODO: make the component actions explicit, as per the paper?
    infix 4 _ᴬ⌣_
    data _ᴬ⌣_ {Γ} : (a a′ : Action Γ) → Set where
       ˣ∇ˣ : {x u : Name Γ} → (• x) ᵇ ᴬ⌣ (• u) ᵇ

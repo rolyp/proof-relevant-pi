@@ -1,6 +1,6 @@
 module Proc where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
 
    open import Name as ᴺ using (Cxt; Name; _+_)
 

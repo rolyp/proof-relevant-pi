@@ -1,6 +1,6 @@
 module Transition.Concur.Cofinal where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
    import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ

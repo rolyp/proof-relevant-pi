@@ -1,6 +1,6 @@
 module Action.Seq where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
    open import Action using (Action; Actionᵇ; Actionᶜ; inc)
    open import Name as ᴺ using (Cxt; Name; _+_)
 

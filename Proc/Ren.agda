@@ -1,7 +1,7 @@
 -- Apply a renaming to a process.
 module Proc.Ren where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
    import Relation.Binary.EqReasoning as EqReasoning
 
    open import Proc as ᴾ using (Proc); open ᴾ.Proc

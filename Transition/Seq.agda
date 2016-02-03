@@ -2,7 +2,7 @@
 -- Concatenation/append proved unmanageable when defining ≃ (heterogeneous equality was very difficult).
 module Transition.Seq where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
 
    open import Action using (_ᵇ; _ᶜ)
    open import Action.Seq using (Action⋆; inc⋆; []; _ᵇ∷_; _ᶜ∷_)

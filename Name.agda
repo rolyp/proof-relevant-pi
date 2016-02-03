@@ -1,7 +1,7 @@
 -- de Bruijn indices.
 module Name where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
 
    open import Data.Fin public
       using (zero; suc; fromℕ; toℕ) renaming (Fin to Name; raise to shift)

@@ -1,7 +1,7 @@
 -- Symmetric residual of a transition and a cofinality witness.
 module Transition.Concur.Cofinal.Transition where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
    import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ

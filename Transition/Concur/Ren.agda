@@ -1,7 +1,7 @@
 -- Concurrent transitions are closed under renamings.
 module Transition.Concur.Ren where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
 
    open import Action as ᴬ using (Action); open ᴬ.Action; open ᴬ.Actionᵇ
    open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖); open _ᴬ⌣_

@@ -1,6 +1,6 @@
 module Braiding.Proc where
 
-   open import SharedModules hiding ([_]; preorder) renaming (sym to ≡-sym; trans to ≡-trans)
+   open import ProofRelevantPiCommon hiding ([_]; preorder) renaming (sym to ≡-sym; trans to ≡-trans)
    import Relation.Binary.EqReasoning as EqReasoning
    import Relation.Binary.PreorderReasoning
 

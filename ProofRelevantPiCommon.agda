@@ -1,4 +1,4 @@
-module SharedModules where
+module ProofRelevantPiCommon where
 
    open import Algebra.FunctionProperties public
    open import Algebra.Structures public

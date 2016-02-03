@@ -1,7 +1,7 @@
 -- Compile this to validate the whole development. TODO: add a makefile for this.
 module ProofRelevantPi where
 
-   open import SharedModules
+   open import ProofRelevantPiCommon
    open import Action
    open import Action.Concur
    open import Action.Ren
