@@ -76,7 +76,7 @@ module Ren where
 
    pop : ∀ {Γ} (x : Name Γ) → Ren (Γ + 1) Γ
    pop x zero = x
-   pop _ (ᴺ.suc n) = n
+   pop _ (ᴺ.suc y) = y
 
    pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) → ρ ∘ pop {Γ} x ≃ₑ pop {Γ′} ((ρ *) x) ∘ suc ρ
    pop-comm _ x zero = refl
