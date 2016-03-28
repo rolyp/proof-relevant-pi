@@ -2,7 +2,7 @@
 module Action where
 
    open import ProofRelevantPiCommon
-   open import Name as ᴺ using (Cxt; Name; zero)
+   open import Name as ᴺ using (Cxt; Name; zero; _+_)
 
    data Actionᵇ (Γ : Cxt) : Set where
       _• : Name Γ → Actionᵇ Γ          -- bound input
@@ -20,8 +20,11 @@ module Action where
    Action↱ = subst Action
    Action↲ = ≡-subst-removable Action
 
-   -- An action optionally bumps the context by a variable. We specify this "relatively" so that we can
-   -- easily show that how an action operates on the context is preserved by a renaming.
+   -- An action optionally bumps the context by a variable. Specify this "relatively" to make it
+   -- easy to show that the way an action operates on the context is preserved by renamings.
    inc : ∀ {Γ} → Action Γ → Cxt
    inc (_ ᵇ) = ᴺ.suc zero
    inc (_ ᶜ) = zero
+
+   target : ∀ {Γ} → Action Γ → Cxt
+   target {Γ} a = Γ + inc a
