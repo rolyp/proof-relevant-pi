@@ -1,7 +1,6 @@
 # Proof-relevant pi calculus
 
-This the Agda development accompanying the paper
-[Proof-relevant pi calculus]
+Agda development accompanying the paper [Proof-relevant pi calculus]
 (http://eptcs.web.cse.unsw.edu.au/paper.cgi?LFMTP15:6), presented at
 [LFMTP 2015](http://lfmtp.org/workshops/2015/).
 
@@ -21,15 +20,11 @@ structure.
 
 # To do
 
-* <s>`Everything` module that imports everything, for easy build validation</s>
 * Reorganise packages relating to cofinality and causal equivalence
 * Proof of symmetry for causal equivalence
 * Vertical composition of braidings
 * Several examples of causal equivalence (trickier than it should be)
-* <s>Residuation-preserves-concurrency for *symmetric* version of
-  concurrency (also tricky)</s>
 * Proof of ⊖-preserves-sym
-* <s>Proof of Theorem 3 from paper (cubical transition)</s>
 * Tighten connection to paper, e.g. key theorems, naming conventions
 * Typeclass for residuals (improve overloading mess somehow, and problem
   with use of Δ as type, constructor and meta-variable)

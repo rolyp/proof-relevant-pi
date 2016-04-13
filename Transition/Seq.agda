@@ -5,7 +5,7 @@ module Transition.Seq where
    open import ProofRelevantPiCommon
 
    open import Action using (_ᵇ; _ᶜ)
-   open import Action.Seq using (Action⋆; inc⋆; []; _ᵇ∷_; _ᶜ∷_)
+   open import Action.Seq using (Action⋆; module Action⋆; inc⋆); open Action⋆
    open import Name using (_+_; +-assoc)
    open import Proc using (Proc; Proc↱)
    open import Transition using (_—[_-_]→_)
@@ -22,6 +22,9 @@ module Transition.Seq where
 
    source⋆ : ∀ {Γ} {P : Proc Γ} {a⋆ : Action⋆ Γ} {R} → P —[ a⋆ ]→⋆ R → Proc Γ
    source⋆ {P = P} _ = P
+
+   action⋆ : ∀ {Γ} {P : Proc Γ} {a⋆ : Action⋆ Γ} {R} → P —[ a⋆ ]→⋆ R → Action⋆ Γ
+   action⋆ {a⋆ = a⋆} _ = a⋆
 
    target⋆ : ∀ {Γ} {P : Proc Γ} {a⋆ : Action⋆ Γ} {R} → P —[ a⋆ ]→⋆ R → Proc (Γ + inc⋆ a⋆)
    target⋆ {R = R} _ = R
