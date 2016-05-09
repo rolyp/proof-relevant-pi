@@ -30,9 +30,9 @@ module Transition.Concur.Cofinal where
    ⋈[ _⋉_ , Γ , ᵛ∇ᵛ , Δ ] P P′ = P ⋉ P′ -- bound braid
 
    -- Specialise cofinality to the irreflexive notion of bound braid.
-   ⋉̂[_,_,_] : ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
+   ⋈̂[_,_,_] : ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
                let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
-   ⋉̂[ Γ , 𝑎 , Δ ] = ⋈[ _⋉̂_ , Γ , 𝑎 , Δ ]
+   ⋈̂[ Γ , 𝑎 , Δ ] = ⋈[ _⋉̂_ , Γ , 𝑎 , Δ ]
 
    ⋈-sym : (_⋉̂_ : ∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
            (∀ {Γ} → Symmetric (_⋉̂_ {Γ})) → Symmetric (⋈[ _⋉̂_ , Γ , 𝑎 , Δ ])
@@ -51,11 +51,14 @@ module Transition.Concur.Cofinal where
    ⋈-sym _⋉̂_ Γ ᶜ∇ᶜ Δ ⋉̂-sym = sym
    ⋈-sym _⋉̂_ Γ ᵛ∇ᵛ Δ ⋉̂-sym = ⋉̂-sym
 
+   ⋈̂-sym : ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) → Symmetric (⋈̂[ Γ , 𝑎 , Δ ])
+   ⋈̂-sym Γ 𝑎 Δ = ⋈-sym _⋉̂_ Γ 𝑎 Δ ⋉̂-sym
+
    open Delta′
 
    -- Called γ in the paper.
    ⊖₁-✓ : ∀ {Γ} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {P R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋉̂[ Γ , 𝑎 , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
+          (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈̂[ Γ , 𝑎 , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
    ⊖₁-✓ (E ᵇ│ᵇ F) = sym (cong₂ _│_ (swap∘push (target E)) (swap∘suc-push (target F)))
    ⊖₁-✓ (E ᵇ│ᶜ F) = refl
    ⊖₁-✓ (E ᶜ│ᵇ F) = refl
