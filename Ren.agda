@@ -100,6 +100,19 @@ module Ren where
    swap-involutive (ᴺ.suc zero) = refl
    swap-involutive (ᴺ.suc (ᴺ.suc _)) = refl
 
+   swap+-involutive : ∀ {Γ} Δ → Involutive (swap {Γ} ᴿ+ Δ)
+   swap+-involutive Δ x =
+      let open EqReasoning (setoid _) in
+      begin
+         (swap ᴿ+ Δ) ((swap ᴿ+ Δ) x)
+      ≡⟨ +-preserves-∘ Δ swap swap _ ⟩
+         ((swap ∘ swap) ᴿ+ Δ) x
+      ≡⟨ +-preserves-≃ₑ Δ swap-involutive _ ⟩
+         (id ᴿ+ Δ) x
+      ≡⟨ +-preserves-id Δ _ ⟩
+         id x
+      ∎
+
    swap∘suc-swap∘swap : ∀ {Γ} → swap ∘ suc (swap {Γ}) ∘ swap ≃ₑ suc swap ∘ swap ∘ suc swap
    swap∘suc-swap∘swap zero = refl
    swap∘suc-swap∘swap (ᴺ.suc zero) = refl

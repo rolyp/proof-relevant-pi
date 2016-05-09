@@ -20,7 +20,7 @@ module Transition.Concur.Cofinal where
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
    -- related by a "bound" braid, by a "free" braid, or by identity. Parametric in the notion of bound braid.
    ⋈[_,_,_,_] : (∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
-               let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
+                let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
    ⋈[ _ , Γ , ˣ∇ˣ , Δ ] P P′ = P ≡ P′
    ⋈[ _ , Γ , ᵇ∇ᵇ , Δ ] P P′ = ((swap ᴿ+ Δ) *) P ≡ P′ -- free braid
    ⋈[ _ , Γ , ᵇ∇ᶜ , Δ ] P P′ = P ≡ P′
@@ -33,16 +33,18 @@ module Transition.Concur.Cofinal where
                let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
    ⋉̂[ Γ , 𝑎 , Δ ] = ⋈[ _⋉̂_ , Γ , 𝑎 , Δ ]
 
-   postulate
-      -- Candidate for a universal property. May require some tweaks to the definition of concurrency
-      -- to make true, and will certainly take effort to prove. Needs various lemmas, such as P → R ⇒ P ≠ R.
-      ⊖-unique : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-                (𝐸 : E ⌣₁[ 𝑎 ] E′) {S S′} (G : R —[ _ - _ ]→ S) (G′ : R′ —[ _ - _ ]→ S′) →
-                ⋉̂[ Γ , 𝑎 , zero ] S (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) S′) → ⊖₁ 𝐸 ≡ G ᵀΔ G′
+   ⋈-sym : (_⋉̂_ : ∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
+           (∀ {Γ} → Symmetric (_⋉̂_ {Γ})) → Symmetric (⋈[ _⋉̂_ , Γ , 𝑎 , Δ ])
+   ⋈-sym _⋉̂_ Γ ˣ∇ˣ Δ ⋉̂-sym = sym
+   ⋈-sym _⋉̂_ Γ ᵇ∇ᵇ Δ ⋉̂-sym x = {!!}
+   ⋈-sym _⋉̂_ Γ ᵇ∇ᶜ Δ ⋉̂-sym = sym
+   ⋈-sym _⋉̂_ Γ ᶜ∇ᵇ Δ ⋉̂-sym = sym
+   ⋈-sym _⋉̂_ Γ ᶜ∇ᶜ Δ ⋉̂-sym = sym
+   ⋈-sym _⋉̂_ Γ ᵛ∇ᵛ Δ ⋉̂-sym = ⋉̂-sym
 
    open Delta′
 
-   -- Called 'cofin' in the paper.
+   -- Called γ in the paper.
    ⊖₁-✓ : ∀ {Γ} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {P R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
           (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋉̂[ Γ , 𝑎 , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬ⊖-✓ 𝑎)) (S′ (⊖₁ 𝐸)))
    ⊖₁-✓ (E ᵇ│ᵇ F) = sym (cong₂ _│_ (swap∘push (target E)) (swap∘suc-push (target F)))
@@ -125,11 +127,10 @@ module Transition.Concur.Cofinal where
          ∎) (⊖₁-✓ 𝐹))
    ⊖₁-✓ (𝐸 │ᵥ′ 𝐹) rewrite sym (⊖₁-✓ 𝐸) | sym (⊖₁-✓ 𝐹) = νν-swapᵣ _
    ⊖₁-✓ (ν• 𝐸) = ⊖₁-✓ 𝐸
-   ⊖₁-✓ (ν•ᵇ 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
-   ... | _ = cong (swap *) (⊖₁-✓ 𝐸)
+   ⊖₁-✓ (ν•ᵇ 𝐸) = cong (swap *) (⊖₁-✓ 𝐸)
    ⊖₁-✓ (ν•ᶜ 𝐸) = ⊖₁-✓ 𝐸
    ⊖₁-✓ (νᵇᵇ_ {a = x •} {a} 𝐸) with (swap *ᵇ) (E/E′ (⊖₁ 𝐸)) | (swap *ᵇ) (E′/E (⊖₁ 𝐸))
-   ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push a =
+   ... | _ | _ rewrite swap∘push∘push x | swap∘push∘push a =
       cong ν_ (
          let open EqReasoning (setoid _); S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
          begin

@@ -15,11 +15,11 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    module Renameable′ = Renameable {A = A}; open Renameable′ ⦃...⦄ -- fix A for all uses of *
    open Renameable ⦃...⦄ using () renaming (_* to _*′)
 
-   +-id-elim : ∀ {Γ} n → (id ᴿ+ n) * ≃ₑ id {A = A (Γ + n)}
-   +-id-elim n a =
+   +-id-elim : ∀ {Γ} Δ → (id ᴿ+ Δ) * ≃ₑ id {A = A (Γ + Δ)}
+   +-id-elim Δ a =
       begin
-         ((id ᴿ+ n) *) a
-      ≡⟨ *-preserves-≃ₑ (+-preserves-id n) _ ⟩
+         ((id ᴿ+ Δ) *) a
+      ≡⟨ *-preserves-≃ₑ (+-preserves-id Δ) _ ⟩
          (id *) a
       ≡⟨ *-preserves-id _ ⟩
          a

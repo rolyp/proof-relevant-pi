@@ -4,7 +4,7 @@ module Name where
    open import ProofRelevantPiCommon
 
    open import Data.Fin public
-      using (zero; suc; fromℕ; toℕ) renaming (Fin to Name; raise to shift)
+      using (zero; suc; pred; fromℕ; toℕ) renaming (Fin to Name; raise to shift)
    open import Data.Fin.Properties public using (_≟_)
    open import Data.Nat as Nat public using (zero; suc) renaming (ℕ to Cxt; module ℕ to Cxt)
 
