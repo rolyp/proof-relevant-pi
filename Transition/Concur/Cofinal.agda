@@ -10,7 +10,8 @@ module Transition.Concur.Cofinal where
    open import Name as ᴺ using (Cxt; Name; toℕ; _+_; zero)
    open import Proc using (Proc); open Proc
    import Proc.Ren
-   open import Ren as ᴿ using (Ren; ᴺren; suc; _ᴿ+_; pop; push; swap; +-preserves-id); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; ᴺren; suc; _ᴿ+_; pop; push; swap; +-preserves-id; +-preserves-involutivity);
+      open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
    open import Transition.Concur
@@ -36,7 +37,15 @@ module Transition.Concur.Cofinal where
    ⋈-sym : (_⋉̂_ : ∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
            (∀ {Γ} → Symmetric (_⋉̂_ {Γ})) → Symmetric (⋈[ _⋉̂_ , Γ , 𝑎 , Δ ])
    ⋈-sym _⋉̂_ Γ ˣ∇ˣ Δ ⋉̂-sym = sym
-   ⋈-sym _⋉̂_ Γ ᵇ∇ᵇ Δ ⋉̂-sym x = {!!}
+   ⋈-sym _⋉̂_ Γ ᵇ∇ᵇ Δ ⋉̂-sym {i = P′} {j = P} P† =
+      let open EqReasoning (setoid _) in
+      begin
+         ((swap ᴿ+ Δ) *) P
+      ≡⟨ cong ((swap ᴿ+ Δ) *) (sym P†) ⟩
+         ((swap ᴿ+ Δ) *) (((swap ᴿ+ Δ) *) P′)
+      ≡⟨ involutive (+-preserves-involutivity swap Δ swap-involutive) _ ⟩
+         P′
+      ∎
    ⋈-sym _⋉̂_ Γ ᵇ∇ᶜ Δ ⋉̂-sym = sym
    ⋈-sym _⋉̂_ Γ ᶜ∇ᵇ Δ ⋉̂-sym = sym
    ⋈-sym _⋉̂_ Γ ᶜ∇ᶜ Δ ⋉̂-sym = sym

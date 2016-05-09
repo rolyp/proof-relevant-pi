@@ -95,11 +95,6 @@ module Ren where
    Involutive : ∀ {Γ} → Ren Γ Γ → Set
    Involutive ρ = ρ ∘ ρ ≃ₑ id
 
-   swap-involutive : ∀ {Γ} → Involutive (swap {Γ})
-   swap-involutive zero = refl
-   swap-involutive (ᴺ.suc zero) = refl
-   swap-involutive (ᴺ.suc (ᴺ.suc _)) = refl
-
    +-preserves-involutivity : ∀ {Γ} (ρ : Ren Γ Γ) Δ → Involutive ρ → Involutive (ρ ᴿ+ Δ)
    +-preserves-involutivity ρ Δ ρ-involutive x =
       let open EqReasoning (setoid _) in
@@ -112,6 +107,11 @@ module Ren where
       ≡⟨ +-preserves-id Δ _ ⟩
          id x
       ∎
+
+   swap-involutive : ∀ {Γ} → Involutive (swap {Γ})
+   swap-involutive zero = refl
+   swap-involutive (ᴺ.suc zero) = refl
+   swap-involutive (ᴺ.suc (ᴺ.suc _)) = refl
 
    swap∘suc-swap∘swap : ∀ {Γ} → swap ∘ suc (swap {Γ}) ∘ swap ≃ₑ suc swap ∘ swap ∘ suc swap
    swap∘suc-swap∘swap zero = refl
