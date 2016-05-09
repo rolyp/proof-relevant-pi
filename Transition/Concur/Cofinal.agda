@@ -34,10 +34,10 @@ module Transition.Concur.Cofinal where
                let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
    ⋈̂[ Γ , 𝑎 , Δ ] = ⋈[ _⋉̂_ , Γ , 𝑎 , Δ ]
 
-   ⋈-sym : (_⋉̂_ : ∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
+   ⋈-sym : (_⋉̂_ : ∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
            (∀ {Γ} → Symmetric (_⋉̂_ {Γ})) → Symmetric (⋈[ _⋉̂_ , Γ , 𝑎 , Δ ])
-   ⋈-sym _⋉̂_ Γ ˣ∇ˣ Δ ⋉̂-sym = sym
-   ⋈-sym _⋉̂_ Γ ᵇ∇ᵇ Δ ⋉̂-sym {i = P′} {j = P} P† =
+   ⋈-sym _⋉̂_ ˣ∇ˣ Δ ⋉̂-sym = sym
+   ⋈-sym _⋉̂_ ᵇ∇ᵇ Δ ⋉̂-sym {i = P′} {j = P} P† =
       let open EqReasoning (setoid _) in
       begin
          ((swap ᴿ+ Δ) *) P
@@ -46,13 +46,13 @@ module Transition.Concur.Cofinal where
       ≡⟨ involutive (+-preserves-involutivity swap Δ swap-involutive) _ ⟩
          P′
       ∎
-   ⋈-sym _⋉̂_ Γ ᵇ∇ᶜ Δ ⋉̂-sym = sym
-   ⋈-sym _⋉̂_ Γ ᶜ∇ᵇ Δ ⋉̂-sym = sym
-   ⋈-sym _⋉̂_ Γ ᶜ∇ᶜ Δ ⋉̂-sym = sym
-   ⋈-sym _⋉̂_ Γ ᵛ∇ᵛ Δ ⋉̂-sym = ⋉̂-sym
+   ⋈-sym _⋉̂_ ᵇ∇ᶜ Δ ⋉̂-sym = sym
+   ⋈-sym _⋉̂_ ᶜ∇ᵇ Δ ⋉̂-sym = sym
+   ⋈-sym _⋉̂_ ᶜ∇ᶜ Δ ⋉̂-sym = sym
+   ⋈-sym _⋉̂_ ᵛ∇ᵛ Δ ⋉̂-sym = ⋉̂-sym
 
-   ⋈̂-sym : ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) → Symmetric (⋈̂[ Γ , 𝑎 , Δ ])
-   ⋈̂-sym Γ 𝑎 Δ = ⋈-sym _⋉̂_ Γ 𝑎 Δ ⋉̂-sym
+   ⋈̂-sym : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) → Symmetric (⋈̂[ Γ , 𝑎 , Δ ])
+   ⋈̂-sym 𝑎 Δ = ⋈-sym _⋉̂_ 𝑎 Δ ⋉̂-sym
 
    open Delta′
 
