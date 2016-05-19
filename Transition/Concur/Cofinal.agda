@@ -4,7 +4,7 @@ module Transition.Concur.Cofinal where
    import Relation.Binary.EqReasoning as EqReasoning
 
    open import Action as ᴬ using (Action; inc); open ᴬ.Action; open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
-   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⌣-sym; ᴬ⊖; ᴬγ; Action₂); open _ᴬ⌣_
+   open import Action.Concur using (_ᴬ⌣_; module _ᴬ⌣_; ᴬ⊖; ᴬγ; Action₂); open _ᴬ⌣_
    import Action.Ren
    open import Braiding.Proc using (_⋉̂_; module _⋉̂_; ⋉̂-sym; _⋉_; ⋉̂-to-⋉); open _⋉̂_
    open import Name as ᴺ using (Cxt; Name; toℕ; _+_; zero)
@@ -21,7 +21,7 @@ module Transition.Concur.Cofinal where
    -- Cofinality is generalised from the usual "on the nose" notion to means target states which are either
    -- related by a "bound" braid, by a "free" braid, or by identity. Parametric in the notion of bound braid.
    ⋈[_,_,_,_] : (∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
-                Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ) → Proc (Γ + inc a′ + inc (π₂ (ᴬ⊖ 𝑎)) + Δ) → Set
+                let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
    ⋈[ _ , Γ , ˣ∇ˣ , Δ ] P P′ = P ≡ P′
    ⋈[ _ , Γ , ᵇ∇ᵇ , Δ ] P P′ = ((swap ᴿ+ Δ) *) P ≡ P′ -- free braid
    ⋈[ _ , Γ , ᵇ∇ᶜ , Δ ] P P′ = P ≡ P′
@@ -31,22 +31,9 @@ module Transition.Concur.Cofinal where
 
    -- Specialise cofinality to the irreflexive notion of bound braid.
    ⋈̂[_,_,_] : ∀ Γ {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
-              Proc (Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ) → Proc (Γ + inc a′ + inc (π₂ (ᴬ⊖ 𝑎)) + Δ) → Set
+               let Γ′ = Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) in Proc (Γ′ + Δ) → Proc (Γ′ + Δ) → Set
    ⋈̂[ Γ , 𝑎 , Δ ] = ⋈[ _⋉̂_ , Γ , 𝑎 , Δ ]
 
-   nib : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) Δ → Γ + inc a + inc (π₁ (ᴬ⊖ 𝑎)) + Δ ≡ Γ + inc a + inc (π₂ (ᴬ⊖ (ᴬ⌣-sym 𝑎))) + Δ
-   nib ˣ∇ˣ Δ = refl
-   nib ᵇ∇ᵇ Δ = refl
-   nib ᵇ∇ᶜ Δ = refl
-   nib ᶜ∇ᵇ Δ = refl
-   nib ᶜ∇ᶜ Δ = refl
-   nib ᵛ∇ᵛ Δ = refl
-
-   postulate
-      ⋈-sym : (_⋉̂_ : ∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
-              (∀ {Γ} → Symmetric (_⋉̂_ {Γ})) →
-              ∀ {P P′} → ⋈[ _⋉̂_ , Γ , 𝑎 , Δ ] P P′ → ⋈[ _⋉̂_ , Γ , ᴬ⌣-sym 𝑎 , Δ ] P′ (Proc↱ (nib 𝑎 Δ) P)
-{-
    ⋈-sym : (_⋉̂_ : ∀ {Γ} → Proc Γ → Proc Γ → Set) → ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
            (∀ {Γ} → Symmetric (_⋉̂_ {Γ})) → Symmetric (⋈[ _⋉̂_ , Γ , 𝑎 , Δ ])
    ⋈-sym _⋉̂_ ˣ∇ˣ Δ ⋉̂-sym = sym
@@ -64,16 +51,14 @@ module Transition.Concur.Cofinal where
    ⋈-sym _⋉̂_ ᶜ∇ᶜ Δ ⋉̂-sym = sym
    ⋈-sym _⋉̂_ ᵛ∇ᵛ Δ ⋉̂-sym = ⋉̂-sym
 
--}
-   ⋈̂-sym : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) →
-           ∀ {P P′} → ⋈̂[ Γ , 𝑎 , Δ ] P P′ → ⋈̂[ Γ , ᴬ⌣-sym 𝑎 , Δ ] P′ (Proc↱ (nib 𝑎 Δ) P)
+   ⋈̂-sym : ∀ {Γ} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) (Δ : Cxt) → Symmetric (⋈̂[ Γ , 𝑎 , Δ ])
    ⋈̂-sym 𝑎 Δ = ⋈-sym _⋉̂_ 𝑎 Δ ⋉̂-sym
 
    open Delta′
 
    -- Called γ in the paper.
    γ₁ : ∀ {Γ} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {P R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈̂[ Γ , 𝑎 , zero ] (S (⊖₁ 𝐸)) (S′ (⊖₁ 𝐸))
+          (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈̂[ Γ , 𝑎 , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬγ 𝑎)) (S′ (⊖₁ 𝐸)))
    γ₁ (E ᵇ│ᵇ F) = sym (cong₂ _│_ (swap∘push (target E)) (swap∘suc-push (target F)))
    γ₁ (E ᵇ│ᶜ F) = refl
    γ₁ (E ᶜ│ᵇ F) = refl
@@ -196,7 +181,7 @@ module Transition.Concur.Cofinal where
 
    -- Now symmetrise.
    γ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-         (𝐸 : E ⌣[ 𝑎 ] E′) → ⋈[ _⋉̂_ , Γ , 𝑎 , zero ] (S (⊖ 𝐸)) (S′ (⊖ 𝐸))
+         (𝐸 : E ⌣[ 𝑎 ] E′) → ⋈[ _⋉̂_ , Γ , 𝑎 , zero ] (S (⊖ 𝐸)) (subst Proc (sym (ᴬγ 𝑎)) (S′ (⊖ 𝐸)))
    γ (inj₁ 𝐸) = γ₁ 𝐸
    γ (inj₂ 𝐸′) with ⊖₁ 𝐸′ | γ₁ 𝐸′
    γ {𝑎 = ˣ∇ˣ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≡S′ = sym S≡S′
@@ -215,7 +200,7 @@ module Transition.Concur.Cofinal where
    γ {𝑎 = ᵛ∇ᵛ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≈S′ = ⋉̂-sym S≈S′
 
    γ-⋉ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-         (𝐸 : E ⌣[ 𝑎 ] E′) → ⋈[ _⋉_ , Γ , 𝑎 , zero ] (S (⊖ 𝐸)) (S′ (⊖ 𝐸))
+         (𝐸 : E ⌣[ 𝑎 ] E′) → ⋈[ _⋉_ , Γ , 𝑎 , zero ] (S (⊖ 𝐸)) (subst Proc (sym (ᴬγ 𝑎)) (S′ (⊖ 𝐸)))
    γ-⋉ {𝑎 = ˣ∇ˣ} = γ
    γ-⋉ {𝑎 = ᵇ∇ᵇ} = γ
    γ-⋉ {𝑎 = ᵇ∇ᶜ} = γ

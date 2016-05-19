@@ -18,7 +18,7 @@ Compiles with:
 See the appendix of the accompanying paper for notes on module
 structure.
 
-# To do
+# Wishlist
 
 * Reorganise packages relating to cofinality and causal equivalence
 * Proof of symmetry for causal equivalence
@@ -30,6 +30,18 @@ structure.
   with use of Δ as type, constructor and meta-variable)
 
 # Design notes
+
+## 0.3 [In progress] CONCUR 2016 version
+
+The "cofinality" relation currently requires the two processes are
+required to be in the same context (as does the definition of the
+symmetric residual). This requires one of the two interleavings to
+determine the target context, with the implied coercion on the other
+process.
+
+Experimented with a more symmetric version (based on the symmetry of
+ᴬ⌣). This removes some of the coercions, but introduces others relating
+to the involutivity of symmetry, so left things as they are.
 
 ## 0.2 Precise cofinality
 
