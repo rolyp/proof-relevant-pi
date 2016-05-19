@@ -33,15 +33,14 @@ structure.
 
 ## 0.3 [In progress] CONCUR 2016 version
 
-The "cofinality" relation currently requires the two processes are
-required to be in the same context (as does the definition of the
-symmetric residual). This requires one of the two interleavings to
-determine the target context, with the implied coercion on the other
-process.
-
-Experimented with a more symmetric version (based on the symmetry of
-ᴬ⌣). This removes some of the coercions, but introduces others relating
-to the involutivity of symmetry, so left things as they are.
+The "cofinality" relation currently relates two processes which are in
+the same context (as does the definition of the symmetric residual).
+This requires one of the two interleavings to determine the target
+context, with the implied coercion on the other process. A more
+symmetric version (based on the symmetry of ᴬ⌣) simplifies in some ways
+(some of these coercions disappear), but complexifies in others, since
+Agda does not know that symmetry is involutive. Decided to leave things
+as they are.
 
 ## 0.2 Precise cofinality
 
