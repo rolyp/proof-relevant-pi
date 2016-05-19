@@ -118,14 +118,14 @@ module Transition.Concur where
    ⌣-sym (inj₁ 𝐸) = inj₂ (subst (Concur₁ _ _) (sym (ᴬ⌣-sym-involutive _)) 𝐸)
    ⌣-sym (inj₂ 𝐸) = inj₁ 𝐸
 
-   -- The type of the symmetric residual of concurrent transitions E and E′. Because cofinality of action
-   -- residuals isn't baked in, need to coerce targets of E/E′ and E′/E to the same type.
+   -- The type of the symmetric residual of concurrent transitions E and E′.
    record Delta′ {Γ P} {a a′ : Action Γ} (𝑎 : a ᴬ⌣ a′) {R R′}
                 (E : P —[ a - _ ]→ R) (E′ : P —[ a′ - _ ]→ R′) : Set where
       constructor Delta
       a′/a = π₁ (ᴬ⊖ 𝑎)
       a/a′ = π₂ (ᴬ⊖ 𝑎)
       field
+         -- Cofinality of action residuals isn't baked in, so need to coerce S and S' to same type.
          {S S′} : _
          E′/E : R —[ a′/a - _ ]→ S
          E/E′ : R′ —[ a/a′ - _ ]→ S′

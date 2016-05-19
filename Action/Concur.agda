@@ -62,11 +62,11 @@ module Action.Concur where
    Action₂ : Cxt → Set
    Action₂ Γ = Σ[ a ∈ Action Γ ] Action (Γ + inc a)
 
-   -- Cofinality of action residuals is simply agreement on target context.
-   ᴬ⊖-✓ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Γ + inc a + inc (π₁ (ᴬ⊖ a⌣a′)) ≡ Γ + inc a′ + inc (π₂ (ᴬ⊖ a⌣a′))
-   ᴬ⊖-✓ ˣ∇ˣ = refl
-   ᴬ⊖-✓ ᵇ∇ᵇ = refl
-   ᴬ⊖-✓ ᵇ∇ᶜ = refl
-   ᴬ⊖-✓ ᶜ∇ᵇ = refl
-   ᴬ⊖-✓ ᶜ∇ᶜ = refl
-   ᴬ⊖-✓ ᵛ∇ᵛ = refl
+   -- Called ᴬγ by analogy with γ witnessing cofinality for concurrent transitions.
+   ᴬγ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Γ + inc a + inc (π₁ (ᴬ⊖ a⌣a′)) ≡ Γ + inc a′ + inc (π₂ (ᴬ⊖ a⌣a′))
+   ᴬγ ˣ∇ˣ = refl
+   ᴬγ ᵇ∇ᵇ = refl
+   ᴬγ ᵇ∇ᶜ = refl
+   ᴬγ ᶜ∇ᵇ = refl
+   ᴬγ ᶜ∇ᶜ = refl
+   ᴬγ ᵛ∇ᵛ = refl
