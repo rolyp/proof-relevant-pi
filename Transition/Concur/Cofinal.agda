@@ -56,7 +56,6 @@ module Transition.Concur.Cofinal where
 
    open Delta′
 
-   -- Called γ in the paper.
    γ₁ : ∀ {Γ} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {P R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
           (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈̂[ Γ , 𝑎 , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬγ 𝑎)) (S′ (⊖₁ 𝐸)))
    γ₁ (E ᵇ│ᵇ F) = sym (cong₂ _│_ (swap∘push (target E)) (swap∘suc-push (target F)))

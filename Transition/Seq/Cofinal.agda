@@ -14,7 +14,7 @@ module Transition.Seq.Cofinal where
    open import Proc using (Proc; Proc↱; Proc↲)
    open import Transition using (_—[_-_]→_; source; target; action)
    open import Transition.Concur using (Concur; module Delta′; ⊖)
-   open import Transition.Concur.Cofinal using (⋈[_,_,_,_]; ⊖-✓)
+   open import Transition.Concur.Cofinal using (⋈[_,_,_,_]; γ)
    open import Transition.Concur.Cofinal.Transition using (⊖′[_,_]; _Δ_; braid)
    open import Transition.Seq as ᵀ⋆ using (_—[_]→⋆_; source⋆; target⋆); open ᵀ⋆._—[_]→⋆_
 
@@ -120,27 +120,27 @@ module Transition.Seq.Cofinal where
       _ᶜ∶⇋∶ᶜ_[_]∷_ : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᶜ - _ ]→ R′) →
                      (E⌣E′ : E ⌣[ ᶜ∇ᶜ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
                      ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
-                     let _ Δ E′⋆/γ = ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , 0 ] E′⋆ (⊖-✓ E⌣E′) in
+                     let _ Δ E′⋆/γ = ⊖⋆[ ᶜ∇ᶜ {a = a} {a′} , 0 ] E′⋆ (γ E⌣E′) in
                      E ᶜ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᶜ∷ E/E′ ᶜ∷ E′⋆/γ
       _ᶜ∶⇋∶ᵇ_[_]∷_ : ∀ {a a′} {R R′} (E : P —[ a ᶜ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
                     (E⌣E′ : E ⌣[ ᶜ∇ᵇ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
                     ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
-                    let _ Δ E′⋆/γ = ⊖⋆[ ᶜ∇ᵇ {a = a} {a′} , 0 ] E′⋆ (⊖-✓ E⌣E′) in
+                    let _ Δ E′⋆/γ = ⊖⋆[ ᶜ∇ᵇ {a = a} {a′} , 0 ] E′⋆ (γ E⌣E′) in
                     E ᶜ∷ E′/E ᵇ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᶜ∷ E′⋆/γ
       _ᵇ∶⇋∶ᵇ_[_]∷_ : ∀ {a a′} {R R′} (E : P —[ a ᵇ - _ ]→ R) (E′ : P —[ a′ ᵇ - _ ]→ R′) →
                     (E⌣E′ : E ⌣[ ᵇ∇ᵇ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
                     ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
-                    let _ Δ E′⋆/γ = ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , 0 ] E′⋆ (⊖-✓ E⌣E′) in
+                    let _ Δ E′⋆/γ = ⊖⋆[ ᵇ∇ᵇ {a = a} {a′} , 0 ] E′⋆ (γ E⌣E′) in
                     E ᵇ∷ E′/E ᵇ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᵇ∷ E′⋆/γ
       _ˣ∶⇋∶ˣ_[_]∷_ : ∀ {x u} {R R′} (E : P —[ (• x) ᵇ - _ ]→ R) (E′ : P —[ (• u) ᵇ - _ ]→ R′) →
                     (E⌣E′ : E ⌣[ ˣ∇ˣ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
                     ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
-                    let _ Δ E′⋆/γ = ⊖⋆[ ˣ∇ˣ {x = x} {u} , 0 ] E′⋆ (⊖-✓ E⌣E′) in
+                    let _ Δ E′⋆/γ = ⊖⋆[ ˣ∇ˣ {x = x} {u} , 0 ] E′⋆ (γ E⌣E′) in
                     E ᵇ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᵇ∷ E/E′ ᶜ∷ E′⋆/γ
       _ᵛ∶⇋∶ᵛ_[_]∷_ : ∀ {R R′} (E : P —[ τ ᶜ - _ ]→ R) (E′ : P —[ τ ᶜ - _ ]→ R′) →
                     (E⌣E′ : E ⌣[ ᵛ∇ᵛ ] E′) → let open Delta′ (⊖ E⌣E′); Q = target E′/E in
                     ∀ {a⋆ S a′⋆ S′} {E⋆ : Q —[ a⋆ ]→⋆ S} {E′⋆ : Q —[ a′⋆ ]→⋆ S′} → E⋆ ≃ E′⋆ →
-                    let _ Δ E′⋆/γ = ⊖⋆[ ᵛ∇ᵛ , 0 ] E′⋆ (⋉̂-to-⋉ (⊖-✓ E⌣E′)) in
+                    let _ Δ E′⋆/γ = ⊖⋆[ ᵛ∇ᵛ , 0 ] E′⋆ (⋉̂-to-⋉ (γ E⌣E′)) in
                     E ᶜ∷ E′/E ᶜ∷ E⋆ ≃ E′ ᶜ∷ E/E′ ᶜ∷ E′⋆/γ
 
       -- Close under trace constructors.
