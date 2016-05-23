@@ -44,7 +44,7 @@ module Action.Concur where
    ᴬΔ {Γ} ᶜ∇ᶜ = Actionᶜ Γ , _ᶜ
    ᴬΔ {Γ} ᵛ∇ᵛ = Actionᶜ Γ , _ᶜ
 
-   -- The residual a′/a. Note that ᵇ∇ᵇ may also relate two bound outputs, but only if they represent
+   -- The residual a′/a. Note that ᵇ∇ᵇ may also relate two bound outputs, as long as they represent
    -- extrusions of distinct binders.
    ᴬ/ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → π₁ (ᴬΔ a⌣a′)
    ᴬ/ (ˣ∇ˣ {u = u}) = • ᴺ.suc u 〈 zero 〉

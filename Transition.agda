@@ -35,11 +35,14 @@ module Transition where
    source : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Proc Γ
    source {P = P} _ = P
 
+   out : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Σ[ a′ ∈ Action Γ ] Proc (Γ + inc a′)
+   out {a = a} {R} _ = a , R
+
    action : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Action Γ
-   action {a = a} _ = a
+   action = π₁ ∘ out
 
    target : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Proc (Γ + inc a)
-   target {R = R} _ = R
+   target = π₂ ∘ out
 
    -- Existentially quantified version.
    record TransitionFrom {Γ} (P : Proc Γ) : Set where
