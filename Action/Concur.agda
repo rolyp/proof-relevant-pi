@@ -54,7 +54,7 @@ module Action.Concur where
    ᴬ/ (ᶜ∇ᶜ {a′ = a′}) = a′
    ᴬ/ ᵛ∇ᵛ = τ
 
-   -- Symmetrise.
+   -- (a′/a, a/a′).
    ᴬ⊖ : ∀ {Γ} {a a′ : Action Γ} (a⌣a′ : a ᴬ⌣ a′) → Action (Γ + inc a) × Action (Γ + inc a′)
    ᴬ⊖ a⌣a′ = π₂ (ᴬΔ a⌣a′) (ᴬ/ a⌣a′) , π₂ (ᴬΔ (ᴬ⌣-sym a⌣a′)) (ᴬ/ (ᴬ⌣-sym a⌣a′))
 
