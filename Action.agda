@@ -26,5 +26,5 @@ module Action where
    inc (_ ᵇ) = ᴺ.suc zero
    inc (_ ᶜ) = zero
 
-   target : ∀ {Γ} → Action Γ → Cxt
-   target {Γ} a = Γ + inc a
+   tgt : ∀ {Γ} → Action Γ → Cxt
+   tgt {Γ} a = Γ + inc a
