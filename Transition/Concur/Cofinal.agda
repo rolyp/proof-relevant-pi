@@ -13,7 +13,7 @@ module Transition.Concur.Cofinal where
    open import Ren as ᴿ using (Ren; ᴺren; suc; _ᴿ+_; pop; push; swap; +-preserves-id; +-preserves-involutivity);
       open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
-   open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
+   open import Transition as ᵀ using (_—[_-_]→_; tgt); open ᵀ._—[_-_]→_
    open import Transition.Concur
       using (Concur₁; module Concur₁; Concur; Delta′; Delta; module Delta′; ⊖₁; ⊖); open Concur₁
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
@@ -57,13 +57,13 @@ module Transition.Concur.Cofinal where
    open Delta′
 
    γ₁ : ∀ {Γ} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {P R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-          (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈̂[ Γ , 𝑎 , zero ] (S (⊖₁ 𝐸)) (Proc↱ (sym (ᴬγ 𝑎)) (S′ (⊖₁ 𝐸)))
-   γ₁ (E ᵇ│ᵇ F) = sym (cong₂ _│_ (swap∘push (target E)) (swap∘suc-push (target F)))
+          (𝐸 : E ⌣₁[ 𝑎 ] E′) → ⋈̂[ Γ , 𝑎 , zero ] (tgt₁ (⊖₁ 𝐸)) (Proc↱ (sym (ᴬγ 𝑎)) (tgt₂(⊖₁ 𝐸)))
+   γ₁ (E ᵇ│ᵇ F) = sym (cong₂ _│_ (swap∘push (tgt E)) (swap∘suc-push (tgt F)))
    γ₁ (E ᵇ│ᶜ F) = refl
    γ₁ (E ᶜ│ᵇ F) = refl
    γ₁ (E ᶜ│ᶜ F) = refl
    γ₁ (_│•ᵇ_ {y = y} {a = a} 𝐸 F) = cong₂ _│_ (
-      let open EqReasoning (setoid _); S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
+      let open EqReasoning (setoid _); S = tgt₁ (⊖₁ 𝐸); S′ = tgt₂(⊖₁ 𝐸) in
       begin
          (pop (push y) *) S
       ≡⟨ cong (pop (push y) *) (swap-swap (γ₁ 𝐸)) ⟩
@@ -77,7 +77,7 @@ module Transition.Concur.Cofinal where
    γ₁ (𝐸 │ᵥᵇ F) = cong ν_ (cong₂ _│_ (swap-swap (γ₁ 𝐸)) (swap∘push _))
    γ₁ (𝐸 │ᵥᶜ F) = cong ν_ (cong₂ _│_ (γ₁ 𝐸) refl)
    γ₁ (_ᵇ│ᵥ_ {x = x} {𝑎 = ˣ∇ˣ} E 𝐹) = cong₂ _│_ (pop-zero∘suc-push _) (γ₁ 𝐹)
-   γ₁ (_ᵇ│ᵥ_ {𝑎 = ᵇ∇ᵇ} E 𝐹) rewrite swap∘push (target E) = cong ν_ (cong₂ _│_ refl (swap-swap (γ₁ 𝐹)))
+   γ₁ (_ᵇ│ᵥ_ {𝑎 = ᵇ∇ᵇ} E 𝐹) rewrite swap∘push (tgt E) = cong ν_ (cong₂ _│_ refl (swap-swap (γ₁ 𝐹)))
    γ₁ (E ᶜ│ᵥ 𝐹) = cong ν_ (cong₂ _│_ refl (γ₁ 𝐹))
    γ₁ (_│ᵇᵇ_ {𝑎 = ˣ∇ˣ} P 𝐹) = cong₂ _│_ refl (γ₁ 𝐹)
    γ₁ (_│ᵇᵇ_ {𝑎 = ᵇ∇ᵇ} P 𝐹) = cong₂ _│_ (swap∘push∘push P) (γ₁ 𝐹)
@@ -93,7 +93,7 @@ module Transition.Concur.Cofinal where
    γ₁ (𝐸 ᵛᵛ│ Q) = (γ₁ 𝐸) │₁ refl
    γ₁ (𝐸 ➕₁ Q) = γ₁ 𝐸
    γ₁ (_│•_ {y = y} {z = z} 𝐸 𝐹) = cong₂ _│_ (
-      let open EqReasoning (setoid _); S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
+      let open EqReasoning (setoid _); S = tgt₁ (⊖₁ 𝐸); S′ = tgt₂(⊖₁ 𝐸) in
       begin
          (pop z *) ((suc (pop y) *) S)
       ≡⟨ sym (pop-pop-swap y z _) ⟩
@@ -103,7 +103,7 @@ module Transition.Concur.Cofinal where
       ∎) (γ₁ 𝐹)
    γ₁ (_│•ᵥ_ {y = y} 𝐸 𝐹) with (pop y *ᵇ) (E′/E (⊖₁ 𝐸))
    ... | _ = cong ν_ (cong₂ _│_ (
-      let open EqReasoning (setoid _); S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸) in
+      let open EqReasoning (setoid _); S₁ = tgt₁ (⊖₁ 𝐸); S′₁ = tgt₂(⊖₁ 𝐸) in
       begin
          (suc (pop y) *) S₁
       ≡⟨ cong (suc (pop y) *) (sym (swap-involutive _ )) ⟩
@@ -115,7 +115,7 @@ module Transition.Concur.Cofinal where
       ∎) (γ₁ 𝐹))
    γ₁ (_│ᵥ•_ {y = y} 𝐸 𝐹) with (pop y *ᵇ) (E′/E (⊖₁ 𝐸))
    ... | _ =
-      let open EqReasoning (setoid _); S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸) in
+      let open EqReasoning (setoid _); S₁ = tgt₁ (⊖₁ 𝐸); S′₁ = tgt₂(⊖₁ 𝐸) in
       cong ν_ (cong₂ _│_ (
          begin
             (pop (push y) *) S₁
@@ -125,7 +125,7 @@ module Transition.Concur.Cofinal where
             (suc (pop y) *) S′₁
          ∎) (γ₁ 𝐹))
    γ₁ (𝐸 │ᵥ 𝐹) =
-      let open EqReasoning (setoid _); S₁ = S (⊖₁ 𝐸); S′₁ = S′ (⊖₁ 𝐸) in
+      let open EqReasoning (setoid _); S₁ = tgt₁ (⊖₁ 𝐸); S′₁ = tgt₂(⊖₁ 𝐸) in
       cong ν_ (cong₂ _│_ (
          begin
             (pop zero *) S₁
@@ -141,7 +141,7 @@ module Transition.Concur.Cofinal where
    γ₁ (νᵇᵇ_ {a = x •} {a} 𝐸) with (swap *ᵇ) (E/E′ (⊖₁ 𝐸)) | (swap *ᵇ) (E′/E (⊖₁ 𝐸))
    ... | _ | _ rewrite swap∘push∘push x | swap∘push∘push a =
       cong ν_ (
-         let open EqReasoning (setoid _); S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
+         let open EqReasoning (setoid _); S = tgt₁ (⊖₁ 𝐸); S′ = tgt₂(⊖₁ 𝐸) in
          begin
             (suc swap *) ((swap *) ((suc swap *) S))
          ≡⟨ sym (swap∘suc-swap∘swap _) ⟩
@@ -150,7 +150,7 @@ module Transition.Concur.Cofinal where
             (swap *) ((suc swap *) S′)
          ∎)
    γ₁ (νᵇᵇ_ {a = • x} {u •} 𝐸) = cong ν_ (
-      let open EqReasoning (setoid _); S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
+      let open EqReasoning (setoid _); S = tgt₁ (⊖₁ 𝐸); S′ = tgt₂(⊖₁ 𝐸) in
       begin
          (suc swap *) ((swap *) ((suc swap *) S))
       ≡⟨ sym (swap∘suc-swap∘swap _) ⟩
@@ -159,7 +159,7 @@ module Transition.Concur.Cofinal where
          (swap *) ((suc swap *) S′)
       ∎)
    γ₁ (νᵇᵇ_ {a = • x} {• u} 𝐸) = cong ν_ (
-      let open EqReasoning (setoid _); S = S (⊖₁ 𝐸); S′ = S′ (⊖₁ 𝐸) in
+      let open EqReasoning (setoid _); S = tgt₁ (⊖₁ 𝐸); S′ = tgt₂(⊖₁ 𝐸) in
       begin
          (suc swap *) ((swap *) ((suc swap *) S))
       ≡⟨ sym (swap∘suc-swap∘swap _) ⟩
@@ -178,12 +178,12 @@ module Transition.Concur.Cofinal where
 
    -- Now symmetrise.
    γ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-         (𝐸 : E ⌣[ 𝑎 ] E′) → ⋈[ _⋉̂_ , Γ , 𝑎 , zero ] (S (⊖ 𝐸)) (subst Proc (sym (ᴬγ 𝑎)) (S′ (⊖ 𝐸)))
+         (𝐸 : E ⌣[ 𝑎 ] E′) → ⋈[ _⋉̂_ , Γ , 𝑎 , zero ] (tgt₁ (⊖ 𝐸)) (subst Proc (sym (ᴬγ 𝑎)) (tgt₂(⊖ 𝐸)))
    γ (inj₁ 𝐸) = γ₁ 𝐸
    γ (inj₂ 𝐸) with ⊖₁ 𝐸 | γ₁ 𝐸
    γ {𝑎 = ˣ∇ˣ} (inj₂ 𝐸) | _ ᵀΔ _ | S≡S′ = sym S≡S′
    γ {𝑎 = ᵇ∇ᵇ} (inj₂ 𝐸) | E′/E ᵀΔ E/E′ | swap*S≡S′ =
-      let open EqReasoning (setoid _); S = target E′/E; S′ = target E/E′ in
+      let open EqReasoning (setoid _); S = tgt E′/E; S′ = tgt E/E′ in
       begin
          (swap *) S′
       ≡⟨ cong (swap *) (sym swap*S≡S′) ⟩
@@ -197,7 +197,7 @@ module Transition.Concur.Cofinal where
    γ {𝑎 = ᵛ∇ᵛ} (inj₂ 𝐸′) | _ ᵀΔ _ | S≈S′ = ⋉̂-sym S≈S′
 
    γ-⋉ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′}
-         (𝐸 : E ⌣[ 𝑎 ] E′) → ⋈[ _⋉_ , Γ , 𝑎 , zero ] (S (⊖ 𝐸)) (subst Proc (sym (ᴬγ 𝑎)) (S′ (⊖ 𝐸)))
+         (𝐸 : E ⌣[ 𝑎 ] E′) → ⋈[ _⋉_ , Γ , 𝑎 , zero ] (tgt₁ (⊖ 𝐸)) (subst Proc (sym (ᴬγ 𝑎)) (tgt₂(⊖ 𝐸)))
    γ-⋉ {𝑎 = ˣ∇ˣ} = γ
    γ-⋉ {𝑎 = ᵇ∇ᵇ} = γ
    γ-⋉ {𝑎 = ᵇ∇ᶜ} = γ
