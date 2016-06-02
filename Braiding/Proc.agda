@@ -70,11 +70,11 @@ module Braiding.Proc where
       _•∙_ : ∀ x {P P′} → P ≡ P′ → x •∙ P ⋉ x •∙ P′
       •_〈_〉∙_ : ∀ x y {P P′} → P ≡ P′ → • x 〈 y 〉∙ P ⋉ • x 〈 y 〉∙ P′
 
-   source : ∀ {Γ} {P P′ : Proc Γ} → P ⋉ P′ → Proc Γ
-   source {P = P} _ = P
+   src : ∀ {Γ} {P P′ : Proc Γ} → P ⋉ P′ → Proc Γ
+   src {P = P} _ = P
 
-   target : ∀ {Γ} {P P′ : Proc Γ} → P ⋉ P′ → Proc Γ
-   target {P′ = P′} _ = P′
+   tgt : ∀ {Γ} {P P′ : Proc Γ} → P ⋉ P′ → Proc Γ
+   tgt {P′ = P′} _ = P′
 
    ⋉-refl : ∀ {Γ} → Reflexive (_⋉_ {Γ})
    ⋉-refl {x = Ο} = Ο

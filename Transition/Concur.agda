@@ -12,7 +12,7 @@ module Transition.Concur where
    open import Ren.Properties
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    import Proc.Ren
-   open import Transition as ᵀ using (_—[_-_]→_; target); open ᵀ._—[_-_]→_
+   open import Transition as ᵀ using (_—[_-_]→_; tgt); open ᵀ._—[_-_]→_
    open import Transition.Ren using (_*ᵇ; _*ᶜ)
 
    -- Whether two coinitial evaluation contexts are concurrent; define asymmetrically and then close under symmetry.
@@ -125,10 +125,10 @@ module Transition.Concur where
       a′/a = π₁ (ᴬ⊖ 𝑎)
       a/a′ = π₂ (ᴬ⊖ 𝑎)
       field
-         -- Cofinality of action residuals isn't baked in, so need to coerce S and S' to same type.
-         {S S′} : _
-         E′/E : R —[ a′/a - _ ]→ S
-         E/E′ : R′ —[ a/a′ - _ ]→ S′
+         -- Cofinality of action residuals isn't baked in, so need to coerce tgt₁ and tgt₂ to same type.
+         {tgt₁ tgt₂} : _
+         E′/E : R —[ a′/a - _ ]→ tgt₁
+         E/E′ : R′ —[ a/a′ - _ ]→ tgt₂
 
    infixl 5 Delta
    syntax Delta E E′ = E ᵀΔ E′
@@ -137,26 +137,27 @@ module Transition.Concur where
    open import Ren.Properties
    open Delta′
 
-   -- The symmetric residual (E′/E , E/E′). The paper defines the residual using E and E′, with E ⌣ E′
-   -- implicit; here we work directly with the proof of E ⌣ E′ and leave E and E′ implicit.
+   -- The symmetric residual (E′/E , E/E′). We use explicit substitutions rather than with/rewrite clauses;
+   -- otherwise the generated with-functions at higher types become ill-typed.
    ⊖₁ : ∀ {Γ P} {a a′ : Action Γ} {𝑎 : a ᴬ⌣ a′} {R R′} {E : P —[ a - _ ]→ R} {E′ : P —[ a′ - _ ]→ R′} →
         E ⌣₁[ 𝑎 ] E′ → E Δ′[ 𝑎 ] E′
-   ⊖₁ (E ᵇ│ᵇ F) = target E │ᵇ (push *ᵇ) F ᵀΔ (push *ᵇ) E ᵇ│ target F
-   ⊖₁ (E ᵇ│ᶜ F) = target E │ᶜ (push *ᶜ) F ᵀΔ E ᵇ│ target F
-   ⊖₁ (E ᶜ│ᵇ F) = target E │ᵇ F ᵀΔ (push *ᶜ) E ᶜ│ target F
-   ⊖₁ (E ᶜ│ᶜ F) = target E │ᶜ F ᵀΔ E ᶜ│ target F
-   ⊖₁ (_│•ᵇ_ {y = y} {a = a} 𝐸 F) with (pop y *ᵇ) (E/E′ (⊖₁ 𝐸))
-   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E (⊖₁ 𝐸) │• (push *ᶜ) F ᵀΔ pop-y*E/E′ ᵇ│ target F
-   ⊖₁ (_│•ᶜ_ {y = y} {a = a} 𝐸 F) with (pop y *ᶜ) (E/E′ (⊖₁ 𝐸))
-   ... | pop-y*E/E′ rewrite pop∘push y a = E′/E (⊖₁ 𝐸) │• F ᵀΔ pop-y*E/E′ ᶜ│ target F
-   ⊖₁ (_ᵇ│•_ {y = y} E 𝐹) = (push *ᵇ) E ᵀ.│• E′/E (⊖₁ 𝐹) ᵀΔ (pop y *) (target E) │ᵇ E/E′ (⊖₁ 𝐹)
-   ⊖₁ (_ᶜ│•_ {y = y} E 𝐹) = E │• E′/E (⊖₁ 𝐹) ᵀΔ (pop y *) (target E) │ᶜ E/E′ (⊖₁ 𝐹)
-   ⊖₁ (𝐸 │ᵥᵇ F) = E′/E (⊖₁ 𝐸) │ᵥ (push *ᵇ) F ᵀΔ νᵇ (E/E′ (⊖₁ 𝐸) ᵇ│ target F)
-   ⊖₁ (𝐸 │ᵥᶜ F) = E′/E (⊖₁ 𝐸) │ᵥ F ᵀΔ νᶜ (E/E′ (⊖₁ 𝐸) ᶜ│ target F)
-   ⊖₁ (_ᵇ│ᵥ_ {𝑎 = ˣ∇ˣ} E 𝐹) with (push *ᵇ) E
-   ... | push*E = push*E │• E′/E (⊖₁ 𝐹) ᵀΔ ν• (target E │ᶜ E/E′ (⊖₁ 𝐹))
-   ⊖₁ (_ᵇ│ᵥ_ {𝑎 = ᵇ∇ᵇ} E 𝐹) = (push *ᵇ) E │ᵥ E′/E (⊖₁ 𝐹) ᵀΔ νᵇ (target E │ᵇ E/E′ (⊖₁ 𝐹))
-   ⊖₁ (E ᶜ│ᵥ 𝐹) = E │ᵥ E′/E (⊖₁ 𝐹) ᵀΔ νᶜ (target E │ᶜ E/E′ (⊖₁ 𝐹))
+   ⊖₁ (E ᵇ│ᵇ F) = tgt E │ᵇ (push *ᵇ) F ᵀΔ (push *ᵇ) E ᵇ│ tgt F
+   ⊖₁ (E ᵇ│ᶜ F) = tgt E │ᶜ (push *ᶜ) F ᵀΔ E ᵇ│ tgt F
+   ⊖₁ (E ᶜ│ᵇ F) = tgt E │ᵇ F ᵀΔ (push *ᶜ) E ᶜ│ tgt F
+   ⊖₁ (E ᶜ│ᶜ F) = tgt E │ᶜ F ᵀΔ E ᶜ│ tgt F
+   ⊖₁ (_│•ᵇ_ {y = y} {a = a} {E′ = E′} 𝐸 F) =
+      E′/E (⊖₁ 𝐸) │• (push *ᶜ) F ᵀΔ
+      subst (λ a → _ —[ a ᵇ - _ ]→ (suc (pop y) *) (tgt₂ (⊖₁ 𝐸))) (pop∘push y a) ((pop y *ᵇ) (E/E′ (⊖₁ 𝐸))) ᵇ│ tgt F
+   ⊖₁ (_│•ᶜ_ {y = y} {a = a} 𝐸 F) =
+      E′/E (⊖₁ 𝐸) │• F ᵀΔ
+      subst (λ a → _ —[ a ᶜ - _ ]→ (pop y *) (tgt₂ (⊖₁ 𝐸))) (pop∘push y a) ((pop y *ᶜ) (E/E′ (⊖₁ 𝐸))) ᶜ│ tgt F
+   ⊖₁ (_ᵇ│•_ {y = y} E 𝐹) = (push *ᵇ) E ᵀ.│• E′/E (⊖₁ 𝐹) ᵀΔ (pop y *) (tgt E) │ᵇ E/E′ (⊖₁ 𝐹)
+   ⊖₁ (_ᶜ│•_ {y = y} E 𝐹) = E │• E′/E (⊖₁ 𝐹) ᵀΔ (pop y *) (tgt E) │ᶜ E/E′ (⊖₁ 𝐹)
+   ⊖₁ (𝐸 │ᵥᵇ F) = E′/E (⊖₁ 𝐸) │ᵥ (push *ᵇ) F ᵀΔ νᵇ (E/E′ (⊖₁ 𝐸) ᵇ│ tgt F)
+   ⊖₁ (𝐸 │ᵥᶜ F) = E′/E (⊖₁ 𝐸) │ᵥ F ᵀΔ νᶜ (E/E′ (⊖₁ 𝐸) ᶜ│ tgt F)
+   ⊖₁ (_ᵇ│ᵥ_ {𝑎 = ˣ∇ˣ} E 𝐹) = (push *ᵇ) E │• E′/E (⊖₁ 𝐹) ᵀΔ ν• (tgt E │ᶜ E/E′ (⊖₁ 𝐹))
+   ⊖₁ (_ᵇ│ᵥ_ {𝑎 = ᵇ∇ᵇ} E 𝐹) = (push *ᵇ) E │ᵥ E′/E (⊖₁ 𝐹) ᵀΔ νᵇ (tgt E │ᵇ E/E′ (⊖₁ 𝐹))
+   ⊖₁ (E ᶜ│ᵥ 𝐹) = E │ᵥ E′/E (⊖₁ 𝐹) ᵀΔ νᶜ (tgt E │ᶜ E/E′ (⊖₁ 𝐹))
    ⊖₁ (_│ᵇᵇ_ {𝑎 = ˣ∇ˣ} P 𝐹) = (push *) P │ᶜ E′/E (⊖₁ 𝐹) ᵀΔ (push *) P │ᶜ E/E′ (⊖₁ 𝐹)
    ⊖₁ (_│ᵇᵇ_ {𝑎 = ᵇ∇ᵇ} P 𝐹) = (push *) P │ᵇ E′/E (⊖₁ 𝐹) ᵀΔ (push *) P │ᵇ E/E′ (⊖₁ 𝐹)
    ⊖₁ (P │ᵇᶜ 𝐹) = (push *) P │ᶜ E′/E (⊖₁ 𝐹) ᵀΔ P │ᵇ E/E′ (⊖₁ 𝐹)
@@ -179,17 +180,14 @@ module Transition.Concur where
    ⊖₁ (𝐸 │ᵥ 𝐹) = νᶜ (E′/E (⊖₁ 𝐸) │• E′/E (⊖₁ 𝐹)) ᵀΔ νᶜ (E/E′ (⊖₁ 𝐸) │• E/E′ (⊖₁ 𝐹))
    ⊖₁ (𝐸 │ᵥ′ 𝐹) = νᶜ (E′/E (⊖₁ 𝐸) │ᵥ E′/E (⊖₁ 𝐹)) ᵀΔ νᶜ (E/E′ (⊖₁ 𝐸) │ᵥ E/E′ (⊖₁ 𝐹))
    ⊖₁ (ν• 𝐸) = E′/E (⊖₁ 𝐸) ᵀΔ E/E′ (⊖₁ 𝐸)
-   ⊖₁ (ν•ᵇ_ {x = x} {a = a} 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
-   ... | swap*E/E′ = E′/E (⊖₁ 𝐸) ᵀΔ ν• swap*E/E′
+   ⊖₁ (ν•ᵇ_ {x = x} {a = a} 𝐸) = E′/E (⊖₁ 𝐸) ᵀΔ ν• (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
    ⊖₁ (ν•ᶜ 𝐸) = E′/E (⊖₁ 𝐸) ᵀΔ ν• E/E′ (⊖₁ 𝐸)
    ⊖₁ (νᵇᵇ_ {a = x •} {a} 𝐸) with (swap *ᵇ) (E/E′ (⊖₁ 𝐸)) | (swap *ᵇ) (E′/E (⊖₁ 𝐸))
    ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push a = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
    ⊖₁ (νᵇᵇ_ {a = • x} {u •} 𝐸) with (swap *ᵇ) (E/E′ (⊖₁ 𝐸)) | (swap *ᵇ) (E′/E (⊖₁ 𝐸))
    ... | swap*E/E′ | swap*E′/E rewrite swap∘push∘push x | swap∘push∘push u = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
-   ⊖₁ (νᵇᵇ_ {a = • x} {• u} 𝐸) with (swap *ᵇ) (E/E′ (⊖₁ 𝐸)) | (swap *ᵇ) (E′/E (⊖₁ 𝐸))
-   ... | swap*E/E′ | swap*E′/E = νᵇ swap*E′/E ᵀΔ νᵇ swap*E/E′
-   ⊖₁ (νˣˣ_ {x = x} {u} 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸)) | (swap *ᶜ) (E′/E (⊖₁ 𝐸))
-   ... | swap*E/E′ | swap*E′/E = νᶜ swap*E′/E ᵀΔ νᶜ swap*E/E′
+   ⊖₁ (νᵇᵇ_ {a = • x} {• u} 𝐸) = νᵇ (swap *ᵇ) (E′/E (⊖₁ 𝐸)) ᵀΔ νᵇ (swap *ᵇ) (E/E′ (⊖₁ 𝐸))
+   ⊖₁ (νˣˣ_ {x = x} {u} 𝐸) = νᶜ (swap *ᶜ) (E′/E (⊖₁ 𝐸)) ᵀΔ νᶜ (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
    ⊖₁ (νᵇᶜ_ {a′ = a′} 𝐸) with (swap *ᶜ) (E′/E (⊖₁ 𝐸))
    ... | swap*E′/E rewrite swap∘push∘push a′ = νᶜ swap*E′/E ᵀΔ νᵇ E/E′ (⊖₁ 𝐸)
    ⊖₁ (νᶜᵇ_ {a = a} 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
@@ -215,4 +213,4 @@ module Transition.Concur where
 
       postulate
          ⊖-preserves-sym : E′/E (⊖ 𝐸) ≅ E/E′ (⊖ (⌣-sym 𝐸))
-         ⊖-preserves-sym′ : S′ (⊖ 𝐸) ≡ S (⊖ (⌣-sym 𝐸))
+         ⊖-preserves-sym′ : tgt₂ (⊖ 𝐸) ≡ tgt₁ (⊖ (⌣-sym 𝐸))

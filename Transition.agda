@@ -32,8 +32,8 @@ module Transition where
    infixl 6 _➕₁_ _ᵇ│_ _ᶜ│_ _│ᵇ_ _│ᶜ_ _│•_ _│ᵥ_
    infixr 7 _•∙_ •_〈_〉∙_
 
-   source : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Proc Γ
-   source {P = P} _ = P
+   src : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Proc Γ
+   src {P = P} _ = P
 
    out : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Σ[ a′ ∈ Action Γ ] Proc (Γ + inc a′)
    out {a = a} {R} _ = a , R
@@ -41,8 +41,8 @@ module Transition where
    action : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Action Γ
    action = π₁ ∘ out
 
-   target : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Proc (Γ + inc a)
-   target = π₂ ∘ out
+   tgt : ∀ {ι Γ P} {a : Action Γ} {R} → P —[ a - ι ]→ R → Proc (Γ + inc a)
+   tgt = π₂ ∘ out
 
    -- Existentially quantified version.
    record TransitionFrom {Γ} (P : Proc Γ) : Set where
