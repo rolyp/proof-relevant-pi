@@ -47,10 +47,6 @@ module Transition.Concur.Ren where
 
    (ρ *ᶜᵇ⌣) (_ᶜ│ᵇ_ {P = P} E F) rewrite ᴿ+-comm 1 ρ P = (ρ *ᶜ) E ᶜ│ᵇ (ρ *ᵇ) F
    (ρ *ᶜᵇ⌣) (E⌣E′ ➕₁ Q) = (ρ *ᶜᵇ⌣) E⌣E′ ➕₁ _
-   (ρ *ᶜᵇ⌣) (P │ᶜᵇ E⌣E′) rewrite ᴿ+-comm 1 ρ P = (ρ *) P │ᶜᵇ (ρ *ᶜᵇ⌣) E⌣E′
-   (ρ *ᶜᵇ⌣) (E⌣E′ ᶜᵇ│ Q) rewrite ᴿ+-comm 1 ρ Q = (ρ *ᶜᵇ⌣) E⌣E′ ᶜᵇ│ (ρ *) Q
-   (ρ *ᶜᵇ⌣) (νᶜᵇ_ {R′ = R′} {a = a} {a′} {E} {E′} E⌣E′) with (suc ρ *ᶜ) E | (suc ρ *ᵇ) E′ | (suc ρ *ᶜᵇ⌣) E⌣E′
-   ... | _ | _ | suc-ρ*E⌣E′ rewrite ᴿ+-comm 1 ρ a | ᴿ+-comm 1 ρ a′ | sym (swap-suc-suc ρ R′) = νᶜᵇ suc-ρ*E⌣E′
    (ρ *ᶜᵇ⌣) (! E⌣E′) = ! (ρ *ᶜᵇ⌣) E⌣E′
 
    (ρ *ᵇᶜ⌣) (_ᵇ│ᶜ_ {Q = Q} E F) rewrite ᴿ+-comm 1 ρ Q = (ρ *ᵇ) E ᵇ│ᶜ (ρ *ᶜ) F
@@ -80,7 +76,6 @@ module Transition.Concur.Ren where
    (ρ *ᶜᶜ⌣) (_│•_ {y = y} {z = z} {R = R} {R′} E⌣E′ F⌣F′) rewrite pop-comm ρ y R | pop-comm ρ z R′ =
       (ρ *ᵇᵇ⌣) E⌣E′ │• (ρ *ᶜᶜ⌣) F⌣F′
    (ρ *ᶜᶜ⌣) (_│•ᵥ_ {y = y} {R = R} E⌣E′ F⌣F′) rewrite pop-comm ρ y R = (ρ *ᵇᵇ⌣) E⌣E′ │•ᵥ (ρ *ᶜᵇ⌣) F⌣F′
-   (ρ *ᶜᶜ⌣) (_│ᵥ•_ {y = y} {R′ = R′} E⌣E′ F⌣F′) rewrite pop-comm ρ y R′ = (ρ *ᵇᵇ⌣) E⌣E′ │ᵥ• (ρ *ᵇᶜ⌣) F⌣F′
    (ρ *ᶜᶜ⌣) (E⌣E′ │ᵥ F⌣F′) = (ρ *ᵇᵇ⌣) E⌣E′ │ᵥ (ρ *ᵇᵇ⌣) F⌣F′
    (ρ *ᶜᶜ⌣) (E⌣E′ │ᵥ′ F⌣F′) = (ρ *ᵇᵇ⌣) E⌣E′ │ᵥ′ (ρ *ᵇᵇ⌣) F⌣F′
    (ρ *ᶜᶜ⌣) (νᶜᶜ_ {a = a} {a′} {E} {E′} E⌣E′) with (suc ρ *ᶜ) E | (suc ρ *ᶜ) E′ | (suc ρ *ᶜᶜ⌣) E⌣E′
