@@ -82,13 +82,11 @@ module Transition.Concur.Cofinal where
    γ₁ (_│ᵇᵇ_ {𝑎 = ˣ∇ˣ} P 𝐹) = cong₂ _│_ refl (γ₁ 𝐹)
    γ₁ (_│ᵇᵇ_ {𝑎 = ᵇ∇ᵇ} P 𝐹) = cong₂ _│_ (swap∘push∘push P) (γ₁ 𝐹)
    γ₁ (P │ᵇᶜ 𝐹) = cong₂ _│_ refl (γ₁ 𝐹)
-   γ₁ (P │ᶜᵇ 𝐹) = cong₂ _│_ refl (γ₁ 𝐹)
    γ₁ (P │ᶜᶜ 𝐹) = cong₂ _│_ refl (γ₁ 𝐹)
    γ₁ (P │ᵛᵛ 𝐹) = refl │₂ (γ₁ 𝐹)
    γ₁ (_ᵇᵇ│_ {𝑎 = ˣ∇ˣ} 𝐸 _) = cong₂ _│_ (γ₁ 𝐸) refl
    γ₁ (_ᵇᵇ│_ {𝑎 = ᵇ∇ᵇ} 𝐸 Q) = cong₂ _│_ (γ₁ 𝐸) (swap∘push∘push Q)
    γ₁ (𝐸 ᵇᶜ│ Q) = cong₂ _│_ (γ₁ 𝐸) refl
-   γ₁ (𝐸 ᶜᵇ│ Q) = cong₂ _│_ (γ₁ 𝐸) refl
    γ₁ (𝐸 ᶜᶜ│ Q) = cong₂ _│_ (γ₁ 𝐸) refl
    γ₁ (𝐸 ᵛᵛ│ Q) = (γ₁ 𝐸) │₁ refl
    γ₁ (𝐸 ➕₁ Q) = γ₁ 𝐸
@@ -113,17 +111,6 @@ module Transition.Concur.Cofinal where
       ≡⟨ suc-pop∘swap y _ ⟩
          (pop ((push *) y) *) S′₁
       ∎) (γ₁ 𝐹))
-   γ₁ (_│ᵥ•_ {y = y} 𝐸 𝐹) with (pop y *ᵇ) (E′/E (⊖₁ 𝐸))
-   ... | _ =
-      let open EqReasoning (setoid _); S₁ = tgt₁ (⊖₁ 𝐸); S′₁ = tgt₂(⊖₁ 𝐸) in
-      cong ν_ (cong₂ _│_ (
-         begin
-            (pop (push y) *) S₁
-         ≡⟨ sym (suc-pop∘swap y _) ⟩
-            (suc (pop y) *) ((swap *) S₁)
-         ≡⟨ cong (suc (pop y) *) (γ₁ 𝐸) ⟩
-            (suc (pop y) *) S′₁
-         ∎) (γ₁ 𝐹))
    γ₁ (𝐸 │ᵥ 𝐹) =
       let open EqReasoning (setoid _); S₁ = tgt₁ (⊖₁ 𝐸); S′₁ = tgt₂(⊖₁ 𝐸) in
       cong ν_ (cong₂ _│_ (
@@ -170,8 +157,6 @@ module Transition.Concur.Cofinal where
    γ₁ (νˣˣ 𝐸) = cong ν_ (cong (swap *) (γ₁ 𝐸))
    γ₁ (νᵇᶜ_ {a′ = a′} 𝐸) with (swap *ᶜ) (E′/E (⊖₁ 𝐸))
    ... | _ rewrite swap∘push∘push a′ = cong ν_ (cong (swap *) (γ₁ 𝐸))
-   γ₁ (νᶜᵇ_ {a = a} 𝐸) with (swap *ᶜ) (E/E′ (⊖₁ 𝐸))
-   ... | _ rewrite swap∘push∘push a = cong ν_ (cong (swap *) (γ₁ 𝐸))
    γ₁ (νᶜᶜ 𝐸) = cong ν_ (γ₁ 𝐸)
    γ₁ (νᵛᵛ 𝐸) = ν (γ₁ 𝐸)
    γ₁ (! 𝐸) = γ₁ 𝐸
