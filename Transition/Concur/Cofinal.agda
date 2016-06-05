@@ -121,7 +121,7 @@ module Transition.Concur.Cofinal where
          ≡⟨ cong (pop zero *) (γ₁ 𝐸) ⟩
             (pop zero *) S′₁
          ∎) (γ₁ 𝐹))
-   γ₁ (𝐸 │ᵥ′ 𝐹) rewrite sym (γ₁ 𝐸) | sym (γ₁ 𝐹) = νν-swapᵣ _
+   γ₁ (𝐸 │ᵥ′ 𝐹) rewrite sym (γ₁ 𝐸) | sym (γ₁ 𝐹) = νν-swapᵣ (tgt₁ (⊖₁ 𝐸) │ tgt₁ (⊖₁ 𝐹))
    γ₁ (ν• 𝐸) = γ₁ 𝐸
    γ₁ (ν•ᵇ 𝐸) = cong (swap *) (γ₁ 𝐸)
    γ₁ (ν•ᶜ 𝐸) = γ₁ 𝐸
