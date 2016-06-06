@@ -18,7 +18,6 @@ module ProofRelevantPi where
    open import Transition.Concur
    open import Transition.Concur.Cofinal
    open import Transition.Concur.Cofinal.Transition
--- open import Transition.Concur.Ren
    open import Transition.Ren
    open import Transition.Seq
    open import Transition.Seq.Cofinal

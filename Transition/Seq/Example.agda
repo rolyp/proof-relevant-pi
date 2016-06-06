@@ -7,7 +7,7 @@ module Transition.Seq.Example where
    open import Action.Seq as ᴬ⋆ using (); open ᴬ⋆.Action⋆
    open import Name using (Cxt; Name; zero; _+_)
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
-   open import Ren as ᴿ using (suc; pop); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (pop; _ᴿ+_); open ᴿ.Renameable ⦃...⦄
    open import Transition as ᵀ using (_—[_-_]→_; tgt); open ᵀ._—[_-_]→_
    open import Transition.Concur using (Concur; Concur₁; module Concur₁; Delta′; module Delta′; ⊖); open Concur₁
    open import Transition.Ren
@@ -53,11 +53,11 @@ module Transition.Seq.Example where
    E₁ : P │ Q —[ τ ᶜ - _ ]→ ν ((id *) R │ S)
    E₁ = E │ᵥ F
 
-   E₂ : ν ((id *) R │ S)  —[ τ ᶜ - _ ]→ ν ((pop zero *) P₁ │ Q₁)
-   E₂ = {!!} --νᶜ ((id *ᵇ) E′/E │• F′/F)
+   E₂ : ν ((id *) R │ S)  —[ τ ᶜ - _ ]→ ν ((pop zero *) (((id ᴿ+ 1) *) P₁) │ Q₁)
+   E₂ = νᶜ ((id *ᵇ) E′/E │• F′/F)
 
-   E₃ : ν ((pop zero *) P₁ │ Q₁) —[ τ ᶜ - _ ]→ ν ((pop zero *) ((suc (pop zero) *) P′) │ Q′)
-   E₃ = νᶜ ((pop zero *ᵇ) E″/E/E′/E │• F″/F/F′/F)
+   E₃ : ν ((pop zero *) (((id ᴿ+ 1) *) P₁) │ Q₁) —[ τ ᶜ - _ ]→ ν ((pop zero *) (((pop zero ᴿ+ 1) *) (((id ᴿ+ 2) *) P′)) │ Q′)
+   E₃ = νᶜ ((pop zero *ᵇ) (((id ᴿ+ 1) *ᵇ) E″/E/E′/E) │• F″/F/F′/F)
 
    E/E′ = Delta′.E/E′ (⊖ (inj₁ 𝐸))
    E″/E′ = Delta′.E′/E (⊖ (inj₁ 𝐸′))
@@ -79,11 +79,11 @@ module Transition.Seq.Example where
    E′₁ : P │ Q —[ τ ᶜ - _ ]→ ν ((id *) R′ │ S′)
    E′₁ = E′ │ᵥ F′
 
-   E′₂ : ν ((id *) R′ │ S′) —[ τ ᶜ - _ ]→ ν ((pop zero *) P′₁ │ Q′₁)
-   E′₂ = {!!} -- νᶜ (E/E′ │• F/F′)
+   E′₂ : ν ((id *) R′ │ S′) —[ τ ᶜ - _ ]→ ν ((pop zero *) (((id ᴿ+ 1) *) P′₁) │ Q′₁)
+   E′₂ = νᶜ ((id *ᵇ) E/E′ │• F/F′)
 
-   E′₃ : ν ((pop zero *) P′₁ │ Q′₁) —[ τ ᶜ - _ ]→ ν ((pop zero *) ((suc (pop zero) *) P″) │ Q″)
-   E′₃ = νᶜ ((pop zero *ᵇ) E″/E′/E/E′ │• F″/F′/F/F′)
+   E′₃ : ν ((pop zero *) (((id ᴿ+ 1) *) P′₁) │ Q′₁) —[ τ ᶜ - _ ]→ ν ((pop zero *) (((pop zero ᴿ+ 1) *) (((id ᴿ+ 2) *) P″)) │ Q″)
+   E′₃ = νᶜ ((pop zero *ᵇ) (((id ᴿ+ 1) *ᵇ) E″/E′/E/E′) │• F″/F′/F/F′)
 
    E⋆ : P │ Q —[ _ ]→⋆ _
    E⋆ = E₁ ᶜ∷ E₂ ᶜ∷ E₃ ᶜ∷ []
