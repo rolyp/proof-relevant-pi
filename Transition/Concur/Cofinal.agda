@@ -101,7 +101,7 @@ module Transition.Concur.Cofinal where
                 (id *) ((swap *) ((push *) (tgt E)))
              ≡⟨ *-preserves-id _ ⟩
                 (swap *) ((push *) (tgt E))
-             ≡⟨ cong (swap * ∘ push *) (sym (*-preserves-id _)) ⟩
+             ≡⟨ cong (swap * ∘ push *) (sym (*-preserves-id (tgt E))) ⟩
                 (swap *) ((push *) ((id *) (tgt E)))
              ∎ in
       cong ν_ (cong₂ _│_ α (swap-swap (γ₁ 𝐹)))
@@ -127,20 +127,24 @@ module Transition.Concur.Cofinal where
          (pop y *) ((suc (pop z) *) S′)
       ∎) (γ₁ 𝐹)
    γ₁ (_│•ᵥ_ {y = y} 𝐸 𝐹) with (pop y *ᵇ) (E′/E (⊖₁ 𝐸))
-   ... | _ = {!!}
-{-
-   cong ν_ (cong₂ _│_ (
-      let open EqReasoning (setoid _); S₁ = tgt₁ (⊖₁ 𝐸); S′₁ = tgt₂(⊖₁ 𝐸) in
-      begin
-         (suc (pop y) *) S₁
-      ≡⟨ cong (suc (pop y) *) (sym (swap-involutive _ )) ⟩
-         (suc (pop y) *) ((swap *) ((swap *) S₁))
-      ≡⟨ cong (suc (pop y) *) (cong (swap *) (γ₁ 𝐸)) ⟩
-         (suc (pop y) *) ((swap *) S′₁)
-      ≡⟨ suc-pop∘swap y _ ⟩
-         (pop ((push *) y) *) S′₁
-      ∎) (γ₁ 𝐹))
--}
+   ... | _ =
+      let S = tgt₁ (⊖₁ 𝐸); S′ = tgt₂(⊖₁ 𝐸)
+          α : (id *) ((suc (pop y) *) S) ≡ (pop (ᴺ.suc y) *) ((suc id *) S′)
+          α = let open EqReasoning (setoid _) in
+             begin
+                (id *) ((suc (pop y) *) S)
+             ≡⟨ *-preserves-id _ ⟩
+                ((suc (pop y) *) S)
+             ≡⟨ cong (suc (pop y) *) (sym (swap-involutive _ )) ⟩
+                (suc (pop y) *) ((swap *) ((swap *) S))
+             ≡⟨ cong (suc (pop y) *) (cong (swap *) (γ₁ 𝐸)) ⟩
+                (suc (pop y) *) ((swap *) S′)
+             ≡⟨ suc-pop∘swap y _ ⟩
+                (pop (ᴺ.suc y) *) S′
+             ≡⟨ cong (pop (ᴺ.suc y) *) (sym (+-id-elim 1 S′)) ⟩
+                (pop (ᴺ.suc y) *) ((suc id *) S′)
+             ∎ in
+      cong ν_ (cong₂ _│_ α (γ₁ 𝐹))
    γ₁ (𝐸 │ᵥ 𝐹) = {!!}
 {-
       let open EqReasoning (setoid _); S₁ = tgt₁ (⊖₁ 𝐸); S′₁ = tgt₂(⊖₁ 𝐸) in
