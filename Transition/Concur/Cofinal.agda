@@ -90,8 +90,9 @@ module Transition.Concur.Cofinal where
              ∎ in
       cong ν_ (cong₂ _│_ α (swap∘push _))
    γ₁ (_│ᵥᶜ_ {a = a} 𝐸 F) with (id *ᶜ) (E/E′ (⊖₁ 𝐸))
-   ... | id*E/E′ rewrite *-preserves-id ((push *) a) = cong ν_ (cong₂ _│_ {!!} refl) -- γ₁ 𝐸
-   γ₁ (_ᵇ│ᵥ_ {x = x} {𝑎 = ˣ∇ˣ} E 𝐹) = cong₂ _│_ {!!} {!!} -- (pop-zero∘suc-push _) (γ₁ 𝐹)
+   ... | id*E/E′ rewrite *-preserves-id ((push *) a) =
+      cong ν_ (cong₂ _│_ (cong (id *) (γ₁ 𝐸)) refl)
+   γ₁ (_ᵇ│ᵥ_ {x = x} {𝑎 = ˣ∇ˣ} E 𝐹) = cong₂ _│_ {!!} (γ₁ 𝐹) -- pop-zero∘suc-push _
    γ₁ (_ᵇ│ᵥ_ {𝑎 = ᵇ∇ᵇ} E 𝐹) rewrite swap∘push (tgt E) = cong ν_ (cong₂ _│_ {!!} (swap-swap (γ₁ 𝐹))) -- refl
    γ₁ (E ᶜ│ᵥ 𝐹) = cong ν_ (cong₂ _│_ refl (γ₁ 𝐹))
    γ₁ (_│ᵇᵇ_ {𝑎 = ˣ∇ˣ} P 𝐹) = cong₂ _│_ refl (γ₁ 𝐹)
