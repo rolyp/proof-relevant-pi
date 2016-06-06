@@ -85,9 +85,7 @@ module Transition.Concur.Cofinal where
                 S
              ≡⟨ swap-swap (γ₁ 𝐸) ⟩
                 (swap *) S′
-             ≡⟨ cong (swap *) (sym (*-preserves-id S′)) ⟩
-                (swap *) ((id *) S′)
-             ≡⟨ cong (swap *) (sym (trans (+-id-elim 1 S′) (sym (*-preserves-id S′)))) ⟩
+             ≡⟨ cong (swap *) (sym (+-id-elim 1 S′)) ⟩
                 (swap *) ((suc id *) S′)
              ∎ in
       cong ν_ (cong₂ _│_ α (swap∘push _))
