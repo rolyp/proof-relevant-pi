@@ -50,11 +50,11 @@ module Transition.Seq.Example where
    P′ = tgt E″/E/E′/E
    Q′ = tgt F″/F/F′/F
 
-   E₁ : P │ Q —[ τ ᶜ - _ ]→ ν (R │ S)
+   E₁ : P │ Q —[ τ ᶜ - _ ]→ ν ((id *) R │ S)
    E₁ = E │ᵥ F
 
-   E₂ : ν (R │ S)  —[ τ ᶜ - _ ]→ ν ((pop zero *) P₁ │ Q₁)
-   E₂ = νᶜ (E′/E │• F′/F)
+   E₂ : ν ((id *) R │ S)  —[ τ ᶜ - _ ]→ ν ((pop zero *) P₁ │ Q₁)
+   E₂ = {!!} --νᶜ ((id *ᵇ) E′/E │• F′/F)
 
    E₃ : ν ((pop zero *) P₁ │ Q₁) —[ τ ᶜ - _ ]→ ν ((pop zero *) ((suc (pop zero) *) P′) │ Q′)
    E₃ = νᶜ ((pop zero *ᵇ) E″/E/E′/E │• F″/F/F′/F)
@@ -76,11 +76,11 @@ module Transition.Seq.Example where
    P″ = tgt E″/E′/E/E′
    Q″ = tgt F″/F′/F/F′
 
-   E′₁ : P │ Q —[ τ ᶜ - _ ]→ ν (R′ │ S′)
+   E′₁ : P │ Q —[ τ ᶜ - _ ]→ ν ((id *) R′ │ S′)
    E′₁ = E′ │ᵥ F′
 
-   E′₂ : ν (R′ │ S′) —[ τ ᶜ - _ ]→ ν ((pop zero *) P′₁ │ Q′₁)
-   E′₂ = νᶜ (E/E′ │• F/F′)
+   E′₂ : ν ((id *) R′ │ S′) —[ τ ᶜ - _ ]→ ν ((pop zero *) P′₁ │ Q′₁)
+   E′₂ = {!!} -- νᶜ (E/E′ │• F/F′)
 
    E′₃ : ν ((pop zero *) P′₁ │ Q′₁) —[ τ ᶜ - _ ]→ ν ((pop zero *) ((suc (pop zero) *) P″) │ Q″)
    E′₃ = νᶜ ((pop zero *ᵇ) E″/E′/E/E′ │• F″/F′/F/F′)
