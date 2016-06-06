@@ -145,18 +145,22 @@ module Transition.Concur.Cofinal where
                 (pop (ᴺ.suc y) *) ((suc id *) S′)
              ∎ in
       cong ν_ (cong₂ _│_ α (γ₁ 𝐹))
-   γ₁ (𝐸 │ᵥ 𝐹) = {!!}
-{-
-      let open EqReasoning (setoid _); S₁ = tgt₁ (⊖₁ 𝐸); S′₁ = tgt₂(⊖₁ 𝐸) in
-      cong ν_ (cong₂ _│_ (
-         begin
-            (pop zero *) S₁
-         ≡⟨ sym (pop-swap _) ⟩
-            (pop zero *) ((swap *) S₁)
-         ≡⟨ cong (pop zero *) (γ₁ 𝐸) ⟩
-            (pop zero *) S′₁
-         ∎) (γ₁ 𝐹))
--}
+   γ₁ (𝐸 │ᵥ 𝐹) =
+      let S = tgt₁ (⊖₁ 𝐸); S′ = tgt₂(⊖₁ 𝐸)
+          α : (pop zero *) ((suc id *) S) ≡ (pop zero *) ((suc id *) S′)
+          α = let open EqReasoning (setoid _) in
+             begin
+                (pop zero *) ((suc id *) S)
+             ≡⟨ cong (pop zero *) (+-id-elim 1 S) ⟩
+                (pop zero *) S
+             ≡⟨ sym (pop-swap _) ⟩
+                (pop zero *) ((swap *) S)
+             ≡⟨ cong (pop zero *) (γ₁ 𝐸) ⟩
+                (pop zero *) S′
+             ≡⟨ cong (pop zero *) (sym (+-id-elim 1 S′)) ⟩
+                (pop zero *) ((suc id *) S′)
+             ∎ in
+      cong ν_ (cong₂ _│_ α (γ₁ 𝐹))
    γ₁ (𝐸 │ᵥ′ 𝐹) rewrite sym (γ₁ 𝐸) | sym (γ₁ 𝐹) = {!!} -- νν-swapᵣ (tgt₁ (⊖₁ 𝐸) │ tgt₁ (⊖₁ 𝐹))
    γ₁ (ν• 𝐸) = γ₁ 𝐸
    γ₁ (ν•ᵇ 𝐸) = cong (swap *) (γ₁ 𝐸)
