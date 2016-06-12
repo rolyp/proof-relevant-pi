@@ -19,7 +19,7 @@ module Transition where
       _ᶜ│_ : ∀ {ι P} {a : Actionᶜ Γ} {R} → P —[ a ᶜ - ι ]→ R → (Q : Proc Γ) → P │ Q —[ a ᶜ - ↑ ι ]→ R │ Q
       _│ᵇ_ : ∀ {ι Q} {a : Actionᵇ Γ} {S} → (P : Proc Γ) → Q —[ a ᵇ - ι ]→ S → P │ Q —[ a ᵇ - ↑ ι ]→ (push *) P │ S
       _│ᶜ_ : ∀ {ι Q} {a : Actionᶜ Γ} {S} → (P : Proc Γ) → Q —[ a ᶜ - ι ]→ S → P │ Q —[ a ᶜ - ↑ ι ]→ P │ S
-      _│•_ : ∀ {ι P R Q S} {x : Name Γ} {y : Name Γ} →
+      _│•_ : ∀ {ι P R Q S} {x y : Name Γ} →
              P —[ x • ᵇ - ι ]→ R → Q —[ • x 〈 y 〉 ᶜ - ι ]→ S → P │ Q —[ τ ᶜ - ↑ ι ]→ (pop y *) R │ S
       _│ᵥ_ : ∀ {ι P R Q S} {x : Name Γ} → P —[ x • ᵇ - ι ]→ R → Q —[ (• x) ᵇ - ι ]→ S →
              P │ Q —[ τ ᶜ - ↑ ι ]→ ν ((id *) R │ S) -- need to be explicit about id here, to support slicing rule.

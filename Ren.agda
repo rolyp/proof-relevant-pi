@@ -20,6 +20,10 @@ module Ren where
    push : ∀ {Γ} → Ren Γ (Γ + 1)
    push = shift 1
 
+   weaken : ∀ {Γ} → Ren Γ (Γ + 1)
+   weaken zero = zero
+   weaken (ᴺ.suc x) = ᴺ.suc (weaken x)
+
    infixl 6 _ᴿ+_
    _ᴿ+_ : ∀ {Γ Γ′} → Ren Γ Γ′ → ∀ n → Ren (Γ + n) (Γ′ + n)
    ρ ᴿ+ zero = ρ

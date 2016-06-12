@@ -94,17 +94,19 @@ module Transition.Concur.Cofinal where
       cong ν_ (cong₂ _│_ (cong (id *) (γ₁ 𝐸)) refl)
    γ₁ (_ᵇ│ᵥ_ {x = x} {𝑎 = ˣ∇ˣ} E 𝐹) =
       cong₂ _│_ (trans (pop-zero∘suc-push (tgt E)) (sym (*-preserves-id (tgt E)))) (γ₁ 𝐹)
-   γ₁ (_ᵇ│ᵥ_ {𝑎 = ᵇ∇ᵇ} E 𝐹) rewrite swap∘push (tgt E) =
-      let α : (id *) ((swap *) ((push *) (tgt E))) ≡ (swap *) ((push *) ((id *) (tgt E)))
+   γ₁ (_ᵇ│ᵥ_ {𝑎 = ᵇ∇ᵇ} E 𝐹) =
+      let α : (id *) ((suc push *) (tgt E)) ≡ (swap *) ((push *) ((id *) (tgt E)))
           α = let open EqReasoning (setoid _) in
              begin
-                (id *) ((swap *) ((push *) (tgt E)))
+                (id *) ((suc push *) (tgt E))
              ≡⟨ *-preserves-id _ ⟩
-                (swap *) ((push *) (tgt E))
-             ≡⟨ cong (swap * ∘ push *) (sym (*-preserves-id (tgt E))) ⟩
+                (suc push *) (tgt E)
+             ≡⟨ cong (suc push *) (sym (*-preserves-id (tgt E))) ⟩
+                (suc push *) ((id *) (tgt E))
+             ≡⟨ swap∘push _ ⟩
                 (swap *) ((push *) ((id *) (tgt E)))
              ∎ in
-      cong ν_ (cong₂ _│_ α (swap-swap (γ₁ 𝐹)))
+      cong ν_ (cong₂ _│_ α (swap-swap (γ₁ 𝐹))) --α
    γ₁ (E ᶜ│ᵥ 𝐹) = cong ν_ (cong₂ _│_ refl (γ₁ 𝐹))
    γ₁ (_│ᵇᵇ_ {𝑎 = ˣ∇ˣ} P 𝐹) = cong₂ _│_ refl (γ₁ 𝐹)
    γ₁ (_│ᵇᵇ_ {𝑎 = ᵇ∇ᵇ} P 𝐹) = cong₂ _│_ (swap∘push∘push P) (γ₁ 𝐹)
