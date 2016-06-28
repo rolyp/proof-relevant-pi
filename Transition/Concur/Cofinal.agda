@@ -43,7 +43,7 @@ module Transition.Concur.Cofinal where
          ((swap ᴿ+ Δ) *) P
       ≡⟨ cong ((swap ᴿ+ Δ) *) (sym P†) ⟩
          ((swap ᴿ+ Δ) *) (((swap ᴿ+ Δ) *) P′)
-      ≡⟨ involutive (+-preserves-involutivity swap Δ swap-involutive) P′ ⟩
+      ≡⟨ involutive (+-preserves-involutivity swap Δ ᴿ.swap-involutive) P′ ⟩
          P′
       ∎
    ⋈-sym _⋉̂_ ᵇ∇ᶜ Δ ⋉̂-sym = sym
@@ -133,7 +133,7 @@ module Transition.Concur.Cofinal where
    γ₁ (ν•ᵇ 𝐸) = cong (swap *) (γ₁ 𝐸)
    γ₁ (ν•ᶜ 𝐸) = γ₁ 𝐸
    γ₁ (νᵇᵇ_ {a = x •} {a} 𝐸) with (swap *ᵇ) (E/E′ (⊖₁ 𝐸)) | (swap *ᵇ) (E′/E (⊖₁ 𝐸))
-   ... | _ | _ rewrite swap∘push∘push x | swap∘push∘push a =
+   ... | _ | _ rewrite swap∘push∘push a =
       cong ν_ (
          let open EqReasoning (setoid _); S = tgt₁ (⊖₁ 𝐸); S′ = tgt₂(⊖₁ 𝐸) in
          begin
