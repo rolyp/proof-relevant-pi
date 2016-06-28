@@ -10,10 +10,9 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    open import Ext
 
    open ᴺ using (Name; _+_; zero; shift)
-   open ᴿ using (module Renameable; suc; pop; push; _ᴿ+_; swap; ᴺren; +-preserves-id)
+   open ᴿ using (module Renameable; suc; pop; push; _ᴿ+_; swap; +-preserves-id)
 
    module Renameable′ = Renameable {A = A}; open Renameable′ ⦃...⦄ -- fix A for all uses of *
-   open Renameable ⦃...⦄ using () renaming (_* to _*′)
 
    +-id-elim : ∀ {Γ} Δ → (id ᴿ+ Δ) * ≃ₑ id {A = A (Γ + Δ)}
    +-id-elim Δ a =
@@ -52,7 +51,7 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    pop∘push : ∀ {Γ} (y : Name Γ) → pop y * ∘ push * ≃ₑ id
    pop∘push _ a = trans (*-preserves-∘ a) (*-preserves-id a)
 
-   pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) → ρ * ∘ pop x * ≃ₑ pop ((ρ *′) x) * ∘ suc ρ *
+   pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) → ρ * ∘ pop x * ≃ₑ pop (ρ x) * ∘ suc ρ *
    pop-comm ρ x = ∘-* (ᴿ.pop-comm ρ x)
 
    ᴿ+-comm : ∀ {Γ Γ′} n (ρ : Ren Γ Γ′) → (ρ ᴿ+ n) * ∘ shift {Γ} n * ≃ₑ shift {Γ′} n * ∘ ρ *
@@ -65,13 +64,13 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    swap∘push : ∀ {Γ} → suc push * ≃ₑ swap * ∘ push {Γ + 1} *
    swap∘push a = sym (∘-*₁ (≃ₑ-sym ᴿ.swap∘push) a)
 
-   pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) * ≃ₑ pop ((push *′) y) * ∘ swap {Γ} *
+   pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) * ≃ₑ pop (ᴺ.suc y) * ∘ swap {Γ} *
    pop∘swap y a = sym (∘-*₁ (≃ₑ-sym (ᴿ.pop∘swap y)) a)
 
    pop-swap : ∀ {Γ} → pop zero * ∘ swap {Γ} * ≃ₑ pop zero *
    pop-swap = ∘-*₁ ᴿ.pop-swap
 
-   pop∘suc-push : ∀ {Γ} (y : Name Γ) → push * ∘ pop {Γ} y * ≃ₑ pop ((push *′) y) * ∘ suc push *
+   pop∘suc-push : ∀ {Γ} (y : Name Γ) → push * ∘ pop {Γ} y * ≃ₑ pop (ᴺ.suc y) * ∘ suc push *
    pop∘suc-push y = ∘-* (ᴿ.pop∘suc-push y)
 
    pop-zero∘suc-push : ∀ {Γ} → pop {Γ + 1} zero * ∘ suc push * ≃ₑ id
@@ -80,7 +79,7 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    pop-pop-swap : ∀ {Γ} (x y : Name Γ) → pop x * ∘ suc (pop y) * ∘ swap {Γ} * ≃ₑ pop y * ∘ suc (pop x) *
    pop-pop-swap x y a = trans (cong (pop x *) (*-preserves-∘ a)) (∘-* (ᴿ.pop-pop-swap x y) a)
 
-   suc-pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) * ∘ swap {Γ} * ≃ₑ pop ((push *′) y) *
+   suc-pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) * ∘ swap {Γ} * ≃ₑ pop (ᴺ.suc y) *
    suc-pop∘swap y = ∘-*₁ (ᴿ.suc-pop∘swap y)
 
    swap-swap : ∀ {Γ} {a a′ : A (Γ + 2)} → (swap *) a ≡ a′ → a ≡ (swap *) a′

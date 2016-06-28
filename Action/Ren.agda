@@ -9,7 +9,7 @@ module Action.Ren where
       open ᴬ.Actionᵇ; open ᴬ.Actionᶜ
    open import Name using (_+_; +-assoc; toℕ)
    open import Ren as ᴿ using (Ren; Renameable; _ᴿ+_);
-      open ᴿ.Renameable ⦃...⦄ renaming (
+      open ᴿ.Renameable ⦃...⦄ using () renaming (
          _* to _*′; *-preserves-≃ₑ to *-preserves-≃ₑ′; *-preserves-∘ to *-preserves-∘′; *-preserves-id to *-preserves-id′
       )
 
@@ -23,8 +23,8 @@ module Action.Ren where
          }
          where
             _* : ∀ {Γ Γ′} → Ren Γ Γ′ → Actionᵇ Γ → Actionᵇ Γ′
-            (ρ *) (x •) = (ρ *′) x •
-            (ρ *) (• x) = • (ρ *′) x
+            (ρ *) (x •) = ρ x •
+            (ρ *) (• x) = • ρ x
 
             *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
             *-preserves-≃ₑ ρ≃ₑσ (x •) = cong _• (ρ≃ₑσ x)
@@ -35,8 +35,8 @@ module Action.Ren where
             *-preserves-∘ (• x) = refl
 
             *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = Actionᵇ Γ}
-            *-preserves-id (x •) = cong _• (*-preserves-id′ x)
-            *-preserves-id (• x) = cong •_ (*-preserves-id′ x)
+            *-preserves-id (x •) = refl
+            *-preserves-id (• x) = refl
 
       renᶜ : Renameable Actionᶜ
       renᶜ = record {
@@ -47,7 +47,7 @@ module Action.Ren where
          }
          where
             _* : ∀ {Γ Γ′} → Ren Γ Γ′ → Actionᶜ Γ → Actionᶜ Γ′
-            (ρ *) • x 〈 y 〉 = • (ρ *′) x 〈 (ρ *′) y 〉
+            (ρ *) • x 〈 y 〉 = • ρ x 〈 ρ y 〉
             (ρ *) τ = τ
 
             *-preserves-≃ₑ : ∀ {Γ Γ′} {ρ σ : Ren Γ Γ′} → ρ ≃ₑ σ → ρ * ≃ₑ σ *
@@ -59,7 +59,7 @@ module Action.Ren where
             *-preserves-∘ τ = refl
 
             *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = Actionᶜ Γ}
-            *-preserves-id • x 〈 y 〉 = cong₂ •_〈_〉 (*-preserves-id′ x) (*-preserves-id′ y)
+            *-preserves-id • x 〈 y 〉 = refl
             *-preserves-id τ = refl
 
       ren : Renameable Action

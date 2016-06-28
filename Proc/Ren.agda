@@ -6,7 +6,7 @@ module Proc.Ren where
 
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Ren as ᴿ using (
-         Ren; suc; push; pop; swap; +-preserves-≃ₑ; +-preserves-id; +-preserves-∘; Renameable; module Renameable; ᴺren
+         Ren; suc; push; pop; swap; +-preserves-≃ₑ; +-preserves-id; +-preserves-∘; Renameable; module Renameable
       );
       open Renameable ⦃...⦄ renaming (
          _* to _*′; *-preserves-≃ₑ to *-preserves-≃ₑ′; *-preserves-∘ to *-preserves-∘′; *-preserves-id to *-preserves-id′
@@ -23,8 +23,8 @@ module Proc.Ren where
          where
             _* : ∀ {Γ Γ′} → Ren Γ Γ′ → Proc Γ → Proc Γ′
             (ρ *) Ο = Ο
-            (ρ *) (x •∙ P) = (ρ *′) x •∙ (suc ρ *) P
-            (ρ *) (• x 〈 y 〉∙ P) = • (ρ *′) x 〈 (ρ *′) y 〉∙ (ρ *) P
+            (ρ *) (x •∙ P) = ρ x •∙ (suc ρ *) P
+            (ρ *) (• x 〈 y 〉∙ P) = • ρ x 〈 ρ y 〉∙ (ρ *) P
             (ρ *) (P ➕ Q) = (ρ *) P ➕ (ρ *) Q
             (ρ *) (P │ Q) = (ρ *) P │ (ρ *) Q
             (ρ *) (ν P) = ν (suc ρ *) P
@@ -55,8 +55,8 @@ module Proc.Ren where
             *-preserves-id : ∀ {Γ} → id * ≃ₑ id {A = Proc Γ}
             *-preserves-id Ο = refl
             *-preserves-id (x •∙ P) =
-               *-preserves-id′ x ⟨ cong₂ _•∙_ ⟩ trans (*-preserves-≃ₑ (+-preserves-id 1) P) (*-preserves-id P)
-            *-preserves-id (• x 〈 y 〉∙ P) = cong₃ •_〈_〉∙_ (*-preserves-id′ x) (*-preserves-id′ y) (*-preserves-id P)
+               refl ⟨ cong₂ _•∙_ ⟩ trans (*-preserves-≃ₑ (+-preserves-id 1) P) (*-preserves-id P)
+            *-preserves-id (• x 〈 y 〉∙ P) = cong₃ •_〈_〉∙_ refl refl (*-preserves-id P)
             *-preserves-id (P ➕ Q) = *-preserves-id P ⟨ cong₂ _➕_ ⟩ *-preserves-id Q
             *-preserves-id (P │ Q) = *-preserves-id P ⟨ cong₂ _│_ ⟩ *-preserves-id Q
             *-preserves-id (ν P) = cong ν_ (trans (*-preserves-≃ₑ (+-preserves-id 1) P) (*-preserves-id P))

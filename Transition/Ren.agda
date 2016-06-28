@@ -8,14 +8,14 @@ module Transition.Ren where
    open import Name using (toℕ; _+_)
    open import Proc using (Proc)
    open import Proc.Ren
-   open import Ren as ᴿ using (Ren; suc; pop; push; _ᴿ+_; swap; Renameable; ᴺren); open ᴿ.Renameable ⦃...⦄
+   open import Ren as ᴿ using (Ren; suc; pop; push; _ᴿ+_; swap; Renameable); open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; action); open ᵀ._—[_-_]→_
 
    _*ᶜ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P R} {a : Actionᶜ Γ} → P —[ a ᶜ - ι ]→ R → (ρ *) P —[ (ρ *) a ᶜ - ι ]→ (ρ *) R
    _*ᵇ : ∀ {ι Γ Γ′} (ρ : Ren Γ Γ′) {P R} {a : Actionᵇ Γ} → P —[ a ᵇ - ι ]→ R → (ρ *) P —[ (ρ *) a ᵇ - ι ]→ (suc ρ *) R
 
-   (ρ *ᶜ) (• x 〈 y 〉∙ P) = • (ρ *) x 〈 (ρ *) y 〉∙ (ρ *) P
+   (ρ *ᶜ) (• x 〈 y 〉∙ P) = • ρ x 〈 ρ y 〉∙ (ρ *) P
    (ρ *ᶜ) (E ➕₁ Q) = (ρ *ᶜ) E ➕₁ (ρ *) Q
    (ρ *ᶜ) (E ᶜ│ Q) = (ρ *ᶜ) E ᶜ│ (ρ *) Q
    (ρ *ᶜ) (P │ᶜ F) = (ρ *) P │ᶜ (ρ *ᶜ) F
@@ -25,7 +25,7 @@ module Transition.Ren where
    ... | E′ rewrite ᴿ+-comm 1 ρ a = νᶜ E′
    (ρ *ᶜ) (! E) = ! (ρ *ᶜ) E
 
-   (ρ *ᵇ) (x •∙ P) = (ρ *) x •∙ (suc ρ *) P
+   (ρ *ᵇ) (x •∙ P) = ρ x •∙ (suc ρ *) P
    (ρ *ᵇ) (E ➕₁ Q) = (ρ *ᵇ) E ➕₁ (ρ *) Q
    (ρ *ᵇ) (E ᵇ│ Q) rewrite ᴿ+-comm 1 ρ Q = (ρ *ᵇ) E ᵇ│ (ρ *) Q
    (ρ *ᵇ) (P │ᵇ F) rewrite ᴿ+-comm 1 ρ P = (ρ *) P │ᵇ (ρ *ᵇ) F

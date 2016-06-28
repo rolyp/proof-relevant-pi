@@ -9,7 +9,7 @@ module Braiding.Proc where
    open import Name using (Name; _+_)
    open import Proc as ᴾ using (Proc); open ᴾ.Proc
    open import Proc.Ren
-   open import Ren as ᴿ using (Ren; push; suc; swap; Renameable; module Renameable; ᴺren);
+   open import Ren as ᴿ using (Ren; push; suc; swap; Renameable; module Renameable);
       open Renameable ⦃...⦄
    open import Ren.Properties
 
@@ -107,8 +107,8 @@ module Braiding.Proc where
    ... | P′ rewrite ≡-sym (swap-suc-suc ρ P) = νν-swapᵣ ((suc (suc ρ) *) P)
    -- Compatibility.
    (ρ *⁼) Ο = Ο
-   (ρ *⁼) (x •∙ P) = (ρ *) x •∙ cong (suc ρ *) P
-   (ρ *⁼) (• x 〈 y 〉∙ P) = • (ρ *) x 〈 (ρ *) y 〉∙ cong (ρ *) P
+   (ρ *⁼) (x •∙ P) = ρ x •∙ cong (suc ρ *) P
+   (ρ *⁼) (• x 〈 y 〉∙ P) = • ρ x 〈 ρ y 〉∙ cong (ρ *) P
    (ρ *⁼) (P ➕₁ Q) = (ρ *⁼) P ➕₁ cong (ρ *) Q
    (ρ *⁼) (P ➕₂ Q) = cong (ρ *) P ➕₂ (ρ *⁼) Q
    (ρ *⁼) (P │ Q) = (ρ *⁼) P │ (ρ *⁼) Q

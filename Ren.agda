@@ -12,7 +12,7 @@ module Ren where
    Ren : Cxt → Cxt → Set
    Ren Γ Γ′ = Name Γ → Name Γ′
 
-   -- Extend a renaming with an identity mapping. Should really be called - + 1.
+   -- Extend a renaming with an identity mapping.
    suc : ∀ {Γ Γ′} → Ren Γ Γ′ → Ren (Γ + 1) (Γ′ + 1)
    suc ρ zero = zero
    suc ρ (ᴺ.suc x) = ᴺ.suc (ρ x)
@@ -67,22 +67,11 @@ module Ren where
             ρ ∘ σ ≃ₑ ρ′ ∘ σ′ → ρ * ∘ σ * ≃ₑ ρ′ * ∘ σ′ *
       ∘-* ρ∘σ≡ρ′∘σ′ a = trans (∘-*₁ ρ∘σ≡ρ′∘σ′ a) (sym (*-preserves-∘ a))
 
-   instance
-      ᴺren : Renameable Name
-      ᴺren = record {
-            _* = λ ρ x → ρ x;
-            *-preserves-≃ₑ = id;
-            *-preserves-id = λ _ → refl;
-            *-preserves-∘ = λ _ → refl
-         }
-
-   open Renameable ᴺren
-
    pop : ∀ {Γ} (x : Name Γ) → Ren (Γ + 1) Γ
    pop x zero = x
    pop _ (ᴺ.suc y) = y
 
-   pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) → ρ ∘ pop {Γ} x ≃ₑ pop {Γ′} ((ρ *) x) ∘ suc ρ
+   pop-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) (x : Name Γ) → ρ ∘ pop {Γ} x ≃ₑ pop {Γ′} (ρ x) ∘ suc ρ
    pop-comm _ x zero = refl
    pop-comm _ x (ᴺ.suc y) = refl
 
@@ -133,7 +122,7 @@ module Ren where
    swap∘push (ᴺ.suc _) = refl
 
    -- The names of the next two are too similar.
-   pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) ≃ₑ pop ((push *) y) ∘ swap
+   pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) ≃ₑ pop (ᴺ.suc y) ∘ swap
    pop∘swap _ zero = refl
    pop∘swap _ (ᴺ.suc zero) = refl
    pop∘swap _ (ᴺ.suc (ᴺ.suc _)) = refl
@@ -143,7 +132,7 @@ module Ren where
    pop-swap (ᴺ.suc zero) = refl
    pop-swap (ᴺ.suc (ᴺ.suc _)) = refl
 
-   pop∘suc-push : ∀ {Γ} (y : Name Γ) → push ∘ (pop y) ≃ₑ pop ((push *) y) ∘ suc push
+   pop∘suc-push : ∀ {Γ} (y : Name Γ) → push ∘ (pop y) ≃ₑ pop (ᴺ.suc y) ∘ suc push
    pop∘suc-push _ zero = refl
    pop∘suc-push _ (ᴺ.suc _) = refl
 
@@ -156,7 +145,7 @@ module Ren where
    pop-pop-swap _ _ (ᴺ.suc zero) = refl
    pop-pop-swap _ _ (ᴺ.suc (ᴺ.suc _)) = refl
 
-   suc-pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) ∘ swap ≃ₑ pop ((push *) y)
+   suc-pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) ∘ swap ≃ₑ pop (ᴺ.suc y)
    suc-pop∘swap _ zero = refl
    suc-pop∘swap _ (ᴺ.suc zero) = refl
    suc-pop∘swap _ (ᴺ.suc (ᴺ.suc _)) = refl
