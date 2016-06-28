@@ -10,7 +10,7 @@ module Transition.Concur.Cofinal where
    open import Name as ᴺ using (Cxt; Name; toℕ; _+_; zero)
    open import Proc using (Proc); open Proc
    import Proc.Ren
-   open import Ren as ᴿ using (Ren; ᴺren; suc; _ᴿ+_; pop; push; swap; +-preserves-id; +-preserves-involutivity);
+   open import Ren as ᴿ using (Ren; suc; _ᴿ+_; pop; push; swap; +-preserves-id; +-preserves-involutivity);
       open ᴿ.Renameable ⦃...⦄
    open import Ren.Properties
    open import Transition as ᵀ using (_—[_-_]→_; tgt); open ᵀ._—[_-_]→_
