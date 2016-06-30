@@ -64,9 +64,6 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
    swap∘push : ∀ {Γ} → suc push * ≃ₑ swap * ∘ push {Γ + 1} *
    swap∘push a = sym (∘-*₁ (≃ₑ-sym ᴿ.swap∘push) a)
 
-   pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) * ≃ₑ pop (ᴺ.suc y) * ∘ swap {Γ} *
-   pop∘swap y a = sym (∘-*₁ (≃ₑ-sym (ᴿ.pop∘swap y)) a)
-
    pop-swap : ∀ {Γ} → pop zero * ∘ swap {Γ} * ≃ₑ pop zero *
    pop-swap = ∘-*₁ ᴿ.pop-swap
 
@@ -78,6 +75,9 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
 
    pop-pop-swap : ∀ {Γ} (x y : Name Γ) → pop x * ∘ suc (pop y) * ∘ swap {Γ} * ≃ₑ pop y * ∘ suc (pop x) *
    pop-pop-swap x y a = trans (cong (pop x *) (*-preserves-∘ a)) (∘-* (ᴿ.pop-pop-swap x y) a)
+
+   pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) * ≃ₑ pop (ᴺ.suc y) * ∘ swap {Γ} *
+   pop∘swap y a = sym (∘-*₁ (≃ₑ-sym (ᴿ.pop∘swap y)) a)
 
    suc-pop∘swap : ∀ {Γ} (y : Name Γ) → suc (pop y) * ∘ swap {Γ} * ≃ₑ pop (ᴺ.suc y) *
    suc-pop∘swap y = ∘-*₁ (ᴿ.suc-pop∘swap y)
@@ -92,13 +92,3 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
       ≡⟨ cong (swap *) swap*a≡a′ ⟩
          (swap *) a′
       ∎
-
-   id-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → id * ∘ ρ * ≃ₑ ρ * ∘ id *
-   id-comm ρ a =
-      begin
-         (id *) ((ρ *) a)
-      ≡⟨ *-preserves-id _ ⟩
-         (ρ *) a
-      ≡⟨ sym (cong (ρ *) (*-preserves-id _)) ⟩
-         (ρ *) ((id *) a)
-      ∎ where open EqReasoning (setoid _)
