@@ -21,8 +21,9 @@ module Transition where
       _│ᶜ_ : ∀ {ι Q} {a : Actionᶜ Γ} {S} → (P : Proc Γ) → Q —[ a ᶜ - ι ]→ S → P │ Q —[ a ᶜ - ↑ ι ]→ P │ S
       _│•_ : ∀ {ι P R Q S} {x y : Name Γ} →
              P —[ x • ᵇ - ι ]→ R → Q —[ • x 〈 y 〉 ᶜ - ι ]→ S → P │ Q —[ τ ᶜ - ↑ ι ]→ (pop y *) R │ S
+      -- Being explicit about the substitution 0 ↦ 0 makes life _way_ easier when defining slicing.
       _│ᵥ_ : ∀ {ι P R Q S} {x : Name Γ} → P —[ x • ᵇ - ι ]→ R → Q —[ (• x) ᵇ - ι ]→ S →
-             P │ Q —[ τ ᶜ - ↑ ι ]→ ν (R │ S)
+             P │ Q —[ τ ᶜ - ↑ ι ]→ ν ((id *) R │ S)
       ν•_ : ∀ {ι P R} {x : Name Γ} → P —[ • suc x 〈 zero 〉 ᶜ - ι ]→ R → ν P —[ (• x) ᵇ - ↑ ι ]→ R
       νᵇ_ : ∀ {ι P R} {a : Actionᵇ Γ} → P —[ (push *) a ᵇ - ι ]→ R → ν P —[ a ᵇ - ↑ ι ]→ ν (swap *) R
       νᶜ_ : ∀ {ι P R} {a : Actionᶜ Γ} → P —[ (push *) a ᶜ - ι ]→ R → ν P —[ a ᶜ - ↑ ι ]→ ν R

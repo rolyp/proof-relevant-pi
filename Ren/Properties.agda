@@ -92,3 +92,13 @@ module Ren.Properties {A : Cxt → Set} ⦃ _ : Renameable A ⦄ where
       ≡⟨ cong (swap *) swap*a≡a′ ⟩
          (swap *) a′
       ∎
+
+   id-comm : ∀ {Γ Γ′} (ρ : Ren Γ Γ′) → id * ∘ ρ * ≃ₑ ρ * ∘ id *
+   id-comm ρ a =
+      begin
+         (id *) ((ρ *) a)
+      ≡⟨ *-preserves-id _ ⟩
+         (ρ *) a
+      ≡⟨ sym (cong (ρ *) (*-preserves-id _)) ⟩
+         (ρ *) ((id *) a)
+      ∎ where open EqReasoning (setoid _)
