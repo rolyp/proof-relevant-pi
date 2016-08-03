@@ -93,7 +93,9 @@ module Transition.Concur.Cofinal where
    ... | id*E/E′ rewrite *-preserves-id ((push *) a) =
       cong ν_ (cong₂ _│_ (cong (id *) (γ₁ 𝐸)) refl)
    γ₁ (_ᵇ│ᵥ_ {x = x} {𝑎 = ˣ∇ˣ} E 𝐹) =
-      cong₂ _│_ (trans (pop-zero∘suc-push (tgt E)) (sym (*-preserves-id (tgt E)))) (γ₁ 𝐹)
+      let α : (pop zero *) ((suc push *) (tgt E)) ≡ (id *) (tgt E)
+          α = trans (pop-zero∘suc-push (tgt E)) (sym (*-preserves-id (tgt E))) in
+      cong₂ _│_ α (γ₁ 𝐹)
    γ₁ (_ᵇ│ᵥ_ {𝑎 = ᵇ∇ᵇ} E 𝐹) =
       let α : (id *) ((suc push *) (tgt E)) ≡ (swap *) ((push *) ((id *) (tgt E)))
           α = let open EqReasoning (setoid _) in
