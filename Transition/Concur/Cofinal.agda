@@ -165,12 +165,10 @@ module Transition.Concur.Cofinal where
                 (pop zero *) ((suc id *) S′)
              ∎ in
       cong ν_ (cong₂ _│_ α (γ₁ 𝐹))
-   γ₁ (𝐸 │ᵥ′ 𝐹) rewrite sym (γ₁ 𝐸) | sym (γ₁ 𝐹) =
-      let P′ = tgt₁ (⊖₁ 𝐸); P″ = tgt₂(⊖₁ 𝐸); Q′ = tgt₁ (⊖₁ 𝐹); Q″ = tgt₂(⊖₁ 𝐹) in
-          subst₂ (λ P† P‡ → ν (ν (P† │ Q′)) ⋉̂ ν (ν (P‡ │ (swap *) Q′)))
-                 (trans (sym (*-preserves-id _)) (cong (id *) (sym (+-id-elim 1 P′))))
-                 (trans (sym (*-preserves-id _)) (cong (id *) (sym (+-id-elim 1 ((swap *) P′)))))
-                 (νν-swapᵣ (tgt₁ (⊖₁ 𝐸) │ tgt₁ (⊖₁ 𝐹)))
+   γ₁ (𝐸 │ᵥ′ 𝐹) rewrite sym (trans (sym (*-preserves-id _)) (cong (id *) (sym (+-id-elim 1 (tgt₁ (⊖₁ 𝐸)))))) |
+                       sym (trans (sym (*-preserves-id _)) (cong (id *) (sym (+-id-elim 1 (tgt₂ (⊖₁ 𝐸)))))) |
+                       sym (γ₁ 𝐸) | sym (γ₁ 𝐹) =
+      νν-swapᵣ (tgt₁ (⊖₁ 𝐸) │ tgt₁ (⊖₁ 𝐹))
    γ₁ (ν• 𝐸) = γ₁ 𝐸
    γ₁ (ν•ᵇ 𝐸) = cong (swap *) (γ₁ 𝐸)
    γ₁ (ν•ᶜ 𝐸) = γ₁ 𝐸

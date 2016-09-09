@@ -8,7 +8,7 @@ module Ren where
 
    open import Name as ᴺ using (Cxt; module Cxt; Name; _+_; zero; shift)
 
-   -- Hom-setoid over extensional equivalence. TODO: define a Category instance.
+   -- Hom-setoid over extensional equivalence.
    Ren : Cxt → Cxt → Set
    Ren Γ Γ′ = Name Γ → Name Γ′
 
