@@ -1,19 +1,20 @@
-# Proof-relevant pi calculus
+# proof-relevant-pi, release 0.3
 
 Agda development accompanying the paper [Proof-relevant pi calculus]
 (http://eptcs.web.cse.unsw.edu.au/paper.cgi?LFMTP15:6), presented at
-[LFMTP 2015](http://lfmtp.org/workshops/2015/).
+[LFMTP 2015](http://lfmtp.org/workshops/2015/), and also the foundation
+for the
+[concurrent-slicing](https://github.com/rolyp/concurrent-slicing)
+formalisation of dynamic slicing for the pi-calculus.
 
 # Build instructions
 
 Compiles with:
 
-* Agda 2.4.2.3
-* agda-stdlib-0.9 (with
-  [postulates accompanying BUILTINs for sized types removed]
-  (https://hackage.haskell.org/package/Agda-2.4.2.3/changelog.txt))
+* Agda 2.4.2.3.
+* agda-stdlib-0.9.
 * agda-stdlib-ext library, version
-  [0.0.2](https://github.com/rolyp/agda-stdlib-ext/releases/tag/0.0.2)
+  [0.0.3](https://github.com/rolyp/agda-stdlib-ext/releases/tag/0.0.2)
 
 See the appendix of the accompanying paper for notes on module
 structure.
@@ -31,7 +32,7 @@ structure.
 
 # Design notes
 
-## 0.3 [In progress] CONCUR 2016 version
+## 0.3 CONCUR 2016 version
 
 The "cofinality" relation currently relates two processes which are in
 the same context (as does the definition of the symmetric residual).
