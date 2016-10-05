@@ -5,19 +5,15 @@ Agda development accompanying the paper [Proof-relevant pi calculus]
 [LFMTP 2015](http://lfmtp.org/workshops/2015/), and also the foundation
 for the
 [concurrent-slicing](https://github.com/rolyp/concurrent-slicing)
-formalisation of dynamic slicing for the pi-calculus.
+formalisation of dynamic slicing for the pi-calculus. See the appendix
+of the accompanying paper for notes on module structure.
 
-# Build instructions
+## Required compiler and libraries
 
-Compiles with:
-
-* Agda 2.4.2.3.
-* agda-stdlib-0.9.
+* Agda, version 2.4.2.3.
+* Agda standard library, version 0.9.
 * agda-stdlib-ext library, version
   [0.0.3](https://github.com/rolyp/agda-stdlib-ext/releases/tag/0.0.2)
-
-See the appendix of the accompanying paper for notes on module
-structure.
 
 # Wishlist
 
